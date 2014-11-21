@@ -1,0 +1,12 @@
+*.tex
+*.log
+*.nav
+*.snm
+*.gz
+*.toc
+*.vrb
+
+figure/
+cache/
+
+*.pdf
