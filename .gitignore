@@ -13,3 +13,9 @@ stat330.Rproj
 # Syllabus derivative files
 syllabus.log
 syllabus.pdf
+
+*.log
+*.synctex.gz
+*.tex
+!syllabus_stat330A.tex
+*.pdf
