@@ -1,0 +1,115 @@
+\documentclass[handout]{beamer}
+
+\input{frontmatter}
+\input{commands}
+
+\title{Probability}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=100)
+@
+
+<<libraries, message=FALSE, warning=FALSE>>=
+library(VennDiagram)
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+\frame{\maketitle}
+
+
+\begin{frame}
+\frametitle{Motivation}
+
+some motivation
+
+\end{frame}
+
+
+
+\section{Events and their probabilities}
+\subsection{Events and their probabilities}
+
+\begin{frame}[fragile]
+\frametitle{Events}
+
+\vspace{-0.1in}
+
+\begin{definition}
+The set of all elementary results, or \alert{outcomes} ($\omega$) of an \alert{experiment}, is called a \alert{sample space} ($\Omega$). 
+\pause
+Any set of outcomes is an \alert{event}. 
+\pause
+Thus events are subsets of the sample space. 
+\end{definition}
+
+\pause
+
+\begin{example}
+Tossing two 6-sided dice:
+\begin{itemize}
+\item An outcome: $\{6,3\}$
+\item Sample space: 
+<<>>=
+cat("die1:",rep(1:6, each=6),"\n")
+cat("die2:",rep(1:6, 6),"\n")
+@
+\item Event: sum of the two dice is 7 or 11
+\end{itemize}
+\end{example}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Set operations}
+
+\begin{definition}
+\item A \alert{union} ($\cup$) of events is an event consisting of all the outcomes in all these events. It occurs if {\bf any} of the events occurs and corresponds to the word {\bf OR}. \pause
+\item An \alert{intersection} ($\cap$) of events is an event consisting of outcomes that are in all these events. It occurs if {\bf all} of the events occur and corresponds to the work {\bf AND}. \pause
+\item A \alert{complement} ($^C$) of an event A is an event that occurs when A does not occur. It consists of outcomes excluded from A and corresponds to the word {\bf NOT}. \pause 
+\item A \alert{difference} of events A and B consists of all outcomes included in A but excluded from B. It occurs when A occurs and B does not and corresponds to "BUT NOT". 
+\end{definition}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Venn diagrams}
+
+<<>>=
+draw.pairwise.venn(1,1,.5)
+@
+
+\end{frame}
+
+
+\subsection{Set operations}
+
+\section{Rules of Probability}
+\subsection{Axioms of probability}
+\subsection{Computing probabilities of events}
+
+\section{Combinatorics}
+\subsection{Equally likely outcomes}
+\subsection{Permutations and combinations}
+
+\section{Conditional probability and independence}
+
+
+
+
+\end{document}
