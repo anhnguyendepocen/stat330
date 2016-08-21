@@ -1,4 +1,3 @@
-*.tex
 *.log
 *.nav
 *.snm
@@ -10,3 +9,11 @@ figure/
 cache/
 
 *.pdf
+
+foils.cls
+fltfonts.def
+foil20.clo
+
+!Set01/foils.cls
+!Set01/fltfonts.def
+!Set01/foil20.clo
