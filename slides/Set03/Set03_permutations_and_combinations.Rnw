@@ -1,0 +1,277 @@
+\documentclass[handout]{beamer}
+
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set03 - Permutations and Combinations}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE>>=
+library(dplyr)
+library(ggplot2)
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+\frame{\maketitle}
+
+\section{Counting}
+\begin{frame}
+\frametitle{Motivating example}
+
+A box contains 4 chips, 1 of them is defective. A person draws one chip at random.
+What is a suitable probability that the person draws the defective chip?
+
+\vspace{0.1in} \pause
+
+Common sense tells us, that since \emph{one out of the four} chips is 
+defective, the person has a chance of 25\% to draw the defective chip.
+
+\vspace{0.1in} \pause
+
+Let us compute this using probability theory:
+\begin{itemize}[<+->]
+\item One possible sample space $\mOmega$ is: $\mOmega = \{ g_{1}, g_{2}, g_{3}, d \}$
+\item The event to draw the defective chip is then $A  = \{ d \}$.
+\item We can write the probability to draw the defective chip by comparing 
+the sizes of $A$ and $\mOmega$:
+\[
+P(A) = \frac{|A|}{|\mOmega|} = 
+\frac{|\{d\}|}{|\{ g_{1}, g_{2}, g_{3}, d \}|} = \frac{1}{4}.
+\]
+\end{itemize}
+\end{frame}
+
+
+\subsection{Equally likely events}
+\begin{frame}
+\frametitle{Equally likely events}
+\begin{theorem}
+If elementary outcomes in a sample space are equally likely, \pause i.e. $P(\{ \mOmega \}) $ is the same for all $\mOmega \in \mOmega$), \pause then  the probability of an event $A$ is given by:
+\[ P(A) = \frac{|A|}{|\mOmega|}, \]
+\pause
+where $|A|$ is the number of elements in $A$ (cardinality of $A$).
+\end{theorem}
+
+\vspace{0.1in} \pause
+
+Let us compute this using probability theory:
+\begin{itemize}[<+->]
+\item One possible sample space $\mOmega$ is: $\mOmega = \{ (g_{1}, g_{2}),  (g_{1}, g_{3}), (g_{1}, d),(g_{2}, g_{3}), (g_{2}, d), (g_{3}, d) \}$
+\item The event to draw the defective chip is then $E  = \{ (g_{1}, d), (g_{2}, d), (g_{3}, d) \}$.
+\item We can write the probability to draw the defective chip by comparing 
+the sizes of $E$ and $\mOmega$:
+\[
+P(A) = \frac{|E|}{|\mOmega|} = \frac{1}{2}.
+\]
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Full house}
+
+A standard deck of cards has 4 suits (clubs, diamonds, hearts, and spades) and 13 ranks (A,2,3,4,5,6,7,8,9,10,Jack,Queen,King) in each suit. \pause A full house is a 5-card hand with 2 cards of one rank and 3 cards of another rank. 
+
+\vspace{0.2in} \pause What is the probability of a full house when you are randomly dealt 5 cards? 
+
+\vspace{0.2in} \pause
+
+We will see that 
+
+\[ P(\text{``Full House''}) = \frac{|\text{``Full House''}|}{|\mOmega|} = \frac{\binom{13}{1}\binom{4}{3}\cdot \binom{12}{1}\binom{4}{2}}{\binom{52}{5}}\approx .0014. \]
+
+\end{frame}
+
+
+\subsection{Counting principles}
+\begin{frame}
+\frametitle{Two basic counting principles}
+
+\begin{itemize} 
+\item \alert{Summation Principle ({\bf OR})}: If a complex action can be performed using one of $k$ \alert{alternative } methods and the methods can be performed in $n_{1}, \ldots, n_{k}$ ways, respectively, \pause then the complex action can be peformed in \begin{displaymath}n_{1}+ \ldots + n_{k}  \end{displaymath}
+ways. \pause
+
+\item \alert{Multiplication Principle ({\bf AND})}: If a complex action can be broken down into a \alert{series} of $k$ component actions, peformed one after the other, and the first can be performed in $n_{1}$ ways, the second in $n_{2}$ ways, $\ldots$, and the last in $n_{k}$ ways, then the complex action can be peformed in \begin{displaymath} n_{1}n_{2}\cdots n_{k} \end{displaymath}
+ways.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Summation Principle Examples}
+
+\begin{itemize} 
+\item {\textcolor{cyan}{In how many ways can you draw a heart or a diamond from a standard deck of cards?}}
+
+\pause
+A heart can be drawn in 13 ways and a diamond in 13 ways. So by summation principle, a heart or a diamond can be drawn in 13+13 =26 ways. \pause 
+
+\item {\textcolor{cyan}{If two dice are thrown one after the other, in how many ways can you get a sum of 4 or a sum of 8?}}
+
+\pause
+The 2-ples $(1,3),(2,2),$ and $(3,1)$ will give 3 ways to get a sum of 4. \pause
+The 2-ples $(2,6),(3,5),(4,4),(5,3),$ and $(6,2)$ will give 5 ways to to get 8. \pause
+So by summation principle, there are $3+5=8$ ways to get a 4 or an 8.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Multiplication Principle Examples}
+
+\begin{itemize} 
+\item {\textcolor{cyan}{How many different license plates are possible if each contains a sequence of 3 letters followed by 3 digits (if no sequence of letters or numbers are prohibited)?}}
+
+\pause
+There are 26 choices each for the three letter positions and 10 choices each for the digit positions. 
+So by the multiplication principle, we have $ 26\cdot 26\cdot 26\cdot 10 \cdot 10 \cdot 10 \cdot= 17,576,000$ license plates.\pause
+
+
+\item {\textcolor{cyan}{Consider the following random experiment: first toss a coin, then roll a die. Record the outcome as an ordered pair. What is $|\mOmega|$ if $\mOmega$ is the sample space for this experiment?}}
+
+\pause
+The first position is occupied by $H$ or $T$ (two choices), 
+the second position by one of $1,2,3,4,5$ or $6$ (6 choices). \pause
+Thus by multiplication principle, we have $ |\mOmega|=2\cdot 6 = 12$.
+\end{itemize}
+\end{frame}
+
+
+
+
+\subsection{Ordered samples with replacement}
+\begin{frame}
+\frametitle{Ordered samples with replacement}
+
+A box has $n$ items numbered $1, \ldots, n$. Draw $k$ items \emph{with replacement}. (A number can be drawn twice). \pause
+\alert{Sample Space:}
+\[ \mOmega=\{(x_{1}, \ldots, x_{k}): x_{i}\in \{1, \ldots, n\}\}
+%=\{x_{1}x_{2}...x_{k}: x_{i}\in \{1, \ldots, n\}\}
+\]
+\pause
+What is $|\mOmega|$?
+
+\vspace{0.1in} \pause
+
+Break the complex action into a series $k$ single draws ($x_{i}$ is outcome on draw $i$). \pause
+Then $n$ possibilities for $x_{1}$, $n$ possibilities for $x_{2}$, $\ldots$, $n$ possibilities for $x_{k}$. \pause
+Then, multiplication principle gives us  $|\mOmega|= n \cdot n \cdots n =n^{k}$. 
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Octal numbers}
+
+A 5-digit octal number is a 5-digit number consisting of the digits $0, \ldots, 7$. 
+\begin{enumerate}
+\item How many 5-digit octal numbers are there? % 8^5 = 32768
+\item What is the probability that a randomly chosen 5-digit decimal number is an octal number? % 8^5/10^5 = 0.32768
+\end{enumerate}
+
+\vspace{0.2in} \pause
+
+Toss a coin 23 times. 
+\begin{enumerate}
+\item How many sequences of $H's$ and $T's$ are there? % 2^23 = 8388608
+\end{enumerate}
+\end{frame}
+
+
+
+\subsection{Ordered samples without replacement}
+\begin{frame}
+\frametitle{Ordered samples without replacement}
+
+A box has $n$ items numbered $1, \ldots, n$. 
+Select $k (\leq n) $ items without replacement, i.e. an item is drawn at most once. 
+Keep track of the \emph{sequence} of selections.
+
+\vspace{0.1in} \pause
+
+\alert{Sample Space:}
+\[
+\mOmega=\{(x_{1}, \ldots, x_{k}): x_{i}\in \{1, \ldots, n\}, x_{i}\neq x_{j}\}
+%=\{x_{1}x_{2}...x_{k}: x_{i}\in \{1, \ldots, n\}x_{i}\neq x_{j}\}
+\]
+
+\vspace{0.1in} \pause
+
+What is $|\mOmega|$?
+
+\begin{itemize}
+\item Break the complex action into a series $k$ single draws, i.e. $x_{i}$ is outcome on draw $i$. 
+\item $n$ possibilities for $x_{1}$, $n-1$ possibilities for $x_{2}$, $\ldots$, $n-(k-1)$ possibilities for $x_{k}$. 
+\item Multiplication principle implies 
+\[ 
+|\mOmega|=n(n-1)(n-1)\cdots (n-(k-1)) \pause =\frac{n!}{(n-k)!}
+\]
+\end{itemize}
+\end{frame}
+
+
+\subsection{Permutations}
+\begin{frame}
+\frametitle{Permutations}
+
+\begin{definition}
+A \alert{permutation} is an ordering of $k$ distinct objects chosen from $n$ distinct objects. \pause
+The \alert{permutation number} is the number of permutations of $k$ objects taken from $n$ and is 
+\[ 
+P(n,k) = \frac{n!}{(n-k)!}.
+\]
+\end{definition}
+
+\pause
+
+\textcolor{cyan}{You only remember that a friend's (4 digit) telephone number consists of the numbers 3, 4, 8 and 9.
+ How many different phone numbers are possible?}
+
+\vspace{0.1in} \pause
+
+That's the situation where we take 4 objects out of a set of 4 and order them - that is $P(4,4)$!. 
+\[ P(4,4) = \frac{4!}{(4-4)!} = \frac{4!}{0!} = \frac{24}{1} = 24.\]
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Pizza toppings}
+
+{\textcolor{cyan}{A survey question lists seven pizza toppings and asks you to rank your favorite 3.}} 
+\begin{enumerate}
+\item {\textcolor{cyan}{How many possible answers to the survey question are there?}} % P(7,3) = 7!/(7-3)! = 210
+
+\vfill
+
+\item {\textcolor{cyan}{One of the choices is ``olives''. If all possible rankings are equally likely, what is the probability that a randomly selected survey has ``olives'' in the top 3?}} % P(6,3)/P(7,3) = 120/210 = 0.57
+
+\vfill
+
+\end{enumerate}
+\end{frame}
+\end{document}
+
+
+
+
