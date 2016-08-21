@@ -1,0 +1,189 @@
+\documentclass[handout]{beamer}
+
+%\input{frontmatter}
+%\input{commands}
+
+\title{Probability}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=100)
+@
+
+<<libraries, message=FALSE, warning=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+\frame{\maketitle}
+
+
+\begin{frame}
+\frametitle{Motivation}
+
+some motivation
+
+\end{frame}
+
+
+
+\section{Events and their probabilities}
+\subsection{Events and their probabilities}
+
+\begin{frame}[fragile]
+\frametitle{Events}
+
+\vspace{-0.1in}
+
+\begin{definition}
+The set of all elementary results, or \alert{outcomes} ($\omega$) of an \alert{experiment}, is called a \alert{sample space} ($\Omega$). 
+\pause
+Any set of outcomes is an \alert{event}. 
+\pause
+Thus events are subsets of the sample space. 
+\end{definition}
+
+\pause
+
+\begin{example}
+Tossing two 6-sided dice:
+\begin{itemize}
+\item An outcome: $\{6,3\}$
+\item Sample space: 
+<<>>=
+cat("die1:",rep(1:6, each=6),"\n")
+cat("die2:",rep(1:6, 6),"\n")
+@
+\item Event: sum of the two dice is 7 or 11
+\end{itemize}
+\end{example}
+
+\end{frame}
+
+
+\subsection{Set operations}
+\begin{frame}
+\frametitle{Set operations}
+
+Consider two sets $A$ and $B$. \pause
+
+\begin{definition}
+\begin{itemize}
+\item A \alert{union} ($A \cup B$) of events is an event consisting of all the outcomes in all of these events. It occurs if \emph{any} of the events occurs and corresponds to the word \alert{OR}. \pause
+\item An \alert{intersection} ($A \cap B$) of events is an event consisting of outcomes that are in all these events. It occurs if \emph{all} of the events occur and corresponds to the work \alert{AND}. \pause
+\item A \alert{complement} ($A^C$) of an event A is an event that occurs when A does not occur. It consists of outcomes excluded from A and corresponds to the word \alert{NOT}. \pause 
+\item A \alert{difference} ($A\setminus B$) of events A and B consists of all outcomes included in A but excluded from B. It occurs when A occurs and B does not and corresponds to \alert{BUT NOT}. 
+\end{itemize}
+\end{definition}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Venn diagrams}
+
+<<venn_setup>>=
+l = 101
+circle = data.frame(
+  loc = c(rep("top", l),rep("bot",l)),
+  x   = c(seq(-1, 1, length=l), seq(1, -1, length=l))) %>%
+  mutate(y   = sqrt(1-x^2)*ifelse(loc=="bot",-1,1))
+  
+indent = circle %>%
+  mutate(x = x-0.5,
+         x = ifelse(x>0,-x,x))
+
+yint = sqrt(1-.5^2)
+
+Aonly = indent %>% mutate(set="Aonly")
+Bonly = indent %>% mutate(x=-x, set="Bonly")
+
+AandB = data.frame(loc=c(rep("left",l),rep("right",l)),
+                   y = c(seq(-yint,yint,length=l), seq(yint,-yint,length=l))) %>%
+  mutate(set="AandB",
+         x = (sqrt(1-y^2)-.5)*ifelse(loc=="left",-1,1))
+
+ggplot(Bonly, aes(x,y,fill=set)) + 
+  geom_polygon(color="black") + 
+  coord_fixed() +
+  theme_minimal()
+  
+
+all = rbind(Aonly,Bonly,AandB) %>%
+  mutate(union = TRUE,
+         intersection = set == "AandB",
+         difference = set == "Aonly",
+         complement = set == "Bonly") %>%
+  gather(operation,value,union,intersection,complement,difference) %>%
+  mutate(operation = factor(operation, 
+                            levels=c("union","intersection","complement","difference")))
+
+
+ggplot(all, aes(x,y, group=set, fill=value)) + 
+  geom_rect(data = all %>% filter(operation == "complement"), fill="red", 
+            xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, alpha = 0.3) + 
+  geom_polygon(color="black") + 
+#  geom_polygon(data=all %>% filter(set=="Aonly"), color="black") + 
+  facet_wrap(~operation) + 
+  coord_fixed() +
+#  theme_minimal() +
+  scale_fill_manual(values=c("gray","red")) + 
+  annotate("text", label="A", x=-1, y=.5,size=12) + 
+  annotate("text", label="B", x= 1, y=.5,size=12)
+
+@
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Craps example}
+
+Suppose the point is a 6, now you win if a 6 is rolled before a 7 and otherwise you keep rolling. \pause Suppose you placed single-roll bets on getting two 2s or two 3s. 
+Rolling two 6-sided dice with the following events (on the come out roll)
+\begin{itemize}
+\item win (W): sum of the two dice is 6
+\item lose (L): sum of the two dice is 7
+\item bet (B): either two 2s or two 3s
+\end{itemize}
+
+\pause
+Now some operations on those sets
+
+\begin{itemize}
+\item ``W $\cup$ L'' is the event that the point  
+\item 
+\end{itemize}
+
+\end{frame}
+
+
+
+\section{Rules of Probability}
+\subsection{Axioms of probability}
+\subsection{Computing probabilities of events}
+
+\section{Combinatorics}
+\subsection{Equally likely outcomes}
+\subsection{Permutations and combinations}
+
+\section{Conditional probability and independence}
+
+
+
+
+\end{document}
