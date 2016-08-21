@@ -1,0 +1,166 @@
+\documentclass[20pt,landscape]{foils}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{amstext}
+\usepackage{amsgen}
+\usepackage{amsxtra}
+\usepackage{amsgen}
+\usepackage{amsthm}
+\usepackage{color}
+\usepackage{hyperref}
+%\usepackage{pause}
+\usepackage{graphicx}
+\usepackage{epsfig}
+%\usepackage{geometry}
+%\geometry{headsep=3ex,hscale=0.9}
+\newcommand{\bd}{\textbf}
+\newcommand{\no}{\noindent}
+\newcommand{\un}{\underline}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand \h {\hspace*{.3in}}
+\newcommand{\bul}{\hspace*{.1in}{\textcolor{red}{$\bullet$ \ }}}
+\newcommand{\xbar}{\bar{x}}
+\rightheader{Stat 330 (Fall 2015): slide set 22}
+
+\begin{document}
+\LogoOff
+
+
+\foilhead[1.3in]{}
+\centerline{\LARGE \textcolor{blue}{Slide set 22}}
+\vspace{0.3in}
+\centerline{\large Stat 330 (Fall 2015)}
+\vspace{0.2in}
+\centerline{\tiny Last update: \today}
+\setcounter{page}{0}
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1$ Queue: Example}}\vspace{0.3cm}
+\no {\textcolor{magenta}{Printer Queue (continued)}} {\textcolor{cyan}{A certain printer in the Stat Lab gets jobs with a rate of 3 per hour. On average, the printer needs 15 min to finish a job.}}\\[.1in]
+\no Let $X(t)$ be the number of jobs in the printer and its queue at time $t$. $X(t)$ is a B\&D Process with constant arrival rate $\lambda = 3$ and death rate $\mu = 4$.\\[.1in] 
+{\small
+  \begin{align*}
+L &= E[X(t)] = \frac{a}{1-a} = \frac{0.75}{0.25} = 3 \\
+W_s &= \frac{1}{\mu} = 0.25 \text{ hours } = 15 \text{ min } \\
+W &= \frac{L}{\lambda} = \frac{3}{3} = 1 \text{ hour} \\
+W_q &= W - W_s = 0.75 \text{ hours } = 45 \text{ minutes } \\
+L_q &= W_q \lambda_q = 0.75 \cdot 3 = 2.25
+\end{align*}}
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1$ Queue: Example (cont'd)}}\vspace*{3mm}
+\no {\textcolor{cyan}{On average, a job has to spend 45 min in the queue. What is the probability that a job has to spend less than 20 min in the queue?}}\\[.3in]
+{\it 
+\no We denoted the waiting time in the queue by $q(t)$. \\[.2in]
+\no $q(t)$ has the cumulative distribution function $1 - a e^{y (\mu - \lambda)}$.\\[.2in]
+\no The probability asked for is 
+\[
+P(q(t) < 2/6) = 1 - 0.75 \cdot e^{-20/60 \cdot (1/1)} = 0.4626.
+\]
+}
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1/K$ queue}}\vspace*{.2in}
+\no  An $M/M/1$ queue with limited size $K$ is a lot more realistic than the one with infinite queue. \\[.1in]
+\no Unfortunately, it's computationally slightly harder to deal with.\\[.1in]
+\no $X(t)$ is modelled as a Birth \& Death Process with states $\{0, 1, ..., K \}$.\\[.1in]
+\no Its state diagram looks like:\\[.1in]
+\centerline {\includegraphics[scale=.8]{mm1K.pdf}}
+
+\no Since $X(t)$ has only a finite number of states, it's a stable process independently from the values of  $\lambda$ and $\mu$.
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1/K$ queue (cont'd)}}\vspace*{.1in}
+\no The steady state probabilities $p_k$ are:
+\begin{eqnarray*}
+p_k &=& = a^k p_0 \\
+p_0 &=& S^{-1} = \frac{1 - a}{1 - a^{K+1}}
+\end{eqnarray*}
+\no where $a = \frac{\lambda}{\mu}$, the traffic intensity and
+$S = 1 + a + a^2 + ... + a^K = \frac{1 - a^{K+1}}{1 - a}$.\\[.1in]
+\no The expected number of individuals in the system $L$ then is:
+\begin{eqnarray*}
+L &=& E[X(t)] = 0\cdot p_0 + 1 \cdot p_1 + 2 \cdot p_2 + ... + K \cdot p_K  \\
+&=& \sum_{k=0}^K k p_k = \sum_{k=0}^K k a^k \cdot p_0 = ... = \frac{a}{1-a} - \frac{(K+1) a^{K+1}}{1 - a^{K+1}} 
+\end{eqnarray*}
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1/K$ queue (cont'd)}}\vspace*{.1in}
+\no Another interesting property of a queuing system with limited size is the number of individuals that get turned away.\\[.1in] 
+\no From a marketing perspective they are the "expensive" ones - they are most likely annoyed and less inclined to return.\\[.1in]
+\no  It's therefore a good strategy to try and minimize this number.\\[.1in]
+\no Since an incoming individual is turned away, when the system is full, the probability for being turned away is $p_K$.\\[.1in]
+\no The rate of individuals being turned away therefore is $p_K \cdot \lambda$.\\[.1in]
+\no For the expected total waiting time $W$, we used Little's theorem:
+\[
+W = \frac{L}{\bar{\lambda}}
+\]
+where $\bar{\lambda}$ is the average arrival rate {\textcolor{magenta}{into the system}}.
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1/K$ queue (cont'd)}}\vspace*{.2in}
+\no At this point we have to be careful when dealing with limited systems: $\bar{\lambda}$ is NOT equal to the arrival rate $\lambda$.\\[.1in]
+\no We have to  {\textcolor{magenta}{adjust}} $\lambda$ by the rate of individuals who are turned away.\\[.2in]
+\no The adjusted rate $\lambda_a$ of individuals {\textcolor{magenta}{entering the system}} is:
+\[
+\lambda_a = \lambda - p_K \lambda = (1 - p_K) \lambda.
+\]
+\no Theerefore, the expected total waiting time is then $W = L/\lambda_a$\\[.2in]
+\no Similarly, the expected length of the queue  is $L_q = W_q \cdot \lambda_a$.
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1/K$ queue (cont'd)}}\vspace*{.2in}
+
+Summary:
+\[\begin{tabular}{cccccc}
+ $p_0$ & $p_x$ &
+ $\lambda_a$ & $L$ & $L_s$ & $L_q$ \\\hline
+ $\frac{1-a}{1-a^{K+1}}$
+ & $a^xp_0$
+ & $(1-p_K)\lambda$
+ & $\frac{a}{1-a} - \frac{(K+1)a^{K+1}}{1-a^{K+1}}$
+ & $L-L_q$
+ & $W_q \lambda_a$
+\end{tabular}\]
+\[\begin{tabular}{ccc}
+  $W$ & $W_s$  & $W_q$\\\hline
+$L/\lambda_a$
+& $\frac{1}{\mu}$
+& $ W-W_s$
+\end{tabular}\]
+
+\foilhead[-.8in]{\textcolor{blue}{Example}}\vspace*{.2in}
+\no  {\textcolor{magenta}{Convenience Store:}} {\textcolor{cyan}{In a small convenience store there's room for only 4 customers. The owner himself deals with all the customers - he likes chatting a bit. On average it takes a customer 4 minutes to  pay for his/her purchase.
+Customers arrive at an average of 1 per 5 minutes. If a customer finds the shop full, he/she will go away immediately.}}
+\begin{enumerate}
+\item {\textcolor{cyan}{What fraction of time will the owner be in the shop on his own?}}\\[.1in]
+\no The number of customers in the shop can be modeled as a B \& D Process with arrival rate $\lambda = 0.2$ per minute and $\mu = 0.25$ per minute and upper size $K = 4$.\\[.1in]
+\no The probability (or fraction of time) that the owner will be alone is $p_0 = \frac{1-a}{1-a^{K+1}} = \frac{0.2}{1-0.8^5} = 0.2975.$\\[.1in]
+\foilhead[-.8in]{\textcolor{blue}{Example (cont'd)}}\vspace*{.2in}
+\item {\textcolor{cyan}{What is the expected number of customers in the store?}}
+\[
+L = \frac{a}{1-a} - \frac{(K+1) a^{K+1}}{1 - a^{K+1}} = 1.56.
+\]
+\item {\textcolor{cyan}{What is the rate of individuals being turned away?}}\\[.1in]
+\[
+p_4 \lambda = 0.8^4 \cdot 0.2975 \cdot 0.2 \text{ per minute } = 0.0243 \text{ per minute } = 1.46 \text{ per hour }
+\]
+\item {\textcolor{cyan}{What is the expected time a customer has to spend in the shop?}}\\[.1in]
+\[
+W = \frac{L}{\lambda_a} = 1.56/(0.2 - 0.0243) = 8.88 \text{ minutes }.
+\]
+\end{enumerate}
+
+
+\end{document}   
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+

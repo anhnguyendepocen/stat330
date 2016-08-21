@@ -1,0 +1,254 @@
+\documentclass[20pt,landscape]{foils}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{amstext}
+\usepackage{amsgen}
+\usepackage{amsxtra}
+\usepackage{amsgen}
+\usepackage{amsthm}
+\usepackage{color}
+\usepackage{hyperref}
+%\usepackage{pause}
+\usepackage{graphicx}
+\usepackage{epsfig}
+%\usepackage{geometry}
+%\geometry{headsep=3ex,hscale=0.9}
+\newcommand{\bd}{\textbf}
+\newcommand{\no}{\noindent}
+\newcommand{\un}{\underline}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand \h {\hspace*{.3in}}
+\newcommand{\bul}{\hspace*{.1in}{\textcolor{red}{$\bullet$ \ }}}
+\newcommand{\xbar}{\bar{x}}
+\rightheader{Stat 330 (Fall 2015): slide set 21}
+
+
+\begin{document}
+\LogoOff
+
+\foilhead[1.3in]{}
+\centerline{\LARGE \textcolor{blue}{Slide set 21}}
+\vspace{0.3in}
+\centerline{\large Stat 330 (Fall 2015)}
+\vspace{0.2in}
+\centerline{\tiny Last update: \today}
+\setcounter{page}{0}
+
+
+\foilhead[-.8in]{\textcolor{blue}{Queuing systems}}\vspace*{.35in}
+ \centerline{\includegraphics[scale=.8]{queue.pdf}}
+%\no {\textcolor{magenta}{Depending upon the specific application there are many 
+%varieties of queuing systems:}}\\[-.7in]
+%\begin{itemize}
+%\addtolength{\itemsep}{-0.8\baselineskip}
+%    \item[\bul] size \& nature of arriving population:    
+%    finite or a (potentially) infinite set?
+%    homogenous, i.e. only one type of individuals, or several 
+%    types?  
+%    \item[\bul] random mechanism by which the population enters
+%    \item[\bul] nature of the queue: finite/ infinite   
+%    \item[\bul] nature of the queuing discipline: FIFO (first-in, first-out) or priority (i.e. different types of individuals get 
+%    different treatment)
+%    \item[\bul] number and behavior of servers; distribution of service times?
+%\end{itemize}
+\no {\textcolor{magenta}{Variety of properties of queues one might want to investigate:}\\[-.7in]
+\begin{itemize}
+\addtolength{\itemsep}{-0.8\baselineskip}
+    \item[\bul] mean number of individuals in the system
+    \item[\bul] mean queue length
+    \item[\bul] fraction of customers turned away (for a finite queue length)
+    \item[\bul] mean waiting time, etc.
+\end{itemize}
+\foilhead[-.8in]{\textcolor{blue}{Queuing systems (cont'd)}}
+\no {\textcolor{magenta}{Notation:}} $F_{Y}/ F_{S}/c/K$\\[.1in]
+\no \bul  $F_{Y}$: distribution of inter arrival times $Y$ \\[.1in]
+\no \bul  $F_{S}$:  distribution of service times $S$\\[.1in]
+\no \bul  $c$:  number of servers \\[.1in]
+\no \bul  $K$:  maximum number of individuals in the system\\[.2in]
+\no {\textcolor{magenta}{We will assume a FIFO (first-in, first-out) queue.}
+  \\[.3in]
+\no {\textcolor{magenta}{The distributions $F_{Y}$ and $F_{S}$ are chosen from a small set of 
+distributions, denoted by:}}\\[.1in]
+\no \bul $M$  exponential (\underline{M}emoryless) distribution \\[.1in]
+\no \bul $E_{k}$  Erlang $k$ stage\\[.1in]
+%\no \bul $D$ deterministic (known) arrivals and constant service duration \\[.1in]
+%\no \bul $G$  a general, not further specified distribution\\[.15in]
+
+\foilhead[-.8in]{\textcolor{blue}{Queuing systems (cont'd)}}
+\no {\textcolor{magenta}{The main properties of interest for a queuing system:}}\\[.1in]
+\no \bul  $L$ average length of system = average \# of individuals in the system (individuals in queue {\it and} being served) ($L=L_q+L_s$)\\[.1in]
+\no \bul  $L_s$ average number of individuals being served  \\[.1in]
+\no \bul  $L_q$ average length of queue  \\[.1in]
+\no \bul  $W$ average waiting time (time in queue {\it and} service time) ($W=W_s+W_q$) \\[.1in]
+\no \bul  $W_s$ average service time \\[.1in]
+\no \bul  $W_q$ average waiting time in queue
+
+\foilhead[-.8in]{\textcolor{blue}{Model queueing systems as Stochastic processes}}
+%\no \bul {\textcolor{cyan}{The main idea of a queuing system is to model the number of individuals in the system (queue and server) as a Birth \& Death Process.}}\\[.1in]
+%\no \bul {\textcolor{cyan}{We model the  number of individuals in the system at time $t$ as the Birth \& Death Process $X(t)$ }}\\[.1in]
+\no \bul {\textcolor{cyan}{This gives us a way to analyze the queuing systems using the methods from the previous chapter.}}\\[.1in]
+\no \bul {\textcolor{cyan}{The theorem below links waiting times to the 
+number of people in the system and will  be very useful in the future}}\\[.1in]
+\no {\textcolor{red}{Little's Law:}}  For a queuing system in steady state\\[.1in]
+\hspace*{2.5in}   $L = \bar{\lambda} \cdot W$ \ \ where\\[.1in] 
+\h \h \h   $L$ is the average number of individuals in the system,\\[.1in] 
+\h \h \h   $W$ is the average time spent in the system, and \\[.1in]
+\h \h \h   $\bar{\lambda}$ is the average rate at which individuals enter the system.
+ \foilhead[-.8in]{\textcolor{blue}{More on Little's Theorem}}
+\no This theorem can also be applied to {\textcolor{magenta}{the queue}} itself:\\[.1in]
+\no \hspace*{3in} $L_{q} = \bar{\lambda_{q}} \cdot W_{q}$\\[.1in]
+or to {\textcolor{magenta}{the server}}\\[.1in]
+\no \hspace*{3in} $L_{s} = \bar{\lambda_{s}} \cdot W_{s}.$\\[.1in]
+\no {\textcolor{magenta}{Relationship between properties}}\\[.1in]
+\no For computing the properties $L, W, W_s, W_q, L_s, L_q$ there are usually two different ways: an easy way and a difficult one.\\[.1in]
+To choose the easier way of computation, the following overview of the relationships between these properties helps:\\[.01in]
+\centerline {\includegraphics[scale=.75]{properties.pdf}}
+
+\foilhead[-.8in]{\textcolor{blue}{Birth \& Death Transition Diagrams}}
+\no A way to visualize what is going on in the queuing system is the birth \& death transition diagram.\\[.1in] 
+\no For $c$ servers and an overall capacity of $K$ (where $K$ may be $\infty$) the transition diagram looks like this:\\[.1in]
+\centerline {\includegraphics*[scale=.6]{bd-general.pdf}}
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1$ Queue}}\vspace*{1mm}
+\no {\textcolor{magenta}{Situation:}} {\textcolor{cyan}{exponential inter arrival times with rate $\lambda$, 
+exponential service times with rate $\mu$.}}\\[.1in]
+\no Let $X(t)$ denote the number of individuals in the system at time 
+$t$, $X(t)$ can then be modeled using a Birth \& Death process:\\[.1in]
+%\begin{eqnarray*}
+\h \h \h $\begin{array}{llll}
+   \lambda_{k} & = \text{birth rate} & = \text{arrival rate} & = 
+    \lambda \text{ for all } k \\
+    \mu_{k} & = \text{death rate} & = \text{service rate} & = 
+    \mu \text{ for all } k \\ 
+\end{array}$
+%\end{eqnarray*}
+\vspace*{-.15in}
+
+%\no We've already seen that the ratio $\lambda/\mu$ is very important for 
+%the analysis of the B\&D process.\\[.1in]
+\no This ratio $\lambda/\mu$ is called the  {\textcolor{magenta}{traffic intensity}} $a$. {\textcolor{red}{For a $M/M/1$ 
+queuing system, the traffic intensity is constant for all $k$.}}\\[.3in]
+\no The steady state probabilities of the 
+B\&D process:
+%is equivalent to finding the steady state probabilities 
+%for the number of individuals in the queuing system,\\[.1in]
+\[p_{k} = \lim_{t \rightarrow \infty}P(X(t) = k)\]
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1$ Queue (cont'd)}}\vspace*{1mm}
+\no The B\&D balance equations then say that
+ $1 = p_{0}(1 + a + a^{2} + \ldots)$\\[.1in]
+\no We have a system with a {\textcolor{magenta}{steady state}} if $a < 1$.\\[.1in]
+\no If $a < 1$\ \ \ $S = \sum_{k=0}^{\infty} a^{k} = \frac{1}{1-a}$, then
+\begin{eqnarray*}
+\addtolength{\itemsep}{-0.8\baselineskip}
+    p_{0} &=& 1-a \\
+    p_{1} &=& a (1-a) \\
+    p_{2} &=& a^{2} (1-a) \\
+    p_{3} &=& a^{3} (1-a) \\
+    \ldots\\
+    p_{k} &=& a^{k} (1-a) 
+\end{eqnarray*}
+Thus $X(t) + 1$ has a Geometric distribution $Geo(1-a)$.
+
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1$ Queue (cont'd)}}\vspace*{1mm}
+\no We can use that to get the expected value of $X(t)$:\\[.1in]
+\no The {\textcolor{magenta}{average number of individuals in the queuing system}}, $L$, is $\lim_{t 
+\rightarrow \infty} E[X(t)]$:
+\[
+L = \lim_{t 
+\rightarrow \infty} E[X(t)] = \lim_{t 
+\rightarrow \infty} E[X(t)+1] -1= \frac{1}{1-a} - 1 = \underline {\frac{a}{1-a}}.
+\]
+\no Note that $L$ gets larger as $a$ gets closer to $1$, that is, as the service rate gets closer to the arrival rate.\\[.1in]
+\no {\textcolor{red}{Thus, the closer the service rate is to the arrival rate, the larger is the 
+expected number of people in the system.}}
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1$ Queue (cont'd)}}\vspace*{1mm}
+\no  The {\textcolor{magenta}{mean time spent in the queueing system}}, $W$ is then, 
+using Little's Law:
+\[
+W =  L/ \lambda = \frac{1}{\mu} \cdot \frac{1}{1-a}
+\]
+\no The overall time spent in the system is a sum of the time spent in the queue $W_{q}$ and the average time spent in 
+service $W_{s}$ i.e. $W=W_{q}+W_{s}$\\[.1in]
+\no Since we know that service  times are exponentially distributed with rate $\mu$,  the {\textcolor{magenta}{the average waiting time is}} $W_{s} = \frac{1}{\mu}$.\\[.1in]
+\no Thus, {\textcolor{magenta}{the average time spent waiting in the queue}} is:
+\[
+W_{q} = W - W_{s} = \frac{1}{\mu}\cdot \left ( \frac{1}{1-a} - 1 \right ) = 
+\frac{1}{\mu}\frac{a}{1-a}.
+\] 
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1$ Queue (cont'd)}}\vspace*{1mm}
+\no The {\textcolor{magenta}{average length of the queue}} 
+is, using Little's Law again, is:
+\[
+L_{q} = W_{q} \lambda = \frac{a^{2}}{1-a}
+\]
+
+Summary:
+\[\begin{tabular}{cccccccc}
+ $p_0$ & $p_x$ & $L$ & $L_s$ & $L_q$ & $W$ & $W_s$  & $W_q$\\\hline
+ $1-a$ & $a^x(1-a)$ & $\frac{a}{1-a}$ &
+$a$ & $\frac{a^2}{1-a}$ & $\frac{1}{\mu}\frac{1}{1-a}$ & $\frac{1}{\mu}$
+& $\frac{1}{\mu}\frac{a}{1-a}$
+\end{tabular}\]
+
+
+\foilhead[-.8in]{\textcolor{blue}{The $M/M/1$ Queue (cont'd)}}\vspace*{1mm}
+\no Further we see, that the long run probability that the server is busy is given as:
+\[
+ P(\text{server busy}) = 1-P(\text{system empty}) = 1 - p_{0} = a.
+\]
+This is {\textcolor{magenta}{the server utilization rate.}}\\[.1in]
+\no  {\textcolor{magenta}{Distribution of time in the queue:}} Denote by $q(t)$ the time that an individual entering the system at 
+time $t$ has to spend waiting in the queue. \\[.1in]
+%\no Clearly, the distribution of the waiting times depends on the number 
+%of individuals already in the queue at time $t$.
+%\foilhead[-.8in]{\textcolor{blue}{The $M/M/1$ Queue (cont'd)}}\vspace*{1mm}
+\no The individual entering the system doesn't have to wait 
+at all in the queue when the system at time $t$ is empty:\\[.1in]
+\no \hspace*{2in} $\lim_{t \rightarrow \infty}P(q(t) =0) = p_{0} = 1-a.$\\[.2in]
+%\no If there are $k$ individuals in the queue, the waiting time $q(t)$ is 
+%Erlang$(k, \mu)$ (i.e., $k$ departures with departures occurring with a rate of $\mu$).\\[.1in] 
+%\no This is a  {\textcolor{magenta}{conditional distribution}}, since it is the distribution of $q(t)$
+%given that the number of people in the system is $k$:\\[.2in]
+%\no \hspace*{2in} $q(t) | X(t) = k \sim \text{ Erlang}(k, \mu) \qquad \text{ for large } t$\\[.2in]
+%\no We can put those pieces together in order to get the large $t$ distribution for $q(t)$ using the {\textcolor{magenta}{the total 
+%probability law}}.
+With some derivations,\\[.1in]
+\no \hspace*{2in} $\lim_{t\rightarrow\infty} P(q(t) \le x)= 1-ae^{-x/W}$\\[.1in]
+where $W$ is the average time spent in the system, $W = \frac{1}{\mu} \cdot \frac{1}{1-a} = \frac{1}{\mu-\lambda}$.
+%\foilhead[-.8in]{\textcolor{blue}{The $M/M/1$ Queue (cont'd)}}\vspace*{2mm}
+%\no For large $t$ and $x \ge 0$:\\[-.55in]
+%{\small \begin{eqnarray*}
+%\addtolength{\itemsep}{-0.8\baselineskip}
+%    F_{q(t)}(x) &=& P(q(t) \le x) = \hspace{2cm} \text{\small now use total probability law! } \\
+%    &=& \sum_{k=0}^{\infty} P(q(t) \le x \cap X(t) = k)  \\
+%    &=& \sum_{k=0}^{\infty} P(q(t) \le x | X(t) = k) p_{k}  \\
+%    &=& p_0 + \sum_{k=1}^{\infty} (1 - Po_{\mu x}(k-1)) p_{k}  \\
+%    &=& p_0 + \sum_{k=1}^{\infty} (1 - \sum_{j=0}^{k-1} e^{-\mu x}\frac{\left ( x \mu \right )^j}{j!}) p_{k} = \ldots \\
+%    &=& 1 - a e^{-x/W},\\[-.5in]
+%\end{eqnarray*}}
+%where $W$ is the average time spent in the system, $W = \frac{1}{\mu} \cdot \frac{1}{1-a} = \frac{1}{\mu-\lambda}$.
+
+\end{document}   
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+

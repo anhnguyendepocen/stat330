@@ -1,0 +1,295 @@
+\documentclass[20pt,landscape]{foils}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{color}
+\usepackage{hyperref}
+%\usepackage{pause}
+\usepackage{graphicx}
+\usepackage{epsfig}
+%\usepackage{geometry}
+%\geometry{headsep=3ex,hscale=0.9}
+\newcommand{\bd}{\textbf}
+\newcommand{\no}{\noindent}
+\newcommand{\un}{\underline}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand \h {\hspace*{.3in}}
+\newcommand{\bul}{\hspace*{.1in}{\textcolor{red}{$\bullet$ \ }}}
+\newcommand{\xbar}{\bar{x}}
+\rightheader{Stat 330 (Fall 2015): slide set 28}
+
+
+\begin{document}
+\LogoOff
+
+\foilhead[1.3in]{}
+\centerline{\LARGE \textcolor{blue}{Slide set 28}}
+\vspace{0.3in}
+\centerline{\large Stat 330 (Fall 2015)}
+\vspace{0.2in}
+\centerline{\tiny Last update: \today}
+\setcounter{page}{0}
+
+\foilhead[-.8in]{\textcolor{blue}{Topic 3: Hypothesis testing:}}
+\no {\textcolor{magenta}{Hypothesis:} A statistical hypothesis is a statement about a population parameter, $\theta$\\[.1in]
+\no  {\textcolor{magenta}{Notations:} Usually, there are two complementary hypotheses in a testing problem: one is the \textcolor{magenta}{null hypothesis} (denoted by $H_0$) and another is the \textcolor{magenta}{alternative hypothesis} (denoted by $H_1$ or $H_a$). \\[.1in]
+\no $\spadesuit$ $H_1$ usually is what you want to show or want to study, and $H_0$ is a starting claim. \\[.1in]
+\no {\textcolor{magenta}{Example:}
+$\tilde{\theta}=(\theta_1,\theta_2)$ are the average blood sugar level of a group of patients before and after taking a new drug\begin{enumerate}
+\item $H_0:$ no effect $\leftrightarrow H_0: \theta_1=\theta_2$
+\item $H_1:$ effective $\leftrightarrow H_0: \theta_1\neq\theta_2$ or $\theta_1>\theta_2$
+    \end{enumerate}
+    
+\foilhead[-.8in]{\textcolor{blue}{Example: Tea Tasting Lady}}
+\no \textcolor{magenta}{Example (due to R.A. Fisher himself):} It is claimed that a lady is able to tell, by tasting a cup of tea with milk, whether the milk was put in first or the tea was put in first.\\[.1in]
+\no  $\clubsuit$ To put the claim to the test, the lady is given 10 cups of tea to taste and is asked to state in each case whether the milk went in first or the tea went in first.\\[.1in]
+%\no  $\clubsuit$  To guard against deliberate or accidental communication of information, before pouring each cup of tea a coin is tossed to decide whether the milk goes in first or the tea goes in first. The person who brings the cup of tea to the lady does not know the outcome of the coin toss.\\[.1in]
+\no  $\clubsuit$ Either the lady has some skill (she can tell to some extent the difference) or she has not, in which case she is simply guessing.\\[.1in]
+\no  $\clubsuit$ Suppose, the lady tested 10 cups of tea in this manner and got 9 of them right. This looks rather suspicious, the lady seems to have some skill. But
+    how can we check it? How can we even phrase this as a scientific question? Here is how Fisher did: \\[.1in]
+    \newpage
+\no {\textcolor{magenta}{(a)} We start with the assumption that the lady does not have any skill.\\[.1in]
+\no $\spadesuit$ That means the probability she gives a correct answer for any single cup of tea is 1/2, which is a "null" hypothesis.\\[.1in]
+\no $\spadesuit$ The number of cups she gets right has therefore a Binomial distribution with parameter $n = 10$ and $p=0.5$ (10 i.i.d Bernoulli, or say 10 fair coins)\\[.1in]
+\no $\spadesuit$ The diagram shows the probability mass function of this distribution:
+%\begin{figure}[h]
+\centerline{\epsfig{file=f9.pdf,width=11cm}}
+%\end{figure}
+\no {\textcolor{magenta}{(b)}
+Events that are as unlikely or less likely are, that the lady got all 10 cups right or - very different, but nevertheless very rare - that she only got 1 cup or none right \textcolor{magenta}{(note, this would be evidence of some ``anti-skill'', but it would certainly be evidence against her guessing)}.\\[.1in]
+\no $\spadesuit$  The total probability for these events is (remember, the binomial probability mass function is $p(x) = {n \choose x} p^{x}(1-p)^{n-x}$)
+$$p(0) + p(1) + p(9) + p(10) = 0.5^{10} + 10 \cdot 0.5^{10} + 10 \cdot 0.5^{10} + 0.5^{10} = 0.021$$    i.e. what we have just observed is a fairly rare event under the assumption, which is the lady is \textbf{only} guessing.
+\\[.1in]
+\no $\spadesuit$
+  This suggests, that the lady \textcolor{red}{may} have some skill in detecting which was poured first into the cup.\\[.1in]
+\no {\textcolor{magenta}{(c)}
+Jargon: 0.021 is called the \textcolor{magenta}{p-value} for testing the \textcolor{magenta}{hypothesis} $p = 0.5$.
+\\[.1in]
+\no $\spadesuit$
+\textcolor{blue}{The fact that the $p$-value is small is evidence against the
+hypothesis}.
+
+\foilhead[-.8in]{\textcolor{blue}{Testing Hypothesis (Cont'd)}}
+\no In the previous slide, $0.021$ is called the p-value for testing the null hypothesis $p=0.5$ against an alternative hypothesis $p\neq 0.5$.\\[.1in]
+\no {\textcolor{magenta}{Formal procedure:} Let
+$$H_0: p=0.5\ v.s.\ H_1: p\neq 0.5$$ then the \textcolor{magenta}{\bf test statistic} is $T=\hat{p}$.\\[.1in]
+\no $\spadesuit$  Observed value of test statistic is $9/10$, then the p-value (the chance that my test statistic would be as extreme, in favor of the alternative hypothesis, as the observed value):\\ \hspace*{0.2in}$P_{H_0}(T\le 1/10 \mbox{ or } T\geq 9/10)=P(T\le 1/10 \mbox{ or } T\geq 9/10\ |\ H_0)=0.021$\vspace{.2cm}\\
+\no {\textcolor{magenta}{Inference:} p-value is very small (less than 0.05), indicating evidence for rejecting $H_0$.
+
+
+\foilhead[-.8in]{\textcolor{blue}{How to set up hypothesis testing?}}
+\no {\textcolor{magenta}{Summary:} Hypothesis testing is a formal procedure to check whether or not the claimed-assumption can be rejected based on the given data.\\[.1in]
+\no $\clubsuit$ If we abstract the main elements, hypothesis testing usually involving five steps (this roadmap is proposed by R.A.Fisher).\\[.1in]
+\no {\textcolor{magenta}{Example:} University CC administrators have historical records that indicates that between \textcolor{magenta}{August and Oct} 2002 the mean time between hits on the ISU homepage was 2 min.\\[.1in]
+\no $\diamond$  They suspect that in fact the mean time between hits has decreased. They sample 50 inter-arrival times from records for \textcolor{magenta}{November} 2002 gives:
+$\bar{x} = 1.7$ min and $s = 1.9$ min.\\[.1in]
+\no $\diamond$  Is this strong evidence for a decrease of mean time between hits?\\[.1in]
+\no \textcolor{magenta}{Solution:} We following the five steps to answer this
+\\[.1in]
+\no $\diamond$ {\textcolor{red}{Step 1:}  State a "\textbf{null hypothesis}" of the form $H_{0}:$ function of
+parameter(s) = \# meant to embody a status quo/ pre data view
+\\[.1in]
+\no $\diamondsuit$ {\textcolor{blue}{In the above example:}
+$H_{0}: \mu = 2.0$ min between hits (i.e. no changes)\\[.1in]
+\no $\diamond$ {\textcolor{red}{Step 2:}  State an "\textbf{alternative hypothesis}" of the form $H_{a}:$ function of
+	parameter(s) $\left \{ \begin{array}{c} > \\ \neq \\ < \end{array} \right .$ \# meant to identify departure from $H_{0}$\\[.1in]
+\no $\diamondsuit$ {\textcolor{blue}{In the above example:} $H_{a}: \mu < 2$ (mean time decreases) \\[.1in]
+\no $\diamond$ {\textcolor{red}{Step 3:} State \textbf{test criteria} - consists of a test statistic, a "reference
+distribution" giving the behavior of the test statistic if $H_{0}$	 is true and the kinds of values of the test statistic that count as evidence against $H_{0}$.
+\\[.1in]
+\no $\diamondsuit$ {\textcolor{blue}{In the above example:}
+test statistic will be $Z =\frac{\bar{X} - 2.0}{s/\sqrt{n}}$. The reference density will be standard normal, large negative values
+for $Z$ count as evidence against $H_{0}$ in favor of $H_{a}$
+\\[.1in]
+\no $\diamond$ {\textcolor{red}{Step 4:} Show \textbf{computations:} Plug numerical values in step 3.\\[.1in]
+\no $\diamondsuit$ {\textcolor{blue}{In the above example:}
+sample gives $z =\frac{\bar{x} - 2.0}{s/\sqrt{n}}= \frac{1.7-2.0}{1.9/\sqrt{50}} = -1.12$ \\[.1in]
+\no $\diamond$ {\textcolor{red}{Step 5:}  Report and interpret a $p$-\textbf{value} = "observed level of significance, with which $H_{0}$ can be rejected".\\[.1in]
+\no $\diamond$ This is the probability of an observed value of the test statistic at least as extreme as the one at hand. \textbf{The smaller this value is, 	the less likely it is that} $H_{0}$ \textbf{is true.}\\[.1in]
+\no $\diamondsuit$ {\textcolor{blue}{In the above example:}
+The $p$-value is $P(Z \le -1.12) = \Phi(-1.12) = 0.1314$. This value is not terribly small - the evidence of a decrease in mean
+time between hits is somewhat weak.\\[.1in]
+\no $\clubsuit$   Note aside: a 90\% confidence interval for $\mu$ above is
+    \[
+    \bar{x} \pm 1.65 \frac{s}{\sqrt{n}} = 1.7 \pm 0.44
+    \]
+    This interval \textcolor{magenta}{contains} the hypothesized value of
+    $\mu = 2.0$
+
+\foilhead[-.8in]{\textcolor{blue}{Testing hypothesis: testing mean or proportions}}
+\no $\spadesuit$ There are four basic hypothesis tests of the above form, testing a mean, a proportion or differences between two means or two proportions. Depending on the hypothesis, the test statistic will be different.\\[.1in]
+\no $\heartsuit$ They are summarized as
+
+\begin{tabular}{lcl}
+    Hypothesis & Statistic & Reference Distribution \\ \hline\vspace{.4cm}
+    $H_{0}: \mu = \#$ & $Z = \frac{\bar{X} - \#}{s/\sqrt{n}}$ & $Z$
+    is standard normal \\[10pt]
+    $H_{0}: p = \#$ & $Z = \frac{\hat{p} - \#}{\sqrt{\frac{\# (1 - \#)}{n}}}$ & $Z$
+    is standard normal \\[10pt]
+    $H_{0}: \mu_{1} - \mu_{2} = \#$ & $Z = \frac{\bar{X}_{1} -
+    \bar{X}_{2} - \#}{\sqrt{\frac{s_{1}^{2}}{n_{1}} +
+    \frac{s_{2}^{2}}{n_{2}}}}$ & $Z$
+    is standard normal \\[10pt]
+    $H_{0}: p_{1} - p_{2} = 0$ & $Z = \frac{\hat{p}_{1} - \hat{p}_{2}}{\sqrt{\hat{p}(1-\hat{p})}\sqrt{\frac{1}{n_{1}} +
+    \frac{1}{n_{2}}}}$ & $Z$
+    is standard normal \\\hline
+\end{tabular}
+
+\no where $\hat{p} = \frac{n_{1}\hat{p}_{1} + n_{2}\hat{p}_{2}}{n_{1} +
+n_{2}}=\hat{p}(\text{pooled})$.
+
+
+\foilhead[-.8in]{\textcolor{blue}{Remarks:}}
+%\no $\spadesuit$  What we discussed before is some very simple hypothesis testing, it is very delicate to construct a powerful and useful test to study certain hypothesis\\[.1in]
+\no $\spadesuit$ Type I error: Type I error occurs when we falsely reject $H_0$, i.e. $H_0$ is true but we reject it\\[.1in]
+\no $\spadesuit$ Type II error: Type II error occurs when we fail to reject $H_0$ when it is not true, i.e. $H_0$ is wrong but we did not have evidence to reject it. \\[.1in]
+%\no $\spadesuit$ The choice of testing statistics is not always trivial and sometimes quite involved: likelihood, monotone likelihood, Bayesian etc. \\[.1in]
+\no $\spadesuit$ If we do not know the population standard deviation (in other word, the distribution of $s$ need to be considered), we need to use $t$-statistic. We need some more delicate distributions, which gives different quantiles that depend on the sample size. 
+
+\foilhead[-.8in]{\textcolor{blue}{Examples:}}
+\no    {\textcolor{magenta}{Example 1 (Tax Fraud):}
+Historically, IRS taxpayer compliance audits have revealed that about $5\%$  of individuals do things on their tax returns that invite criminal prosecution.\\[.1in]
+\no $\diamond$ A sample of $n=1000$ tax returns produces $\hat{p} = 0.061$ as an estimate of the fraction of fraudulent returns\\[.1in]
+\no $\diamond$ Does this provide a clear signal of change in the tax payer
+behavior?\\[.1in]
+\no  {\textcolor{magenta}{1.} \textcolor{magenta}{State null hypothesis}: $H_{0} : p = 0.05$\\[.1in]
+\no  {\textcolor{magenta}{2.} \textcolor{magenta}{alternative hypothesis}: $H_{a} : p \neq 0.05$\\[.1in]
+\no  {\textcolor{magenta}{3.} \textcolor{magenta}{test statistic}:
+\[
+Z = \frac{\hat{p} - 0.05}{\sqrt{0.05 \cdot 0.95 / n}}
+\]
+$Z$ has under the null hypothesis a standard normal distribution, and any large values of $Z$ - positive \textcolor{magenta}{\bf and} negative values - will count as evidence against $H_{0}$.
+\\[.1in]
+\no  {\textcolor{magenta}{4.} \textcolor{magenta}{computation}: Plug numerical values in step 3, $$z = (0.061 - 0.05)/\sqrt{0.05 \cdot 0.95/1000} =
+1.59$$
+\no  {\textcolor{magenta}{5.} \textcolor{magenta}{$p${-value}}: $$P( |Z| \ge 1.59) = P(Z \le - 1.59) + P( Z \ge
+1.59) = 0.11.$$
+This is not a very small value, we therefore have only very weak
+evidence against $H_{0}$, or say, we do not reject the null hypothesis at $0.1$ level.\\[.3in]\newpage
+\no    {\textcolor{magenta}{Example 2 (Life time of disk drive):} $n_{1} = 30$ and $n_{2} = 40$ disk drives of 2 different designs were tested under conditions of "accelerated" stress and times to failure recorded:
+
+\begin{center}
+    \begin{tabular}{ll}
+	Standard Design & New Design \\ \hline
+	$n_{1} = 30$ & $n_{2} = 40$ \\
+	$\bar{x}_{1} = 1205$ hr & $\bar{x}_{2} = 1400$ hr \\
+	$s_{1} = 1000$ hr & $s_{2} = 900$ hr
+    \end{tabular}
+\end{center}
+Does this provide conclusive evidence that the new design has a
+larger mean time to failure under "accelerated" stress conditions? \\[.1in]
+\no $\clubsuit$ In other word, is the new design better? \\[.1in]
+\no  {\textcolor{magenta}{1.}  \textcolor{magenta}{State null hypothesis}: $H_{0} : \mu_{1} = \mu_{2} \ ( \mu_{1} -\mu_{2} = 0)$\\[.1in]
+\no  {\textcolor{magenta}{2.} \textcolor{magenta}{alternative hypothesis}: $H_{a} : \mu_{1} < \mu_{2} \ ( \mu_{1} -\mu_{2} < 0)$\\[.1in]
+\no  {\textcolor{magenta}{3.} \textcolor{magenta}{test statistic} is:
+\[
+Z = \frac{\bar{X}_{1} - \bar{X}_{2} -
+0}{\sqrt{\frac{s_{1}^{2}}{n_{1}}+ \frac{s_{2}^{2}}{n_{2}}}}
+\] $Z$ has under the null hypothesis a standard normal distribution, we will consider large negative values of $Z$ as evidence against $H_{0}$.\\[.1in]
+\no  {\textcolor{magenta}{4.} \textcolor{magenta}{computation}: \begin{align*}z& = \frac{\bar{x}_{1} - \bar{x}_{2} -
+0}{\sqrt{\frac{s_{1}^{2}}{n_{1}}+ \frac{s_{2}^{2}}{n_{2}}}}\\&=(1205 - 1400 - 0)/\sqrt{1000^{2}/30 + 900^{2}/40} = - 0.84\end{align*}
+\no  {\textcolor{magenta}{5.} \textcolor{magenta}{$p$-value}: $P( Z < -0.84) = 0.2005.$
+This is not a very small value, we therefore have only very weak
+evidence against $H_{0}$, or say, we do not reject the null hypothesis. So, the new design does not improve significantly.
+
+\newpage
+\no   {\textcolor{magenta}{Example 3 (Queueing System):}
+2 very complicated queuing systems: We'd like to know, whether there is a difference in the large $t$ probabilities of there being an available server. \\[.1in]
+\no $\spadesuit$ We do simulations for each system, and look  whether at time $t = 2000$ there is a server available (each with different random seed):
+
+\begin{center}
+    \begin{tabular}{ll}
+	System 1 & System 2 \\ \hline
+	$n_{1} = 1000$ runs & $n_{2} = 500$ runs \\
+	\multicolumn{2}{l}{server at time $t=2000$ available?}\\
+	$\hat{p}_{1} = \frac{551}{1000}$ & $\hat{p}_{2} = \frac{303}{500}$ \\
+    \end{tabular}
+\end{center}
+
+How strong is the evidence of a difference between the $t=2000$
+availability of a server for the two systems?\\[.1in]
+\no  {\textcolor{magenta}{1.} \textcolor{magenta}{State null hypothesis}: $H_{0} : p_{1} = p_{2} \ ( p_{1} -p_{2} = 0)$\\[.1in]
+\no  {\textcolor{magenta}{2.}  \textcolor{magenta}{alternative hypothesis}: $H_{a} : p_{1} \neq p_{2} \ ( p_{1} -p_{2} \neq 0)$\\[.1in]
+\no  $\diamond$ Preliminary: note that, if there was no difference between the two systems, a plausible estimate of the availability of a server would be
+\[
+\hat{p} = \frac{n_1 \hat{p}_{1} + n_2 \hat{p}_{2}}{n_{1} + n_{2}} =
+\frac{551 + 303}{1000 + 500} = 0.569
+\]
+\no  {\textcolor{magenta}{3.} \textcolor{magenta}{test statistic} is:
+\[
+Z = \frac{\hat{p}_{1} - \hat{p}_{2} -
+0}{\sqrt{\hat{p}(1-\hat{p})} \cdot \sqrt{\frac{1}{n_{1}}+ \frac{1}{n_{2}}}}
+\]
+$Z$ has under the null hypothesis a standard normal distribution,
+we will consider large values of $Z$ as evidence against $H_{0}$.\\[.1in]
+\no  {\textcolor{magenta}{4.} \textcolor{magenta}{computation}:\\
+$z = (0.551 - 0.606)/(\sqrt{0.569 \cdot (1 - 0.569)}$$
+\sqrt{1/1000 + 1/500}) = -2.03$\\[.1in]
+\no  {\textcolor{magenta}{5.} \textcolor{magenta}{$p$-value}: $P( |Z| > 2.03) = 0.04$.
+This is fairly strong evidence of a real difference in $t$=2000
+availabilities of a server between the two systems.
+
+%\foilhead[-.8in]{\textcolor{blue}{Testing hypothesis: testing mean(s) using small samples when the standard deviation $\sigma$ is unknown}}
+
+%\begin{tabular}{lcl}
+%    Hypothesis & Statistic & Reference Distribution \\ \hline\vspace{.4cm}
+%    $H_{0}: \mu = \#$ & $t = \frac{\bar{X} - \#}{s/\sqrt{n}}$ & $t$
+%    is t-dist. with $n-1$ d.f. \\[10pt]
+%    
+%    $H_{0}: \mu_{1} - \mu_{2} = \#$ & $t = \frac{\bar{X}_{1} -
+%    \bar{X}_{2} - \#}{s_{p}{\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}}$ &$t$
+%    dist with $n_1+n_2-2$\\[20pt] 
+%    
+%    $H_{0}: \mu_{1} - \mu_{2} = \#$ & $t = \frac{\bar{X}_{1} -
+%    \bar{X}_{2} - \#}{\sqrt{\frac{s_{1}^{2}}{n_{1}} +
+%    \frac{s_{2}^{2}}{n_{2}}}}$ & $t$
+%    dist with $\nu$ d.f. when $\sigma_1^2\neq \sigma_2^2$\\
+%\end{tabular}
+%
+%\noindent $s_{p}^{2}$ is the {\textcolor{red}{pooled variance}} calculated as \[
+%s_{p}^{2}=\frac{(n_1-1)s_1^{2}+(n_2-1)s_2^{2}}{n_1+n_2-2}\] and $\nu$ is as given earlier.
+
+%\foilhead[-.8in]{\textcolor{blue}{Testing hypotheses using Rejection Regions}}
+%\no \bul Statistical software calculates {\textcolor{magenta}{p-values}} for various alternative hypotheses so that it is easier to make decisions when using the software to analyze one's data.\\[.15in]
+%\no \bul In practice, when statistical tests are conducted using the t-statisctics,  p-values cannot be exactly calculated because the t-table is not extensive. \\[.15in]
+%\no \bul Using a t-table, one can only obtain bounds for the p-value which then can be used to make a decision.\\[.15in]
+%\no \bul As an alternative, one may use {\textcolor{magenta}{rejection regions}} for making decisons based on the pre-selected {\textcolor{magenta}{significance level $\alpha$}}\\[.15in]
+%\no \bul In each of the cases below, the t-distribution is looked-up with the appropriate d.f. to obtain the appropriate percentile as shown.
+%
+%\foilhead[-.8in]{\textcolor{blue}{Testing hypotheses using Rejection Regions (contd.)}}
+%\vspace*{-.3in}
+%
+%\bc
+%\begin{tabular}{lcl}
+% Test &   Alternative Hypothesis & Rejection Region (R.R)\\ \hline
+%  one-sample t-test  &   $H_{1}: \mu >  \#$ & $t > t_{(n-1),\alpha}$   \\
+% (one-sided, right tail)&\\[10pt]
+%  one-sample t-test  &    $H_{1}: \mu < \#$ & $t < -t_{(n-1),\alpha}$\\
+%  (one-sided, left tail)& \\[10pt]
+%  one-sample t-test  &   $H_{1}: \mu \neq \#$ & $|t| > t_{(n-1),\alpha/2}$ \\
+%    two-sided \\[10pt]   
+%  two-sample t-test  &    $H_{1}: \mu_{1} - \mu_{2} > \#$ & $t > t_{(n_1+n_2-2),\alpha}$\\
+%  (one-sided, right tail) \\[10pt] 
+%  two-sample t-test  &   $H_{1}: \mu_{1} - \mu_{2} < \#$ & $t > t_{(n_1+n_2-2),\alpha}$ \\
+%   (one-sided, left tail)& \\[10pt]
+%   two-sample t-test  &   $H_{1}: \mu_{1} - \mu_{2} \neq \#$ & $|t| > t_{(n_1+n_2-2),\alpha/2}$  \\
+%      (two-sided) 
+%\end{tabular}
+%\ec
+%\no \bul As an example, to test $H_{0}: \mu = 2 $ vs. $H_{1}: \mu > 2$ using $\alpha=.05$ when the sample size $n=10$, the rejection region is $t>t_{9,.05}$ i.e. $t>1.833$ \\[.05in]
+%\no \bul To perform the test you would calculate the test statistic using the data and check if it is in the rejection region $t>1.833$ \\[.05in]
+%\no {\textcolor{magenta}{Example 9.28 (Baron): Time between key strokes when typing username and password to determine an unauthorized user.} \\[.05in]
+%\no Statistics from data in Example 9.19: $n=18,\ \bar{x}=0.29\ s=0.074$\\[.05in]
+%\no Use 1\% significance level i.e., $\alpha=.05$ to test $H_{0}: \mu = 0.2 $ vs. $H_{1}: \mu \neq 0.2$ 
+%$$ t=\frac{\bar{x}- 0.2}{s/\sqrt{n}}=\frac{0.29-0.2}{0.074/\sqrt{18}}=5.16 $$
+%\no The R.R. is $|t|>t_{17,.025}$. i.e. $t<-2.11$ or $t>2.11$. \\[.05in]
+%\no Since the computed t-statistic 5.16 is in the R.R., we reject the null hypothesis, and conclude that there is significance evidence that the user is an unauthorized user. ({\textcolor{magenta}{Note: the p-value is $<.0002$ from the t-table}})
+
+\end{document}
+
+
+
+

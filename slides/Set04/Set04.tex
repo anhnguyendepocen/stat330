@@ -1,0 +1,147 @@
+\documentclass[20pt,landscape]{foils}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{color}
+\usepackage{hyperref}
+%\usepackage{pause}
+\usepackage{graphicx}
+\usepackage{epsfig}
+%\usepackage{geometry}
+%\geometry{headsep=3ex,hscale=0.9}
+\newcommand{\bd}{\textbf}
+\newcommand{\no}{\noindent}
+\newcommand{\un}{\underline}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand \h {\hspace*{.3in}}
+\newcommand{\bul}{\hspace*{.3in}{\textcolor{red}{$\bullet$ \ }}}
+\newcommand{\xbar}{\bar{x}}
+\rightheader{Stat 330 (Fall 2015): slide set 4}
+
+\begin{document}
+\LogoOff
+
+\foilhead[1.3in]{}
+\centerline{\LARGE \textcolor{blue}{Slide set 4}}
+\vspace{0.3in}
+\centerline{\large Stat 330 (Fall 2015)}
+\vspace{0.2in}
+\centerline{\tiny Last update: \today}
+\setcounter{page}{0}
+
+\foilhead[-.8in]{}
+\no {\textcolor{red}{Ordered Samples Without Replacement}}\\[.1in]
+\no {\textcolor{magenta}{Experiment:} A box has $n$ items numbered $1, \ldots,
+  n$. Select $k (\leq n) $ items without replacement. (An item is drawn at most
+  once). Keep track of the \emph{sequence} of selections.\\[.1in] 
+\no  {\textcolor{magenta}{Sample Space:}} \\[.1in]
+$
+\Omega=\{(x_{1}, \ldots, x_{k}): x_{i}\in \{1, \ldots, n\}, x_{i}\neq
+x_{j}\}
+%=\{x_{1}x_{2}...x_{k}: x_{i}\in \{1, \ldots, n\}x_{i}\neq x_{j}\}
+$\\[.1in]
+\no What is $|\Omega|$?\\[.1in]
+\no Break the complex action into a series $k$ single draws.  \\[.01in]
+\no (i.e.,$x_{i}$ is outcome on draw $i$). \\[.1in]
+\no $n$ possibilities for $x_{1}$, $n-1$ possibilities for $x_{2}$, $\ldots$, $n-(k-1)$ possibilities for $x_{k}$. \\[.1in]
+\no Multiplication principle implies $|\Omega|=n(n-1)(n-2)\cdots (n-(k-1))$\\[.1in]
+\hspace*{4.2in} $=\frac{n!}{(n-k)!}$
+
+\foilhead[-.8in]{\textcolor{blue}{Permutations}}
+\no $|\Omega|$ in the previous example has a name $\ldots$\\[.1in]
+\no   {\textcolor{magenta}{Permutation}} - An ordering of $k$ distinct objects chosen from $n$ distinct objects.\\[.1in]  
+\no  {\textcolor{magenta}{Permutation Number}}: $P(n,k)$ - The number of permutations of $k$ objects taken from $n$. \\[.1in] 
+{\textcolor{red}{Theorem:}} \[P(n,k) = \frac{n!}{(n-k)!}\]
+\no \no {\textcolor{magenta}{Example 1:}\\[.1in]
+ {\textcolor{cyan}{You only remember that a friend's (4 digit) telephone number consists of the numbers 3, 4, 8 and 9.
+ How many different phone numbers are possible?}\\[.1in]
+\no That's the situation, where we take 4 objects out of a set of 4 and order them - that is $P(4,4)$!. \\[.1in]
+\hspace*{2in} $P(4,4) = \frac{4!}{(4-4)!} = \frac{4!}{0!} = \frac{24}{1} = 24.$
+ 
+
+\foilhead[-.8in]{}
+\no {\textcolor{red}{Permutations: Examples}}\\[.1in]
+\no {\textcolor{magenta}{Example 2:} Pizza Toppings\\[.1in]
+ {\textcolor{cyan}{A survey question lists seven pizza toppings and asks you to rank your favorite 3.}}
+\begin{enumerate}
+\item {\textcolor{cyan}{How many possible answers to the survey question are there?}}\\[.1in]
+\item {\textcolor{cyan}{One of the choices is ``olives''. If all possible rankings are equally likely, what is the probability that a randomly selected survey has ``olives'' in the top 3?}}\\[.1in]
+
+\end{enumerate}
+
+\foilhead[-.8in]{}
+\no {\textcolor{red}{Unordered Samples Without Replacement}}\\[.1in]
+\no {\textcolor{magenta}{Experiment:} A box has $n$ items numbered $1, \ldots, n$. Select $k\leq n$ items without replacement. (A number is drawn at most once). Keep track of the \emph{set} of numbers selected. (Order does not matter).\\[.1in] 
+\no  {\textcolor{magenta}{Sample Space:}} \\[.1in]
+$\Omega=\{\{x_{1}, \ldots, x_{k}\}: x_{i}\in \{1, \ldots, n\}, x_{i}\neq x_{j}\}$\\[.1in]
+\no What is $|\Omega|$?\\[.1in]
+$|\Omega|=$ \# of ways to select  $k$ distinct objects from $n$  objects.\\[.1in]
+It is important to note that the complex action of obtaining 
+ an ordering of $k$ distinct objects from $n$ distinct objects can be broken down to  two simple components:\\[.1in]
+\h \h \h \bul Select a subset of $k$ objects from $n$. \\[.1in]
+\h \h \h \bul Order the $k$ objects. 
+
+\foilhead[-.8in]{\textcolor{blue}{Continued...}}
+\no Hence by {\textcolor{red}{multiplication principle}},\\[.1in]
+\no {\textcolor{magenta}{\# of ways to order $k$ objects chosen from $n$ = \\[.1in]
+\no (\# of ways to select $k$ distinct objects from n objects)\\[.1in] 
+\hspace*{2.5in}$\times$ (\# of ways that $k$ distinct objects can be ordered)}\\[.15in]
+\no The left hand side, \# of ways to order $k$ objects chosen from $n$, is $P(n,k)$\\[.15in]
+\no Thus, \\[.1in]
+\no $P(n,k) = (\text{\# of ways to select } k \text{ objects from } n)\times(\text{\# ways to order the }k)$ \\[.1in]
+\hspace*{.8in} $ = |\Omega|P(k,k).$ \\[.1in]
+\no Thus $$|\Omega| = \frac{P(n,k)}{P(k,k)} = \frac{n!}{(n-k)!k!}$$
+
+
+\foilhead[-.8in]{\textcolor{blue}{Combinations}}
+\no $|\Omega|$ in the previous example has a name $\ldots$\\[.1in]
+\no   {\textcolor{magenta}{Combination}} - A subset of $n$ distinct objects which has $k$ distinct objects. \\[.1in]  
+\no  {\textcolor{magenta}{Number of Combinations}}: The number of combinations of $k$ objects chosen from $n$ is $C(n,k)$ \\[.1in]  
+\no {\textcolor{red}{Theorem:}}  \[C(n,k) = \binom{n}{k}=\frac{n!}{(n-k)!k!}\]\\[.1in]  
+
+\foilhead[-.7in]{\textcolor{blue}{Combinations: Examples}}
+\no  {\textcolor{magenta}{Example 1: Lottery (pick-five)}}\\[.1in]
+\no The lottery picks 5 numbers from $\{1, \ldots, 49\}$ without replacement. The order in which the numbers are picked is irrelevant. You win if you pick at least three of the same numbers that the lottery picks. \\[.1in]  
+\h \h \h \bul What is the probability that all 5 match?\\[.1in] 
+\h \h \h \bul What is the probability that you win?\\[.2in] 
+\no  {\textcolor{magenta}{Example 2: Coin Toss}}\\[.1in]
+\no Toss a coin 23 times.\\[.1in]  
+\h \h \h \bul How many ways are there to get 17 heads? \\[.1in] 
+\h \h \h \bul If the coin is fair, what is the probability of getting 17 heads?
+
+
+\foilhead[-.8in]{\textcolor{blue}{Solution to the ``Full House'' problem}}
+\no  {\textcolor{magenta}{Example:} \\[.01in]
+\includegraphics*[height=2cm]{fullhouse.pdf}\\[.01in]
+\no We use the multiplication rule to compute the number of ways a full house hand may be chosen.\\[.1in] 
+\no First, break down to two steps: select the {\textcolor{magenta}{first three cards}, then select the {\textcolor{magenta}{next two cards}.\\[.1in]
+\no Now, break down the selection of the {\textcolor{magenta}{first three cards} into the following two steps:\\[.1in]
+\h \h \h \bul Select the {\textcolor{magenta}{rank}\\[.1in]
+\h \h \h \bul Then select the 3 cards of this rank out of 4 {\textcolor{magenta}{suits}.\\[.1in]
+\no The number of ways to do this is  (using the multiplication rule) $ =\binom{13}{1} \cdot \binom{4}{3}$
+
+\foilhead[-.7in]{\textcolor{blue}{Solution to the ``Full House'' problem (continued)...}}
+\no Now, break down the selection of the {\textcolor{magenta}{other two cards} likewise.\\[.1in]
+\no The number of ways to do this is:\\[.15in]
+\no \hspace*{1in}  (since we have already used {\textcolor{magenta}{one rank} for the first 3) $ =\binom{12}{1} \cdot \binom{4}{2}$\\[.2in]
+\no Therefore the number of ways to select a full house hand\\[.15in]
+\no \hspace*{1in} (using the multiplication rule) is: $ =\binom{13}{1}\binom{4}{3} \cdot \binom{12}{1}  \binom{4}{2} $\\[.1in]
+\no Thus $$P(\text{``Full House''}) = \frac{|\text{``Full House''}|}{|\Omega|} = \frac{\binom{13}{1}\binom{4}{3}\cdot \binom{12}{1}\binom{4}{2}}{\binom{52}{5}}\approx .0014$$
+
+\foilhead[-.6in]{\textcolor{blue}{Counting Summary}}
+\begin{tabular}{ll}
+\underline{Method} & \underline{Number of Possible Outcomes}\\\\[.15in]
+{\textcolor{magenta}{Ordered Sample With Replacement}} & $n^{k}$ \\[.25in]
+{\textcolor{magenta}{Ordered Sample Without Replacement}} & $P(n,k) = \frac{n!}{(n-k)!}$ \\[.25in] 
+{\textcolor{magenta}{Unordered Sample Without Replacement}} & $C(n,k) = \binom{n}{k} = \frac{n!}{(n-k)!k!}$  
+ 
+\end{tabular}
+
+\end{document}
+
+
+
+

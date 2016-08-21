@@ -1,0 +1,176 @@
+\documentclass[20pt,landscape]{foils}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{color}
+\usepackage{hyperref}
+%\usepackage{pause}
+\usepackage{graphicx}
+\usepackage{epsfig}
+%\usepackage{geometry}
+%\geometry{headsep=3ex,hscale=0.9}
+\newcommand{\bd}{\textbf}
+\newcommand{\no}{\noindent}
+\newcommand{\un}{\underline}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand \h {\hspace*{.3in}}
+\newcommand{\bul}{\hspace*{.1in}{\textcolor{red}{$\bullet$ \ }}}
+\newcommand{\xbar}{\bar{x}}
+\rightheader{Stat 330 (Fall 2015): slide set 20}
+
+
+\begin{document}
+\LogoOff
+
+\foilhead[1.3in]{}
+\centerline{\LARGE \textcolor{blue}{Slide set 20}}
+\vspace{0.3in}
+\centerline{\large Stat 330 (Fall 2015)}
+\vspace{0.2in}
+\centerline{\tiny Last update: \today}
+\setcounter{page}{0}
+
+
+\foilhead[-.8in]{\textcolor{blue}{Balance equations:}}
+%\no {\textcolor{red}{Balance equations:}} In the context of physical-chemistry, it is called the master equation.\\[.1in]
+\no  {\textcolor{magenta}{Flows:} The {\it Flow-In = Flow-Out Principle} provides us with the means to
+derive equations between the steady state probabilities.  \\[.2in]
+\no {\textcolor{magenta}{State 0:}} \\[.1in]
+    \begin{tabular}{p{2in}r}
+	$\mu_{1} p_{1} = \lambda_{0} p_{0}$ & \\[.01in]
+	i.e. $p_{1} = \frac{\lambda_{0}}{\mu_{1}} p_{0}$. & {\includegraphics[scale=.8]{lec201}}
+    \end{tabular} 
+%\newpage
+\foilhead[-.8in]{\textcolor{blue}{Balance equations (cont'd) }}
+\no {\textcolor{magenta}{State 1:}} \\[.01in]
+ \begin{tabular}{p{2in}r}
+	&$\mu_{1} p_{1} + \lambda_{1} p_{1} = \lambda_{0} p_{0}  + \mu_{2}
+	p_{2}$  \\
+ & {\includegraphics[scale=.4]{lec202}} \\[.01in]
+& i.e. $p_{2} =  \frac{\lambda_{1}}{\mu_{2}} p_{1} =  \frac{\lambda_{0}
+	\lambda_{1}}{\mu_{1}\mu_{2}} p_{0}$.   
+\end{tabular} \\[.01in] 
+\no {\textcolor{magenta}{State 2:}} \\[.01in]
+   \begin{tabular}{p{2in}r}
+	&$\mu_{2} p_{2} + \lambda_{2} p_{2} = \lambda_{0} p_{0}  + \mu_{3}
+	p_{3}$   \\
+	& {\includegraphics[scale=.4]{lec202}} \\[.01in]
+	&i.e. $p_{3} =  \frac{\lambda_{2}}{\mu_{3}} p_{2} =  \frac{\lambda_{0}
+	\lambda_{1}\lambda_{2}}{\mu_{1}\mu_{2}\mu_{3}} p_{0}$.  
+    \end{tabular}\\[.01in]  
+    \newpage
+\no {\textcolor{magenta}{ for state $k$ we get:}} \\[.01in]    
+    \[
+    p_{k} =   \frac{\lambda_{0}
+	\lambda_{1}\lambda_{2} \cdot \ldots \cdot
+	\lambda_{k-1}}{\mu_{1}\mu_{2}\mu_{3} \cdot \ldots \cdot \mu_{k}} p_{0}.
+	\]
+
+%\foilhead[-.8in]{\textcolor{blue}{Equilibriums and ramifications:}}
+%\no $\heartsuit$  ok, so now we know all the steady state probabilities depending on
+%$p_{0}$.% But what use has that, if we don't know $p_{0}$?
+%\\[.1in]
+\no $\clubsuit$ Here, we need another trick to find $p_0$:
+%the steady state probabilities sum to 1:
+\begin{eqnarray*}
+1 &=& p_{0} + p_{1} + p_{2} + \ldots \\
+&=& p_{0} \underbrace{\left ( 1 + \frac{\lambda_{0}}{\mu_{1}} +
+\frac{\lambda_{0}\lambda_{1}}{\mu_{1}\mu_{2}}+ \ldots \right )}_{:= S}
+\end{eqnarray*}
+\no $\spadesuit$ If $S$ converges, $p_0 = S^{-1}$. With $p_0$, we can compute $p_k$. This implies that the Birth \& Death process is stable.
+\\[.1in]
+\no $\spadesuit$ If $S$ does not converge, then the B \& D process is unstable, i.e. it does not have steady state probabilities.
+%\foilhead[-.1in]{\textcolor{blue}{Balance equations (cont'd) }}
+%%\no $\heartsuit$ If this sum $S$ converges, we get $p_{0} = S^{-1}$.
+%%If it doesn't
+%%converge, we know that we don't have any steady state probabilities,
+%%i.e. the B+D process never reaches an equilibrium.
+%%The analysis of $S$ is crucial!
+%%\\[.15in]
+%\no $\spadesuit$ If $S$ converges, $p_0 = S^{-1}$. With $p_0$, we can compute $p_k$. This implies that the Birth \& Death process is stable.
+%\\[.15in]
+%\no $\diamondsuit$ If $S$ does not converge, then the B \& D process is unstable, i.e. it does not have steady state probabilities.\\[.15in]
+%\no $\diamondsuit$  The steady state of the B \& D process is an alternative to studying the steady state ofthe  associated stochastic differential equation $dX=f(X,t)dt+\sigma(X,t)dW$ where $dW$ is the infinitesimal dynamic of birth and death, i.e. Brownian motion. 
+\foilhead[-.8in]{\textcolor{blue}{Special Case: constant birth and death rates}}
+\no  {\textcolor{magenta}{Traffic intensity:}} \\[.1in]
+\no If all birth rates $\lambda_k = \lambda$, a constant birth rate, and $\mu_k = \mu$ for all $k>0$,
+the ratio between birth and death rates is constant, too:\\[.1in]
+\hspace*{2in} $a := \frac{\lambda}{\mu}$\\[.1in]
+$a$ is called the   {\textcolor{magenta}{traffic intensity}} (in the context of transport theory, this is referred to as wave velocity).\\[.1in]
+\no 1. In order to decide, whether a specific B \& D process is stable or not, we have to look at $S$.
+For constant traffic intensities, $S$ can be written as:
+\[
+S =  1 + \frac{\lambda_{0}}{\mu_{1}} +
+\frac{\lambda_{0}\lambda_{1}}{\mu_{1}\mu_{2}}+ \ldots = 1 + a + a^2 + a^3 + ...  = \sum_{k=0}^{\infty} a^k
+\]
+This sum is called a {\textcolor{magenta}{geometric series}}.
+\newpage
+\no 2. If $0 < a < 1$ the series converges:
+\[
+S = \frac{1}{1-a} \hspace{1cm} \text{ for } 0 < a < 1.
+\]
+Then:\vspace{-.2cm}\begin{eqnarray*}
+p_0 &=& S^{-1} = 1-a \\
+p_k &=& a^k \cdot (1-a) = P(X(t) = k), i.e.
+\end{eqnarray*}
+$X(t)+1$ therefore has a Geometric distribution for large $t$:
+\[
+X(t)+1 \sim Geo(1-a) \hspace{1cm} \text{ for large } t \text{ and } 0 < a < 1.
+\] 
+%\no $\clubsuit$ {\textcolor{magenta}{Review of geometric distributions}
+ 
+
+\foilhead[-.8in]{\textcolor{blue}{Example 1:}} 
+\no   {\textcolor{magenta}{Printer queue (continued)}\\[.1in]
+\no $\diamondsuit$ {\textcolor{cyan}{A certain printer in the Stat Lab gets jobs with a rate of 3 per hour. On average, the printer needs 15 min to finish a job.}}\\[.1in]
+\no $\spadesuit$ Let $X(t)$ be the number of jobs in the printer and its queue at time $t$}}.\\[.1in]
+\no $\heartsuit$ $X(t)$ is a Birth \& Death Process with constant arrival rate $\lambda = 3$ and constant death rate $\mu = 4$.\\[.1in]
+\no \textbf{1.}  {\textcolor{cyan}{Draw a state diagram for $X(t)$ - the (technically possible) number of jobs in  the printer (and its queue)}}.\\[.1in]
+ \begin{figure}[h]
+  \centering
+  \epsfig{file=lec204.pdf, height=4cm,width=12cm}
+\end{figure}
+
+\no \textbf{2.}   {\textcolor{cyan}{What is the (true) probability that at some large time $t$ the printer is idle?}} 
+\[
+P(X(t) = 0) = p_0 = 1 - \frac{3}{4} = 0.25.
+\]
+\no \textbf{3.}   {\textcolor{cyan}{What is the probability that there arrive more than 7 jobs during one hour?}}\\[.1in]
+\no Let $Y$ be the number of arrivals. $Y$ is a Poisson Process with arrival rate $\lambda = 3$. Thus  $Y(t) \sim Poisson(\lambda \cdot t)$
+$$P(Y(1) > 7 ) = 1 - P(Y(1) \le 7) = 1 - Po_{3 \cdot 1} (7) = 1 - 0.988 = 0.012.$$ 
+\newpage
+\no \textbf{4.}  {\textcolor{cyan}{What is the probability that the printer is idle for more than 1 hour at a time? (Hint: this is the probability that $X(t) = 0$ and - at the same time - no job arrives for more than one hour.)}}\\[.1in]
+Let $Z$ be the time until the next arrival, then  $Z \sim Exp(3)$.\\[-.3in]
+\begin{align*}
+&P( X(t) = 0 \cap Z > 1) \stackrel{X(t), Z \text{independent}}{=} P( X(t) = 0) \cdot P(Z > 1)\\
+ &= p_0 \cdot (1 - Exp_3 (1)) = 0.25 \cdot e^{-3} = 0.0124
+\end{align*}
+\no \textbf{5.}  {\textcolor{cyan}{What is the probability that there are 3 jobs in the printer queue at time $t$ (including the job printing at the moment)?}}\\[.1in]
+\no \hspace*{2in} $P(X(t) = 3) = p_3 = .75^3 \cdot .25 = 0.10$\\[.1in]
+%\no \textbf{6.}  {\textcolor{cyan}{What is the difference between the true and the empirical probability of exactly 5 jobs in the printer system?}}\\[.1in]
+%\no \hspace*{2in} $p_5 =0.75^5 \cdot 0.25 = 0.05933 \qquad \text{Recall  }\widehat{p_5} = 0.04125$\\[.1in]
+%Given that we observed only two instances of 5 jobs in our queue, the estimate is close - which means that we can model this particular printer queue as a Birth \& Death process.
+
+\foilhead[-.8in]{\textcolor{blue}{Example 2:}}
+\no   {\textcolor{magenta}{ICB-International Campus Bank of Ames}\\[.1in]
+\no {\textcolor{cyan}{The ICB Ames employs \emph{three} tellers. Customers arrive according to a Poisson process with a mean rate of $1$ per minute. If a customer finds all tellers busy, he or she joins a queue that is serviced by all tellers. Transaction times are independent and have exponential distributions with mean 2 minutes.}} \\[.1in]
+\no \textbf{1.} {\textcolor{cyan}{Sketch an appropriate state diagram for this queueing system.}}
+ \begin{figure}[h]
+  \centering
+  \epsfig{file=lec205.pdf, height=4cm,width=12cm}
+\end{figure}
+\no As it turns out, the large $t$ probability that there are no customers in the system is $p_0=1/9$. (Show this).\\[.1in] 
+\no \textbf{2.} {\textcolor{cyan}{What is the probability that a customer entering the bank (at large $t$) must enter the queue and wait for service?}}\\[.1in]
+\no A person entering the bank must queue for services, if at least three people are in the bank (not including the one who enters at the same moment). We are therefore looking for the large $t$ probability, that $X(t)$ is at least 3:
+$$P(X(t)\geq 3)=1-P(X(t)<3)=1-P(X(t)\leq 2)=1-(p_0+p_1+p_2)$$
+where $$p_0+p_1+p_2=1/9+2\cdot 1/9+2\cdot 1/9=5/9$$
+so $$P(X(t)\geq 3)=4/9.$$
+
+\end{document}
+
+
+
+

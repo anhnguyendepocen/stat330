@@ -1,0 +1,142 @@
+\documentclass[20pt,landscape]{foils}
+\usepackage{color}
+\usepackage{hyperref}
+%\usepackage{pause}
+\usepackage{graphicx}
+\usepackage{epsfig}
+%\usepackage{geometry}
+%\geometry{headsep=3ex,hscale=0.9}
+\newcommand{\bd}{\textbf}
+\newcommand{\no}{\noindent}
+\newcommand{\un}{\underline}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand \h {\hspace*{.3in}}
+\newcommand{\bul}{\hspace*{.3in}{\textcolor{red}{$\bullet$ \ }}}
+\newcommand{\xbar}{\bar{x}}
+\rightheader{Stat 330 (Fall 2016): slide set 1}
+
+\begin{document}
+\LogoOff
+
+\foilhead[1.3in]{}
+\centerline{\LARGE \textcolor{blue}{Slide set 1}}
+\vspace{0.3in}
+\centerline{\large Stat 330 (Fall 2016)}
+\vspace{0.2in}
+\centerline{\tiny Last update: \today}
+\setcounter{page}{0}
+
+\foilhead[-.7in]{\textcolor{blue}{Uncertainty/Randomness}}
+
+\bi
+%\addtolength{\itemsep}{-0.6\baselineskip}
+\item[\bul] The lack of certainty, a state of having limited knowledge where it is impossible to exactly describe current state or future outcome, (or the existence of more than one possible outcome).
+\item[\bul] Uncertainty exists in many aspects of science, business and our everyday life. It is something usually unavoidable  which we have to deal with.
+\item[\bul] Uncertainty appears in all areas of computer science and engineering. We will see some realistic examples as we proceed.
+\ei
+
+\foilhead[-.65in]{\textcolor{blue}{Probability and Statistics}}
+\no We want to study physical processes that are not completely deterministic. Using probability and statistics to understand the random components of such processes can help us do this. Two definitions (among many that I've seen) of probability and statistics are as follows. 
+
+\h \textcolor{magenta}{\bd{Probability}} - \parbox[t]{6.5in}{mathematical theory for modeling \emph{experiments} where outcomes occur randomly.} 
+
+\h \textcolor{magenta}{\bd{Statistics}} - \parbox[t]{6.5in}{theory of information that uses data to make inferences about questions of interest, under the assumption that there is a random component to the process that generated the data.} 
+
+\no Because statistical inference makes use of probability models, probability is a foundation for statistics. To use probability and statistics in a mathematically coherent way, we need a formal framework for talking about random processes and the elements that comprise random experiments. 
+
+\foilhead[-.5in]{\textcolor{blue}{Probabilistic Models for ``Real-World'' Processes}}
+%\vspace*{-.4in}
+\bi
+%\addtolength{\itemsep}{-0.6\baselineskip}
+\item[\bul] Many physical processes involve a random component -- an element that cannot be described exactly by a deterministic algorithm.
+\item[\bul] A name for such a process is a \textcolor{magenta}{\textit{random experiment}}.
+\item[\bul] The term \textcolor{magenta}{\textit{experiment}} used here does not necessarily have its usual meaning of a controlled situations  in which outputs (responses) are observed as a result of inputs (factors).
+\item[\bul] Some examples of what we consider to be random experiments are below.  More interesting examples can be found in the textbook or Prof. Hofmann's notes.
+\ei
+\foilhead[-.8in]{\textcolor{blue}{Examples of Random Experiments}}
+%\vspace*{-.4in}
+\no \textcolor{magenta}{Definition:} A random experiment is a process with random outcomes.
+\be
+\addtolength{\itemsep}{-0.6\baselineskip}
+\item[\bul] Record the result of tossing two coins repeatedly: HH,HT,TH,TH,HH,...
+\item[\bul] Record the number of car accidents at an intersection. 
+\item[\bul] \emph{The Wall Street Journal} tracks the DOW Jones industrial averages.
+\item[\bul] We try to access a web page and record the time it takes for the webpage to respond.
+\item[\bul] Consumers can send an email to an organization's phishing box to report a phishing attempt. The organization records the number of notifications and the time between notifications. 
+\item[\bul] A company measures the installation time of a software system under different conditions so that it can give customers some idea of the time required.
+\ee
+
+
+
+
+\foilhead[-.7in]{\textcolor{blue}{Components of Random Experiments}}
+%\vspace*{-.3in}
+\begin{itemize}
+\item[\bul] \textcolor{magenta}{Elementary Outcome} $(\omega)$ - an outcome of a random process.
+\no  \textcolor{magenta}{Examples:}
+\begin{enumerate}
+\item[1.] Toss a coin until we get a head. \\[.1in]
+ $\omega = TTTTH$
+\item[2.] Record the time for a webpage to respond. \\[.1in]
+$\omega = 3.527 \mbox{ seconds} $
+\item[3.] A message can take two network routers to get to a recipient computer. We may record the status of router 1, the status of router 2, and the status of the recipient computer, where the status is either up (U) or down (D). \\[.1in]
+$\omega = (\mbox{router 1 down, router 2 down, recipient computer up}) = DDU$
+\end{enumerate}
+\foilhead[-.7in]{\textcolor{blue}{Components of Random Experiments (Continued)}}
+\item[\bul] \textcolor{magenta}{Sample Space} $(\Omega)$ - set of all possible outcomes. 
+
+\no \emph{Examples:}
+\begin{enumerate}
+\item[1.] Toss coin until a head:\\[.1in] 
+$\Omega = \{H, TH, TTH, TTTH,\ldots\}$
+\item[2.] Time to access webpage:\\[.1in] 
+$\Omega = (0,\infty)$
+\item[3.] Network Routers:\\[.1in] 
+$\Omega = \{\mbox{ordered triples of U's and D's}\}$\\
+\h \h \h \h = $\{DDD, DDU, DUD, UDD, UUD, UDU, DUU, UUU\}$\\
+and 					 $ |\Omega|=8 = 2^{3} $					 
+\end{enumerate}
+\end{itemize}
+\newpage
+\begin{itemize}
+\item[--] \textcolor{magenta}{Discrete Sample Space} - sample space with a finite or countably infinite number of elements.
+ 
+\no \emph{Examples:}
+\begin{itemize}
+\item[1.] Toss coin until a head: Discrete
+\item[2.] Time to access webpage: Not discrete
+\item[3.] Network Routers: Discrete
+\end{itemize}
+
+\item[--] Note that there are usually multiple ways to express the sample space for a particular experiment. 
+
+\emph{Example} 1. Toss coin until a head: $\Omega' = \{1, 2, 3, \ldots\}$ is an equivalent expression for the sample space. 
+\end{itemize}
+\foilhead[-.8in]{\textcolor{blue}{Components of Probability Experiments (continued)}}
+\vspace*{-.1in}
+\begin{itemize}
+\item[\bul] \textcolor{magenta}{Event} $(A)$ -  $A\subset\Omega$  i.e. subset of $\Omega$.  (A is a collection of elementary outcomes).\\[.01in] 
+\no \emph{Examples:}
+\begin{enumerate}
+\addtolength{\itemsep}{-0.7\baselineskip}
+\item[1.] Toss coin until a head:\\[.15in] 
+\hspace*{1in}$A = \mbox{ first head occurs between 5 and 11 tosses (inclusive)}$\\
+\hspace*{1.3in}$  = \{5, 6, 7, 8, 9, 10, 11\}$\\
+\item[2.] Time to access a webpage:\\[.15in]
+\hspace*{1in}$B = \mbox{More than 10 seconds}$ \\ 
+\hspace*{1.3in}$= (10, \infty)$\\
+\item[3.] Suppose the message is transmitted successfully if at least one router is up and the recipient's computer is up.\\[.15in] 
+\hspace*{1in}$C = \mbox{Successful transmission}$\\
+\hspace*{1.3in}$= \{DUU, UDU, UUU\}$
+\end{enumerate}
+\end{itemize}
+
+					  
+								
+\end{document}
+

@@ -1,0 +1,192 @@
+\documentclass[20pt,landscape]{foils}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{amstext}
+\usepackage{amsgen}
+\usepackage{amsxtra}
+\usepackage{amsgen}
+\usepackage{amsthm}
+\usepackage{color}
+\usepackage{hyperref}
+%\usepackage{pause}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\newcommand{\bd}{\textbf}
+\newcommand{\no}{\noindent}
+\newcommand{\un}{\underline}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand \h {\hspace*{.3in}}
+\newcommand{\bul}{\hspace*{.1in}{\textcolor{red}{$\bullet$ \ }}}
+\newcommand{\xbar}{\bar{x}}
+\rightheader{Stat 330 (Fall 2015): slide set 19}
+
+\begin{document}
+\LogoOff
+
+\foilhead[1.3in]{}
+\centerline{\LARGE \textcolor{blue}{Slide set 19}}
+\vspace{0.3in}
+\centerline{\large Stat 330 (Fall 2015)}
+\vspace{0.2in}
+\centerline{\tiny Last update: \today}
+\setcounter{page}{0}
+
+
+\foilhead[-.8in]{\textcolor{blue}{Birth and Death Processes}}
+%\no {\textcolor{magenta}{Review:}} What is a stochastic process? What is a Poisson Process? \\[.1in]
+\no  {\textcolor{magenta}{Motivation:}} Birth and Death process ($B+D$) is a generalization of Poisson process, and it provides for modeling of queues, i.e. we assume that arrivals stay some time in the system and leave after that.  \\[.1in]
+%\no {\textcolor{magenta}{More motivation:}} The concept of memoryless property is further formalized by the Markov property.\\[.1in]
+\no  {\textcolor{red}{Definition:}{ A B+D process $X(t)$ is a stochastic process that monitors the number of people in a system.}}\\[.1in]
+\no {\textcolor{magenta}{Remarks:}}\\[.1in]
+\no 1. $X(t)=k$, implies that at time $t$ there are $k$ people/objects in the system.\\[.1in]
+\no 2. $X(t)$ is still called the {\textcolor{magenta}{state at time}} $t$. $X(t)$ is in $\{0,1,2,\ldots\}$ for all $t$.  
+
+
+\foilhead[-.8in]{\textcolor{blue}{B+D Process: Examples}}
+\no  {\textcolor{magenta}{Visualization:}  \\[.1in]
+\no $\heartsuit$ One can visualize the set-up for a B+D process in a {\textcolor{magenta}{state diagram}} as movements between consecutive states. \\[.1in]
+\no $\heartsuit$ Conditional on $X(t)=k$, we either move to state $k+1$ or to $k-1$, depending on whether a birth or a death occurs first. \\[.1in]
+\no $\spadesuit$ This process sometimes is referred as Random walk, used more in  material science, physics, chemistry and biology. \\[-.3in]
+  \begin{figure}[h]
+  \centering
+  \epsfig{file=lec191.pdf, height=4cm}\caption{State diagram of B+D process}
+\end{figure}
+
+\foilhead[-.8in]{\textcolor{blue}{B+D Process: Examples (Cont'd)}}\vspace*{3mm}
+\no  {\textcolor{magenta}{Stat Printer:} The "heavy-duty" printer in the Stats department gets 3 jobs per hour. On average, it takes 15 min to complete printing. The printer queue is monitored for a day (8h total time).\\[.1in]
+\no 1. Jobs arrive at the following points in time (in h):\\[-.7in]
+\begin{center}\small
+\begin{tabular}{r|rrrrrrrrrr}
+job $i$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
+arrival time & 0.10 & 0.40 & 0.78 & 1.06 & 1.36 & 1.84 & 1.87 & 2.04 & 3.10 & 4.42 \\
+\multicolumn{2}{c}{ }\\
+job $i$ & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 \\ \hline
+arrival time &  4.46 & 4.66 & 4.68 & 4.89 & 5.01 & 5.56 & 5.56 & 5.85 & 6.32 & 6.99
+\end{tabular}
+\end{center}
+\no 2. The printer finishes jobs at:\\[-.7in]
+\begin{center}\small
+\begin{tabular}{r|rrrrrrrrrr}
+job $i$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
+finishing time & 0.22 & 0.63 & 1.61 & 1.71 & 1.76 & 1.90 & 2.32 & 2.68 & 3.42 & 4.67\\
+\multicolumn{2}{c}{ }\\
+job $i$ & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 \\ \hline
+finishing time &  5.31 & 5.54 & 5.59 & 5.62 & 5.84 & 6.04 & 6.83 & 7.10 & 7.23 & 7.39
+\end{tabular}
+\end{center}
+\foilhead[-.8in]{\textcolor{blue}{Stat Printer (Cont'd)}}
+\no $\clubsuit$ Let $X(t)$ be the number of jobs in the printer and its queue at time $t$.
+\no  {\textcolor{magenta}{ $X(t)$ is a Birth \& Death process.}}\\[.1in]
+\no A graph of $X(t)$: \\[-.4in]
+ \begin{figure}[h]
+  \centering
+  \epsfig{file=lec192.pdf, height=10cm} 
+\end{figure}
+%\foilhead[-.8in]{\textcolor{blue}{Stat Printer (Cont'd)}}
+%\no 2. What is the (empirical) probability that there are 5 jobs in the printer and its queue at some time $t$?\\[.1in]
+%\no{\textcolor{magenta}{The empirical probability for 5 jobs in the printer is the time, $X(t)$ is in state 5 divided by the total time}}: 
+%\[
+%\widehat{P (X(t) = 5)} = \frac{(5.31-5.01) + (5.59-5.56)}{8} = \frac{0.33}{8} = 0.04125.
+%\]
+\foilhead[-.8in]{\textcolor{blue}{Modeling B \& D Processes}}
+\no  {\textcolor{magenta}{Model:}} \\[.1in]
+\no 1. The model for a birth or a death is given, conditional on $X(t) = k$, as:
+\begin{tabular}{cl}
+    $B$ & = time till a potential birth $\sim Exp(\lambda_{k})$ \\
+    $D$ & = time till a potential death $\sim Exp(\mu_{k})$ \\
+\end{tabular}   {\textcolor{magenta}{N.B.}} ($P(B=D) = 0$!)\\[.1in]
+\no 2. if  
+\begin{tabular}{cl}
+$B < D$ & the move is to state $k+1$ at time $t+B$ \\
+$B > D$ & the move is to state $k-1$ at time $t+D$ \\
+\end{tabular}\\[.1in]
+\no 3. $B$ and $D$ are independent for each state $k$.\\[.1in]
+\no $\clubsuit$ This implies, that, given the process is in state $k$, the
+probability of moving to\\[-.4in]
+\begin{eqnarray*}
+   \text{ state } k+1 && \text{ is  } \frac{\lambda_{k}}{\mu_{k} + \lambda_{k}} \\
+   \text{ state } k-1 && \text{ is  } \frac{\mu_{k}}{\mu_{k} + \lambda_{k}}. \\
+\end{eqnarray*}
+\foilhead[-.8in]{\textcolor{blue}{Modeling (Cont'd)}}\vspace*{2mm}
+\no $\clubsuit$ Notice that $Y = \min (B,D)$ is the time the system will be in state $k$ until the move. \\[.1in]
+ \no $\diamondsuit$ What can we say about the distribution of $Y := \min (B,D)$?\\[-.5in]
+\begin{eqnarray*}
+    P(Y \le y) &=& P( \min (B,D) \le y) = 1-P(\min(B,D)>y)\\
+    %= P( B \le y \cup D \le y)    \\
+    %&=& P(B \le y) + P( D \le y) - P(B \le y \cap D \le y)  \\
+    %&=& P(B \le y) + P( D \le y) - P(B \le y) \cdot P( D \le y)  \\
+    %&=& 1 - e^{-\lambda_{k}y} + 1 - e^{-\mu_{k}y} - (1 -
+    %e^{-\lambda_{k}y})(1 - e^{-\mu_{k}y}) = \\
+    &=& 1 - e^{-(\lambda_{k} + \mu_{k})y} =
+    \underline{Exp_{\lambda_{k}+ \mu_{k}}(y)},
+\end{eqnarray*}
+using exponential race (page 2 of slide set 18)\\[.1in]
+%\no $\diamondsuit$ We talked about this discussing the Poisson process: this is the exponential races!\\[.1in]
+\no $\clubsuit$ $Y$ itself is, again, an exponential variable, its rate is the the
+sum of the rates of $B$ and $D$.
+
+\foilhead[-.8in]{\textcolor{blue}{Remarks:}}
+\no \bul Knowing the distribution of $Y$, the staying time in state $k$, gives
+us, e.g. the possibility to compute the mean staying time in state
+$k$. \\[.1in]
+\no \bul   The mean staying time in state $k$ is the expected value of an
+exponential distribution with rate $\lambda_{k} + \mu_{k}$.\\[.1in]
+\no \bul  $\ddag$ The mean staying time therefore is $1/(\lambda_{k} + \mu_{k})$.  \\[.1in]
+\no \bul {\textcolor{red}{N.E.} A Poisson process with rate $\lambda$ is a special case of a Birth \& Death process,
+where the birth rates and death rates are constant, $\lambda_{k} =
+\lambda$ and $\mu_{k} = 0$  for all $k$.\\[.1in]
+\no \bul The analysis of this model for small $t$ is mathematically difficult
+because of ``start-up'' effects - but in some cases, we can compute
+the ``large $t$'' behaviour.\\[.1in]
+%\no \bul A lot depends on the ratio of births and deaths:
+
+\foilhead[-.8in]{\textcolor{blue}{Examples:}}
+ \begin{figure}[h]
+  \centering
+  \epsfig{file=lec193.pdf, height=9cm}
+\end{figure} 
+\no $\diamondsuit$ {\textcolor{red}{N.E.} In the picture, three different simulations of Birth \& Death processes are shown.
+Only in the first case, the process is {\it stable} (birth rate $<$ death rate).
+The other two processes are {\it unstable} (birth rate $=$ death rate (2nd process) and birth rate $>$ death rate (3rd process)).
+
+\foilhead[-.8in]{\textcolor{blue}{More on stability:}}
+\no {\textcolor{magenta}{Equilibrium:} Only if the  B+D process is stable, it will reach an equilibrium after some time - this is called the {\textcolor{red}{{\it steady state}} of the B+D process.\\[.1in]
+\no $\diamondsuit$ Mathematically, the notion of a steady state translates to
+\[
+\lim_{t \rightarrow \infty} P( X(t) = k) = p_{k} \text{ for all } k,
+\]
+where the $p_{k}$ are numbers between 0 and 1, with $\sum_{k} p_{k} = 1$.\\[.1in]
+\no $\clubsuit$ The $p_{k}$ probabilities are called the {\textcolor{magenta}{{\it steady state
+probabilities}} of the B+D process, and they form a probability mass function for $X$.\\ [.1in]
+\no $\heartsuit$ How to compute $p_k$?
+To compute $p_k$, we need to know the long run rate of transitions.
+By some mathematical derivations:\\[.2in]
+$\lambda_k p_k$ is the {{long run rate}} of \emph{transitions} from $k \rightarrow k+1$.\\[.1in]
+$\mu_{k}p_{k}$ is the long run rate of transitions from $k \rightarrow k-1$. 
+%\newpage
+%\no Sketched arguments:\\[-.4in]
+%\begin{eqnarray*}
+%\frac{\text{time in state $k$ until time $t$}}{\text{total time}\ t} \rightarrow && p_{k}  \\[5pt]
+%\frac{{{\text{\# of visits to}} \choose {\text{state $k$ by time
+%$t$}}}{{{\text{mean stay}} \choose {\text{in state $k$}}}}}{\text{total
+%time } t} \rightarrow && p_{k} \hspace{1.5cm} \text{ use (\ddag)}\\[5pt]
+%\frac{{{\text{\# of visits to}} \choose {\text{state $k$ by time
+%$t$}}}}{\text{total
+%time } t} \rightarrow && p_{k} (\lambda_{k} + \mu_{k})
+%\end{eqnarray*} 
+%\no  The long rate of visits to state $k$ is $ p_{k} (\lambda_{k} + \mu_{k})$; but we know that a fraction of $\frac{\lambda_{k}}{\lambda_{k}+\mu_{k}}$ visits to
+%state $k$ results in moves to state $k+1$. So\\[.1in]
+%\hspace*{2.5in}$\frac{\lambda_{k}}{\lambda_{k}+\mu_{k}} p_{k} \cdot
+%(\lambda_{k}+\mu_{k}) = \lambda_{k} p_{k}$\\[.1in]
+%is the {\textcolor{magenta}{long run rate}} of \emph{transitions} from $k \rightarrow k+1$.\\[.1in]
+%Similarly, $\mu_{k}p_{k}$ is the long run rate of transitions from $k \rightarrow k-1$. 
+
+\end{document}
+
+
+
+

@@ -1,0 +1,153 @@
+\documentclass[20pt,landscape]{foils}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{color}
+\usepackage{hyperref}
+%\usepackage{pause}
+\usepackage{graphicx}
+\usepackage{epsfig}
+%\usepackage{geometry}
+%\geometry{headsep=3ex,hscale=0.9}
+\newcommand{\bd}{\textbf}
+\newcommand{\no}{\noindent}
+\newcommand{\un}{\underline}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand \h {\hspace*{.3in}}
+\newcommand{\bul}{\hspace*{.1in}{\textcolor{red}{$\bullet$ \ }}}
+\newcommand{\xbar}{\bar{x}}
+\rightheader{Stat 330 (Fall 2015): slide set 24}
+
+\begin{document}
+\LogoOff
+
+\foilhead[1.3in]{}
+\centerline{\LARGE \textcolor{blue}{Slide set 24}}
+\vspace{0.3in}
+\centerline{\large Stat 330 (Fall 2015)}
+\vspace{0.2in}
+\centerline{\tiny Last update: \today}
+\setcounter{page}{0}
+
+\foilhead[-.8in]{\textcolor{blue}{Other descriptive statistics}}
+\no {\textcolor{cyan}{Review:} Descriptive statistics, inferential statistics, sample/population mean, sample/population variance, sample/population median, range\\[.1in]
+\no  {\textcolor{magenta}{Population quantile:} A $p$-quantile of a population is a {\textcolor{red}{number} $x$ that solves equations
+ $P(X<x)\leq p,\ P(X>x)\leq 1-p$\\[.1in]
+%\no  {\textcolor{magenta}{Sample quantile:} A sample $p$-quantile is any number that exceeds at most $100\cdot p\%$ of the sample and is exceeded by at most $100(1-p)\%$ of the sample. \\[.1in]
+\no  {\textcolor{magenta}{Percentile:} A $p$-quantile is also called a $100p^{th}$ percentile.\\[.1in]
+\no  {\textcolor{magenta}{Quartile:} The 1st, 2nd and 3rd quartiles are the 25th, 50th, and 75th percentiles. They split a population or a sample into four parts.\\[.1in]
+\no  $\clubsuit$ A median is at the same time a $0.5$-quantile, $50^{th}$ percentile, and 2nd quartile.
+
+
+\foilhead[-.8in]{\textcolor{blue}{Computing the sample quantile}}
+\no {\textcolor{blue}{Example:} The CPU time for randomly chosen tasks are $$70,36,43,49,82,48,34,62,35,15$$ with ordered sample $15, 34, 35, 36, 43, 48, 49, 62, 70, 82$.\\[.4in]
+\no For the sample $p$-quantile: we could compute $(n+1)p$ first. If it is an integer, use $(n+1)p$-th ordered observation as the $p$-sample quantile. If not, use the average of the two
+surrounding ordered observations as in
+the example below: \\
+\no $\heartsuit$ The first quartile: for $p=0.25$ and $n=10$,
+$(n+1)p=2.75$, so the first sample quartile is the average of the 2nd and the 3rd ordered observations. So ${Q}_1=(34+35)/2 = 34.5$.\\[.1in]
+%so $25\%$ of the sample equals to $np=2.5$ and $75\%$ of the sample is $n(1-p)=7.5$.\\[.1in]
+%\no $\heartsuit$ From the ordered sample, we see only the 3rd element, $34.5$, has no more than $2.5$ observations to the left and no more than 7.5 observations to the right of it. Hence, the first quartile $\hat{Q}_1=34.5$.\\[.1in]
+\no $\diamondsuit$ The third quartile is ${Q}_3=(62+70)/2=66$.
+
+
+\foilhead[-.8in]{\textcolor{blue}{Other descriptive statistics (Cont'd)}}
+\no {\textcolor{magenta}{Interquartile range (IQR):} is the difference between the first and the third quartiles
+$$IQR=Q_3-Q_1$$ It measures the variability of the data and is not affected by outliers significantly.  \\[.1in]
+\no $\clubsuit$ In practice, outliers may be a real serious problem that is hard to avoid. To detect and identify outliers, we use IQR to measure the variability of the data\\[.1in]
+\no {\textcolor{magenta}{Rule of thumb:} used to detect and identify the outliers, it is the rule of 1.5(IQR). \\[.1in]
+\no $\diamondsuit$ Measure 1.5(IQR) down from the first quartile and up from the third quartile. All the data points outside this range are assumed to be \textcolor{red}{suspiciously extreme}. They are the candidates of outliers. \\[.1in]\newpage
+\no  {\textcolor{blue}{Previous Example:} Ordered sample $15, 34, 35, 36, 43, 48, 49, 62, 70, 82$ with $Q_1=34.5$ and $Q_3=66$. Then
+$$IQR=Q_3-Q_1=66-34.5=31.5$$
+and measure 1.5 interquartile ranges from each quartile
+$$Q_1-1.5(IQR)=34.5-1.5\cdot 31.5=-12.75$$
+$$Q_3+1.5(IQR)=66+1.5\cdot 31.5=113.25$$  \\[.1in]
+\no $\clubsuit$ None of the data in the sample is outside the interval $[-12.75,113.25]$. No outliers are suspected.
+
+
+\foilhead[-.6in]{\textcolor{blue}{Graphical Statistics}}
+\no $\spadesuit$ To illustrate graphical tools, consider a data set consisting of measurements of the girth, height, and volume of 31 felled black cherry trees.    \\[.1in]
+\no $\spadesuit$ Note that girth is the diameter of the tree (in inches) measured at 4 ft 6 in above the ground. \\[.1in]
+\no $\spadesuit$ We can collect the data and draw schematics to illustrate how the data is distributed. \\[.1in]
+\no {\textcolor{magenta}{Histogram:} A histogram shows the shape of a pmf or a pdf of data, checks for homogeneity, and suggests possible outliers. \\[.1in]
+\no $\heartsuit$ To construct a histogram, we split the range of data into equal intervals, 'bins', and count how many (or what proportion of) observations fall into each bin.
+\newpage
+\begin{figure}[h]
+  \centering
+  \epsfig{file=f3.pdf, height=15cm}
+\end{figure}
+
+\no {\textcolor{magenta}{Stem-and-leaf:} A stem-and-leaf plot is similar to histogram. They however show how the data are distributed within columns. \\[.1in]
+\no $\heartsuit$ To construct a stem-and-leaf plot, we need to draw a stem and a leaf.\\[.1in]
+\no $\heartsuit$ The first one or several digits for a stem, and the next digit forms a leaf. Other digits are dropped. For example
+$$239\Leftrightarrow 23\ |\ 9,\ 23\Leftrightarrow 2|3$$
+\no {\textcolor{blue}{Example: cherry tree (again)} Stem-and-leaf plot for height (leaf unit=1, $6|34=63, 64$)
+ \begin{center}
+\begin{tabular}{c|llllllll} 
+5 & 34 \\ 
+6 & 34569\\ 
+7 & 01224455566789\\ 
+8 & 000001123567
+ \\ 
+\end{tabular}
+\end{center}}
+\newpage
+\no {\textcolor{magenta}{Boxplot:} To construct a boxplot, we draw a box between the first and the third quartile, a line inside the box for a median, and extend whiskers to the smallest and the largest observations. \\[.1in]
+\no $\spadesuit$ This representation is also called \textbf{five-points summary} ($x_i$ is the sample value obtained for random variable $X_i$)
+$$\text{five points}=(\min x_i, \hat{Q}_1, \hat{M}, \hat{Q}_3, \max x_i)$$
+\no {\textcolor{blue}{Example: cherry tree (again)} The boxplot of girth is below
+\begin{figure}[h]
+  \centering
+  \epsfig{file=f4.pdf, height=5cm}
+\end{figure}
+
+\no {\textcolor{magenta}{Scatter plot and time series plot:} Scatter plots are used to see and understand a relationship between two variables. Particularly if one of the variables is time, it is referred as a time plot. \\[.1in]
+\no $\clubsuit$ A scatter plot consists of $n$ points on an $(x,y)-$plane, with $x-$ and $y-$coordinates representing the two recorded variables. \\[.1in]
+\no {\textcolor{blue}{Example: cherry tree (again)} The scatter plot of girth v.s. height (\textcolor{magenta}{x-coordinate is girth, y-coordinate is height})
+\begin{figure}[h]
+  \centering
+  \epsfig{file=f5.pdf, height=7cm}
+\end{figure}
+
+\foilhead[-.8in]{\textcolor{blue}{Parameter Estimation}}
+\no $\spadesuit$ Why do we need estimators and what is an estimator?\\[.1in]
+\no {\textcolor{cyan}{Some motivations:} Suppose we are interested in the average annual income of people in the U.S., we use a parameter $\theta$ to denote it. \\[.1in]
+\no $\spadesuit$ Ideally, if we know all the data in the population, say $x_1,\cdots, x_N$ (they are the sample values of $X_1\cdots, X_N$) then $\theta=\sum\limits_{i=1}^N x_i/N$. \textcolor{red}{However, we are not able to record the annual income for each individual!}\\[.1in]
+\no $\spadesuit$ What we do is to select a good and appropriate sample, a subset of the whole population, say $X_1,\cdots, X_n$ with sample size $n<N$. \\[.1in]
+\no $\clubsuit$ Their values are $x_1,\cdots, x_n$ and we can compute the sample mean based on those values: $\bar{x}$, we hope this is a good representation of $\theta$, i.e. \textcolor{red}{estimate} $\theta$ accurately\\[.1in]
+\no $\heartsuit$ $\bar{X}$ is an \textcolor{red}{estimator} for $\theta$ then, and $\bar{x}$ is a value of this estimator.
+
+\foilhead[-.8in]{\textcolor{blue}{Estimators}}
+\no {\textcolor{magenta}{Estimator:}  Let $X_1,\cdots, X_n$ be i.i.d. random variables with distribution $F_\theta$ with (unknown) parameter $\theta$. A statistics $\hat{\theta}=\hat{\theta}(X_1,\cdots, X_n)$ used to estimate the value of $\theta$ is called an estimator of $\theta$. \\[.1in]
+\no {\textcolor{magenta}{Estimate:} For each realization $x_1,\cdots, x_n$, $\hat{\theta}(x_1,\cdots, x_n)$, which is a number, is called an estimate of $\theta$. \\[.1in]
+\no {\textcolor{red}{A very natural question:} is the estimate good or bad? \\[.1in]
+\no $\spadesuit$  We need some terminology to compare our estimators.\\[.1in]
+\no $\clubsuit$ {\textcolor{magenta}{Unbiasedness:} An estimator for $\theta$ is unbiased if the expected value of the estimator is the true parameter, i.e. $E(\hat{\theta})=\theta$\\[.1in]
+\no $\clubsuit$ {\textcolor{magenta}{Efficiency:} For two estimators of $\theta$, say $\hat{\theta}_1$ and $\hat{\theta}_2$, $\hat{\theta}_1$ is considered to be more efficient than $\hat{\theta}_2$ if
+$$E(\hat{\theta}_1-\theta)^2<E(\hat{\theta}_2-\theta)^2$$
+\no $\spadesuit$ $E(\hat{\theta}-\theta)^2$ is called \textcolor{red}{MSE} (Mean Squared Error)\\[.1in]
+\no $\clubsuit$ {\textcolor{magenta}{Consistency:} If we have a large sample size $n$, we want the estimator $\hat{\theta}$ to be close to the true parameter in the sense that
+$$\lim\limits_{n\to \infty}P(|\hat{\theta}-\theta|>\epsilon)=0$$ for any $\epsilon>0$. \\[.1in]
+\no $\heartsuit$ {\textcolor{cyan}{Example:}  The sample mean $\bar{X}$ is unbiased for population mean $\mu$, and the sample variance is unbiased for the population variance $\sigma^2$. \\[.1in]
+\no $\heartsuit$ \textcolor{cyan}{Reason:} We have
+$$
+E(\bar{X})=E(n^{-1}\sum\limits_{i=1}^n X_i) =n^{-1}\sum\limits_{i=1}^n E(X_i)
+=n^{-1}\sum\limits_{i=1}^n \mu=n^{-1}n\mu=\mu
+$$
+and
+$$S^2=(n-1)^{-1}\sum\limits_{i=1}^n (X_i-\bar{X})^2=\frac{1}{n-1}\sum(X_i-\mu)^2-n(\bar{X}-\mu)^2$$
+where $\mu=E(X_i)$.\\
+Thus
+$$E(S^2)=\frac1{n-1}(n\sigma^2-n\text{Var}(\bar{X}))=\frac1{n-1}(n\sigma^2-\frac{n}{n}\sigma^2)=
+\sigma^2.$$
+
+
+
+\end{document}
+
+
+
+

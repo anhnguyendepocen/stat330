@@ -1,0 +1,251 @@
+\documentclass[20pt,landscape]{foils}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{color}
+\usepackage{hyperref}
+%\usepackage{pause}
+\usepackage{graphicx}
+\usepackage{epsfig}
+%\usepackage{geometry}
+%\geometry{headsep=3ex,hscale=0.9}
+\newcommand{\bd}{\textbf}
+\newcommand{\no}{\noindent}
+\newcommand{\un}{\underline}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand \h {\hspace*{.3in}}
+\newcommand{\bul}{\hspace*{.3in}{\textcolor{red}{$\bullet$ \ }}}
+\newcommand{\xbar}{\bar{x}}
+\rightheader{Stat 330 (Fall 2015): slide set 11}
+
+\begin{document}
+\LogoOff
+
+\foilhead[1.3in]{}
+\centerline{\LARGE \textcolor{blue}{Slide set 11}}
+\vspace{0.3in}
+\centerline{\large Stat 330 (Fall 2015)}
+\vspace{0.2in}
+\centerline{\tiny Last update: \today}
+\setcounter{page}{0}
+
+\foilhead[-.75in]{\textcolor{blue}{Compound p.m.f.}}
+\no  {\textcolor{magenta}{Motivation:} Real problems very seldom concern a single random variable. As soon
+as more than 1 variable is involved it is not sufficient to think of
+modeling them only individually - their {\it joint } behavior is
+important.}   \\[.1in]
+ \no  {\textcolor{blue}{2 variables case:}
+Consider the two variables: $X, Y$ are two discrete variables.
+The {\it joint probability mass function} is defined as
+\[
+p_{X,Y}(x,y) := P( X = x \cap Y = y)
+\]\\[-.6in]
+\no  {\textcolor{magenta}{Example:}}  {\textcolor{cyan}{A box contains 5 unmarked PowerPC G4 processors of different
+    speeds: \hspace*{2cm}
+    \begin{tabular}{c|c}
+      no & speed\\\hline
+	2 & 400 mHz \\
+	1 & 450 mHz \\
+	2 & 500 mHz
+    \end{tabular}}}\\[.1in]
+\no Select two processors out of the box (without replacement) and let
+    \begin{tabular}{l}
+\h \h \h	$X$ = speed of the first selected processor\\
+\h \h \h	$Y$ = speed of the second selected processor
+    \end{tabular}
+
+
+
+\foilhead[-.8in]{\textcolor{blue}{Example (Cont'd)}}
+\no  {\textcolor{magenta}{Summary:}} For a sample space we can draw a table of all the possible
+    combinations of processors. We will distinguish between
+    processors of the same speed by using the subscripts 1 and 2
+    
+     \begin{center}
+	\begin{tabular}{l|lccccc}
+	&	\multicolumn{5}{c}{1st processor}\\ \hline
+&	$\Omega$ & $400_{1}$ & $400_{2}$ & $450$ & $500_{1}$ & $500_{2}$ 
+\\ \hline
+&	$400_{1} $ & - & x & x & x & x  \\
+&	$400_{2} $ & x & - & x & x & x  \\
+	2nd processor &	$450$ & x & x & - & x & x  \\
+&	$500_{1}$ &   x & x & x & - & x \\
+&	$500_{2}$ & x & x & x & x & - 
+	\end{tabular}
+    \end{center}
+ 
+\no    In total we have $5 \cdot 4 = 20$ possible combinations. 
+
+\no     Since we draw at random, we assume that each of the above
+    combinations is equally likely. This yields the following
+    probability mass function:
+
+
+
+\foilhead[-.8in]{\textcolor{blue}{Example (Cont'd)}}
+\no  {\textcolor{red}{Probabilities:}} 
+  \begin{center}
+	\begin{tabular}{ll|ccc}
+	    & & \multicolumn{3}{c}{2nd processor} \\
+	 & mHz  & 400 & 450 & 500  \\ \hline
+	  &  400 & 0.1 & 0.1 & 0.2 \\
+ 1st proc. & 450 & 0.1 & 0.0 & 0.1 \\
+	  &  500  & 0.2 & 0.1 & 0.1 	   
+	\end{tabular}
+    \end{center}
+    }
+\no  {\textcolor{magenta}{Question 1:}}  {\textcolor{cyan}{ What is the probability for $X=Y$?}}\\[.1in]
+\no  This might be important if we wanted to match the chips to
+    assemble a dual processor machine \\[.1in]
+\no  {\textcolor{magenta}{Solution:}}\\[.1in]
+ \hspace*{1in}  $ P(X = Y) = p_{X,Y}(400,400) + p_{X,Y}(450, 450) + p_{X,Y}(500,500) $\\[.1in]
+  \hspace*{2.3in}  $ =0.1 + 0 + 0.1 = 0.2.$
+
+    \foilhead[-.75in]{\textcolor{blue}{Example (Cont'd) and Marginal p.m.f.}}
+\no  {\textcolor{magenta}{Question 2:}}  {\textcolor{cyan}{ What is the probability for $X>Y$?}}\\[.1in]
+\no This is asking: What is the probability that the first processor
+    has higher speed than the second?\\[.1in]
+\no  {\textcolor{magenta}{Solution:}}\\[.1in] 
+  \hspace*{1in} $  P(X > Y) = p_{X,Y}(450,400) +  p_{X,Y}(500,400) +  p_{X,Y}(500,450)$ \\[.1in]
+  \hspace*{2.5in}  $ =0.1 + 0.2 + 0.1 = 0.4.$ \\[.2in]
+ \no {\textcolor{magenta}{Marginal p.m.f.:}} Go from joint probability mass functions to individual pmfs:\\[-.3in]
+\begin{eqnarray*}
+    \begin{array}{l}
+	\displaystyle p_{X}(x) = \sum_{y} p_{X,Y}(x,y) \\[5pt]
+	\displaystyle p_{Y}(y) = \sum_{x} p_{X,Y} (x,y)
+    \end{array}
+\end{eqnarray*}
+ 
+
+
+\foilhead[-.8in]{\textcolor{blue}{Previous example again...}}   
+\no {\textcolor{magenta}{Example}} {\textcolor{cyan} {For the previous example the marginal probability mass
+    functions are}}
+    \[
+    \begin{array}{c||ccc}
+	x & 400 & 450 & 500 \text{ (mHz)} \\ \hline
+	p_{X}(x) & 0.4 & 0.2 & 0.4 \\
+    \end{array}
+    \hspace{2cm}
+    \begin{array}{c||ccc}
+	y & 400 & 450 & 500 \text{ (mHz)} \\ \hline
+	p_{Y}(y) & 0.4 & 0.2 & 0.4 \\
+    \end{array}
+    \]
+\no {\textcolor{magenta}{Recall:}} Expected value of $X$ is ....?\\[.1in]
+\no {\textcolor{magenta}{Expected value for a function of several variables:}}
+$$E[h(X,Y)] := \sum_{x,y} h(x,y) p_{X,Y}(x,y)$$
+\no {\textcolor{red}{Continued Example:} } Let $X,Y$ be as before.\\[.1in]
+\no  {\textcolor{magenta}{Question 3:}} {\textcolor{cyan} {What is $E[|X-Y|]$ (the average speed difference)}}?
+
+
+\foilhead[-.8in]{\textcolor{blue}{Example (Cont'd)}}    
+\no {\textcolor{magenta}{Solution:}  Here, we have the situation $E[|X-Y|] = E[h(X,Y)]$, with $h(X,Y) =
+    |X - Y|$.\\[.1in]
+\no Using the above definition of expected value of $h(X,Y)$ gives us:
+    \begin{eqnarray*}
+	E[|X-Y|] &=& \sum_{x,y} |x-y| p_{X,Y}(x,y) = \\
+	&=& |400 - 400| \cdot 0.1 + |400 - 450| \cdot 0.1 + |400 - 500| \cdot
+	0.2 + \\
+	&& |450 - 400| \cdot 0.1 + |450 - 450| \cdot 0.0 + |450 - 500| \cdot
+	0.1 + \\
+	&& |500 - 400| \cdot 0.2 + |500 - 450| \cdot 0.1 +  |500 - 500| \cdot
+	0.1 = \\
+	&=& 0 + 5 + 20 + 5 + 0 + 5 + 20 + 5 + 0 = 60.
+    \end{eqnarray*}
+
+\foilhead[-.8in]{\textcolor{blue}{Statistics for multivariate case}}  
+\no {\textcolor{red}{Motivation:}
+%The most important cases for $h(X,Y)$ in this context are linear
+%combinations of $X$ and $Y$.\\[.1in]
+\no For two variables we can measure how ``similar'' their values are:\\[.1in]
+ \textcolor{red} {\emph{Covariance} between $X$ and $Y$:}\\[-.2in]
+  $$\text{Cov}(X,Y) = E[ (X-E[X]) (Y-E[Y]) ]$$\\[-.2in]
+\no \textcolor{red} {Remark:} This definition looks very much like the definition for
+the variance of a single random variable. In fact, if we set $Y := X$
+in the above definition, then $Cov (X,X) = Var(X)$.\\[.1in]
+\no \textcolor{red} {Correlation:}  The \emph{correlation} between two variables $X$ and $Y$ is\\[-.2in]
+$$    \rho := \frac{Cov(X,Y)}{\sqrt{Var(X) \cdot Var(Y)}}$$
+    
+\foilhead[-.8in]{\textcolor{blue}{Statistics for multivariate (cont'd)}}  
+\no \textcolor{red} {Facts and inference about correlation:} 
+\begin{itemize}
+    \item[\bul] $\rho$ is between -1 and 1
+    \item[\bul] if $\rho$ = 1 or -1, $Y$ is  a linear function of $X$
+    \begin{tabular}{ll}
+	$\rho = 1$ & $\rightarrow Y = aX + b$ with $a > 0$, \\	
+	$\rho = -1$ & $\rightarrow Y = aX + b$ with $a < 0$, \\
+    \end{tabular}   
+    \item[\bul] $\rho$ is a measure of linear association between $X$ and $Y$.
+\item[\bul] $\rho$ near $\pm 1$ indicates a strong linear relationship, $\rho$
+near 0 indicates lack of linear association.
+\end{itemize}
+
+
+\foilhead[-.8in]{\textcolor{blue}{Example (Cont'd)}}
+\no {\textcolor{magenta}{In our previous Example:}   What is $\rho(X,Y)$ in our box with five chips?\\[.1in]
+\no {\textcolor{magenta}{Solution:} Use marginal pmfs to compute:\\[.1in]
+\no \h \h   \bul $E[X] = E[Y] = 450$\\
+\no \h \h    \bul $Var[X] = Var[Y] = 2000$\\[.15in]
+The covariance between $X$ and $Y$ is:
+    \begin{eqnarray*}
+	Cov(X,Y) &=& \sum_{x,y} (x-E[X])(y-E[Y]) p_{X,Y}(x,y) = \\
+	&=& (400 - 450)(400-450) \cdot 0.1 + (450 - 450)(400-450) \cdot 0.1+\\
+	&& \cdots +   +
+	(500-450)(500-450) \cdot 0.1 = \\
+	&=& 250 + 0 - 500 + 0 + 0 + 0 -500 + 250 + 0 = -500.
+    \end{eqnarray*}
+\foilhead[-.8in]{\textcolor{blue}{Example (Cont'd)}}    
+\no    $\rho$ therefore is
+    \[
+    \rho = \frac{Cov(X,Y)}{\sqrt{Var(X) Var(Y)}} =
+    \frac{-500}{2000} = -0.25,
+    \]
+\no $\rho$ indicates a weak negative (linear) association.\\[.1in]
+\no {\textcolor{magenta}{Question:}  Are $X$ and $Y$ independent?\\[.1in]
+\no  {\textcolor{magenta}{Recall:} What is independence of events? \\[.1in]
+\no  {\textcolor{red}{Definition:} Two random variables $X$ and $Y$ are {\it independent}, if their
+joint probability $p_{X,Y}$ is equal to the product of the marginal densities $p_{X} \cdot p_{Y}$.
+    
+ \no  {\textcolor{red}{Note:}   Random variables are independent, if {\bf all} events of the form $\{X = x\}$ and $\{Y = y\}$ are independent. Need $p_{X,Y}(x,y) = p_{X}(x) \cdot p_{Y}(y)$ for all
+    possible combinations of $x$ and $y$.
+
+\foilhead[-.8in]{\textcolor{blue}{Answer to the question:}}
+\no Check \[
+    p_{X,Y}(450,450) = 0 \neq 0.2 \cdot 0.2 = p_{X}(450) \cdot
+    p_{Y}(450).
+    \]
+\no {\textcolor{magenta}{Answer: }}{\textcolor{cyan}{ Therefore, $X$ and $Y$ are not independent!}}\\[.2in]
+\no That means we need to find only one contradiction to prove that two variables are not independent!\\[.2in]
+\no To prove that two variables are independent we need to check $p_{X,Y}(x,y) = p_{X}(x) \cdot p_{Y}(y)$ for all
+    possible combinations of $x$ and $y$.!
+
+\foilhead[-.8in]{\textcolor{blue}{More theorems on statistics}}
+
+ \no  {\textcolor{red}{Theorem:}}   If two random variables $X$ and $Y$ are independent,
+    \begin{eqnarray*}
+	E[X \cdot Y] &=& = E[X] \cdot E[Y] \\
+	Var[X + Y] &=& Var[X] + Var[Y]
+    \end{eqnarray*}
+    
+  \no  {\textcolor{red}{Theorem:}}    For two random variables $X$ and $Y$ and three real numbers
+    $a,b,c$ holds:
+    \[
+    Var[aX + bY + c] = a^{2} Var[X] + b^{2} Var[Y] + 2ab \cdot Cov(X,Y)
+    \]
+    
+%\no {\textcolor{magenta}{Exercise:}} Apply these results to  the previous example by yourself.
+
+
+
+
+
+
+
+
+
+
+\end{document}

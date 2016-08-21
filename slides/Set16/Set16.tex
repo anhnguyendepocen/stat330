@@ -1,0 +1,189 @@
+\documentclass[20pt,landscape]{foils}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{color}
+\usepackage{hyperref}
+%\usepackage{pause}
+\usepackage{graphicx}
+\usepackage{epsfig}
+%\usepackage{geometry}
+%\geometry{headsep=3ex,hscale=0.9}
+\newcommand{\bd}{\textbf}
+\newcommand{\no}{\noindent}
+\newcommand{\un}{\underline}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand \h {\hspace*{.3in}}
+\newcommand{\bul}{\hspace*{.3in}{\textcolor{red}{$\bullet$ \ }}}
+\newcommand{\xbar}{\bar{x}}
+\rightheader{Stat 330 (Fall 2015): slide set 16}
+
+\begin{document}
+\LogoOff
+
+\foilhead[1.3in]{}
+\centerline{\LARGE \textcolor{blue}{Slide set 16}}
+\vspace{0.3in}
+\centerline{\large Stat 330 (Fall 2015)}
+\vspace{0.2in}
+\centerline{\tiny Last update: \today}
+\setcounter{page}{0}
+
+\foilhead[-.8in]{\textcolor{blue}{Stochastic Processes}}
+%\no  {\textcolor{magenta}{Intuitive idea:}  {}.}} \\[.1in]
+%{\textcolor{red}{Random Variable }}
+\no \bul  A {\textcolor{magenta}{stochastic process}} is a collection of random variables
+indexed by {}``time'' $t$, that is, \[
+\{\, X(t,\omega)\mid t\in\mathcal{T}\,\},\]
+where $\mathcal{T}$ is a set of possible times, e.g. $[0,\infty),\,\text{(-\ensuremath{\infty}, \ensuremath{\infty}),\,\{0, 1, 2, ...\}}$;
+$\omega\in\Omega$ is an outcome from the whole sample space $\Omega$.\\[.1in]
+\no \bul  Values of $X(t,\omega)$ are called {\textcolor{magenta}{states}}.\\[.1in]
+\no \bul For any fixed time $t$, we see a random variable $X_{t}(\omega)$,
+a function of an outcome. \\[.1in]
+\no \bul On the other hand, if we fix $\omega,$ we
+obtain a function of time $X_{\omega}(t)$. This function is called
+a {\textcolor{magenta}{realization}}, a sample path or trajectory of a process $X(t,\omega)$.\\[.1in]
+\no Stochastic process $X(t,\omega)$ is {\textcolor{magenta}{discrete-state}} ({\textcolor{magenta}{continuous-state}})
+if $X_{t}(\omega)$ is {\textcolor{magenta}{discrete}} ({\textcolor{magenta}{continuous}}) for
+each time $t$. It is a {\textcolor{magenta}{discrete-time}} ({\textcolor{magenta}{continuous-time}})
+process if the set of times $\mathcal{T}$ is {\textcolor{magenta}{discrete}} ({\textcolor{magenta}{continuous}}).   
+   
+\foilhead[-.8in]{\textcolor{blue}{Examples}}   
+\begin{enumerate}
+\item CPU usage, in percents, is a continuous-state and continuous-time process.
+\item Let $X(t,\omega)$ be the amount of time required to serve
+the $t$-th customer at a Subway. This is a discrete-time, continuous-state stochastic
+process, as $t\in\mathcal{T}=\{1,\,2,\,...\}$ and the state space
+is $(0,\infty)$.
+\item Let $X(t,\omega)$ be the result of tossing a fair coin in the $t$-th
+trial (1 for head, 0 for tail), this is then a discrete-time, discrete-state
+stochastic process.
+\item Let $X(t,\omega)$ be the reported temperature (rounded to the nearest integer) by radio at time $t$,
+it is then a continuous-time, discrete-state stochastic process.
+\end{enumerate}
+
+\foilhead[-.8in]{\textcolor{blue}{Markov processes}}  
+\no Stochastic process $X(t)$ is Markov if for any $t_{1}<t_{2}<...<t_{n}<t$
+and any sets $A;\, A_{1},...,\, A_{n}$, \[
+P\{X(t)\in A|\, X(t_{1})\in A_{1},\,...\,,\, X(t_{n})\in A_{n}\}=P\{X(t)\in A|\, X(t_{n})\in A_{1}\}.\]
+In other words, it means that the conditional distribution of $X(t)$
+is the same under two different conditions:
+
+\begin{itemize}
+\item[\bul] conditional on  the observations of the process $X$ at several moments in the past;
+\item[\bul] conditional only on the \emph{latest} observations of $X$.
+\end{itemize}
+\no Implies that the distribution of $X(t)$ at time $t$ depends only on the distribution of $X(t)$ at time $t_n$.
+\foilhead[-.8in]{\textcolor{blue}{Markov processes:Examples}} 
+\be
+\addtolength{\itemsep}{-0.6\baselineskip}
+\item[\bul] ({\textcolor{magenta}{Internet Connections}}). Let $X(t)$ be the total number
+of internet connections registered by some internet service provider
+by the time $t$. Typically, people connect to the internet at random
+times, regardless of how many connections have already been made.
+Therefore, the number of connections in a minute will only depend
+on the current number.
+\item[\bul] ({\textcolor{magenta}{Stock Prices}}). The following is the Dow Jones Industrial
+Average recorded on Oct 6, 2010 from 9:30am ET to 12:22pm
+ET. Let $Y(t)$ be the value of DJI at time $t$. The fact that the market has been falling several periods before 11:00 p.m. may help us you to predict the dip of $Y(t)$. Thus this process is not Markov.
+\ee
+\bc
+%\includegraphics[scale=0.5,bb = 0 0 200 100]{1006_1.pdf}
+\includegraphics[scale=0.35]{stock.pdf}
+\ec
+
+
+\foilhead[-.8in]{\textcolor{blue}{Markov Chains}} 
+\no A {\textcolor{magenta}{Markov chain}} is a discrete-time, discrete-state Markov
+process. So we can define time set $\mathcal{T}=\{0,\,1,\,2,\,...\}$.
+The Markov chain can be treated as a sequence $\{X(0),\, X(1),\, X(2),\,...\}$.
+The state space is $\{1,\,2,\,3,\,...\}$.\\[.15in] 
+\no The Markov property means
+that \\\\[.1in]
+$P\{X(t+1)=j\,|\, X(t)=i\}=P\{X(t+1)=j\,|\, X(t)=i,$\\
+\hspace*{5in}$\, X(t-1)=h,\, X(t-2)=g,\,...\}.$
+\begin{enumerate}
+\item {\textcolor{magenta}{Transition probability}} $p_{ij}(t)$ is defined as \[
+p_{ij}(t)=P\{X(t+1)=j\,|\, X(t)=i\}.\]
+$p_{ij}(t)$ the probability of moving from state $i$ to state $j$ in 1-step.
+\item The {\textcolor{magenta}{$h$-step transition probability}} $p_{ij}^{(h)}(t)$ is
+defined as
+\[p_{ij}^{(h)}(t)=P(X(t+h)=j\,|\, X(t)=i).\]
+ $p_{ij}^{(h)}(t)$ the probability of moving from state $i$ to state $j$ in h-steps.
+\item A Markov chain is {\textcolor{magenta}{homogeneous}} if all its transition probabilities
+are independent of $t$. That is  the transition probability from state $i$ to state $j$ is the same at any time $t$:  $p_{ij}^{(h)}(t)=p_{ij}^{(h)},$ for all times  $t$.
+\item The distribution of homogeneous Markov chain is completely determined by the initial
+distribution $P_{0}$ and one-step transition probabilities $p_{ij}$.
+Here $P_{0}$ is the {\textcolor{magenta}{probability mass function}} of $X(0)$, that is,
+\[ P_{0}(x)=P(X(0)=x)\ \mathrm{for}\ x\in\{1,\,2,\,,...,\, n\}\]
+\end{enumerate}
+\foilhead[-.8in]{\textcolor{blue}{Markov Chains : Example}} 
+\no In the summer, each day in Ames is either sunny or rainy. A sunny
+day is followed by another sunny day with probability 0.7, whereas
+a rainy day is followed by a sunny day with probability 0.4. It rains
+on Monday. Make weather forecasts for Tuesday, Wednesday, and Thursday, using a homogeneous Markov chain model.\\[.1in]
+\no Let 1=''sunny'' and 2=''rainy'' and M,T,W,R denotes days of the week.\\[.1in]
+Given $p_{11}=.7$; it follows that for the complementary event  $p_{12}=.3$\\[.1in]
+Similarly, given $p_{21}=.4$ it follows that $p_{22}=.6$\\[.15in]
+{\textcolor{blue}{Forecast for Tuesday:}}\\[.1in]
+Consider Monday(M) to Tuesday(T) as a one-step transition:\\[.1in]
+\hspace*{1in} $P(\text{T sunny}|\text{M rainy})=p_{21}=.4$\\[.1in]
+\hspace*{1in} $P(\text{T rainy}|\text{M rainy})=p_{22}=.6$\\[.1in]
+{\textcolor{magenta}{Prediction:}} 60\% chance of rain for Tuesday.
+\newpage
+\no {\textcolor{blue}{Forecast for Wednesday:}}\\[.01in]
+Consider Monday(M) to Wednesday(W) as a 2-step transition:\\[.1in]
+$P(\text{W sunny}|\text{M rainy})=p_{21}^{(2)}=$ ({\textcolor{magenta}{By Total Probability Law}})\\[.1in]
+\hspace*{1in} $P(\text{W sunny}|\text{T rainy},\text{M rainy})\cdot P(\text{T rainy}|\text{M rainy})$\\
+\hspace*{2.5in} $+P(\text{W sunny}|\text{T sunny},\text{M rainy})\cdot P(\text{T sunny}|\text{M rainy})$ \\[.1in]
+\no Using {\textcolor{magenta}{Markov property}}, above equals to\\[.1in]
+{\small $P(\text{W sunny}|\text{T rainy})\cdot P(\text{T rainy}|\text{M rainy})+P(\text{W sunny}|\text{T sunny})\cdot P(\text{T sunny}|\text{M rainy})$} \\[.1in]
+\hspace*{1.5in} $=p_{21}\cdot p_{22}+p_{11} \cdot p_{21}=(.4)(.6)+(.7)(.4)=.52$\\[.1in]
+For the complementary event, $P(\text{W rainy}|\text{M rainy})=p_{21}^{(2)}=1-.52=.48$\\[.1in]
+{\textcolor{magenta}{Prediction:}} 48\% chance of being sunny on Wednesday.\\[.1in]
+Using this method, computations of 3-step probabilities follow similar arguments:
+$p_{21}^{(3)}=p_{21}\cdot p_{22}^{(2)}+p_{11} \cdot p_{22}^{(2)}=(.4)(.48)+(.7)(.52)=.556$\\[.1in]
+{\textcolor{magenta}{Prediction:}} 44.4\% chance of rain for Thursday.
+\foilhead[-.8in]{\textcolor{blue}{Transition Probability Matrix}} 
+\no Let $\{1,\,2,\,...,\, n\}$ be the state space. The 1-step
+transition probability matrix is
+\[P=\begin{pmatrix}p_{11} & p_{12} & \cdots & p_{1n}\\
+p_{21} & p_{22} & \cdots & p_{2n}\\
+\vdots & \vdots & \ddots & \vdots\\
+p_{n1} & p_{n2} & \cdots & p_{nn}
+\end{pmatrix}.\]
+The element from the $i$-th row and $j$-th column is $p_{ij}$,
+which is the transition probability from state $i$ to state $j$.
+Similarly, one can define a $h$-step transition probability matrix\\
+\[P^{(h)}=\begin{pmatrix}p_{11}^{(h)} & p_{12}^{(h)} & \cdots & p_{1n}^{(h)}\\
+p_{21}^{(h)} & p_{22}^{(h)} & \cdots & p_{2n}^{(h)}\\
+\vdots & \vdots & \ddots & \vdots\\
+p_{n1}^{(h)} & p_{n2}^{(h)} & \cdots & p_{nn}^{(h)}
+\end{pmatrix}.\]
+\newpage
+\no Using the matrix notation the following results follow:\\[.15in]
+\bul 2-step transition matrix $P^{(2)}=P\cdot P=P^{2}$\\[.1in]
+\bul $h$-step transition matrix $P^{(h)}=P^{h}$\\[.1in]
+\bul  The distribution of $X(h)$ is given by $P_{h}=P_{0}P^{h}$\\[.1in]
+{\textcolor{blue}{Rain in Ames Example:}}\\
+\[P=\begin{pmatrix}.7 & .3 \\
+.4 & .6\\
+\end{pmatrix}, \ \ P^{(2)}=\begin{pmatrix}.7 & .3 \\
+.4 & .6\\
+\end{pmatrix} \cdot \begin{pmatrix}.7 & .3 \\
+.4 & .6\\
+\end{pmatrix}=\begin{pmatrix} .61 &  .39 \\ .52 & .48 \end{pmatrix}\]
+ \[P^{(3)}=\begin{pmatrix} .61 &  .39 \\ .52 & .48 \end{pmatrix} \cdot \begin{pmatrix} .7 & .3 \\
+.4 & .6\\
+\end{pmatrix}=\begin{pmatrix} .583 & .417  \\ .556 & .444 \end{pmatrix}\]\\
+Just read-off values needed for predictions: \\[.1in]
+\hspace*{1.5in} $P(\text{W rainy}|\text{M rainy})=p_{22}^{(2)}=.48$\\[.1in] 
+\hspace*{1.5in} $P(\text{R sunny}|\text{M rainy})=p_{21}^{(3)}=.556$ 
+\end{document}
+
+
+
+
