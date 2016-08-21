@@ -1,0 +1,206 @@
+\documentclass[handout]{beamer}
+
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set01 - Uncertainty and Randomness}
+
+\begin{document}
+
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE>>=
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+\frame{\maketitle}
+
+
+\begin{frame}
+\frametitle{Uncertainty/Randomness}
+
+\begin{itemize}[<+->]
+\item The lack of certainty, a state of having limited knowledge where it is impossible to exactly describe current state or future outcome, (or the existence of more than one possible outcome).
+\item Uncertainty exists in many aspects of science, business and our everyday life. It is something usually unavoidable  which we have to deal with.
+\item Uncertainty appears in all areas of computer science and engineering. We will see some realistic examples as we proceed.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Probability and Statistics}
+
+We want to study physical processes that are not completely deterministic. Using probability and statistics to understand the random components of such processes can help us do this. \pause
+
+\vspace{0.2in}
+
+\begin{itemize}
+\item \alert{Probability}: mathematical theory for modeling \emph{experiments} where outcomes occur randomly. \pause
+\item \alert{Statistics}: use data to make inferences about questions of interest
+\end{itemize}
+
+\vspace{0.2in} \pause
+
+Because statistical inference makes use of probability models, probability is a foundation for statistics. To use probability and statistics in a mathematically coherent way, we need a formal framework for talking about random processes and the elements that comprise random experiments. 
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Probabilistic Models for ``Real-World'' Processes}
+
+\begin{itemize}[<+->]
+\item Many physical processes involve a random component -- an element that cannot be described exactly by a deterministic algorithm.
+\item A name for such a process is a \alert{random experiment}.
+\item The term \alert{experiment} used here does not necessarily have its usual meaning of a controlled situations  in which outputs (responses) are observed as a result of inputs (factors).
+\item Some examples of what we consider to be random experiments are below.  More interesting examples can be found in the textbook or Prof. Hofmann's notes.
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Examples of Random Experiments}
+
+\begin{definition}
+A \alert{random experiment} is a process with random outcomes.
+\end{definition}
+
+\pause
+
+Examples:
+\begin{itemize}[<+->]
+\item Record the result of tossing two coins repeatedly: HH,HT,TH,TH,HH,...
+\item Record the number of cars passing through an intersection. 
+\item \emph{The Wall Street Journal} tracks the DOW Jones industrial averages.
+\item Record the time it takes for the webpage to respond.
+\item Consumers can send an email to an organization's phishing box to report a phishing attempt. The organization records the number of notifications and the time between notifications. 
+\item A company measures the installation time of a software system under different conditions so that it can give customers some idea of the time required.
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Components of Random Experiments}
+
+\begin{definition}
+An \alert{elementary outcome} $(\omega)$ is a result of a random experiment.
+\end{definition}
+
+\vspace{0.2in} \pause
+
+\alert{Examples:}
+\begin{enumerate}
+\item Toss a coin until we get a head. $\omega = TTTTH$
+\item Record the time for a webpage to respond. $\omega = 3.527 \mbox{ seconds} $
+\item A message can take two network routers to get to a recipient computer. We may record the status of router 1, the status of router 2, and the status of the recipient computer, where the status is either up (U) or down (D). 
+$\omega = (\mbox{router 1 down, router 2 down, recipient computer up}) = DDU$
+\end{enumerate}
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Components of Random Experiments (cont.)}
+
+\begin{definition}
+The \alert{sample space} $(\mOmega)$ is the set of all possible (elementary) outcomes. 
+\end{definition}
+
+\pause
+
+\emph{Examples:}
+\begin{enumerate}
+\item Toss coin until a head: $\mOmega = \{H, TH, TTH, TTTH,\ldots\}$
+\item Time to access webpage: $\mOmega = (0,\infty)$
+\item Network Routers: 
+\[ \begin{array}{rl}
+\mOmega &= \{\mbox{ordered triples of U's and D's}\} \pause \\
+&= \{DDD, DDU, DUD, UDD, UUD, UDU, DUU, UUU\} 
+\end{array} \]
+where $|\mOmega|=8 = 2^{3}$.					 
+\end{enumerate}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Discrete sample spaces}
+
+\begin{definition}
+A \alert{discrete sample space} is a sample space with a finite or countably infinite number of elements. \pause A \alert{continuous sample space} is a sample space with an uncountably infinite number of elements.
+\end{definition}
+
+\pause
+ 
+\emph{Examples:}
+\begin{itemize}
+\item Toss coin until a head: \pause Discrete (infinite) \pause
+\item Time to access webpage: \pause Continuous \pause
+\item Network Routers: \pause Discrete (finite)
+\end{itemize}
+
+\vspace{0.2in} \pause
+
+{\bf Note}: 
+There are usually multiple ways to express the sample space for a particular experiment. 
+\emph{Example}: Toss coin until a head: $\mOmega' = \{1, 2, 3, \ldots\}$ is an equivalent expression for the sample space. 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Events}
+
+\begin{definition}
+An \alert{event} is a collection of elementary outcomes.
+\end{definition}
+
+\pause
+
+Examples:
+
+\begin{enumerate}[<+->]
+\item Toss coin until a head:
+\[ \begin{array}{rl}
+A &= \mbox{first head occurs between 5 and 11 tosses (inclusive)} \\
+&= \{5, 6, 7, 8, 9, 10, 11\}
+\end{array} \] 
+
+\item Time to access a webpage:
+\[ \begin{array}{rl} 
+B &= \mbox{More than 10 seconds} \\
+&= (10, \infty)
+\end{array} \]
+
+\item Suppose the message is transmitted successfully if at least one router is up and the recipient's computer is up.
+\[ \begin{array}{rl}
+C &= \mbox{Successful transmission} \\
+&= \{DUU, UDU, UUU\}
+\end{array} \]
+\end{enumerate}
+\end{frame}
+					  
+								
+\end{document}
+
