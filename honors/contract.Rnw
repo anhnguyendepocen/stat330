@@ -1,0 +1,8 @@
+\documentclass{article}
+
+\begin{document}
+
+This document describes what must be accomplished to earn honors credit in STAT 330 Fall 2016. 
+
+
+\end{document}
