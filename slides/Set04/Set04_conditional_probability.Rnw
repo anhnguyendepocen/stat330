@@ -278,14 +278,34 @@ A \alert{serial} system consists of $k$ components $c_{1}, \ldots, c_{k}$ arrang
 \end{frame}
 
 
-% \foilhead[-.8in]{\textcolor{blue}{On Systems and Reliability (continued)}}
-% \begin{itemize}
-% \item The system consisting of the AOL network and the phone line is an example of a serial system.
-% \item The {\textcolor{magenta}{reliability}} of a system is the probability that the system works.
-% \item For example, the reliability of the system consisting of the AOL network and the phone line (if the two are independent) is .54. 
-% \item We can also construct larger systems with sub-systems that are connected in series and/or in parallel.
-% \end{itemize}
+
+\begin{frame}
+\frametitle{Reliability}
+
+\begin{definition}
+\alert{Reliability} of a system is the probability the system works. 
+\end{definition}
+
+\pause
+
+\begin{example}
+The reliability of the WiFi-ISP network (assuming independence) is 0.54
+\end{example}
+
+\end{frame}
+
+
+% \begin{frame}
+% \frametitle{Reliability of parallel systems with independent components}
 % 
+% Let 
+% \[ 
+% 
+% \]
+% 
+% \end{frame}
+
+
 % 
 % \foilhead[-.7in]{\textcolor{blue}{Example: Parallel system with $k$ mutually independent components}}
 % \no {\textcolor{magenta}{Let $c_{1}, \ldots, c_{k}$ denote the $k$ components in a parallel system. Assume the $k$ components operate independently, and $P(c_{j} \text{ works })=p_{j}$. What is the reliability of the system?}}
