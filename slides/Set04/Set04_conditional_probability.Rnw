@@ -1,0 +1,315 @@
+\documentclass[handout]{beamer}
+
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set03 - Permutations and Combinations}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE>>=
+library(dplyr)
+library(ggplot2)
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+\frame{\maketitle}
+
+
+\section{Probability}
+\subsection{Conditional probability}
+
+\begin{frame}[fragile]
+\frametitle{Computer CPU example}
+
+A box has 5 CPUs and 2 are defective. \pause 
+Two CPUs are selected from the box, one at a time. \pause
+What is the probability the second CPU is defective? 
+
+\vspace{0.1in} \pause
+
+Let $A$ be the event \emph{the second CPU is defective}. \pause Assuming each draw is equally likely, we have
+
+\[ 
+P(A) = \frac{|A|}{|\mOmega|} \pause = \frac{2\times 4}{P(5,2)} = 0.4
+\]
+
+\pause
+
+Monte Carlo:
+<<monte_carlo_computer_cpu_example, echo=TRUE>>=
+CPUs = c("d","d","g","g","g") # d = defective, g = good
+sims = replicate(1e5, sample(CPUs, 2))
+mean(sims[2,] == "d")
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Computer CPU example (cont.)}
+
+Suppose you know the first CPU is good. \pause
+Now what is the probability the second CPU is defective? 
+
+\vspace{0.1in} \pause
+
+Let $A$ be the event \emph{the second CPU is defective}, but the sample space ($\mOmega$) has also changed. \pause Assuming each draw is equally likely, we have
+
+\[ 
+P(A) = \frac{|A|}{|\mOmega|} \pause = \frac{2}{P(4,1)} = 0.5
+\]
+
+Monte Carlo:
+<<monte_carlo_cpu_continued, dependson="monte_carlo_computer_cpu_example", echo=TRUE>>=
+mean(sims[2, sims[1,] == "g"] == "d")
+@
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Conditional probability}
+
+\begin{definition}
+The \alert{conditional probability} of an event $A$ given an event $B$ is 
+\[ 
+P(A|B) = \frac{P(A\cap B)}{P(B)}
+\]
+if $P(B) > 0$. 
+\end{definition}
+
+\pause
+
+Intuitively, the fraction of outcomes in $B$ that are also in $A$. 
+
+\pause
+
+\begin{corollary} 
+\[ 
+P(A\cap B) = P(A|B)P(B) = P(B|A)P(A).
+\]
+\end{corollary}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Computer CPU example (cont.)}
+
+Let 
+\begin{itemize}
+\item $A$ be the event the second CPU is defective and 
+\item $B$ be the event the first CPU is good. 
+\end{itemize}
+
+\pause
+
+Thus 
+\begin{itemize}
+\item $|A\cap B| = 3\times 2$ because we first pick a good CPU and then pick a defective CPU, \pause
+\item $|B| = 3\times 4$ because we first pick a good CPU and then pick any other CPU, \pause and
+\item $|\mOmega| = P(5,2)$ because we are choosing 2 objects out of 5 ordered without replacement. 
+\end{itemize}
+
+which implies
+\[ 
+P(A|B) = \frac{P(A\cap B)}{P(B)} = \frac{|A\cap B|/|\mOmega|}{|B|/|\mOmega|} = \frac{|A\cap B|}{|B|} = \frac{3\times 2}{3\times 4} = 0.5.
+\]
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{More CPUs}
+{\small
+A box has 500 computer CPUs with a speed of 1.8 GHz and 500 with a speed of 2.0 GHz. The numbers of good (G) and defective (D) CPUs at the two different speeds are as shown below.
+\begin{center}
+\begin{tabular}{c|c|c|c}
+& 1.8 GHz & 2.0 GHz & \\
+\hline 
+G & 480 & 490 & 970  \\
+D & 20 & 10 & 30  \\
+\hline
+& 500 & 500 & Total=1000    
+\end{tabular}
+\end{center}
+
+\pause
+
+We select a CPU at random and observe its speed. What is the probability that the CPU is defective given that its speed is 1.8 GHz?
+
+\pause
+
+Let 
+\begin{itemize}
+\item $A$ be the event the CPU is defective and
+\item $B$ be the event the CPU speed is 1.8 GHz.
+\end{itemize}
+
+\pause
+
+Then 
+\begin{itemize}
+\item $P(A) = 30/1000 = 0.03$
+\item $P(B) = 500/1000 = 0.5$
+\item $P(A|B) = P(A\cap B)/P(B) = |A\cap B|/|B| = 20/500 = 0.04$. 
+\end{itemize}
+}
+\end{frame}
+
+
+\subsection{Independence}
+
+\begin{frame}
+\frametitle{Statistical independence}
+
+\begin{definition}
+Events $A$ and $B$ are statistically \alert{independent} if 
+\[ 
+P(A\cap B) = P(A) \times P(B)
+\]
+\pause
+or, equivalently,
+\[ 
+P(A|B) = P(A). 
+\]
+\end{definition}
+
+\pause
+
+Intuitively, the occurrence of one event does not effect the probability of the other. 
+
+\pause
+
+\begin{example}
+If I toss a fair coin and it comes up tails, does that affect the probability the next coin flip is a head?
+\end{example}
+\end{frame}
+
+
+% \foilhead[-.8in]{\textcolor{blue}{Example 2 continued...}}
+% \no Suppose now, that I have the partial information that the CPU 
+% selected is a 1.8 GHz CPU.\\[.1in]
+% \no  2. {\textcolor{cyan}{What is now the probability that it is defective?}}\\[.1in]
+% \no Using the definition of conditional probability, we get\\[.1in] 
+% \begin{eqnarray*}
+% P( \text{ CPU is } D | \text{ CPU is } 400mHz) & = &\frac{P( \text{ CPU is } D  \text{ and  CPU is } 400mHz)}{P( \text{ CPU is } 400mHz)}\\
+% & = & \frac{0.02}{0.5} = 0.04.
+% \end{eqnarray*}
+% \no i.e. knowing the speed of the CPU influences our probability 
+% assignment to whether the CPU is defective or not.
+% \foilhead[-.8in]{\textcolor{blue}{Independence of Events}}
+% \no Sometimes, knowledge that $B$ occurred does not change our assessment of the $P(A)$. Let's say I toss a  fair  coin. I tell you that I got a tail. I then give you the coin to toss. Does the knowledge that I got a tail affect what you think the chance is that you will get a head? \\[.1in] 
+% \no {\textcolor{magenta}{Intuitively, two events $A$ and $B$ are independent if the event $B$ does not have any influence on the probability that $A$ happens (and vice versa)}}.\\[.1in]  
+% \no Mathematically, independence of two events is defined as follows:\\[.1in] 
+% {\textcolor{red}{Definition:}} Two events $A$ and $B$ are said to be {\textcolor{magenta}{independent}}, if 
+% $$
+% P( A \cap B) = P(A) \cdot P(B)
+% $$
+% \no (Result: If $P(B) \neq 0, \text{ then } $A$\text{ and }$B$\text{ are independent }  P(A|B) = P(A).$ )
+% { Example: } An alternative model for logging on to the AOL network using dial-up.\
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Independence Example}}
+% \no {\textcolor{magenta}{Example:}}  {\textcolor{cyan}{Suppose I log on to AOL using dial-up. I connect successfully if and only if the phone number works and the AOL network works. The probability that the phone works is $.9$, and the probability that the network works is $.6$.  Suppose that the status of the phone line and the status of the AOL network are independent. What is the probability that I connect successfully?}\\[.1in]
+% \no Let $A=$``phone number works'' and $B=$ ``AOL network works''; we need $P(A\cap B)$.\\[.1in]
+% \no Since we are told that $A$ and $B$ are independent, we know that $P( A \cap B) = P(A) \cdot P(B)=(.9)(.6)=.54$\\[.1in]
+% 
+% \newpage
+% %\foilhead[-.8in]{\textcolor{blue}{Independence and Disjointedness}}
+% \no {\textcolor{magenta}{Warning:}} independence and disjointedness are two very different 
+% concepts!\\[.1in]
+% \begin{minipage}[t]{3.5in}
+% {\textcolor{cyan}{Disjointedness:}}   
+%     \centerline{\includegraphics[width=2in]{disjoint.pdf}}
+% 
+%     If $A$ and $B$ are disjoint, their intersection is empty, has 
+%     therefore probability 0:
+%     \[
+%     P(A \cap B) = P(\emptyset) = 0.
+%     \]
+% \end{minipage}
+% \hfill
+% \begin{minipage}[t]{3.5in}
+% {\textcolor{cyan}{Independence: }}
+%     \centerline{\includegraphics[width=2in]{intersection.pdf}}    
+%     If $A$ and $B$ are independent events, the probability of their 
+%     intersection can be computed as the product of their individual 
+%     probabilities: $P(A \cap B) = P(A) \cdot P(B)$\\[.01in]
+%     The probability for the intersection is zero only if $A$ or $B$ is empty.
+% \end{minipage}
+% 
+% \foilhead[-.8in]{\textcolor{blue}{On Systems in Series, Systems in Parallel, and Reliability}}
+% \no \bul A {\textcolor{magenta}{parallel}} system consists of $k$ components $c_{1}, \ldots, c_{k}$ arranged in such a way that the system works if and only if at least one of the $k$ components functions properly.\\[.1in]
+% \centerline{\includegraphics[height=6cm]{parallel-system.pdf}}
+% \no \bul A {\textcolor{magenta}{serial} system consists of $k$ components $c_{1}, \ldots, c_{k}$ arranged in such a way that the system works if an only if all of the components function properly.\\[.1in]
+% \centerline{\includegraphics[height=1.5cm]{series-system.pdf}}
+% \foilhead[-.8in]{\textcolor{blue}{On Systems and Reliability (continued)}}
+% \begin{itemize}
+% \item The system consisting of the AOL network and the phone line is an example of a serial system.
+% \item The {\textcolor{magenta}{reliability}} of a system is the probability that the system works.
+% \item For example, the reliability of the system consisting of the AOL network and the phone line (if the two are independent) is .54. 
+% \item We can also construct larger systems with sub-systems that are connected in series and/or in parallel.
+% \end{itemize}
+% 
+% 
+% \foilhead[-.7in]{\textcolor{blue}{Example: Parallel system with $k$ mutually independent components}}
+% \no {\textcolor{magenta}{Let $c_{1}, \ldots, c_{k}$ denote the $k$ components in a parallel system. Assume the $k$ components operate independently, and $P(c_{j} \text{ works })=p_{j}$. What is the reliability of the system?}}
+% \begin{eqnarray*}
+% P(\text{ system works}) &=& P(\text{ at least one component works}) \\
+% &=& 1-P(\text{ all components fail }) \\ 
+% &=& 1-P(c_{1} \text{ fails and } c_{2} \text{ fails } \ldots \text{ and } c_{k} \text{ fails }) \\ 
+% &=& 1- \prod_{j=1}^k P(c_j \text{ fails}) \\
+% &=& 1- \prod_{j=1}^{k}(1-p_{j}). 
+% \end{eqnarray*}
+% 
+% \foilhead[-.7in]{\textcolor{blue}{Example: System in series with $k$ mutually independent components}}
+% %\begin{itemize}
+% \no {\textcolor{magenta}{Let $c_{1}, \ldots, c_{k}$ denote the $k$ components in a system. Assume the $k$ components are connected in series, operate independently, and $P(c_{j} \text{ works })=p_{j}$. What is the reliability of the system?}}
+% \begin{eqnarray*}
+% P(\text{ system works}) &=& P(\text{ all components work}) \\
+% &=& \prod_{j=1}^k P(c_j \text works) \\
+% &=& \prod_{j=1}^{k}p_{j}.
+% \end{eqnarray*}
+% 
+% \foilhead[-.78in]{\textcolor{blue}{Reliability of Systems (continued) }}
+% \no  {\textcolor{magenta}{Example 2.17:}}{\textcolor{cyan}{Each component in the system shown below is opearable with probability 0.92 independently of other components. Calculate the reliability}} \\[.01in]
+% \begin{minipage}[t]{4.25in}
+% {\textcolor{cyan}{of the system:}}\\[.01in]  
+% \includegraphics*[scale=.25]{circuit1.pdf}\\[.01in]
+% \no 1. The upper link A-B works if both A and B work.   Thus we can replace this link with a component F that operates with probability $P(A\cap B)=(0.92)^2=0.8464$
+% \end{minipage}
+% \hfill
+% \begin{minipage}[t]{4.25in}
+% \no 2. The components D and E connected in parallel can be replaced by component G that operates with probability\\ 
+% $P(D\cup E)=1-(1-0.92)^2$\hfill $=0.9936$\\[.1in]
+% \includegraphics*[scale=.25]{circuit2.pdf}
+% \end{minipage}
+% \foilhead[-.7in]{\textcolor{blue}{Example 2.17 (continued) }}
+% \no 3. The components C  and G connected in series so they can be replaced by a component H that operates with probability\\[.1in]
+% \hspace*{2in}$P(C\cap G)=(0.92)(0.9936)=0.9141$\\[.1in]
+% \hspace*{2.5in}\includegraphics*[scale=.3]{circuit3.pdf}\\[.1in]
+% \no 4. Lastly, the components F and H are in parallel so the reliability of the system is\\[.1in]
+% \hspace*{2in}$P(F\cup H)=1-(1-0.8424)(1-0.9141)=0.9868$
+
+
+\end{document}
+
+
+
+
+
