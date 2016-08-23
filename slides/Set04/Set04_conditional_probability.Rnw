@@ -261,12 +261,23 @@ P(A \cap B) = P(A)\times P(B) = 0.6 \times 0.9.
 
 
 
-% 
-% \foilhead[-.8in]{\textcolor{blue}{On Systems in Series, Systems in Parallel, and Reliability}}
-% \no \bul A {\textcolor{magenta}{parallel}} system consists of $k$ components $c_{1}, \ldots, c_{k}$ arranged in such a way that the system works if and only if at least one of the $k$ components functions properly.\\[.1in]
-% \centerline{\includegraphics[height=6cm]{parallel-system.pdf}}
-% \no \bul A {\textcolor{magenta}{serial} system consists of $k$ components $c_{1}, \ldots, c_{k}$ arranged in such a way that the system works if an only if all of the components function properly.\\[.1in]
-% \centerline{\includegraphics[height=1.5cm]{series-system.pdf}}
+\begin{frame}
+\frametitle{Parallel system}
+\begin{definition}
+A \alert{parallel} system consists of $k$ components $c_{1}, \ldots, c_{k}$ arranged in such a way that the system works if at least one of the $k$ components functions properly.
+\end{definition}
+\centerline{\includegraphics{parallel-system}}
+\end{frame}
+
+\begin{frame}
+\frametitle{Serial system}
+\begin{definition}
+A \alert{serial} system consists of $k$ components $c_{1}, \ldots, c_{k}$ arranged in such a way that the system works if an only if all of the components function properly.
+\end{definition}
+\centerline{\includegraphics{series-system}}
+\end{frame}
+
+
 % \foilhead[-.8in]{\textcolor{blue}{On Systems and Reliability (continued)}}
 % \begin{itemize}
 % \item The system consisting of the AOL network and the phone line is an example of a serial system.
