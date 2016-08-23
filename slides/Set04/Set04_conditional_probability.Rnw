@@ -202,56 +202,65 @@ If I toss a fair coin and it comes up tails, does that affect the probability th
 \end{frame}
 
 
-% \foilhead[-.8in]{\textcolor{blue}{Example 2 continued...}}
-% \no Suppose now, that I have the partial information that the CPU 
-% selected is a 1.8 GHz CPU.\\[.1in]
-% \no  2. {\textcolor{cyan}{What is now the probability that it is defective?}}\\[.1in]
-% \no Using the definition of conditional probability, we get\\[.1in] 
-% \begin{eqnarray*}
-% P( \text{ CPU is } D | \text{ CPU is } 400mHz) & = &\frac{P( \text{ CPU is } D  \text{ and  CPU is } 400mHz)}{P( \text{ CPU is } 400mHz)}\\
-% & = & \frac{0.02}{0.5} = 0.04.
-% \end{eqnarray*}
-% \no i.e. knowing the speed of the CPU influences our probability 
-% assignment to whether the CPU is defective or not.
-% \foilhead[-.8in]{\textcolor{blue}{Independence of Events}}
-% \no Sometimes, knowledge that $B$ occurred does not change our assessment of the $P(A)$. Let's say I toss a  fair  coin. I tell you that I got a tail. I then give you the coin to toss. Does the knowledge that I got a tail affect what you think the chance is that you will get a head? \\[.1in] 
-% \no {\textcolor{magenta}{Intuitively, two events $A$ and $B$ are independent if the event $B$ does not have any influence on the probability that $A$ happens (and vice versa)}}.\\[.1in]  
-% \no Mathematically, independence of two events is defined as follows:\\[.1in] 
-% {\textcolor{red}{Definition:}} Two events $A$ and $B$ are said to be {\textcolor{magenta}{independent}}, if 
-% $$
-% P( A \cap B) = P(A) \cdot P(B)
-% $$
-% \no (Result: If $P(B) \neq 0, \text{ then } $A$\text{ and }$B$\text{ are independent }  P(A|B) = P(A).$ )
-% { Example: } An alternative model for logging on to the AOL network using dial-up.\
-% 
-% \foilhead[-.8in]{\textcolor{blue}{Independence Example}}
-% \no {\textcolor{magenta}{Example:}}  {\textcolor{cyan}{Suppose I log on to AOL using dial-up. I connect successfully if and only if the phone number works and the AOL network works. The probability that the phone works is $.9$, and the probability that the network works is $.6$.  Suppose that the status of the phone line and the status of the AOL network are independent. What is the probability that I connect successfully?}\\[.1in]
-% \no Let $A=$``phone number works'' and $B=$ ``AOL network works''; we need $P(A\cap B)$.\\[.1in]
-% \no Since we are told that $A$ and $B$ are independent, we know that $P( A \cap B) = P(A) \cdot P(B)=(.9)(.6)=.54$\\[.1in]
-% 
-% \newpage
-% %\foilhead[-.8in]{\textcolor{blue}{Independence and Disjointedness}}
-% \no {\textcolor{magenta}{Warning:}} independence and disjointedness are two very different 
-% concepts!\\[.1in]
-% \begin{minipage}[t]{3.5in}
-% {\textcolor{cyan}{Disjointedness:}}   
-%     \centerline{\includegraphics[width=2in]{disjoint.pdf}}
-% 
-%     If $A$ and $B$ are disjoint, their intersection is empty, has 
-%     therefore probability 0:
-%     \[
-%     P(A \cap B) = P(\emptyset) = 0.
-%     \]
-% \end{minipage}
-% \hfill
-% \begin{minipage}[t]{3.5in}
-% {\textcolor{cyan}{Independence: }}
-%     \centerline{\includegraphics[width=2in]{intersection.pdf}}    
-%     If $A$ and $B$ are independent events, the probability of their 
-%     intersection can be computed as the product of their individual 
-%     probabilities: $P(A \cap B) = P(A) \cdot P(B)$\\[.01in]
-%     The probability for the intersection is zero only if $A$ or $B$ is empty.
-% \end{minipage}
+
+
+\begin{frame}
+\frametitle{WiFi example}
+
+In trying to connect my laptop to the internet, I need 
+\begin{itemize}
+\item my WiFi network to be up (event $A$) and
+\item the ISP network to be up (event $B$). 
+\end{itemize}
+
+\pause
+
+Independently, assume the probability the WiFi network is up is 0.6 and the ISP network is up is 0.9. \pause
+What is the probability we can connect to the internet?
+
+\vspace{0.1in} \pause
+
+Since we have independence, we know
+\[ 
+P(A \cap B) = P(A)\times P(B) = 0.6 \times 0.9. 
+\]
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Independence and disjoint}
+
+\alert{Warning:} Independence and disjointedness are two very different concepts!
+
+\vspace{0.1in} \pause
+
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+{\textcolor{cyan}{Disjointedness:}}   
+    \centerline{\includegraphics[width=1.5in]{disjoint}}
+
+    If $A$ and $B$ are disjoint, their intersection is empty, has 
+    therefore probability 0:
+    \[
+    P(A \cap B) = P(\emptyset) = 0.
+    \]
+\end{column}
+
+\begin{column}{0.5\textwidth}
+{\textcolor{cyan}{Independence: }}
+    \centerline{\includegraphics[width=1.5in]{intersection}}    
+    If $A$ and $B$ are independent events, the probability of their 
+    intersection can be computed as the product of their individual 
+    probabilities: $P(A \cap B) = P(A) \cdot P(B)$\\[.01in]
+    The probability for the intersection is zero only if $A$ or $B$ is empty.
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
 % 
 % \foilhead[-.8in]{\textcolor{blue}{On Systems in Series, Systems in Parallel, and Reliability}}
 % \no \bul A {\textcolor{magenta}{parallel}} system consists of $k$ components $c_{1}, \ldots, c_{k}$ arranged in such a way that the system works if and only if at least one of the $k$ components functions properly.\\[.1in]
