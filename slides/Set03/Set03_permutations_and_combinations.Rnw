@@ -264,7 +264,7 @@ That's the situation where we take 4 objects out of a set of 4 and order them - 
 
 \vfill
 
-\item {\textcolor{cyan}{One of the choices is ``olives''. If all possible rankings are equally likely, what is the probability that a randomly selected survey has ``olives'' in the top 3?}} % P(6,3)/P(7,3) = 120/210 = 0.57
+\item {\textcolor{cyan}{One of the choices is ``olives''. If all possible rankings are equally likely, what is the probability that a randomly selected survey has ``olives'' in the top 3?}} % 1-P(6,3)/P(7,3) = 120/210 = 0.57 or P(3,1)*P(6,2)/P(7,3) = 90/210 = 0.43
 
 \vfill
 
