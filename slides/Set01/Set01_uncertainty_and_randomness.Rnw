@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[handout]{beamer}
 
 
 \input{../frontmatter}
@@ -46,7 +46,7 @@ set.seed(2)
 \item Will Pok\'emon Go load on my iPhone4S?
 \item Will the client appreciate my beautifully abstract code even if it doesn't quite do what it is expected to do?
 
-\vspace{0.2in}
+\vspace{0.1in}
 
 \item How many minutes will it take to load \url{news.google.com}?
 \item What hardware platforms will Pok\'emon Go load on? Does this depend on anything else?
@@ -122,13 +122,14 @@ An \alert{elementary outcome} $(\omega)$ is a result of a random experiment.
 
 \vspace{0.2in} \pause
 
-\alert{Examples:}
-\begin{enumerate}
+\begin{example}
+\begin{enumerate}[<+->]
 \item Toss a coin until we get a head. $\omega = TTTTH$
 \item Record the time for a webpage to respond. $\omega = 3.527 \mbox{ seconds} $
 \item A message can take two network routers to get to a recipient computer. We may record the status of router 1, the status of router 2, and the status of the recipient computer, where the status is either up (U) or down (D). 
 $\omega = (\mbox{router 1 down, router 2 down, recipient computer up}) = DDU$
 \end{enumerate}
+\end{example}
 
 \end{frame}
 
@@ -144,8 +145,8 @@ The \alert{sample space} $(\mOmega)$ is the set of all possible (elementary) out
 
 \pause
 
-\emph{Examples:}
-\begin{enumerate}
+\begin{example}
+\begin{enumerate}[<+->]
 \item Toss coin until a head: $\mOmega = \{H, TH, TTH, TTTH,\ldots\}$
 \item Time to access webpage: $\mOmega = (0,\infty)$
 \item Network Routers: 
@@ -155,6 +156,7 @@ The \alert{sample space} $(\mOmega)$ is the set of all possible (elementary) out
 \end{array} \]
 where $|\mOmega|=8 = 2^{3}$.					 
 \end{enumerate}
+\end{example}
 \end{frame}
 
 
@@ -168,12 +170,13 @@ A \alert{discrete sample space} is a sample space with a finite or countably inf
 
 \pause
  
-\emph{Examples:}
-\begin{itemize}
+\begin{example}
+\begin{itemize}[<+->]
 \item Toss coin until a head: \pause Discrete (infinite) \pause
 \item Time to access webpage: \pause Continuous \pause
 \item Network Routers: \pause Discrete (finite)
 \end{itemize}
+\end{example}
 
 \vspace{0.2in} \pause
 
@@ -192,27 +195,24 @@ An \alert{event} is a collection of elementary outcomes.
 
 \pause
 
-Examples:
-
+\begin{example}
+\small
 \begin{enumerate}[<+->]
 \item Toss coin until a head:
 \[ \begin{array}{rl}
-A &= \mbox{first head occurs between 5 and 11 tosses (inclusive)} \\
-&= \{5, 6, 7, 8, 9, 10, 11\}
+A :=& \mbox{first head occurs between 5 and 11 tosses (inclusive)} \\
+=& \{5, 6, 7, 8, 9, 10, 11\}
 \end{array} \] 
-
 \item Time to access a webpage:
 \[ \begin{array}{rl} 
-B &= \mbox{More than 10 seconds} \\
-&= (10, \infty)
+B &:= \mbox{More than 10 seconds} = (10, \infty)
 \end{array} \]
-
 \item Suppose the message is transmitted successfully if at least one router is up and the recipient's computer is up.
 \[ \begin{array}{rl}
-C &= \mbox{Successful transmission} \\
-&= \{DUU, UDU, UUU\}
+C &:= \mbox{Successful transmission} = \{DUU, UDU, UUU\}
 \end{array} \]
 \end{enumerate}
+\end{example}
 \end{frame}
 					  
 								
