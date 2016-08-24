@@ -37,7 +37,7 @@ set.seed(2)
 \begin{frame}
 \frametitle{Probability}
 
-\textbf{Example:}
+\begin{example}
 \begin{itemize}[<+->]
 \item Consider the Event C (a successful transmission) defined earlier. 
 
@@ -49,6 +49,7 @@ chance that the next message gets through is 90 \%.
 \item To be able to work with probabilities, in particular, to be able to compute \alert{probabilities of events},
 a mathematical foundation is necessary.
 \end{itemize}
+\end{example}
 \end{frame}
 
 
@@ -60,7 +61,7 @@ a mathematical foundation is necessary.
 
   For example,
   \begin{itemize}
-  \item if a is a member of B, this is denoted $a  \in B$ \pause and
+  \item if a is a member of B, this is denoted $a  \in B$ and
   \item if every member of set A is also a member of set B, then A is said to be a subset of B, written $A \subseteq B$ (A is said to be contained in B).
   \end{itemize}
 
@@ -77,7 +78,7 @@ An intersection of events is an event consisting of the common outcomes in these
 
 \begin{frame}
 \frametitle{Set comparison, operations, terminology (cont.)}
-\begin{enumerate}
+\begin{enumerate}[<+->]
 \setcounter{enumi}{3}
 \item \alert{Complement} ($\bar A$): 
 A complement of an event $A$ is an event that occurs when event $A$ does not happen.
@@ -180,11 +181,11 @@ them - one must lay down a set of postulates.
 \vspace{0.2in} \pause
 
 A system of probabilities (\alert{a probability model}) is an assignment of 
-numbers $P(A)$ to events $A \subset \Omega$ \pause such that
+numbers $P(A)$ to events $A \subset \mOmega$ \pause such that
 
 \begin{itemize}[<+->]
     \item[(i)]  $0 \le P(A) \le 1$ for all $A$ 
-    \item[(ii)] $P(\Omega) = 1$. 
+    \item[(ii)] $P(\mOmega) = 1$. 
     \item[(iii)]  if $A_{1},A_{2}, \ldots$ are (possibly, infinite many)
       mutually exclusive events 
     (i.e. $A_{i} \cap A_{j} = \emptyset$ for all $i\neq j$) then 
@@ -211,7 +212,7 @@ specific application is another question.
 
 
 Example: Draw a single card from a standard deck of playing cards:
-$\Omega = \{ \textcolor{red}{red}, black \}$
+$\mOmega = \{ \textcolor{red}{red}, black \}$
 Two different, equally valid probability models are:
 \begin{center}
 {\small
@@ -234,18 +235,20 @@ Mathematically, both schemes are equally valid. But, of course, our real world e
 
 \begin{frame}
 \frametitle{Useful Consequences of Kolmogorov's Axioms}
-Let $A,\,B\subset\Omega$. 
+Let $A,\,B\subset\mOmega$. 
 
 \vspace{0.2in} \pause
 
 \begin{itemize}[<+->]
 \item Probability of the Complementary Event: 
 $ P(\overline{A}) = 1-P(A)$
-\hspace*{.2in} {\textcolor{red}{Corollary:}} $P(\emptyset)=0$
+
+{\textcolor{red}{Corollary:}} $P(\emptyset)=0$
 \item Addition Rule of Probability 
 \[ P(A \cup B) = P(A) + P(B) - P(A \cap B) \]
 \item If $A\subset B$, then $P(A)\leq P(B)$.
-\hspace*{.2in}  {\textcolor{red}{Corollary:}} For any $A$, $P(A)\leq 1$. 
+
+{\textcolor{red}{Corollary:}} For any $A$, $P(A)\leq 1$. 
 \end{itemize}
 \end{frame}
 
@@ -261,7 +264,10 @@ P(\text{ WiFi up } ) &=& .9   \\
 P(\text{ ISP up } ) &=& .6, \mbox{ and } \\ 
 P(\text{ WiFi up and ISP up } ) &=& .55.
 \end{eqnarray*}
-\begin{enumerate}
+
+\pause
+
+\begin{enumerate}[<+->]
 \item What is the probability that the WiFi is up or the ISP is up?
 \item What is the probability that both the WiFi and the ISP are down? 
 \item What is the probability that we fail to connect?
@@ -271,8 +277,8 @@ P(\text{ WiFi up and ISP up } ) &=& .55.
 
 \begin{frame}
 \frametitle{Solution}
-Let  $A\equiv \text{WiFi up};\ B\equiv \text{ISP up}$
-\begin{enumerate}
+Let  $A\equiv \text{WiFi up};\ B\equiv \text{ISP up}$ \pause
+\begin{enumerate}[<+->]
 \item What is the probability that the WiFi is up or the ISP is up?
 \[ P( \text{ WiFi up or ISP up}) =P(A\cup B) = 0.9 + 0.6 - 0.55 = 0.95 \]
 \item  What is the probability that both the WiFi and the ISP are down?
@@ -314,14 +320,14 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 % \paragraph*{Kolmogorov's Axioms}
 % 
 % A system of probabilities ( a probability model) is an assignment of 
-% numbers $P(A)$ to events $A \subset \Omega$ in such a manner that
+% numbers $P(A)$ to events $A \subset \mOmega$ in such a manner that
 % \begin{itemize}
 %     \item[(i)]  \notiz{the probability of any event $A$ 
 %     is a real number between 0 and 1}
 %     $0 \le P(A) \le 1$ for all $A$ 
 %     \item[(ii)] \notiz{the sum of pro\-ba\-bi\-li\-ties of all 
 %     events in the sample space is 1}
-%     $P(\Omega) = 1$. 
+%     $P(\mOmega) = 1$. 
 %     \item[(iii)]  \notiz{the pro\-ba\-bi\-lity of a disjoint union of events is equal to the 
 %     sum of the individual pro\-ba\-bi\-li\-ties}
 %     if $A_{1},A_{2}, \ldots$ are (possibly, infinite many) disjoint events 
@@ -344,7 +350,7 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 % \begin{xpl}{}
 % Draw a single card from a standard deck of playing cards
 % \[
-% \Omega = \{ \textcolor{ red, black } \}
+% \mOmega = \{ \textcolor{ red, black } \}
 % \]
 % Two different, equally valid probability models are:
 % 
@@ -352,7 +358,7 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 % \begin{tabular}{ll}
 %     \underline{Model 1} & \underline{Model 2} \\
 % %    $P(0) = 0$ & $P(0) = 0$ \\
-%     $P(\Omega) = 1$ & $P(\Omega) = 1$ \\
+%     $P(\mOmega) = 1$ & $P(\mOmega) = 1$ \\
 %     $P(\textcolor{red}{red}) = 0.5$ &  $P(\textcolor{red}{red}) = 0.3$ \\
 %     $P(black) = 0.5$ &  $P(\textcolor{ black }) = 0.7$
 % \end{tabular}
@@ -367,12 +373,12 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 % Beginning from the axioms of probability one can prove a number of 
 % useful theorems about how a probability model must operate.
 % 
-% We start with the probability of $\Omega$ and derive others from that.
+% We start with the probability of $\mOmega$ and derive others from that.
 % 
 % \begin{satz}\label{complement}
-%     Let $A$ be an event in $\Omega$, then 
+%     Let $A$ be an event in $\mOmega$, then 
 %     \[
-%     P(\bar{A}) = 1 - P(A) \textcolor{ for all } A \subset \Omega.
+%     P(\bar{A}) = 1 - P(A) \textcolor{ for all } A \subset \mOmega.
 %     \]
 % \end{satz}
 % 
@@ -380,15 +386,15 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 %     For the proof we need to consider three main facts and piece them 
 %     together appropriately:
 %     \begin{enumerate}
-% 	\item We know that $P(\Omega) = 1$ because of axiom (ii)
-% 	\item $\Omega$ can be written as $\Omega = A \cup \bar{A}$ because of 
+% 	\item We know that $P(\mOmega) = 1$ because of axiom (ii)
+% 	\item $\mOmega$ can be written as $\mOmega = A \cup \bar{A}$ because of 
 % 	the definition of an event's complement.
 % 	\item $A$ and $\bar{A}$ are disjoint and therefore the probability of 
 % 	their union equals the sum of the individual probabilities (axiom iii).
 %     \end{enumerate}
 %     All together:
 %     \[
-%     1 \stackrel{(1)}{=} P(\Omega) \stackrel{(2)}{=} P(A \cup \bar{A}) 
+%     1 \stackrel{(1)}{=} P(\mOmega) \stackrel{(2)}{=} P(A \cup \bar{A}) 
 %     \stackrel{(3)}{=} P(A) + P(\bar{A}).
 %     \]
 %     This yields the statement.
@@ -407,17 +413,17 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 % \end{kor}
 % \begin{bew}
 %     For a proof of the above statement we exploit that the empty set 
-%     is the complement of $\Omega$. Then we can apply Theorem \ref{complement}.
+%     is the complement of $\mOmega$. Then we can apply Theorem \ref{complement}.
 %     \[
-%     P(\emptyset) = P(\bar{\Omega}) \stackrel{\textcolor{Thm \ref{complement}}}{=} 
-%     1 - P({\Omega}) = 1 - 1 =0.
+%     P(\emptyset) = P(\bar{\mOmega}) \stackrel{\textcolor{Thm \ref{complement}}}{=} 
+%     1 - P({\mOmega}) = 1 - 1 =0.
 %     \]
 % \end{bew}
 % 
 % \begin{xsatz}{Addition Rule of Probability}
 % \begin{minipage}[b]{3in}
 %     \mbox{}
-%     Let $A$ and $B$ be two events of $\Omega$, then:
+%     Let $A$ and $B$ be two events of $\mOmega$, then:
 %     \[
 %     P(A \cup B) = P(A) + P(B) - P(A \cap B)
 %     \]
@@ -478,16 +484,16 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 % Just for training, we will write this down in terms of probability 
 % theory:
 % 
-% One possible sample space $\Omega$ is: $\Omega = \{ g_{1}, g_{2}, g_{3}, d \}$
+% One possible sample space $\mOmega$ is: $\mOmega = \{ g_{1}, g_{2}, g_{3}, d \}$
 % (i.e. we distinguish the good chips, which may be a bit artificial. It 
 % will become obvious, why that is a good idea anyway, later on.) 
 % 
 % The event to draw the defective chip is then $A  = \{ d \}$.
 % 
 % We can write the probability to draw the defective chip by comparing 
-% the sizes of $A$ and $\Omega$:
+% the sizes of $A$ and $\mOmega$:
 % \[
-% P(A) = \frac{|A|}{|\Omega|} = \frac{|\{d\}|}{|\{ g_{1}, g_{2}, g_{3}, d 
+% P(A) = \frac{|A|}{|\mOmega|} = \frac{|\{d\}|}{|\{ g_{1}, g_{2}, g_{3}, d 
 % \}|} = 0.25.
 % \]
 % }
@@ -497,10 +503,10 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 % valid in a special case:
 % \begin{satz}\label{equally.likely}
 %     If all elementary events in a sample space are equally likely (i.e. 
-%     $P(\{ \omega_{i} \}) = $ const for all $\omega \in \Omega$), the 
+%     $P(\{ \omega_{i} \}) = $ const for all $\omega \in \mOmega$), the 
 %     probability of an event $A$ is given by:
 %     \[
-%     P(A) = \frac{|A|}{|\Omega|},
+%     P(A) = \frac{|A|}{|\mOmega|},
 %     \]
 %     where $|A|$ gives the number of elements in $A$.
 % \end{satz}
@@ -514,7 +520,7 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 % drawing two chips:
 % 
 % \begin{eqnarray*}
-% \Omega &=& \{ \{g_{1}, g_{2}\},  \{g_{1}, g_{3}\}, \{g_{1}, d\}, \\
+% \mOmega &=& \{ \{g_{1}, g_{2}\},  \{g_{1}, g_{3}\}, \{g_{1}, d\}, \\
 %        &&  \ \  \{g_{2}, g_{3}\}, \{g_{2}, d\}, \\
 %        &&  \ \  \{g_{3}, d\} \} 
 % \end{eqnarray*}
@@ -524,13 +530,13 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 % \end{eqnarray*}
 % Then
 % \[
-% P(E) = \frac{|E|}{|\Omega|} = \frac{3}{6} = 0.5.
+% P(E) = \frac{|E|}{|\mOmega|} = \frac{3}{6} = 0.5.
 % \]
 % }
 % \end{xpl}
 % 
 % Finding $P(E)$ involves counting the number of outcomes in $E$. 
-% Counting by hand is sometimes not feasible if $\Omega$ is large.
+% Counting by hand is sometimes not feasible if $\mOmega$ is large.
 % 
 % Therefore, we need some standard counting methods.
 
