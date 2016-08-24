@@ -426,9 +426,9 @@ Under this policy, how many distinct passwords exist? \pause
 {\small
 \begin{itemize}
 \item We are performing \emph{ordered sampling with replacement}. \pause
-\item $55^8 \approx 84$ trillion 8 character passwords with $26\times 2+3$ character dictionary. \pause
-\item There are $45^8$ all letter or special character passwords and $10^8$ all number passwords for a total of about 17 trillion invalid passwords. \pause
-\item Thus, there are approximately $84-17 = 67$ trillion possible passwords. 
+\item $65^8 \approx 319$ trillion 8 character passwords with $26\times 2+3+10$ character dictionary. \pause
+\item There are $55^8$ all letter or special character passwords and $10^8$ all number passwords for a total of about 84 trillion invalid passwords. \pause
+\item Thus, there are approximately $319-84=235$ trillion possible passwords. 
 \end{itemize}
 }
 
