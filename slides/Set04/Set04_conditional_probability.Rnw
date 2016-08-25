@@ -231,6 +231,7 @@ P(A \cap B) = P(A)\times P(B) = 0.6 \times 0.9.
 
 \begin{frame}
 \frametitle{Independence and disjoint}
+\small
 
 \alert{Warning:} Independence and disjointedness are two very different concepts!
 
@@ -248,6 +249,8 @@ P(A \cap B) = P(A)\times P(B) = 0.6 \times 0.9.
     \]
 \end{column}
 
+\pause
+
 \begin{column}{0.5\textwidth}
 {\textcolor{cyan}{Independence: }}
     \centerline{\includegraphics[width=1.5in]{intersection}}    
@@ -260,11 +263,11 @@ P(A \cap B) = P(A)\times P(B) = 0.6 \times 0.9.
 \end{frame}
 
 
-
+\subsection{Reliability}
 \begin{frame}
 \frametitle{Parallel system}
 \begin{definition}
-A \alert{parallel} system consists of $k$ components $c_{1}, \ldots, c_{k}$ arranged in such a way that the system works if at least one of the $k$ components functions properly.
+A \alert{parallel} system consists of $K$ components $c_{1}, \ldots, c_{K}$ arranged in such a way that the system works if {\bf at least one} of the $K$ components functions properly.
 \end{definition}
 \centerline{\includegraphics{parallel-system}}
 \end{frame}
@@ -272,7 +275,7 @@ A \alert{parallel} system consists of $k$ components $c_{1}, \ldots, c_{k}$ arra
 \begin{frame}
 \frametitle{Serial system}
 \begin{definition}
-A \alert{serial} system consists of $k$ components $c_{1}, \ldots, c_{k}$ arranged in such a way that the system works if an only if all of the components function properly.
+A \alert{serial} system consists of $K$ components $c_{1}, \ldots, c_{K}$ arranged in such a way that the system works if an only if {\bf all} of the components function properly.
 \end{definition}
 \centerline{\includegraphics{series-system}}
 \end{frame}
@@ -295,58 +298,93 @@ The reliability of the WiFi-ISP network (assuming independence) is 0.54
 \end{frame}
 
 
-% \begin{frame}
-% \frametitle{Reliability of parallel systems with independent components}
-% 
-% Let 
-% \[ 
-% 
-% \]
-% 
-% \end{frame}
+\begin{frame}
+\frametitle{Reliability of parallel systems with independent components}
+
+Let $c_{1}, \ldots, c_{K}$ denote the $K$ components in a \alert{parallel} system. \pause
+Assume the $K$ components operate independently and $P(c_{k} \text{ works })=p_{k}$. \pause
+What is the reliability of the system?
+
+\pause
+
+\[ \begin{array}{rl}
+P(\text{ system works }) &= P(\text{ at least one component works }) \\
+&= 1-P(\text{ all components fail }) \\
+&= 1-P(c_{1} \text{ fails and } c_{2} \text{ fails } \ldots \text{ and } c_{k} \text{ fails }) \\
+&=1- \prod_{k=1}^K P(c_j \text{ fails}) \\
+&= 1- \prod_{k=1}^K(1-p_{k}).
+\end{array} \]
+
+\end{frame}
 
 
-% 
-% \foilhead[-.7in]{\textcolor{blue}{Example: Parallel system with $k$ mutually independent components}}
-% \no {\textcolor{magenta}{Let $c_{1}, \ldots, c_{k}$ denote the $k$ components in a parallel system. Assume the $k$ components operate independently, and $P(c_{j} \text{ works })=p_{j}$. What is the reliability of the system?}}
-% \begin{eqnarray*}
-% P(\text{ system works}) &=& P(\text{ at least one component works}) \\
-% &=& 1-P(\text{ all components fail }) \\ 
-% &=& 1-P(c_{1} \text{ fails and } c_{2} \text{ fails } \ldots \text{ and } c_{k} \text{ fails }) \\ 
-% &=& 1- \prod_{j=1}^k P(c_j \text{ fails}) \\
-% &=& 1- \prod_{j=1}^{k}(1-p_{j}). 
-% \end{eqnarray*}
-% 
-% \foilhead[-.7in]{\textcolor{blue}{Example: System in series with $k$ mutually independent components}}
-% %\begin{itemize}
-% \no {\textcolor{magenta}{Let $c_{1}, \ldots, c_{k}$ denote the $k$ components in a system. Assume the $k$ components are connected in series, operate independently, and $P(c_{j} \text{ works })=p_{j}$. What is the reliability of the system?}}
-% \begin{eqnarray*}
-% P(\text{ system works}) &=& P(\text{ all components work}) \\
-% &=& \prod_{j=1}^k P(c_j \text works) \\
-% &=& \prod_{j=1}^{k}p_{j}.
-% \end{eqnarray*}
-% 
-% \foilhead[-.78in]{\textcolor{blue}{Reliability of Systems (continued) }}
-% \no  {\textcolor{magenta}{Example 2.17:}}{\textcolor{cyan}{Each component in the system shown below is opearable with probability 0.92 independently of other components. Calculate the reliability}} \\[.01in]
-% \begin{minipage}[t]{4.25in}
-% {\textcolor{cyan}{of the system:}}\\[.01in]  
-% \includegraphics*[scale=.25]{circuit1.pdf}\\[.01in]
-% \no 1. The upper link A-B works if both A and B work.   Thus we can replace this link with a component F that operates with probability $P(A\cap B)=(0.92)^2=0.8464$
-% \end{minipage}
-% \hfill
-% \begin{minipage}[t]{4.25in}
-% \no 2. The components D and E connected in parallel can be replaced by component G that operates with probability\\ 
-% $P(D\cup E)=1-(1-0.92)^2$\hfill $=0.9936$\\[.1in]
-% \includegraphics*[scale=.25]{circuit2.pdf}
-% \end{minipage}
-% \foilhead[-.7in]{\textcolor{blue}{Example 2.17 (continued) }}
-% \no 3. The components C  and G connected in series so they can be replaced by a component H that operates with probability\\[.1in]
-% \hspace*{2in}$P(C\cap G)=(0.92)(0.9936)=0.9141$\\[.1in]
-% \hspace*{2.5in}\includegraphics*[scale=.3]{circuit3.pdf}\\[.1in]
-% \no 4. Lastly, the components F and H are in parallel so the reliability of the system is\\[.1in]
-% \hspace*{2in}$P(F\cup H)=1-(1-0.8424)(1-0.9141)=0.9868$
+\begin{frame}
+\frametitle{Reliability of serial systems with independent components}
+
+Let $c_{1}, \ldots, c_{K}$ denote the $K$ components in a \alert{serial} system. \pause
+Assume the $K$ components operate independently and $P(c_{k} \text{ works })=p_{k}$. \pause
+What is the reliability of the system?
+
+\pause
+
+\[ \begin{array}{rl}
+P(\text{ system works }) &= P(\text{ all component works }) \\
+&= \prod_{k=1}^K P(c_j \text{ works }) \\
+&= \prod_{k=1}^K p_{k}.
+\end{array} \]
+
+\end{frame}
 
 
+\begin{frame}
+\frametitle{Reliability example}
+\small
+Each component in the system shown below is opearable with probability 0.92 independently of other components. Calculate the reliability.
+
+\begin{center}
+\includegraphics*[scale=.25]{circuit1.pdf}
+\end{center}
+
+\pause
+
+\begin{enumerate}
+\item Serial components A B can be replace with a component F that operates with probability $P(A\cap B)=(0.92)^2=0.8464$.
+\item Parallel components D and E can be replaced by component G that operates with probability $P(D\cup E)=1-(1-0.92)^2=0.9936$.
+\end{enumerate}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Reliability example (cont.)}
+\small
+Updated circuit:
+
+\begin{center}
+\includegraphics{circuit2}
+\end{center}
+
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item Serial components C and G connected can be replaced by a component H that operates with probability $P(C\cap G)=(0.92)(0.9936)=0.9141$.
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Reliability example (cont.)}
+
+Updated circuit:
+
+\begin{center}
+\includegraphics{circuit3}
+\end{center}
+
+\begin{enumerate}
+\setcounter{enumi}{3}
+\item  Parallel componenents F and H are in parallel, so the reliability of the system is $P(F\cup H)=1-(1-0.8424)(1-0.9141)=0.9868$.
+\end{enumerate}
+\end{frame}
 \end{document}
 
 
