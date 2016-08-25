@@ -1,0 +1,116 @@
+\documentclass[10pt]{article}
+\usepackage{graphicx, fancyhdr, enumerate}
+\usepackage{amsmath, amsfonts, color}
+
+\setlength{\topmargin}{-.5 in} 
+\setlength{\textheight}{8.875 in}
+\setlength{\textwidth}{6.5 in} 
+\setlength{\evensidemargin}{0 in}
+\setlength{\oddsidemargin}{0 in} 
+\setlength{\parindent}{0 in}
+\newcommand{\ben}{\begin{enumerate}}
+    \newcommand{\een}{\end{enumerate}}
+\newcommand{\xbar}{\overline{X}}
+\newcommand{\ansfont}[2]{{\sffamily \color{blue} \textbf{Concepts: #1} #2}}
+\newcommand{\correction}[1]{{\color{green} \emph{#1}}}
+%\newcommand{\refs}[2]{Baron: #1 {\sffamily \color{blue} Slide sets: #2 }}
+\newcommand{\refs}[2]{{\sffamily \color{blue} Slide sets: #2} Baron: #1}
+%\newcommand{\refs}[2]{Slide sets: #2 Baron: #1}
+\newcommand{\sepline}{{\color{blue}\noindent\rule{16.5cm}{0.4pt}}\addtocounter{section}{1}\setcounter{subsection}{0}}
+
+%\rhead{\raisebox{0pt}{Name:\hspace{1in}}} 
+\lhead{\Large\sffamily Stat 330 (Fall 2016): Teaching schedule} 
+\rhead{\sffamily Last update: \today}
+\cfoot{\thepage} 
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt} 
+
+\def\Exp#1#2{\ensuremath{#1\times 10^{#2}}}
+\def\Case#1#2#3#4{\left\{ \begin{tabular}{cc} #1 & #2 \phantom{\Big|}  #3 & #4 \phantom{\Big|} \end{tabular} \right.}
+%part 	-1,chapter 	0,section 	1,subsection 	2
+%\renewcommand{\subsection}{\@startsection
+%{subsection}%                   % the name
+%{2}%                         % the level
+%{0mm}%                       % the indent
+%{-.5\baselineskip}%            % the before skip
+%{.25\baselineskip}%          % the after skip
+%{\normalfont\large\itshape}} % the style
+\def\thesubsection       {\thesection-\arabic{subsection}.\hspace{-6pt}}
+
+
+\begin{document}
+\pagestyle{fancy} 
+
+Below is the tentative schedule for the semester with weekly topics as well as associated slide sets, sections from Probability and Statistics for Computer Science (2nd. ed), and sections from Professor Hoffman's notes.
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+Week & Topic & Slide set & Book sections & Hoffman notes \\
+\hline
+1 & Experiments & 1 & 1 & 1.1 \\
+& Probability & 2  & 2.1--2.2 & 1.2-1.3 \\
+& Permutations and combinations & 3 & 2.3 & 1.4 \\
+\hline
+2 & Conditional probability & 4 & 2.4 & 1.5--1.6 \\
+& Bayes' rule &  & 2.4 & 1.7 \\
+\hline
+3 & Discrete random variables &  & 3.1 & 2.1\\
+& Discrete distributions &  & 3.4 & 2.2 \\
+\hline
+4 & Continuous random variables &  & 4.1 & 2.3 \\
+& Continuous distributions &  & 4.2 & 2.4 \\
+& Central limit theorem & & 4.3 & 2.5 \\
+\hline 
+5 & Covariance &  & 3.2 & 2.2.5 \\
+\hline
+\hline
+\multicolumn{5}{|c|}{Mid-term I*} \\
+\hline
+\hline
+6 & Stochastic processes & & 6.1 & 4 \\
+& Stationary distribution &  & 6.2 & \\
+& Poisson process &  & 6.3 & 4.1 \\
+\hline
+7 & Birth-death process &   & & 4.1 \\
+& Balance equations &  & & \\
+\hline
+8 & Queuing systems &  & 7.1--7.2 & 5.1--5.2 \\
+& M/M/1/C queue &  & 7.4 & 5.3 \\
+\hline
+9 & M/M/k queue &  & 7.5 & 5.4 \\
+\hline
+\hline
+\multicolumn{5}{|c|}{Mid-term II*} \\
+\hline
+\hline
+10 & Descriptive statistics &  & 8.1--8.2 & \\
+& Graphical statistics &  & 8.3 & \\
+\hline 
+11 & Method of moments &  & 9.1 & \\
+& Maximum likelihood estimation &  & 9.2 & 6.1 \\
+& Confidence intervals &  & 9.3 & 6.2\\
+\hline
+12 & Bayesian estimation &  & 9.3 & 6.2\\
+& Credible intervals & & & \\
+& Posterior model probabilities & & & \\
+\hline
+13 & Hypothesis testing &  & 9.4 & 6.3 \\
+\hline
+\hline
+\multicolumn{5}{|c|}{Mid-term III*} \\
+\hline
+\hline
+14 & Simple linear regression &  & 11.1 & 6.4 \\
+& &  & 11.2 & \\
+\hline
+15 & &&& \\
+& & & & \\
+\hline
+\end{tabular}
+\end{center}
+
+* The coverage of exams will be announced a week before the exams.
+
+\end{document}
+
