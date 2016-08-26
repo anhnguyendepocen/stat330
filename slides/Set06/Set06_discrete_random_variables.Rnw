@@ -32,100 +32,146 @@ set.seed(2)
 
 
 \begin{frame}
-\frametitle{Random variables}
+\frametitle{Discrete random variables}
+\setkeys{Gin}{width=0.15\textwidth}
+
+\begin{definition}
+A \alert{random variable} $X$ is a function $X:\mOmega \mapsto \mathbb{R}$.
+\end{definition}
+\pause
+Intuitive idea:  \textcolor{cyan}{If the value of a numerical variable depends on the outcome of an experiment, we call the variable a {\it random variable}.}
+
+\pause
+\begin{example}
+Simple dartboard:
+
+\end{example}
+\begin{center}
+\includegraphics{dartboard.pdf}
+\end{center}
+Imagine we throw three darts on this board one by one and we are interested in the number of times the red area has been hit. \pause
+This count is a random variable!
 \end{frame}
 
-% \foilhead[-.8in]{\textcolor{blue}{Random Variables}}
-% \no  {\textcolor{magenta}{Intuitive idea:}  {\textcolor{cyan}{If the value of a numerical variable depends on the outcome of an
-% experiment, we call the variable a {\it random variable}.}} \\[.1in]
-% {\textcolor{red}{Random Variable }}
-% A function $X: \Omega \mapsto \mathbb{R}$ is called a random variable.\\[.1in] 
-% %\no {\textcolor{magenta}{Standard notation:} Denote random variables by capital letters from the end of the alphabet.\\[.1in]   
-% \no   {\textcolor{magenta}{Example:  Very simple Dartboard}}\\[.01in]
-% \bc
-% \includegraphics*[scale=0.4]{dartboard.pdf}\\[.01in]
-% \ec
-% \no {\textcolor{cyan}{Imagine we throw three darts on this board one by one and we are interested in the number of times the
-% red area has been hit. This count is a random variable!}}\\[.1in]
-% \no Also note that $P(\text{red})=\frac{1}{9}$ on any throw.
-% \foilhead[-.8in]{\textcolor{blue}{Dartboard (continued...)}}
-% \no  More formally:\\[.1in] 
-% \no {\textcolor{cyan}{We define $X$ to be the function that assigns the number of times that the red area is hit in a sequence of three throws.}\\[.1in]
-% \no $X(\omega)=  k$, if the outcome $\omega$ has $k$ hits to the red area, and $3-k$ hits to the gray area.\\[.1in]
-% \no $X(\omega)$ is then an integer between 0 and 3 for every possible  sequence of throws of 3 darts.\\[.1in]
-% \no That is, the set of possible values for $X(\omega)$ is $\{0,1,2,3\}$\\[.1in]   
-%  \no  {\textcolor{magenta}{Notation:} To avoid cumbersome notation, we write
-% $$\{X = x\}$$ 
-% for the event
-% \[
-% \{ \omega | \omega \in \Omega\ \text{ and }\ X(\omega) = x \}.
-% \]
-%     
-%    
-% \foilhead[-.8in]{\textcolor{blue}{Practice with notation}}   
-% \no   {\textcolor{magenta}{Example}} {\textcolor{cyan}{Suppose, 8 bits are sent through a communication channel.
-% Each bit has a certain probability to be received incorrectly. We are interested in the number of bits that are received incorrectly.}}\\[.1in]
-% \no Use random variable $X$ to ``count'' the number of wrong bits received.
-%  $X$ assigns a value between 0 and 8 to each sequence in the sample space.\\[.1in]
-% \no That is, the possible values for $X$  are $\{0,1,2,3,4,5,6,7,8\}$\\[.1in]
-% \no Examples of events and equivalent expressions using $X$. \\[.1in]
-% \bul No wrong bits received: $\{X=0\}$\\[.1in]
-% \bul At least one wrong bit received: $\{X\geq 1\}$\\[.1in]
-% \bul Exactly 2 wrong bits received: $\{X=2\}$\\[.1in]
-% \bul Between 2 and 7 wrong bits (inclusive) received: $\{2\leq X\leq 7\}$   
-%      
-% \foilhead[-.8in]{\textcolor{blue}{Image of R.V.: all possible values $X$ can take}}
-% \no {\textcolor{magenta}{Definition:}} The image of a random variable $X$ is defined as
-% \no \hspace*{1in} $Im(X) := \{x: x=X(\omega) \text{ for some }\omega \in \Omega \}.$ \\[.1in]
-% %\no {\textcolor{red}{Depending on whether or not the image of a random variable is
-% %countable, we distinguish between {\it discrete} and {\it continuous}
-% %random variables. }}
-%    \begin{enumerate}
-% 	\item Put a disk drive into service, measure $Y$ = ``time till
-% 	the first major failure''.\\[.1in]
-% 		$Im(Y) = (0, \infty)$.\\[.1in]
-%     image of $Y$ is an interval (uncountable image) $\rightarrow Y$ is a
-%   continuous random variable.
-% 	\item Communication channel: $X$ = ``\# of incorrectly received bits''\\[.1in]
-% 		$Im(X) = \{ 0,1,2,3,4,5,6,7,8 \}$ is a finite set $\rightarrow X$ is
-% 	a discrete random variable.
-%     \end{enumerate}
-%     
-%     
-%     
-% \foilhead[-.8in]{\textcolor{blue}{Discrete R.V.s}}
-% \no \bul Assume $X$ is a discrete random variable. The image of $X$ is
-% therefore countable and can be written as $\{ x_{1}, x_{2}, x_{3},
-% \ldots \}$\\[.1in]
-% \no \bul Very often we are interested in probabilities of the form $P(X=x)$.
-% \no We can think of this expression as a function, that yields different
-% probabilities depending on the value of $x$.\\[.1in]
-% \no {\textcolor{magenta}{Example: Dartboard}}  {\textcolor{cyan}{ What is the probability that you hit the red square exactly twice in 3 throws?}}\\[.1in]
-% \no The event ``exactly 2 reds'' is formally written as $\{\omega : X(\omega)=2$\}, and with the
-% simpler notation for this event  is $X=2$.\\[.1in]
-% \no $P(\text{2 reds}) = P(X=2)$ \\[.1in]
-% \no \hspace*{1.2 in} $ = P(RRG \text{ or } RGR \text{ or } GRR)$ \\[.1in]
-% \no \hspace*{1.2 in} $ = P(RRG)+P(RGR)+P(GRR)$\\[.1in] 
-% \no \hspace*{1.2 in} $ = \frac{1}{9}\cdot\frac{1}{9}\cdot\frac{8}{9}+\frac{1}{9}\cdot\frac{8}{9}\cdot\frac{1}{9}+\frac{8}{9}\cdot\frac{1}{9}\cdot\frac{1}{9}=?$
-% 
-% 
-% 
-% \foilhead[-.8in]{\textcolor{blue}{Probability Mass Function}}
-% \no \no  {\textcolor{cyan}{Definition: Probability Mass Function, PMF} \\[.1in]
-% \no {\textcolor{red}{   The function $p_{X}(x) := P(X=x)$ is called the {\it probability mass function
-%     of $X$}. }}
-%  
-%  
-%    \no \no  {\textcolor{cyan}{Properties of PMF:} \\[.1in]
-%  $p_{X}$ is the pmf of $X$, if and only if
-%     \begin{itemize}
-% 	\item[(i)] $0 \le p_{X}(x) \le 1$ for all $x \in \{ x_{1}, x_{2}, x_{3},
-% \ldots \}$ ({all values must be between 0 and 1})
-%         \item[(ii)]  
-%         $\sum_{i}p_{X}(x_{i}) = 1$ ({the sum of all values is 1})
-%     \end{itemize}
-%     
-%     
+
+\begin{frame}
+\frametitle{Dartboard example (cont.)}
+
+\begin{itemize}
+\item Let $X$ the number of times that the red area is hit out of three throws. \pause
+\item $X(\omega)=  x$, if the outcome $\omega$ has $x$ hits to the red area, and $3-x$ hits to the gray area. \pause
+\item Thus, the set of possible values for $X(\omega)$ is $\{0,1,2,3\}$. \pause
+\item To avoid cumbersome notation, we write
+\[ \{X = x\} \]
+for the event
+\[
+\{ \omega | \omega \in \Omega\ \text{ and }\ X(\omega) = x \}.
+\]
+\item By convention, we use a capital letter to indicate the random variable and a lower case letter to indicate a realized value of the random variable.
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}
+\frametitle{8 bit example}
+
+\begin{example}
+Suppose, 8 bits are sent through a communication channel.
+Each bit has a certain probability to be received incorrectly. 
+We are interested in the number of bits that are received incorrectly.
+\end{example}
+
+\pause 
+\begin{itemize}
+\item Let $X$ be the number of incorrect bits received. \pause 
+\item The possible values for $X$ are $\{0,1,2,3,4,5,6,7,8\}$. \pause
+\item Example events: 
+	\begin{itemize}
+	\item No incorrect bits received: \pause $\{X=0\}$. \pause
+	\item At least one incorrect bit received: \pause $\{X\ge 1\}$. \pause
+	\item Exactly two incorrect bits received: \pause $\{X=2\}$. \pause
+	\item Between two and seven (inclusive) incorrect bits received: \pause $\{2\ge X \ge 7\}$.
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Image of random variables}
+
+\begin{definition}
+The \alert{image} of a random variable $X$ is defined as 
+\[ 
+Im(X) := \{x: x=X(\omega) \text{ for some }\omega \in \Omega \}
+\]
+\pause
+If the image is finite or countable, we have a \alert{discrete} random variable. \pause
+If the image is uncountably infinite, we have a \alert{continuous} random variable.
+\end{definition}
+
+\pause
+
+\begin{example}
+\begin{itemize}
+\item Put a disk drive into service, measure $Y$ = ``time till the first major failure'' and thus
+		$Im(Y) = (0, \infty)$. \pause Image of $Y$ is an interval (uncountable image), so $Y$ is a
+  continuous random variable.
+\item Communication channel: $X$ = ``\# of incorrectly received bits'' with 
+		$Im(X) = \{ 0,1,2,3,4,5,6,7,8 \}$. \pause Image of $X$ is a finite set, so $X$ is
+	a discrete random variable.
+\end{itemize}
+\end{example}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Distribution}
+
+The collection of all the probabilities related to $X$ is the \alert{distribution} of $X$. \pause For a discrete random variable, the function
+\[ 
+P(x) = P(X=x) 
+\]
+is the \alert{probability mass function} (pmf) \pause and the \alert{cumulative distribution function} (cdf) is 
+\[ 
+F(x) = P(X\le x) =\sum_{y\le x} P(y).
+\]
+\pause 
+The set of possible values of $X$ is called the \alert{support} of the distribution $F$. 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Examples}
+\begin{example}
+Which of the following functions is a valid probability mass function?
+\begin{itemize}
+\item
+    	\begin{tabular}{c|ccccc}
+		$x$ & -3 & -1 & 0 & 5 & 7  \\
+		\hline
+		$P_{X}(x)$ & 0.1 & 0.45 & 0.15 & 0.25 & 0.05  \\
+	\end{tabular}
+    \item
+    	\begin{tabular}{c|ccccc}
+		$y$ & -1 & 0 & 1.5 & 3 & 4.5 \\
+		\hline
+		$P_{Y}(y)$ & 0.1 & 0.45 & 0.25 & -0.05 & 0.25  \\
+	\end{tabular}
+    \item
+    	\begin{tabular}{c|ccccc}
+		$z$ & 0 & 1 & 3 & 5 & 7  \\
+		\hline
+		$P_{Z}(z)$ & 0.22 & 0.18 & 0.24 & 0.17 & 0.18  \\
+	\end{tabular}
+\end{itemize}
+\end{example}
+\end{frame}
+
 %   \foilhead[-.8in]{\textcolor{blue}{Examples:}} 
 %    \no {\textcolor{red}{These properties give us an easy method to check, whether a function is a
 % probability mass function }}  \\[.1in]
