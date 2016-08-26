@@ -132,88 +132,147 @@ The branches of our tree $(B_1,B_2,B_3)$ formed a partition.
 
 
 \begin{frame}
-\frametitle{Law of total probability}
+\frametitle{Law of Total Probability}
 
-\begin{theorem}
-If  the collection of events $B_{1}, \ldots, B_{K}$ is a cover of $\Omega$, and $A$ is an event, then 
+\begin{theorem}[Law of Total Probability]
+If  the collection of events $B_{1}, \ldots, B_{K}$ is a partition of $\Omega$, and $A$ is an event, then 
 \[ P(A) = \sum_{k=1}^{K}P(A|B_{k})P(B_{k}). \]
 \end{theorem}
 
 \begin{proof}
-\begin{itemize}[<+->]
-\item By definition of conditional probability $P(A|B_{k})P(B_{k}) = P(A\cap B_{k})$.
-\item $\cup_{k=1}^{K} A\cap B_k = A$ because 
+\[ \begin{array}{rll}
+P(A) &= P\left( \bigcup_{k=1}^K A\cap B_k \right) & \mbox{$B_1,\ldots,B_K$ is a partition} \pause \\
+&= \sum_{k=1}^K P(A\cap B_k) & \mbox{$A\cup B_1,\ldots,A\cup B_K$ are disjoint} \pause \\
+&= \sum_{k=1}^K P(A|B_k)P(B_k) & \mbox{definition of conditional probability}
+\end{array} \]
+\end{proof}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Law of Total Probability graphic}
+\setkeys{Gin}{width=0.6\textwidth}
+
+\begin{center}
+\includegraphics{total-prob.pdf}
+\end{center}
+
+\pause
+
+\begin{example}
+In the Treasure Hunt example, the events $B_1, B_2,$ and $B_3$ form a cover $\Omega$, as a coin can be drawn only from one of the boxes. \pause
+Thus, we have 
+
+\[ \begin{array}{rl}
+P(G) &= P(G|B_1)P(B_1) + P(G|B_2)P(B_2) + P(G|B_3)P(B_3) \pause \\
+&= 1\times \frac{1}{3} + \frac{1}{2}\times\frac{1}{3} + 0\times \frac{1}{3} \pause \\
+&= \frac{1}{2}
+\end{array} \]
+\end{example}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Inverse probability}
+
+\begin{example}
+What if we know a gold coin was chosen, but we want to know which box it was drawn from. \pause
+That is, we want to know 
 \begin{itemize}
-\item $B_{1}, \ldots, B_{K}$ partition $\Omega$ \pause and 
-\item the events $A\cap B_{1}, \ldots A\cap B_{K}$ are disjoint. 
+\item $P(B_1|G)$
+\item $P(B_2|G)$
+\item $P(B_3|G)$
 \end{itemize}
-\item $P(A) = \sum_{k=1}^{K}P(A\cap B_{k}) = \sum_{k=1}^{K}P(A|B_{k})P(B_{k})$. 
+\end{example}
+
+\pause
+
+Intuitively, we know \pause
+\begin{itemize}
+\item $P(B_3|G) = 0$ since there are no gold coins in box 3, 
+\item $P(B_1|G)+P(B_2|G)+P(B_3|G)=1$ since these are the only three options, and
+\item perhaps $P(B_1|G) = 2P(B_2|G)$. 
 \end{itemize}
+
+\pause
+
+This results in $P(B_1|G) = \frac{2}{3}$ and $P(B_2|G) = \frac{1}{3}$. 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Bayes' rule}
+
+\begin{theorem}[Bayes' Rule]
+If $B_{1}, \ldots, B_{K}$ is a partition of $\Omega$, and $A$ is an event, then 
+\[]
+P(B_k|A) = \frac{P(A|B_k)P(B_k)}{\sum_{k=1}^{K}P(A|B_k)P(B_k)}.
+\]
+\end{theorem}
+
+\pause
+
+\begin{proof}
+\[ \begin{array}{rll}
+P(B_k|A) &= \frac{P(A\cup B_k)}{P(A)} & \mbox{by definition of conditional probability} \pause \\
+&= \frac{P(A|B_k)P(B_k)}{P(A)} & \mbox{by definition of conditional probability} \pause \\
+&= \frac{P(A|B_k)P(B_k)}{\sum_{k=1}^K P(A|B_k)P(B_k)} & \mbox{by Law of Total Probability} 
+\end{array} \]
 \end{proof}
 
 \end{frame}
 
 
 
-% \no {\textcolor{magenta} {Proof of the Law of Total Probability:}}\\[-.5in]
-% \begin{itemize}
-% \addtolength{\itemsep}{-0.6\baselineskip}
-% \item[\bul] By definition of conditional probability $P(A|B_{i})P(B_{i}) = P(A\cap B_{i})$
-% \item[\bul] Because $B_{1}, \ldots, B_{k}$ partition $\Omega$, the events $A\cap B_{1}, \ldots A\cap B_{k}$ are disjoint, and $\cup_{i=1}^{k}A_{i} = A$ where $A_i= A\cap B_i$. 
-% \item[\bul] By Axiom (iii) (slide set 2 p.5), $P(A) = \sum_{i=1}^{k}P(A\cap B_{i}) = \sum_{i=1}^{k}P(A|B_{i})P(B_{i})$. 
-% \end{itemize}
-% \foilhead[-.8in]{\textcolor{blue}{Law of Total Probability (continued...)}}
-% \no  We can depict event $A$ using a Venn diagram:\\[.1in]
-%     \centerline{\includegraphics[width=3in]{total-prob.pdf}} \\[.01in]
-% \no The probability of event $A$ is put together as sum of the probabilities of the intersections $\sum_{i=1}^{k}P(A\cap B_{i})$.\\[.1in]
-% \no In our Treasure Hunt example, the events $B_1, B_2,$ and $B_3$ form a cover $\Omega$, as a coin can be drawn only from one of the boxes.\\[.1in]
-% \no Defining event $A=$ drawing a gold coin, we have\\[.15in]
-%  $P(A) = P(A|B_1)P(B_1)+P(A|B_2)P(B_2)= 1   \cdot \frac{1}{3}+ \frac{1}{2}  \cdot  \frac{1}{3}=0.5$ as before.\\[.15in] 
-% \no Note that event $A$ does not intersect the event $B_3$ as there are no gold coins in Box 3.
-% 
-% 
-% 
-% \foilhead[-.75in]{\textcolor{blue}{Bayes' rule.  }}
-% \no {\textcolor{magenta} {Theorem: \emph{Bayes' Rule.}}} If $B_{1}, \ldots, B_{k}$ is a cover or partition of $\Omega$, and $A$ is an event, then 
-% $$
-% P(B_{j}|A) = \frac{P(A|B_{j})P(B_{j})}{\sum_{j=1}^{k}P(A|B_{j})P(B_{j})}.
-% $$
-% \no {\textcolor{magenta} {Proof of Bayes' Rule:}}\\[-.5in]
-% \begin{eqnarray*}
-% P(B_{j}|A) &=& \frac{P(B_{j}\cap A)}{P(A)}= \frac{P(A|B_{j})P(B_{j})}{P(A)}\\ 
-% &=& \frac{P(A|B_{j})P(B_{j})}{\sum_{j=1}^{k}P(A|B_{j})P(B_{j})}.
-% \end{eqnarray*}
-% %\no We can represent Bayes' rule with tree diagrams and Venn diagrams as well. \\[.15in]
-% %\no {\textcolor{magenta}{Read Section 1.7 (Hofmann notes)}}.
-% \foilhead[-.8in]{\textcolor{blue}{ Example 1.7.3: (Hofmann notes) }}
-% \no {\textcolor{cyan} {A given lot of chips contains 2\%  defective chips. Each chip is tested before delivery.
-% However, the tester is not wholly reliable:
-% \begin{eqnarray*}
-%     P(\text{ ``tester says chip is good'' } | \text{  ``chip is good'' }) &=& 0.95 \\
-%     P(\text{ ``tester says chip is defective'' } | \text{ ``chip is defective'' }) &=&  0.94     
-% \end{eqnarray*}
-% If the test device says the chip is defective, what is the probability that the chip actually is defective?}}
-% 
-% \no We will apply Bayes' Rule, using  $C_{d}$, and $\bar{C}_{d}$ as cover.
-% \begin{eqnarray*}
-%     P(\underbrace{\text{ chip is defective }}_{:= C_{d}} &|& 
-%     \underbrace{\text{ tester says it's defective }}_{:= T_{d}})\\
-%     & =& P(C_{d}| T_{d}) 
-%  \end{eqnarray*}   
-% \foilhead[-.8in]{\textcolor{blue}{Continue Example 1.7.3 }}  
-%  \begin{eqnarray*}
-% P(C_{d}| T_{d})  
-%  &=&\frac{P(T_d|C_d)P(C_d)}{P(T_d)}\\
-%     &=& \frac{P(T_{d}| C_{d}) P(C_{d})}{P(T_{d}| C_{d}) P(C_{d}) + 
-%     P(T_{d}| \bar{C_{d}}) P(\bar{C_{d}})}\\
-%     &=&\frac{0.94\cdot 0.02}{0.94\cdot 0.02+(1-P(\bar{T}_d|\bar{C}_d))\cdot 0.98}\\
-%   &=  &\frac{0.94\cdot 0.02}{0.94\cdot 0.02+(1-0.95)\cdot 0.98}=0.28
-% \end{eqnarray*}
-% 
-% %eqnarray\no {\textcolor{magenta}{Study Example 2.3.2 of Baron's text carefully.}}
-% 
-% 
-% \end{document}
+
+\begin{frame}
+\frametitle{CPU testing}
+\begin{example}
+A given lot of chips contains 2\%  defective chips. \pause
+Each chip is tested before delivery. \pause
+However, the tester is not wholly reliable: \pause
+\[ \begin{array}{rl}
+    P(\text{ ``tester says chip is good'' } | \text{  ``chip is good'' }) &= 0.95 \pause \\
+    P(\text{ ``tester says chip is defective'' } | \text{ ``chip is defective'' }) &=  0.94
+\end{array} \]
+\pause
+If the test device says the chip is defective, what is the probability that the chip actually is defective?
+\end{example}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{CPU testing (cont.)}
+
+Let
+\begin{itemize}
+\item $C_g$ ($C_d$) be the event the chip is good (defective) \pause
+\item $T_g$ ($T_d$) be the event the tester says the chip is good (defective)
+\end{itemize}
+
+We know \pause
+
+\begin{itemize}
+\item $0.02 = P(C_d) \phantom{|C_g} = 1-P(C_g)$
+\item $0.95 = P(T_g|C_g) = 1-P(T_d|C_g)$
+\item $0.94 = P(T_d|C_d) = 1-P(T_g|C_d)$
+\end{itemize}
+
+\pause
+Using Bayes' Rule, we have 
+
+\[ \begin{array}{rl}
+P(C_d|T_d) &= \frac{P(T_d|C_d)P(C_d)}{P(T_d|C_d)P(C_d)+P(T_d|C_g)P(C_g)} \pause \\
+&= \frac{P(T_d|C_d)P(C_d)}{P(T_d|C_d)P(C_d)+[1-P(T_g|C_g)][1-P(C_d)]} \pause \\
+&= \frac{0.94\times 0.02}{0.94\times 0.02 + [1-0.95]\times[1-0.02]} \pause \\
+&= 0.28
+\end{array} \]
+\end{frame}
+
+
 \end{document}
 
 
