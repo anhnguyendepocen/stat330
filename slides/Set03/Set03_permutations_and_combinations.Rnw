@@ -89,20 +89,24 @@ P(E) = |E|/|\mOmega| = 1/4.
 
 
 \begin{frame}
-\frametitle{Second chip is defective}
+\frametitle{Second chip is defective given first chip is good}
 
-Suppose an individual draws two chips and we want to know the probability the second chip is defective.
+Suppose an individual draws two chips and we are told the first chip is good. \pause
+What is the probability the second chip is defective?
 
 \pause 
 
 Let us compute this using probability theory:
 \begin{itemize}[<+->]
-\item One possible sample space $\mOmega$ is: $\mOmega = \{ (g_{1}, g_{2}),  (g_{1}, g_{3}), (g_{1}, d),(g_{2}, g_{3}), (g_{2}, d), (g_{3}, d) \}$
+\item One possible sample space $\mOmega$ is: $\mOmega = 
+\{ (g_{1}, g_{2}),  (g_{1}, g_{3}), (g_{1},      d), 
+   (g_{2}, g_{1}),  (g_{2}, g_{3}), (g_{2},      d), 
+   (g_{3}, g_{1}),  (g_{3}, g_{2}), (g_{3},      d) \}$
 \item The event to draw the defective chip is then $E  = \{ (g_{1}, d), (g_{2}, d), (g_{3}, d) \}$.
 \item We can write the probability to draw the defective chip by comparing 
 the sizes of $E$ and $\mOmega$:
 \[
-P(E) = \frac{|E|}{|\mOmega|} = \frac{1}{2}.
+P(E) = \frac{|E|}{|\mOmega|} = \frac{1}{3}.
 \]
 \end{itemize}
 \end{frame}
