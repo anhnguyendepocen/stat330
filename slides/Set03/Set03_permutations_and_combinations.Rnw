@@ -1,4 +1,4 @@
-\documentclass[handout]{beamer}
+\documentclass{beamer}
 
 
 \input{../frontmatter}
@@ -354,7 +354,7 @@ You choose 5 numbers and win if you pick at least 3 of the same numbers that the
 
 \begin{itemize}
 \item What is the probability that all 5 match? \pause % 1/C(49,5) \approx 5.2e-7
-\item What is the probability that you win? \pause % ??? [C(5,3)+C(5,4)+C(5,5)]/C(49,5) \approx 50/1906884 \approx 2.6e-5
+\item What is the probability that you win? \pause % ??? [C(5,3)C(44,2)+C(5,4)C(44,1)+C(5,5)]/C(49,5) \approx 9681/1906884 \approx 0.005
 	\begin{enumerate}
 	\item Addition rule: we could win with 3, 4, or 5 matching cards. 
 	\item Number of ways we could match $k$ cards is $C(5,k)$. 
