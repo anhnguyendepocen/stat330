@@ -1,0 +1,222 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set05 - Bayes' Rule}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE>>=
+library(dplyr)
+library(ggplot2)
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+\frame{\maketitle}
+
+
+\begin{frame}
+\frametitle{Treasure hunt}
+
+\begin{example}
+Treasure hunt:
+\begin{itemize}
+\item Box 1 has two gold coins.
+\item Box 2 has one gold coin and one silver coin.
+\item Box 3 has two silver coins. 
+\end{itemize}
+Suppose that you 
+\begin{enumerate}
+\item randomly select one of the boxes at random \pause and then
+\item randomly select one of the coins from that box. 
+\end{enumerate}
+\pause What is the probability that the coin you select is a gold coin?
+\end{example}
+
+\vspace{0.2in} \pause
+
+For a problem like this, that consists of a step-wise procedure, it is 
+often useful to draw a tree (a flow chart) of the choices we can make 
+in each step.
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Treasure hunt (cont.)}
+\setkeys{Gin}{width=0.3\textwidth}
+
+\begin{center}
+\includegraphics{box_coin_tree}
+\end{center}
+
+\pause
+
+Let $B_1, B_2, B_3$ to be the events that Box 1, 2 or 3 is selected randomly. \pause 
+Then $P(B_1)=P(B_2)=P(B_3) = 1/3$. 
+
+\vspace{0.2in} \pause
+
+Let $G$ be the event that a gold coin is selected. \pause
+Now, \emph{conditional on a particular box} what is the probability of randomly selecting a gold coin?
+\begin{itemize}
+\item $P(G|B_1) = \pause 1$. \pause
+\item $P(G|B_2) = \pause 1/2$. \pause
+\item $P(G|B_3) = \pause 0$.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Treasure hunt (cont.)}
+
+Using conditional probability, we can calculate 
+\begin{itemize}
+\item $P(G\cup B_1) = \pause P(G|B_1)P(B_1) = 1\times \frac{1}{3} = \frac{1}{3}$.
+\item $P(G\cup B_2) = \pause P(G|B_2)P(B_2) = \frac{1}{2}\times \frac{1}{3} = \frac{1}{0}$.
+\item $P(G\cup B_3) = \pause P(G|B_3)P(B_3) = 0\times \frac{1}{3} = 0$.
+\end{itemize}
+
+\vspace{0.2in} \pause
+
+These are disjoint events and thus the probability of their union is the sum of their probabilities\pause, i.e. 
+{\small
+\[ \begin{array}{rl}
+P([G\cup B_1] \cap [G\cup B_2] \cap [G\cup B_3]) \pause
+&= P(G\cup B_1) + P(G\cup B_2) + P(G\cup B_3) \pause \\
+&= \frac{1}{3} + \frac{1}{6} + 0 = \frac{1}{2}
+\end{array} \]
+}
+
+\pause
+
+Since these are the only ways to get the gold coin, this is the probability of getting a gold coin.
+\end{frame}
+
+\begin{frame}
+\frametitle{Partition}
+\setkeys{Gin}{width=0.3\textwidth}
+\begin{definition}
+A collection of events $B_{1}, \ldots B_{K}$ is called a \alert{partition} (or \alert{cover}) of $\Omega$ if 
+\begin{itemize}
+\item the events are mutually exclusive (i.e., $B_{i}\cap B_{j} = \emptyset$ for $i\neq j$)\pause, and
+\item the union of the events is $\Omega$ (i.e., $\bigcup_{k=1}^{K}B_{k} = \Omega$).
+\end{itemize}
+\end{definition}
+
+\begin{center}
+\includegraphics{cover}
+\end{center}
+
+\pause
+
+The branches of our tree $(B_1,B_2,B_3)$ formed a partition. 
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Law of total probability}
+
+\begin{theorem}
+If  the collection of events $B_{1}, \ldots, B_{K}$ is a cover of $\Omega$, and $A$ is an event, then 
+\[ P(A) = \sum_{k=1}^{K}P(A|B_{k})P(B_{k}). \]
+\end{theorem}
+
+\begin{proof}
+\begin{itemize}[<+->]
+\item By definition of conditional probability $P(A|B_{k})P(B_{k}) = P(A\cap B_{k})$.
+\item $\cup_{k=1}^{K} A\cap B_k = A$ because 
+\begin{itemize}
+\item $B_{1}, \ldots, B_{K}$ partition $\Omega$ \pause and 
+\item the events $A\cap B_{1}, \ldots A\cap B_{K}$ are disjoint. 
+\end{itemize}
+\item $P(A) = \sum_{k=1}^{K}P(A\cap B_{k}) = \sum_{k=1}^{K}P(A|B_{k})P(B_{k})$. 
+\end{itemize}
+\end{proof}
+
+\end{frame}
+
+
+
+% \no {\textcolor{magenta} {Proof of the Law of Total Probability:}}\\[-.5in]
+% \begin{itemize}
+% \addtolength{\itemsep}{-0.6\baselineskip}
+% \item[\bul] By definition of conditional probability $P(A|B_{i})P(B_{i}) = P(A\cap B_{i})$
+% \item[\bul] Because $B_{1}, \ldots, B_{k}$ partition $\Omega$, the events $A\cap B_{1}, \ldots A\cap B_{k}$ are disjoint, and $\cup_{i=1}^{k}A_{i} = A$ where $A_i= A\cap B_i$. 
+% \item[\bul] By Axiom (iii) (slide set 2 p.5), $P(A) = \sum_{i=1}^{k}P(A\cap B_{i}) = \sum_{i=1}^{k}P(A|B_{i})P(B_{i})$. 
+% \end{itemize}
+% \foilhead[-.8in]{\textcolor{blue}{Law of Total Probability (continued...)}}
+% \no  We can depict event $A$ using a Venn diagram:\\[.1in]
+%     \centerline{\includegraphics[width=3in]{total-prob.pdf}} \\[.01in]
+% \no The probability of event $A$ is put together as sum of the probabilities of the intersections $\sum_{i=1}^{k}P(A\cap B_{i})$.\\[.1in]
+% \no In our Treasure Hunt example, the events $B_1, B_2,$ and $B_3$ form a cover $\Omega$, as a coin can be drawn only from one of the boxes.\\[.1in]
+% \no Defining event $A=$ drawing a gold coin, we have\\[.15in]
+%  $P(A) = P(A|B_1)P(B_1)+P(A|B_2)P(B_2)= 1   \cdot \frac{1}{3}+ \frac{1}{2}  \cdot  \frac{1}{3}=0.5$ as before.\\[.15in] 
+% \no Note that event $A$ does not intersect the event $B_3$ as there are no gold coins in Box 3.
+% 
+% 
+% 
+% \foilhead[-.75in]{\textcolor{blue}{Bayes' rule.  }}
+% \no {\textcolor{magenta} {Theorem: \emph{Bayes' Rule.}}} If $B_{1}, \ldots, B_{k}$ is a cover or partition of $\Omega$, and $A$ is an event, then 
+% $$
+% P(B_{j}|A) = \frac{P(A|B_{j})P(B_{j})}{\sum_{j=1}^{k}P(A|B_{j})P(B_{j})}.
+% $$
+% \no {\textcolor{magenta} {Proof of Bayes' Rule:}}\\[-.5in]
+% \begin{eqnarray*}
+% P(B_{j}|A) &=& \frac{P(B_{j}\cap A)}{P(A)}= \frac{P(A|B_{j})P(B_{j})}{P(A)}\\ 
+% &=& \frac{P(A|B_{j})P(B_{j})}{\sum_{j=1}^{k}P(A|B_{j})P(B_{j})}.
+% \end{eqnarray*}
+% %\no We can represent Bayes' rule with tree diagrams and Venn diagrams as well. \\[.15in]
+% %\no {\textcolor{magenta}{Read Section 1.7 (Hofmann notes)}}.
+% \foilhead[-.8in]{\textcolor{blue}{ Example 1.7.3: (Hofmann notes) }}
+% \no {\textcolor{cyan} {A given lot of chips contains 2\%  defective chips. Each chip is tested before delivery.
+% However, the tester is not wholly reliable:
+% \begin{eqnarray*}
+%     P(\text{ ``tester says chip is good'' } | \text{  ``chip is good'' }) &=& 0.95 \\
+%     P(\text{ ``tester says chip is defective'' } | \text{ ``chip is defective'' }) &=&  0.94     
+% \end{eqnarray*}
+% If the test device says the chip is defective, what is the probability that the chip actually is defective?}}
+% 
+% \no We will apply Bayes' Rule, using  $C_{d}$, and $\bar{C}_{d}$ as cover.
+% \begin{eqnarray*}
+%     P(\underbrace{\text{ chip is defective }}_{:= C_{d}} &|& 
+%     \underbrace{\text{ tester says it's defective }}_{:= T_{d}})\\
+%     & =& P(C_{d}| T_{d}) 
+%  \end{eqnarray*}   
+% \foilhead[-.8in]{\textcolor{blue}{Continue Example 1.7.3 }}  
+%  \begin{eqnarray*}
+% P(C_{d}| T_{d})  
+%  &=&\frac{P(T_d|C_d)P(C_d)}{P(T_d)}\\
+%     &=& \frac{P(T_{d}| C_{d}) P(C_{d})}{P(T_{d}| C_{d}) P(C_{d}) + 
+%     P(T_{d}| \bar{C_{d}}) P(\bar{C_{d}})}\\
+%     &=&\frac{0.94\cdot 0.02}{0.94\cdot 0.02+(1-P(\bar{T}_d|\bar{C}_d))\cdot 0.98}\\
+%   &=  &\frac{0.94\cdot 0.02}{0.94\cdot 0.02+(1-0.95)\cdot 0.98}=0.28
+% \end{eqnarray*}
+% 
+% %eqnarray\no {\textcolor{magenta}{Study Example 2.3.2 of Baron's text carefully.}}
+% 
+% 
+% \end{document}
+\end{document}
+
+
+
+
+
