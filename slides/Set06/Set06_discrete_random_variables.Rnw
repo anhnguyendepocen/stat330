@@ -172,32 +172,7 @@ Which of the following functions is a valid probability mass function?
 \end{example}
 \end{frame}
 
-%   \foilhead[-.8in]{\textcolor{blue}{Examples:}} 
-%    \no {\textcolor{red}{These properties give us an easy method to check, whether a function is a
-% probability mass function }}  \\[.1in]
-%    \no {\textcolor{magenta}{Experiment:}    Which of the following functions is a valid probability mass
-%     function?
-%     \begin{enumerate}
-%     \item
-%     	\begin{tabular}{c|ccccc}
-% 		$x$ & -3 & -1 & 0 & 5 & 7  \\
-% 		\hline
-% 		$p_{X}(x)$ & 0.1 & 0.45 & 0.15 & 0.25 & 0.05  \\
-% 	\end{tabular}
-%     \item
-%     	\begin{tabular}{c|ccccc}
-% 		$y$ & -1 & 0 & 1.5 & 3 & 4.5 \\
-% 		\hline
-% 		$p_{Y}(y)$ & 0.1 & 0.45 & 0.25 & -0.05 & 0.25  \\
-% 	\end{tabular}
-%     \item
-%     	\begin{tabular}{c|ccccc}
-% 		$z$ & 0 & 1 & 3 & 5 & 7  \\
-% 		\hline
-% 		$p_{Z}(z)$ & 0.22 & 0.18 & 0.24 & 0.17 & 0.18  \\
-% 	\end{tabular}
-%     \end{enumerate}
-%     
+
 %     
 %  \foilhead[-.8in]{\textcolor{blue}{More Examples of Discrete R.V.'s}}
 %  \no {\textcolor{magenta}{Example: }} {\textcolor{cyan}{Roll of a fair die}}\\[.1in] 
