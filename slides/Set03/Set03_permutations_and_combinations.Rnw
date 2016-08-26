@@ -62,14 +62,38 @@ P(A) = \frac{|A|}{|\mOmega|} =
 \subsection{Equally likely events}
 \begin{frame}
 \frametitle{Equally likely events}
+
+\small
+
 \begin{theorem}
-If elementary outcomes in a sample space are equally likely, \pause i.e. $P(\{ \mOmega \}) $ is the same for all $\mOmega \in \mOmega$), \pause then  the probability of an event $A$ is given by:
+If elementary outcomes in a sample space are equally likely, \pause i.e. $P(\{ \omega \}) $ is the same for all $\omega \in \mOmega$), \pause then  the probability of an event $A$ is given by:
 \[ P(A) = \frac{|A|}{|\mOmega|}, \]
 \pause
 where $|A|$ is the number of elements in $A$ (cardinality of $A$).
 \end{theorem}
 
-\vspace{0.1in} \pause
+\pause
+
+\begin{example}
+Probability of drawing a defective chip when there are 3 good chips and one defective chip.
+\begin{itemize}[<+->]
+\item One possible sample space $\mOmega$ is: $\mOmega = \{ g_{1}, g_{2}, g_{3} d \}$
+\item The event to draw the defective chip is then $E  = \{ d \}$.
+\item Thus
+\[
+P(E) = |E|/|\mOmega| = 1/4.
+\]
+\end{itemize}
+\end{example}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Second chip is defective}
+
+Suppose an individual draws two chips and we want to know the probability the second chip is defective.
+
+\pause 
 
 Let us compute this using probability theory:
 \begin{itemize}[<+->]
@@ -78,7 +102,7 @@ Let us compute this using probability theory:
 \item We can write the probability to draw the defective chip by comparing 
 the sizes of $E$ and $\mOmega$:
 \[
-P(A) = \frac{|E|}{|\mOmega|} = \frac{1}{2}.
+P(E) = \frac{|E|}{|\mOmega|} = \frac{1}{2}.
 \]
 \end{itemize}
 \end{frame}
@@ -204,7 +228,7 @@ Toss a coin 23 times.
 \frametitle{Ordered samples without replacement}
 
 A box has $n$ items numbered $1, \ldots, n$. 
-Select $k (\leq n) $ items without replacement, i.e. an item is drawn at most once. 
+Select $k \leq n$ items without replacement, i.e. an item is drawn at most once. 
 Keep track of the \emph{sequence} of selections.
 
 \vspace{0.1in} \pause
@@ -220,7 +244,7 @@ Keep track of the \emph{sequence} of selections.
 What is $|\mOmega|$?
 
 \begin{itemize}
-\item Break the complex action into a series $k$ single draws, i.e. $x_{i}$ is outcome on draw $i$. 
+\item Break the complex action into a series of $k$ single draws, i.e. $x_{i}$ is outcome on draw $i$. 
 \item $n$ possibilities for $x_{1}$, $n-1$ possibilities for $x_{2}$, $\ldots$, $n-(k-1)$ possibilities for $x_{k}$. 
 \item Multiplication principle implies 
 \[ 
@@ -309,14 +333,14 @@ What is $|\mOmega|$?
 \frametitle{Combinations}
 
 \begin{definition}
-A \emph{combination} is a selection of all or part of a set of objects without regard to the order in which objects are selected. 
+A \alert{combination} is a selection of all or part of a set of objects without regard to the order in which objects are selected. 
 \end{definition}
 {\tiny \url{http://stattrek.com/online-calculator/combinations-permutations.aspx}}
 
 \vspace{-0.2in} \pause
 
 \begin{theorem}
-The number of combinations of $k\le n$ objects chosen from $n$ objects is 
+The number of combinations of $k\le n$ objects chosen from $n$ objects without replacement is 
 \[ C(n,k) = {n\choose k} = \frac{n!}{(n-k)!k!} \]
 \end{theorem}
 \end{frame}
