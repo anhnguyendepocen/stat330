@@ -65,13 +65,17 @@ a mathematical foundation is necessary.
   \item if every member of set A is also a member of set B, then A is said to be a subset of B, written $A \subseteq B$ (A is said to be contained in B).
   \end{itemize}
 
-\item \alert{Union} ($\cup$): 
+\item \alert{Union} ($\union$): 
 A union of events is an event consisting of all the outcomes in these events.
-\[ A\cup B = \{\omega\mid \omega \in A \text{ or } \omega \in B\} \]
+\[ A\union B = \{\omega\mid \omega \in A \text{ or } \omega \in B\} \]
 
-\item \alert{Intersection} ($\cap$): 
+\item \alert{Intersection} ($\intersection$): 
 An intersection of events is an event consisting of the common outcomes in these events.
-\[ A\cap B = \{\omega\mid \omega \in A \text{ and } \omega \in B\} \]
+\[ A\intersection B = \{\omega\mid \omega \in A \text{ and } \omega \in B\} \]
+
+\item \alert{Complement} ($\bar A$): 
+A complement of an event $A$ is an event that occurs when event $A$ does not happen.
+\[ \bar A = \{\omega \mid \omega \notin A\} \]
 \end{enumerate}
 \end{frame}
 
@@ -79,24 +83,34 @@ An intersection of events is an event consisting of the common outcomes in these
 \begin{frame}
 \frametitle{Set comparison, operations, terminology (cont.)}
 \begin{enumerate}[<+->]
-\setcounter{enumi}{3}
+\setcounter{enumi}{4}
 \item \alert{Complement} ($\bar A$): 
 A complement of an event $A$ is an event that occurs when event $A$ does not happen.
 \[ \bar A = \{\omega \mid \omega \notin A\} \]
 
-\item \alert{Demorgan's Law}:
-\[(\overline{A\cup B}) = \bar A\cap \bar B \]
+\item \alert{Set difference} ($A\setminus B$):
+All elements in $A$ that are not in $B$, i.e. 
+\[ 
+A\setminus B = \{\omega| \omega\in A \mbox{ and } \omega\notin B\}
+\]
 
 \item \alert{Empty Set} $\emptyset$ is a set having no elements, i.e. $\{\}$.
 The empty set is a subset of every set:
 \[ \emptyset \subseteq A \]
 
 \item \alert{Disjoint sets}: Sets $A, B$ are disjoint if their intersection is empty:
-\[ A\cap B = \emptyset \]
+\[ A\intersection B = \emptyset \]
 
 \item \alert{Mutually exclusive sets}: Sets $A_1, A_2, \ldots$ are
   mutually exclusive if any two of these events are disjoint:
-\[ A_i\cap A_j  = \emptyset \text{ for any } i\neq j \]
+\[ A_i\intersection A_j  = \emptyset \text{ for any } i\neq j \]
+
+\item \alert{De Morgan's Laws}:
+\[
+(\overline{A\union B}) = \bar A\intersection \bar B 
+\qquad \mbox{and} \qquad
+(\overline{A\intersection B}) = \bar A\union \bar B 
+\]
 \end{enumerate}
 \end{frame}
 
@@ -188,9 +202,9 @@ numbers $P(A)$ to events $A \subset \mOmega$ \pause such that
     \item[(ii)] $P(\mOmega) = 1$. 
     \item[(iii)]  if $A_{1},A_{2}, \ldots$ are (possibly, infinite many)
       mutually exclusive events 
-    (i.e. $A_{i} \cap A_{j} = \emptyset$ for all $i\neq j$) then 
+    (i.e. $A_{i} \intersection A_{j} = \emptyset$ for all $i\neq j$) then 
     \[
-    P(A_{1} \cup A_{2} \cup \ldots ) = P(A_{1}) + P(A_{2}) + \ldots = 
+    P(A_{1} \union A_{2} \union \ldots ) = P(A_{1}) + P(A_{2}) + \ldots = 
     \sum_{i}P(A_{i}).
     \]
 \end{itemize}
@@ -247,11 +261,10 @@ $ P(\overline{A}) = 1-P(A)$ \pause
 {\textcolor{red}{Corollary:}} $P(\emptyset)=0$ \pause
 
 \item Addition Rule of Probability 
-\[ P(A \cup B) = P(A) + P(B) - P(A \cap B) \]
 
-\pause
+\[ P(A \union B) = P(A) + P(B) - P(A \intersection B) \]
 
-\item If $A\subset B$, then $P(A)\leq P(B)$. \pause
+\item If $A\subset B$, then $P(A)\leq P(B)$.
 
 {\textcolor{red}{Corollary:}} For any $A$, $P(A)\leq 1$. 
 \end{itemize}
@@ -285,17 +298,17 @@ P(\text{ WiFi up and ISP up } ) &=& .55.
 Let  $A\equiv \text{WiFi up};\ B\equiv \text{ISP up}$ \pause
 \begin{enumerate}[<+->]
 \item What is the probability that the WiFi is up or the ISP is up?
-\[ P( \text{ WiFi up or ISP up}) =P(A\cup B) = 0.9 + 0.6 - 0.55 = 0.95 \]
+\[ P( \text{ WiFi up or ISP up}) =P(A\union B) = 0.9 + 0.6 - 0.55 = 0.95 \]
 \item  What is the probability that both the WiFi and the ISP are down?
 \[ \begin{array}{rl}
-P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}) \\
+P( \text{ WiFi down and ISP down}) &=P(\bar A\intersection \bar B) = P(\overline{A\union B}) \\
 &=1-.95=.05
 \end{array} \]
 \item What is the probability that we fail to connect?
 \[ \begin{array}{rl}
 \multicolumn{2}{l}{P( \text{ WiFi down or ISP down})} \\
- &=P(\bar A\cup \bar B)=P(\bar A) + P(\bar B) -P(\bar A\cap \bar B) \\
-&=P(\bar A\cup \bar B) =(1-.9)+(1-.6)-.05=.1+.4-.05=.45
+ &=P(\bar A\union \bar B)=P(\bar A) + P(\bar B) -P(\bar A\intersection \bar B) \\
+&=P(\bar A\union \bar B) =(1-.9)+(1-.6)-.05=.1+.4-.05=.45
 \end{array} \]
 \end{enumerate}
 
@@ -336,9 +349,9 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 %     \item[(iii)]  \notiz{the pro\-ba\-bi\-lity of a disjoint union of events is equal to the 
 %     sum of the individual pro\-ba\-bi\-li\-ties}
 %     if $A_{1},A_{2}, \ldots$ are (possibly, infinite many) disjoint events 
-%     (i.e. $A_{i} \cap A_{j} = \emptyset$ for all $i, j$) then 
+%     (i.e. $A_{i} \intersection A_{j} = \emptyset$ for all $i, j$) then 
 %     \[
-%     P(A_{1} \cup A_{2} \cup \ldots ) = P(A_{1}) + P(A_{2}) + \ldots = 
+%     P(A_{1} \union A_{2} \union \ldots ) = P(A_{1}) + P(A_{2}) + \ldots = 
 %     \sum_{i}P(A_{i}).
 %     \]
 %    
@@ -392,14 +405,14 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 %     together appropriately:
 %     \begin{enumerate}
 % 	\item We know that $P(\mOmega) = 1$ because of axiom (ii)
-% 	\item $\mOmega$ can be written as $\mOmega = A \cup \bar{A}$ because of 
+% 	\item $\mOmega$ can be written as $\mOmega = A \union \bar{A}$ because of 
 % 	the definition of an event's complement.
 % 	\item $A$ and $\bar{A}$ are disjoint and therefore the probability of 
 % 	their union equals the sum of the individual probabilities (axiom iii).
 %     \end{enumerate}
 %     All together:
 %     \[
-%     1 \stackrel{(1)}{=} P(\mOmega) \stackrel{(2)}{=} P(A \cup \bar{A}) 
+%     1 \stackrel{(1)}{=} P(\mOmega) \stackrel{(2)}{=} P(A \union \bar{A}) 
 %     \stackrel{(3)}{=} P(A) + P(\bar{A}).
 %     \]
 %     This yields the statement.
@@ -430,7 +443,7 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 %     \mbox{}
 %     Let $A$ and $B$ be two events of $\mOmega$, then:
 %     \[
-%     P(A \cup B) = P(A) + P(B) - P(A \cap B)
+%     P(A \union B) = P(A) + P(B) - P(A \intersection B)
 %     \]
 %     
 %     \vfill
@@ -443,8 +456,8 @@ P( \text{ WiFi down and ISP down}) &=P(\bar A\cap \bar B) = P(\overline{A\cup B}
 % \end{minipage}
 % \end{xsatz}    
 % To see why this makes sense, think of probability as the area in the 
-% Venn diagram: By simply adding $P(A)$ and $P(B)$, $P(A \cap B)$ gets 
-% counted twice and must be subtracted off to get $P(A \cup B)$.
+% Venn diagram: By simply adding $P(A)$ and $P(B)$, $P(A \intersection B)$ gets 
+% counted twice and must be subtracted off to get $P(A \union B)$.
 % 
 % \begin{xpl}{}
 % \begin{enumerate}
