@@ -198,7 +198,7 @@ as the latter has a different success probability for each experiment.
 \end{frame}
 
 
-
+\subsection{Binomial distribution}
 \begin{frame}
 \frametitle{Binomial distribution}
 
@@ -209,61 +209,66 @@ Y = \sum_{i=1}^n X_i.
 
 \vspace{0.1in} \pause
 
+Then we use the notation $Y\sim Bin(n,p)$ to indicate a binomial distribution with 
+\begin{itemize}
+\item $n$ attempts and 
+\item probability of success $p$. 
+\end{itemize}
 \end{frame}
 
-% 
-% 
-% \foilhead[-.8in]{\textcolor{blue}{Binomial distribution}}
-%  {\textcolor{magenta}{Situation:}  {\textcolor{cyan}{$n$ sequential Bernoulli experiments, with success rate
-% $p$ for a single trial. Single trials are independent from each other.}} \\[.1in]
-% We are only interested in the number of successes in total after $n$ trials, random variable $X$ is then:
-% \[
-% X = \text{``number of successes in } n \text{ trials''}
-% \]\\[-.5in]
-% This leads to a sample space of
-% \[
-% \mOmega = \{ 0 , 1 , 2 , \ldots, n \}
-% \]\\[-.5in]
-%  {\textcolor{magenta}{ What is the general expression for $p_X(k)$ for all possible
-% $k = 0, \ldots, n$}
-% $$p_X(k) = P( X = k)$$
-% 
-% 
-% 
-% \foilhead[-.8in]{\textcolor{blue}{Derivation of Binomial pmf }}
-% We want to find the probability, that
-% in a sequence of $n$ trials there are exactly $k$ successes. If $s$ is a
-% particular sequence with $k$ successes and $n-k$ failures, we
-% already know the probability:
-% \[
-% P(s) = p^{k}(1-p)^{n-k}.
-% \]
-%  {\textcolor{red}{ Think:} Now we need to know, how
-% many} possibilities there are, to have $k$ successes in $n$ trials:}
-% think of the $n$ trials as numbers from 1 to $n$. \\[.1in]
-% There are $n \choose k$ possible ways of selecting $k$  numbers out of the
-% $n$ possible numbers. $p_X(k)$ is therefore (by summation rule):
-% \[
-% p_X(k) = {n \choose k} p^{k}(1-p)^{n-k}.
-% \]
-% This probability mass function is called the  {\textcolor{red}{  Binomial mass
-% function.}
-% 
-% 
-% \foilhead[-.8in]{\textcolor{blue}{Binomial distribution (cont'd)}}
-%  {\textcolor{red} {Remark:}} Any Binomial variable $X$ can be represented as a sum of \emph{iid} Bernoulli variables:\\[.1in]
-% \hspace*{1.5in}$X=X_1+\cdots+X_n$\\[.1in]
-% where $X_i\sim$ Bernoulli$(p)$\\[.1in]
-%   {\textcolor{magenta}{Expected value and Variance of Binomial random variable:}}\\[.1in]
-% \h  \bul $E[X]=\sum\limits_{i=1}^n E(X_i)=np$\\[.1in]
-% \h  \bul $\text{Var}[X]=\sum\limits_{i=1}^n\text{Var}(X_i)=np(1-p)$ (since $X_1, X_2,\ldots,x_n$ are iid)\\[.1in]
-% The cdf of X, $F_X$ is:
-% \[
-% F_X(t) = P(X\leq t)=\sum_{i=0}^{\lfloor{t}\rfloor} {n \choose i} p^{i}(1-p)^{n-i} =:
-% B_{n,p}(t)
-% \]
-% 
-% 
+
+\begin{frame}
+\frametitle{Binomial probability mass function}
+
+We need to obtain 
+\[ 
+p_Y(y) = P(Y=y) \quad \forall y\in \mOmega \pause = \{0,1,2,\ldots,n\}.
+\]
+
+\pause
+The probability of obtaining a particular sequence of $y$ success and $n-y$ failures is 
+\[ 
+p^y(1-p)^{n-y}
+\]
+since the experiments are $iid$ with success probability $p$. \pause But there are 
+\[
+{n\choose y} 
+\]
+ways of obtaining a sequence of $y$ success and $n-y$ failures. \pause Thus, the binomial probability mass function is 
+\[ 
+P_Y(y) = P(Y=y) = {n\choose y} p^y(1-p)^{n-y}.
+\]
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Properties of the binomial distribution}
+
+The expected value is 
+\[ 
+E[Y] = E\left[ \sum_{i=1}^n X_i \right] \pause = \sum_{i=1}^n E[X_i] \pause= \sum_{i=1}^n p = np.
+\]
+
+\vspace{0.1in} \pause
+
+The variance is 
+\[ 
+Var[Y] = \sum_{i=1}^n Var[X_i] = np(1-p)
+\]
+since the $X_i$ are independent. 
+
+\vspace{0.1in} \pause
+
+The cumulative distribution function is 
+\[ 
+F_Y(y) = P(Y\le y) = \sum_{x=0}^{\lfloor y\rfloor} {n\choose x} p^x(1-p)^{n-x}.
+\]
+
+\end{frame}
+
+
+
 % \foilhead[-.8in]{\textcolor{blue}{Binomial distribution: Example}}
 %  {\textcolor{blue} {Example:}} Compute the probabilities for the following events: \\[.1in]
 %     A box contains 15 components that each have a failure rate of 5\%.
