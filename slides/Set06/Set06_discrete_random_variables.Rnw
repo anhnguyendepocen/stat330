@@ -30,9 +30,9 @@ set.seed(2)
 
 \frame{\maketitle}
 
-
+\section{Random variables}
 \begin{frame}
-\frametitle{Discrete random variables}
+\frametitle{Random variables}
 \setkeys{Gin}{width=0.15\textwidth}
 
 \begin{definition}
@@ -59,13 +59,13 @@ This count is a random variable!
 
 \begin{itemize}
 \item Let $X$ the number of times that the red area is hit out of three throws. \pause
-\item $X(\omega)=  x$, if the outcome $\omega$ has $x$ hits to the red area, and $3-x$ hits to the gray area. \pause
-\item Thus, the set of possible values for $X(\omega)$ is $\{0,1,2,3\}$. \pause
+\item $X(\mOmega)=  x$, if the outcome $\mOmega$ has $x$ hits to the red area, and $3-x$ hits to the gray area. \pause
+\item Thus, the set of possible values for $X(\mOmega)$ is $\{0,1,2,3\}$. \pause
 \item To avoid cumbersome notation, we write
 \[ \{X = x\} \]
 for the event
 \[
-\{ \omega | \omega \in \Omega\ \text{ and }\ X(\omega) = x \}.
+\{ \mOmega | \mOmega \in \mOmega\ \text{ and }\ X(\mOmega) = x \}.
 \]
 \item By convention, we use a capital letter to indicate the random variable and a lower case letter to indicate a realized value of the random variable.
 \end{itemize}
@@ -99,13 +99,16 @@ We are interested in the number of bits that are received incorrectly.
 \end{itemize}
 \end{frame}
 
+
+
+\subsection{Image}
 \begin{frame}
 \frametitle{Image of random variables}
 
 \begin{definition}
 The \alert{image} of a random variable $X$ is defined as 
 \[ 
-Im(X) := \{x: x=X(\omega) \text{ for some }\omega \in \Omega \}
+Im(X) := \{x: x=X(\mOmega) \text{ for some }\mOmega \in \mOmega \}
 \]
 \pause
 If the image is finite or countable, we have a \alert{discrete} random variable. \pause
@@ -128,11 +131,16 @@ If the image is uncountably infinite, we have a \alert{continuous} random variab
 
 
 
-
+\section{Discrete random variables}
+\subsection{Distribution}
 \begin{frame}
 \frametitle{Distribution}
 
-The collection of all the probabilities related to $X$ is the \alert{distribution} of $X$. \pause For a discrete random variable, the function
+The collection of all the probabilities related to $X$ is the \alert{distribution} of $X$. 
+
+\vspace{0.2in} \pause 
+
+For a discrete random variable, the function
 \[ 
 P(x) = P(X=x) 
 \]
@@ -145,11 +153,21 @@ The set of possible values of $X$ is called the \alert{support} of the distribut
 \end{frame}
 
 
+
+
 \begin{frame}
 \frametitle{Examples}
-\begin{example}
-Which of the following functions is a valid probability mass function?
+A probability mass function is valid if it defines a valid set of probabilities, i.e. 
 \begin{itemize}
+\item the probabilities are non-negative,
+\item the probabilities sum to 1. 
+\end{itemize}
+
+\vspace{0.2in} \pause
+
+\begin{example}
+Which of the following functions are a valid probability mass functions?
+\begin{itemize}[<+->]
 \item
     	\begin{tabular}{c|ccccc}
 		$x$ & -3 & -1 & 0 & 5 & 7  \\
@@ -173,99 +191,335 @@ Which of the following functions is a valid probability mass function?
 \end{frame}
 
 
-%     
-%  \foilhead[-.8in]{\textcolor{blue}{More Examples of Discrete R.V.'s}}
-%  \no {\textcolor{magenta}{Example: }} {\textcolor{cyan}{Roll of a fair die}}\\[.1in] 
-% \no 	Let $Y$ be the number of spots on the upturned face of a die.\\[.15in]  	
-% \no Obviously, $Y$ is a random variable with image $Im(Y)=\{1,2,3,4,5,6\}$.	\\[.1in] 
-% \no Assuming, that the die is a fair die means, that the outcomes of 
-% each face turning up are equally likely i.e.,
-% 	probabilities of each face turning up are equal.\\[.1in]  
-% \no The probability mass function for $Y$ therefore is \\[.1in] 
-% \hspace*{1in}\begin{tabular}{c|cccccc}
-% 		$x$ & 1 & 2 & 3 & 4 & 5& 6 \\
-% 		\hline 
-% 		$p_{X}(x)$ & $\frac{1}{6}$  & $\frac{1}{6}$ & $\frac{1}{6}$ & $\frac{1}{6}$ & $\frac{1}{6}$ & $ \frac{1}{6} $ 
-% \end{tabular}
-% 
-% %\no Checkout pmf's in  Examples 3.1 and 3.3 from Baron's book.
-%    
-%  \foilhead[-.8in]{\textcolor{blue}{More Examples of Discrete R.V.'s}}
-%  \no {\textcolor{magenta}{Example: }} {\textcolor{cyan}{Roll of a doctored die}}\\[.1in] 
-%  \begin{minipage}[t]{6in} 
-% 	    The diagram shows all six faces of a particular die.
-% 	    If $Z$ denotes the number of spots on the upturned face after 
-% 	    toss this die,
-% 	    what is the probability mass function for $Z$?
-% 	    
-% 	    {\it Assuming, that each face of the die appears with the same 
-% 	    probability, we have 1 possibility to get a 1 or a 4, and two 
-% 	    possibilities for a 2 or 3 to appear, which gives a probability 
-% 	    mass function for $Z$ as:
-% 	     \[
-% 	    \begin{array}{l||c|c|c|c}
-% 		z & 1 & 2 & 3 & 4 \\ \hline
-% 		p(z) & 1/6 & 1/3 & 1/3 & 1/6 
-% 	    \end{array}
-% 	    \]
-% 	    }
-% 	\end{minipage}
-% 	\hfill
-% 	\begin{minipage}[t]{2in}
-% 	    	\vspace{0in}
-%             	 \centerline {
-%             	 \includegraphics[width=2in]{die-faces.pdf}
-% 		}
-% 	\end{minipage}
-%  
-% 
-% 
-% \foilhead[-.8in]{\textcolor{red}{Statistics of R.V.s}}
-% \no {\textcolor{magenta}{Gamblers Luck!:}}
-% {\textcolor{cyan}{Toss a die. Let $X$ be the number of spots turned up, then if}}\\[-.2in]
-% \[
-% X = \left\{ \begin{array}{rll}
-% & 1,\ 3\ \text{or}\ 5 & \text{I pay you}\ \$ X\\
-% & 2\ \text{or}\ 4 & \text{you pay me}\ \$ 2X \\
-% & 6 & \text{no money changes hands.}
-% \end{array}
-% \right .
-% \]
-% 
-% \no {\textcolor{cyan}{What amount of money do I \emph{expect} to win?}}\\[.1in]
-% \no For that, we look at another function, $h(x)$, that counts the money I win with
-% respect to the number of spots:
-% \[
-% h(x) = \left\{ \begin{array}{rl}
-% -x & \text{ for } x = 1,3,5 \\
-% 2x & \text{ for } x = 2,4 \\
-% 0 & \text{ for } x = 6.
-% \end{array}
-% \right .
-% \]
-% 
-%    \foilhead[-.8in]{\textcolor{red}{Gambling Example Continued...}}\vspace*{.05in}
-% \begin{tabular}{@{In 1/6 of all tosses $X$ will be }c@{, and I will
-% gain }r@{ dollars}}
-% 1 & -1\\[.05in]
-% 2 & 4 \\[.05in]
-% 3 & -3 \\[.05in]
-% 4 & 8 \\[.05in]
-% 5 & -5 \\[.05in]
-% 6 & 0 
-% \end{tabular}
-% 
-% \no In total I expect to get\\[.15in] 
-% \hspace*{1in} $\frac{1}{6} \cdot (-1) + \frac{1}{6} \cdot
-% 4 + \frac{1}{6} \cdot (-3) + \frac{1}{6} \cdot 8 + \frac{1}{6} \cdot
-% (-5) + \frac{1}{6} \cdot 0 = \frac{3}{6} = 0.5$\\[.15in]
-% \no dollars per play.\\[.1in]
-% \no In this example, we are calculating the \emph{expected value} of the function $h(X)$\\[.1in]
-% \no We denote this by $E(h(X))$ and define this mathematically in the next lecture.
+\subsection{Die rolling}
+\begin{frame}[fragile]
+\frametitle{Rolling fair 6-sided fair dice}
+\begin{example}
+Let $Y$ be the number of pips on the upturned face of a die. \pause 
+The image of $Y$ is  \pause $\{1,2,3,4,5,6\}$.	\pause
+The probability mass function for $Y$ therefore is 
+\[ \arraycolsep=2pt\def\arraystretch{2.2} 
+\begin{array}{c|cccccc}
+\hline
+x & 1 & 2 & 3 & 4 & 5 & 6 \pause \\
+\hline
+P(X=x) & \frac{1}{6} & \frac{1}{6} & \frac{1}{6} & \frac{1}{6} & \frac{1}{6}  & \frac{1}{6} \pause \\ 
+P(X\le x) & \frac{1}{6} & \frac{2}{6} & \frac{3}{6} & \frac{4}{6} & \frac{5}{6}  & \frac{6}{6} \\
+\hline
+\end{array} \]
+\end{example}
+\end{frame}
+
+
+\subsection{Dragonwood}
+\begin{frame}[fragile]
+\frametitle{Dragonwood}
+\begin{example}
+Dragonwood has 6-sided dice with the following \# of pips: $\{1,2,2,3,3,4\}$. 
+
+\vspace{0.1in} \pause
+
+What is the image, pmf, and cdf for the sum of the number of pips when rolling 3 dice? \pause
+<<dragonwood, echo=TRUE>>=
+# Three dice
+die   = c(1,2,2,3,3,4)
+rolls = expand.grid(die1 = die, die2 = die, die3 = die)
+sum   = rowSums(rolls)
+pdf   = table(sum)/length(sum)
+cdf   = cumsum(pdf)
+
+round(pdf,3)
+round(cdf,3)
+@
+\end{example}
+\end{frame}
+
+
+
+ 
+\begin{frame}
+\frametitle{Dragonwood (cont.)}
+
+In Dragonwood, you capture monsters by rolling a sum equal to or greater than its defense. \pause
+Suppose you have 3 dice and the following monsters are available to be captured:
+\begin{itemize}
+\item A monster worth 1 victory point with a defense of 3.
+\item A monster worth 3 victory points with a defense of 7.
+\item A monster worth 4 victory points with a defense of 8. 
+\end{itemize}
+\pause
+Which monster should your attack?
+
+\vspace{0.1in} \pause
+
+We can calculate the probability of defeating each monster by computing one minus the cdf evaluated at ``defense minus 1''. \pause
+Let $X$ be the sum of the number of pips on 3 Dragonwood dice. \pause
+Then
+\begin{itemize}
+\item $P(X\ge 3) = 1-P(X\le 2) = 1$
+\item $P(X\ge 7) = 1-P(X\le 6) = 0.722$.
+\item $P(X\ge 8) = 1-P(X\le 7) = 0.5$. 
+\end{itemize}
+\end{frame}
+
+
+
+\subsection{Expectation}
+\begin{frame}
+\frametitle{Expectation}
+
+\begin{definition}
+Let $X$ be a random variable and $h$ be some function. 
+The \alert{expected value} of a function of a (discrete) random variable is 
+\[ 
+E[h(X)] = \sum_i h(x_i) \cdot p_X(x_i).
+\]
+\pause
+If $h(x)=x)$, then 
+\[ 
+E[X] = \sum_i x_i \cdot p_X(x_i)
+\]
+\pause
+and we call this the \alert{expectation} of $X$. 
+\end{definition}
+
+\pause
+
+Expected values are \emph{weighted averages} of the possible values weighted by their probability. 
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Dragonwood (cont.)}
+
+What is the expectation of the sum of 3 Dragonwood dice? 
+<<dragonwood_expectation, dependson='dragonwood', echo=TRUE>>=
+x = as.numeric(names(pdf))
+x
+expectation = sum(x*pdf)
+expectation
+@
+
+\pause
+
+The expectation can be thought of as the \emph{center of gravity} of masses $p_X(x)$ placed at corresponding points $x$. \pause
+<<dragonwood_center_of_gravity, dependson='dragonwood_expectation', fig.height=2>>=
+opar = par(mar=c(4,4,1,0)+.1)
+plot(x,pdf,type="h")
+axis(1, 3:12)
+par(opar)
+@
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Biased coin}
+
+Suppose we have a biased coin represented by the following probability mass function:
+\[ \begin{array}{ccc}
+\hline
+y & 0 & 1 \\
+p_Y(y) & 1-p & p \\
+\hline
+\end{array} \]
+\pause
+What is the expected value? % E[Y] = p
+
+\vspace{0.2in} \pause
+
+If $p=0.9$, 
+<<biased_coin, fig.height=2>>=
+y = c(0,1)
+py = c(.1,.9)
+
+opar = par(mar=c(4,4,1,0)+.1)
+plot(y,py,type='h',ylab='pdf', axes=F, frame=TRUE, ylim=c(0,1))
+axis(1, c(0,1))
+axis(2, c(0,1))
+par(opar)
+@
+\end{frame}
+
+
+\subsection{Properties of expectations and variances}
+\begin{frame}
+\frametitle{Properties of expectations and variance}
+
+\begin{theorem}
+Let $X$ and $Y$ be random variables and $a$, $b$, and $c$ be constants. \pause
+Then 
+\[ \begin{array}{rl}
+E[aX + bY+c] &= aE[X] + bE[Y] + c.
+\end{array} \]
+\end{theorem}
+
+\pause
+
+In particular
+\begin{corollary}
+\begin{itemize}[<+->]
+\item $E[X+Y] = E[X]+E[Y]$,
+\item $E[aX] = a E[X]$, and
+\item $E[c] = c$.
+\end{itemize}
+\end{corollary}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Dragonwood (cont.)}
+
+Enhancement cards in Dragonwood allow you to improve your rolls. \pause Here are two enhancement cards:
+\begin{itemize}
+\item \emph{Cloak of Darkness} adds 2 points to all capture attempts \pause and
+\item \emph{Friendly Bunny} allows you (once) to roll an extra die. 
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+What is the expected attack roll total if you had 3 Dragonwood dice, the Cloak of Darkness, and are using the Friendly Bunny? 
+
+\vspace{0.2in} \pause
+
+Let 
+\begin{itemize}
+\item $X$ be the sum of 3 Dragonwood dice (we know $E[X]=7.5$), 
+\item $Y$ be the sum of 1 Dragonwood die \pause which has $E[X] = 2.5$.
+\end{itemize}
+
+\pause
+
+Then the attack roll total is $X+Y+2$ and the \emph{expected} attack roll total is 
+\[ 
+E[X+Y+2] = E[X]+E[Y]+2 = 7.5+2.5+2 = 12,
+\]
+\pause
+or the attack roll is $4Y+2$ and the \emph{expected} attack roll total is 
+\[ 
+E[4Y+2] = 4E[Y]+2 = 12.
+\]
+
+\end{frame}
+
+
+
+\subsection{Variance}
+\begin{frame}
+\frametitle{Variance}
+
+\begin{definition}
+The \alert{variance} of a random variable is defined as the expected squared deviation from the mean. \pause 
+For discrete random variables, variance is
+\[
+Var[X] = E[(X-E[X])^2] = \sum_i (x_i-\mu)^2 \cdot p_X(x_i)
+\]
+where $\mu = E[X]$. \pause
+The symbol $\sigma^2$ is commonly used for the variance.
+\end{definition}
+
+\pause
+
+\begin{definition}
+The \alert{standard deviation} is the positive square root of the variance
+\[
+SD[X] = \sqrt{Var[X]}.
+\]
+\pause
+The symbol $\sigma$ is commonly used for the standard deviation.
+\end{definition}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Dragonwood (cont.)}
+
+What is the variance for the sum of the pips on 3 Dragonwood dice?
+
+<<dragonwood_variance, dependson='dragonwood_expectation', echo=TRUE>>=
+variance = sum((x-expectation)^2*pdf)
+variance
+@
+
+\pause
+
+What is the standard deviation for the sum of the pips on 3 Dragonwood dice?
+<<dragonwood_standard_deviation, dependson='dragonwood_variance', echo=TRUE>>=
+sqrt(variance)
+@
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Biased coin}
+
+Suppose we have a biased coin represented by the following probability mass function:
+\[ \begin{array}{ccc}
+\hline
+y & 0 & 1 \\
+p_Y(y) & 1-p & p \\
+\hline
+\end{array} \]
+\pause
+What is the variance?
+
+\pause
+
+\begin{enumerate}
+\item $E[Y] = p$ 
+\item $V[y] = (0-p)^2(1-p) + (1-p)^2\times p = p-p^2 = p(1-p)$
+\end{enumerate}
+
+\pause
+When is this variance maximized?
+
+\pause
+<<biased_coin_variance, fig.height=2>>=
+opar = par(mar=c(4,4,1,0)+.1)
+variance = function(p) p*(1-p)
+curve(variance, xlab='y', ylab='variance')
+par(opar)
+@
+\end{frame}
+
+
+
+
+
+
+
+\subsection{Properties of variances}
+\begin{frame}
+\frametitle{Properties of variance}
+
+\begin{theorem}
+Let $X$ and $Y$ be random variables and $a$, $b$, and $c$ be constants. \pause
+Then 
+\[ \begin{array}{rl}
+Var[aX + bY+c] &= a^2Var[X] + b^2Var[Y] + 2ab Cov(X,Y).
+\end{array} \]
+\end{theorem}
+
+\pause
+
+% needs to be fixed
+% In particular
+% \begin{corollary}
+% \begin{itemize}[<+->]
+% \item $Var[X+Y] = Var[X]+Var[Y]$,
+% \item $Var[aX] = a Var[X]$, and
+% \item $Var[c] = c$.
+% \end{itemize}
+% \end{corollary}
+
+\end{frame}
 
 
 \end{document}
-
-
-
 
