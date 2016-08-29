@@ -269,21 +269,54 @@ F_Y(y) = P(Y\le y) = \sum_{x=0}^{\lfloor y\rfloor} {n\choose x} p^x(1-p)^{n-x}.
 
 
 
-% \foilhead[-.8in]{\textcolor{blue}{Binomial distribution: Example}}
-%  {\textcolor{blue} {Example:}} Compute the probabilities for the following events: \\[.1in]
-%     A box contains 15 components that each have a failure rate of 5\%.
-%     What is the probability that
-%     \begin{enumerate}
-% 	\item exactly two out of the fifteen components are defective?
-% 	\item at most two components are defective?
-% 	\item more than three components are defective?
-% 	\item more than 1 but less than 4 are defective?
-%     \end{enumerate}
-%    {\textcolor{blue} {Solution:}}   Let $X$ be the number of defective components. Then $X$ has a
-%     $B_{15,0.05}$ distribution.
-%     %We shall look-up values of $B_{15,0.05}$ from Table A2.  of Baron.
-% 
-% 
+\begin{frame}
+\frametitle{Component failure rate}
+
+Suppose a box contains 15 components that each have a failure rate of 5\%. 
+
+\vspace{0.1in} \pause
+
+What is the probability that 
+\begin{enumerate}
+	\item exactly two out of the fifteen components are defective?
+	\item at most two components are defective?
+	\item more than three components are defective?
+	\item more than 1 but less than 4 are defective?
+\end{enumerate}
+
+\vspace{0.1in} \pause
+
+Let $Y$ be the number of defective components. \pause Then $Y\sim Bin(15,0.05)$. \pause
+
+{\small
+\[ \begin{array}{lll}
+1. & P(Y=2)&= P(Y=2) = {15\choose 2} (0.05)^2(1-0.05)^{15-2} \pause \\
+2. & P(Y\le 2) &= \sum_{x=0}^2 {15\choose x} (0.05)^x(1-0.05)^{15-x} \pause \\
+3. & P(Y>3) &= 1-P(Y\le 3) = 1-\sum_{x=0}^3 {15\choose x} (0.05)^x(1-0.05)^{15-x} \pause \\
+4. & P(1<Y<4) &= \sum_{x=2}^3 {15\choose x} (0.05)^x(1-0.05)^{15-x} \\
+\end{array} \]
+}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Component failure rate (solutions in R)}
+
+<<component_failure_rate,echo=TRUE>>=
+n = 15
+p = 0.05
+choose(15,2)
+dbinom(2,n,p)           # P(Y=2)
+pbinom(2,n,p)           # P(Y<=2)
+1-pbinom(3,n,p)         # P(Y>3) 
+sum(dbinom(c(2,3),n,p)) # P(1<Y<4) = P(Y=2)+P(Y=3)
+@
+
+\end{frame}
+
+
+
 % \foilhead[-.8in]{\textcolor{blue}{Binomial distribution: Example (Continued...)}}
 %  \begin{enumerate}
 % 	\item
@@ -297,52 +330,62 @@ F_Y(y) = P(Y\le y) = \sum_{x=0}^{\lfloor y\rfloor} {n\choose x} p^x(1-p)^{n-x}.
 % 	\item $\displaystyle P(\text{ more than 1 but less than 4 are defective }) = P( 1 <
 % 	X < 4) = P(X \le 3) - P(X \le 1) = 0.9945 - 0.8290 = 0.1655.$
 %     \end{enumerate}
-% \foilhead[-.8in]{\textcolor{blue}{Example from Baron}}
-% {\textcolor{magenta}{Example from Baron: }}{\textcolor{cyan}{As part of a business strategy, randomly selected 20\% of new internet service subscribers receive a special promotion from the provider. A group of 10 neighbors signs up for the service. What is the probability that at least 4 of them get a special promotion?}}\\[.1in]
-% {\textcolor{magenta}{Solution:}} \\[.1in]
-% Need to calculate $P(X \ge 4)$ where $X$ is the number of people out of 10 who will receive the special promotion.\\[.1in]
-% Modelling $X$ as the number of successes in 10 Bernoulli trials each with $P(\text{success})=0.2$, we have that $X \sim Bin(10,0.2)$\\[.1in]
-% Thus
-% $$ P(X \ge 4) = 1-P(X\le 3)= 1- B_{10,0.2}(3)=1-0.8791=0.1209$$
-% 
-% \foilhead[-.8in]{\textcolor{blue}{Geometric distribution}}\vspace{5pt}
-%  {\textcolor{magenta}{Situation:} \\[.1in] {\textcolor{cyan}{1. We have a single Bernoulli experiment with probability for
-% success $p$. \\[.1in]
-% 2. Now, we repeat this experiment until we have a first success. \\[.1in]
-% 3. Denote by $X$ the number of repetitions of the experiment  until we
-% have the first success, i.e  $X = k$ implies that, we  have $k-1$ failures and the first
-% success in the $k$th repetition of the experiment.}} \\[.1in]
-%  {\textcolor{red}{Question:}  It is very natural to ask what is the probability distribution of $X$? \\[.1in]
-% {\textcolor{red}{Pmf: }The sample space $\mOmega$ is infinite and starts at 1 (we
-% need at least one success):
-% \[
-% \mOmega = \{ 1, 2, 3, 4, \ldots \}
-% \] and the pmf
-% \[
-% p_X(k) = P(X=k) = \underbrace{(1-p)^{k-1}}_{k-1 \text{ failures}} %\qquad \text{for} k=1,2,3,\ldots
-% \cdot \underbrace{p}_{\text{success!}}
-% \]
-%  
-%  
-% 
-% \foilhead[-.75in]{\textcolor{blue}{Geometric distribution (cont'd)}}
-%  This probability mass function is called the {\textcolor{red} {Geometric mass function.}} \\[.15in]
-%   {\textcolor{magenta}{Expectation and Variance of the Geometric random variable:}}\\[-.3in]
-% \begin{eqnarray*}
-%     E[X] &=& \sum_{i=1}^{\infty} i (1-p)^{i}p = \ldots = \frac{p}{(1-q)^2}=\frac{1}{p},
-%     \\
-%     Var[X] &=& \sum_{i=1}^{\infty} (i-\frac{1}{p})^{2} (1-p)^{i}p =
-%     \ldots = \frac{1-p}{p^{2}}.
-% \end{eqnarray*}
-% The {\textcolor{magenta} {c.d.f.} is given by :
-% \[
-% F_X(t) = 1 - (1-p)^{\lfloor {t}\rfloor} =: Geo_{p}(t)
-% \]
-%  {\textcolor{magenta}{Proof:}} If $X$ is greater than $t$, this means
-% that the first $\lfloor{t}\rfloor$ trials yields failures. This probability is easy to
-% compute: just $(1-p)^{\lfloor{t}\rfloor}$. 
-%  
- 
+
+
+\begin{frame}
+\frametitle{Geometric distribution}
+
+Rather than attempting $n$ times, 
+we continue attempting until we get a success (where each trial has success probability $p$) and we record the number of the successful attempt\pause, i.e. 
+\[ 
+Z  = \min \{i|X_i=1 \}.
+\]
+
+\vspace{0.1in} \pause
+
+Then $Z$ is said to have a geometric distribution and we write $Z\sim Geo(p)$ \pause with 
+\begin{itemize}
+\item sample space $\mOmega = \pause \{ 1, 2, 3, 4, \ldots \}$ \pause and
+\item probability mass function 
+\[ 
+P_Z(z) = P(Z=z) = p(1-p)^{z-1}.
+\]
+\end{itemize}
+
+\pause
+
+{\bf Note:} An alternative version of the Geometric distribution does not record the successful attempt, but rather the number of failures.
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Properties of the geometric distribution}
+
+The expectation of a geometric random variable is 
+\[ 
+E[Z] = \sum_{z=1}^{\infty} z p(1-p)^{z-1} = \ldots %= \frac{p}{(1-q)^2}
+= \frac{1}{p}.
+\]
+\pause
+The variance of a geometric random variable is 
+\[ 
+Var[Z] = \sum_{z=1}^{\infty} \left[z-\frac{1}{p}\right]^{2} (1-p)^{z-1}p = \ldots = \frac{1-p}{p^2}.
+\]
+\pause
+The cumulative distribution function is 
+\[ 
+F_Z(z) = P(Z\le z) = 1 - [1-p]^{\lfloor z \rfloor}
+\]
+but is actually easier to calculate the complement, i.e. 
+\[ 
+P(Z>z) = [1-p]^{\lfloor z \rfloor}.
+\]
+
+\end{frame}
+
+
 \end{document}
 
 
