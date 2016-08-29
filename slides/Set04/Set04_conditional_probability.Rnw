@@ -4,7 +4,7 @@
 \input{../frontmatter}
 \input{../commands}
 
-\title{Set03 - Permutations and Combinations}
+\title{Set04 - Conditional Probability}
 
 \begin{document}
 
