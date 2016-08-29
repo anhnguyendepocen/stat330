@@ -1,74 +1,105 @@
-\documentclass[20pt,landscape]{foils}
-\usepackage{amsmath, amssymb, amsthm}
-\usepackage{color}
-\usepackage{hyperref}
-%\usepackage{pause}
-\usepackage{graphicx}
-\usepackage{epsfig}
-%\usepackage{geometry}
-%\geometry{headsep=3ex,hscale=0.9}
-\newcommand{\bd}{\textbf}
-\newcommand{\no}{\noindent}
-\newcommand{\un}{\underline}
-\newcommand{\bi}{\begin{itemize}}
-\newcommand{\ei}{\end{itemize}}
-\newcommand{\be}{\begin{enumerate}}
-\newcommand{\ee}{\end{enumerate}}
-\newcommand{\bc}{\begin{center}}
-\newcommand{\ec}{\end{center}}
-\newcommand \h {\hspace*{.3in}}
-\newcommand{\bul}{\hspace*{.3in}{\textcolor{red}{$\bullet$ \ }}}
-\newcommand{\xbar}{\bar{x}}
-\rightheader{Stat 330 (Fall 2016): slide set 9}
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set07 - Discrete distributions}
 
 \begin{document}
-\LogoOff
 
-\foilhead[1.3in]{}
-\centerline{\LARGE \textcolor{blue}{Slide set 9}}
-\vspace{0.3in}
-\centerline{\large Stat 330 (Fall 2016)}
-\vspace{0.2in}
-\centerline{\tiny Last update: \today}
-\setcounter{page}{0}
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
 
-\foilhead[-.8in]{\textcolor{blue}{Special discrete pmfs}}
-\no  {\textcolor{magenta}{Intuitive idea:}  {\textcolor{cyan}{In many theoretical and practical problems, several probability mass functions occur often enough to be worth exploring.}} \\[.1in]
-\no  {\textcolor{red}{Common feature:}  {\textcolor{black}{The sample space is always finite or countably many.}} \\[.1in]
-\no   {\textcolor{magenta}{Example: }
- \begin{enumerate}
-\item   Bernoulli distribution
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+\frame{\maketitle}
+
+
+\section{Discrete distributions}
+\begin{frame}
+\frametitle{Special discrete distributions}
+
+\begin{itemize}
+\item Bernoulli distribution
 \item Binomial distribution
 \item Geometric distribution
 \item Poisson distribution
 \item Compounded distribution
-\end{enumerate}
-
-
-\foilhead[-.8in]{\textcolor{blue}{Bernoulli distribution}}
-\no  {\textcolor{magenta}{Situation:}  {\textcolor{cyan}{Bernoulli experiment (only two outcomes: {\it success/failure}) with}}\\[.1in]
-\no \hspace*{1.1in}  {\textcolor{cyan}{$P(\text{ success }) = p$}}\\[.2in]
-\no We define a random variable $X$ as:
-\no $$ X( \text{ failure }) = 0 \hspace{2cm}  X( \text{ success }) = 1 $$
-\no The probability mass function $p_{X}$ of $X$ is then:
-$$ p_{X}(0) = 1-p \hspace{2cm} p_{X}(1) = p $$
-%This probability mass function is called the  {\textcolor{cyan}{{\it Bernoulli mass
-%function}}
-The random variable is said to follow Bernoulli distribution
-}.
-
-\foilhead[-.8in]{\textcolor{blue}{Bernoulli experiment: Examples}}
-\begin{itemize}
-\item[\bul] Toss a coin: $\Omega = \{H,T\}$
-\item[\bul] Throw a fair die and ask if the face value is a six: $\Omega = \{{\text{face value is a six},\text{face value is not a six}}\}$
-\item[\bul] Sent a message through a network and record whether or not it is received: $\Omega = \{ \text{successful transmission}, \text{ unsuccessful transmission}\}$
-\item[\bul] Draw a part from an assembly line and record whether or not it is defective: $\Omega = \{\text{defective }, \text{good}\}$
-\item[\bul] Response to the question ``Are you in favor of the above measure''? (in reference to a new tax levy to  be imposed on city residents): $\Omega = \{\text{yes}, \text{no}\}$
 \end{itemize}
-\foilhead[-.8in]{\textcolor{blue}{Bernoulli random variable (cont'd)}}
-\no {\textcolor{magenta}{The cdf of the Bernoulli distribution}, $F_{X}$ is then:}
+
+\vspace{0.1in} \pause
+
+Note: The sample space is always finite or countable.
+
+\end{frame}
+
+
+\subsection{Bernoulli}
+\begin{frame}
+\frametitle{Bernoulli distribution}
+
+A Bernoulli experiment has only two outcomes: success/failure. 
+
+\vspace{0.1in} \pause
+
+Let 
+\begin{itemize}
+\item $X=1$ represent success and
+\item $X=0$ represent failure. 
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+The probability mass function $p_X(x)$ is 
+\[ 
+p_X(0) = 1-p \quad p_X(1) = p.
+\]
+
+\vspace{0.1in} \pause
+
+We use the notation $X\sim Ber(p)$ to denote a random variable $X$ that follows a Bernoulli distribution with success probability $p$, i.e. $P(X=1)=p$. 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Bernoulli experiment examples}
+
+\begin{example}
+\begin{itemize}
+\item Toss a coin: $\mOmega = \{H,T\}$
+\item Throw a fair die and ask if the face value is a six: $\mOmega = \{{\text{face value is a six},\text{face value is not a six}}\}$
+\item Sent a message through a network and record whether or not it is received: $\mOmega = \{ \text{successful transmission}, \text{ unsuccessful transmission}\}$
+\item Draw a part from an assembly line and record whether or not it is defective: $\mOmega = \{\text{defective}, \text{ good}\}$
+\item Response to the question ``Are you in favor of the above measure''? (in reference to a new tax levy to  be imposed on city residents): $\mOmega = \{\text{yes}, \text{no}\}$
+\end{itemize}
+\end{example}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Bernoulli distribution (cont.)}
+
+The cdf of the Bernoulli distribution is
 \[
-F_{X}(t) =P(X\leq t)= \left \{
+F_X(t) =P(X\leq t)= \left \{
 \begin{array}{cl}
     0 & t < 0 \\
     1-p & 0 \le t < 1 \\
@@ -76,163 +107,236 @@ F_{X}(t) =P(X\leq t)= \left \{
 \end{array}
 \right .
 \]
-This function is called the {\textcolor{red}{ Bernoulli cumulative distribution
-function (cdf)}}.\\[.2in]
-\no {\textcolor{magenta}{Expected value and Variance of a Bernoulli random variable:}}\\[.2in]
-\no \h \h \bul $E(X)=\sum\limits_{x} p_X(x)=0(1-p)+1\cdot p=p$\\[.1in]
-\no \h  \h \bul $\text{Var}(X)=\sum\limits_{x}(x-E(X))^2p_X(x)= (0-p)^2\cdot (1-p)+(1-p)^2 \cdot p$\\[.1in]
-\no \hspace*{1in} $= p(1-p)$
+
+\vspace{0.1in} \pause
+
+The expected value is 
+\[ 
+E[X]=\sum\limits_{x} p_X(x)=0(1-p)+1\cdot p=p.
+\]
+
+\vspace{0.1in} \pause
+
+The variance is 
+\[ Var[X]=\sum\limits_{x}(x-E[X])^2p_X(x)= (0-p)^2\cdot (1-p)+(1-p)^2 \cdot p = p (1-p). \]
+
+\end{frame}
 
 
 
-\foilhead[-.8in]{\textcolor{blue}{Sequence of Bernoulli Experiments}}
-\no A compound experiment consisting of $n$ {\textcolor{cyan}{independent and identically distributed}} Bernoulli experiments.\\[.1in]
-\no \no  {\textcolor{magenta}{Example:}} {\textcolor{cyan}{Sequences of Bernoulli experiments}}\\[-.2in]
-\begin{itemize} 
-\item[\bul] Toss a coin $n$ times. 
-\item[\bul] Send 23 identical messages through the network independently.
-\item[\bul] Draw 5 cards from a standard deck with replacement and record whether or not the card is a king.
-\end{itemize}
-\no What does {\textcolor{cyan}{independent and identically distributed}} mean?\\[.1in]
+
+\begin{frame}
+\frametitle{Sequence of Bernoulli experiments}
+
+A compound experiment consisting of $n$ \alert{independent and identically distributed} Bernoulli experiments. \pause
+E.g.
 \begin{itemize}
-\item[\bul] Saying that the trials are independent means, for example, that 
-\begin{eqnarray*}P(\text{ trial 1 a success } \text{ and} \text{ trial 2 a failure }, \text{and} \ldots \text{ trial }k\text{ a failure}) = \\
-P(\text{ trial 1 a success})P(\text{ trial 2 a failure })\ldots P(\text{ trial }k\text{ a failure}).\
-\end{eqnarray*}
-\item[\bul] Saying that the trials are identically distributed means that 
-\begin{eqnarray*}
-P(\text{ trial 1 a success})=P(\text{ trial 2 a success }) = \ldots\\ =P(\text{ trial }k\text{ a success}) = p \\
-P(\text{ trial 1 a failure})=P(\text{ trial 2 a failure }) = \ldots \\=P(\text{ trial }k\text{ a failure}) = q=1-p 
-\end{eqnarray*}
-\item[\bul] Shorthand for {\textcolor{cyan}{independent and identically distributed}} is {\textcolor{red}{iid}}.
+\item Toss a coin $n$ times.
+\item Send 23 identical messages through the network independently.
+\item Draw 5 cards from a standard deck with replacement (and reshuffling) and record whether or not the card is a king.
 \end{itemize}
 
+\vspace{0.2in} \pause
 
+What does \alert{independent and identically distributed} mean? 
 
-\foilhead[-.8in]{\textcolor{blue}{Binomial distribution}}
-\no  {\textcolor{magenta}{Situation:}  {\textcolor{cyan}{$n$ sequential Bernoulli experiments, with success rate
-$p$ for a single trial. Single trials are independent from each other.}} \\[.1in]
-\no We are only interested in the number of successes in total after $n$ trials, random variable $X$ is then:
-\[
-X = \text{``number of successes in } n \text{ trials''}
-\]\\[-.5in]
-\no This leads to a sample space of
-\[
-\Omega = \{ 0 , 1 , 2 , \ldots, n \}
-\]\\[-.5in]
-\no  {\textcolor{magenta}{ What is the general expression for $p_{X}(k)$ for all possible
-$k = 0, \ldots, n$}
-$$p_{X}(k) = P( X = k)$$
+\end{frame}
 
+\begin{frame}
+\frametitle{Independent and identically distributed}
 
+Let $X_i$ represent the $i^{th}$ Bernoulli experiment. 
 
-\foilhead[-.8in]{\textcolor{blue}{Derivation of Binomial pmf }}
-\no We want to find the probability, that
-in a sequence of $n$ trials there are exactly $k$ successes. If $s$ is a
-particular sequence with $k$ successes and $n-k$ failures, we
-already know the probability:
-\[
-P(s) = p^{k}(1-p)^{n-k}.
+\vspace{0.1in} \pause 
+
+\alert{Independence} means 
+
+\[ 
+P(X_1=x_1,\ldots,X_n=x_n) = \prod_{i=1}^n P(X_i=x_i),
 \]
-\no  {\textcolor{red}{ Think:} Now we need to know, how
-many} possibilities there are, to have $k$ successes in $n$ trials:}
-think of the $n$ trials as numbers from 1 to $n$. \\[.1in]
-\no There are $n \choose k$ possible ways of selecting $k$  numbers out of the
-$n$ possible numbers. $p_{X}(k)$ is therefore (by summation rule):
-\[
-p_{X}(k) = {n \choose k} p^{k}(1-p)^{n-k}.
+i.e. the joint probability is the product of the individual probabilities. 
+
+\vspace{0.1in} \pause
+
+\alert{Identically distributed} (for Bernoulli random variables) means 
+\[ 
+P(X_i=1) = p \quad \forall\, i,
 \]
-This probability mass function is called the  {\textcolor{red}{  Binomial mass
-function.}
+and more generally, the distribution is the same for all the random variables.
+
+\vspace{0.1in} \pause
+
+We will use $iid$ as a shorthand for \emph{independent and identically distributed}, although I will often use $ind$ to indicate \emph{independent} and let \emph{identically distributed} be clear from context. 
+
+\end{frame}
 
 
-\foilhead[-.8in]{\textcolor{blue}{Binomial distribution (cont'd)}}
-\no  {\textcolor{red} {Remark:}} Any Binomial variable $X$ can be represented as a sum of \emph{iid} Bernoulli variables:\\[.1in]
-\no \hspace*{1.5in}$X=X_1+\cdots+X_n$\\[.1in]
-\no where $X_i\sim$ Bernoulli$(p)$\\[.1in]
-\no   {\textcolor{magenta}{Expected value and Variance of Binomial random variable:}}\\[.1in]
-\no \h  \bul $E(X)=\sum\limits_{i=1}^n E(X_i)=np$\\[.1in]
-\no \h  \bul $\text{Var}(X)=\sum\limits_{i=1}^n\text{Var}(X_i)=np(1-p)$ (since $X_1, X_2,\ldots,x_n$ are iid)\\[.1in]
-\no The cdf of X, $F_{X}$ is:
-\[
-F_{X}(t) = P(X\leq t)=\sum_{i=0}^{\lfloor{t}\rfloor} {n \choose i} p^{i}(1-p)^{n-i} =:
-B_{n,p}(t)
+
+\begin{frame}
+\frametitle{Sequences of Bernoulli experiments}
+
+Let $X_i$ denote the outcome of the $i^{th}$ Bernoulli experiment. \pause
+We use the notation 
+\[ 
+X_i \iid Ber(p), \quad \mbox{for }i=1,\ldots,n
+\]
+to indicate a sequence of $n$ independent and identically distributed Bernoulli experiments.
+
+\vspace{0.1in}\pause
+
+We could write this equivalently as 
+\[ 
+X_i \ind Ber(p), \quad \mbox{for }i=1,\ldots,n
+\]
+\pause
+but this is different than 
+\[ 
+X_i \ind Ber(p_i), \quad \mbox{for }i=1,\ldots,n
+\]
+as the latter has a different success probability for each experiment. 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Binomial distribution}
+
+Suppose we perform a sequence of $n$ $iid$ Bernoulli experiments and only record the number of successes, i.e. 
+\[ 
+Y = \sum_{i=1}^n X_i.
 \]
 
+\vspace{0.1in} \pause
 
-\foilhead[-.8in]{\textcolor{blue}{Binomial distribution: Example}}
-\no  {\textcolor{blue} {Example:}} Compute the probabilities for the following events: \\[.1in]
-    A box contains 15 components that each have a failure rate of 5\%.
-    What is the probability that
-    \begin{enumerate}
-	\item exactly two out of the fifteen components are defective?
-	\item at most two components are defective?
-	\item more than three components are defective?
-	\item more than 1 but less than 4 are defective?
-    \end{enumerate}
- \no   {\textcolor{blue} {Solution:}}   Let $X$ be the number of defective components. Then $X$ has a
-    $B_{15,0.05}$ distribution.
-    %We shall look-up values of $B_{15,0.05}$ from Table A2.  of Baron.
+\end{frame}
 
-
-\foilhead[-.8in]{\textcolor{blue}{Binomial distribution: Example (Continued...)}}
- \begin{enumerate}
-	\item
-	$\displaystyle P( \text{exactly two out of the fifteen components are
-	defective} ) = p_{X}(2) = {15 \choose 2} 0.05^{2} 0.95^{13} = 0.1348.$
-	\item
-	$\displaystyle P( \text{at most two components are defective} ) = P(X \le 2) =
-	B_{15,0.05}(2) = 0.9638.$
-	\item $\displaystyle P(\text{ more than three components are defective }) = P(X > 3) =
-	1 - P( X \le 3) = 1 - 0.9945 = 0.0055.$
-	\item $\displaystyle P(\text{ more than 1 but less than 4 are defective }) = P( 1 <
-	X < 4) = P(X \le 3) - P(X \le 1) = 0.9945 - 0.8290 = 0.1655.$
-    \end{enumerate}
-\foilhead[-.8in]{\textcolor{blue}{Example from Baron}}
-\no {\textcolor{magenta}{Example from Baron: }}{\textcolor{cyan}{As part of a business strategy, randomly selected 20\% of new internet service subscribers receive a special promotion from the provider. A group of 10 neighbors signs up for the service. What is the probability that at least 4 of them get a special promotion?}}\\[.1in]
-\no {\textcolor{magenta}{Solution:}} \\[.1in]
-\no Need to calculate $P(X \ge 4)$ where $X$ is the number of people out of 10 who will receive the special promotion.\\[.1in]
-\no Modelling $X$ as the number of successes in 10 Bernoulli trials each with $P(\text{success})=0.2$, we have that $X \sim Bin(10,0.2)$\\[.1in]
-\no Thus
-$$ P(X \ge 4) = 1-P(X\le 3)= 1- B_{10,0.2}(3)=1-0.8791=0.1209$$
-
-\foilhead[-.8in]{\textcolor{blue}{Geometric distribution}}\vspace{5pt}
-\no  {\textcolor{magenta}{Situation:} \\[.1in] {\textcolor{cyan}{1. We have a single Bernoulli experiment with probability for
-success $p$. \\[.1in]
-2. Now, we repeat this experiment until we have a first success. \\[.1in]
-3. Denote by $X$ the number of repetitions of the experiment  until we
-have the first success, i.e  $X = k$ implies that, we  have $k-1$ failures and the first
-success in the $k$th repetition of the experiment.}} \\[.1in]
-\no  {\textcolor{red}{Question:}  It is very natural to ask what is the probability distribution of $X$? \\[.1in]
-\no {\textcolor{red}{Pmf: }The sample space $\Omega$ is infinite and starts at 1 (we
-need at least one success):
-\[
-\Omega = \{ 1, 2, 3, 4, \ldots \}
-\] and the pmf
-\[
-p_{X}(k) = P(X=k) = \underbrace{(1-p)^{k-1}}_{k-1 \text{ failures}} %\qquad \text{for} k=1,2,3,\ldots
-\cdot \underbrace{p}_{\text{success!}}
-\]
- 
- 
-
-\foilhead[-.75in]{\textcolor{blue}{Geometric distribution (cont'd)}}
-\no  This probability mass function is called the {\textcolor{red} {Geometric mass function.}} \\[.15in]
-\no   {\textcolor{magenta}{Expectation and Variance of the Geometric random variable:}}\\[-.3in]
-\begin{eqnarray*}
-    E[X] &=& \sum_{i=1}^{\infty} i (1-p)^{i}p = \ldots = \frac{p}{(1-q)^2}=\frac{1}{p},
-    \\
-    Var[X] &=& \sum_{i=1}^{\infty} (i-\frac{1}{p})^{2} (1-p)^{i}p =
-    \ldots = \frac{1-p}{p^{2}}.
-\end{eqnarray*}
-\no The {\textcolor{magenta} {c.d.f.} is given by :
-\[
-F_{X}(t) = 1 - (1-p)^{\lfloor {t}\rfloor} =: Geo_{p}(t)
-\]
-\no  {\textcolor{magenta}{Proof:}} If $X$ is greater than $t$, this means
-that the first $\lfloor{t}\rfloor$ trials yields failures. This probability is easy to
-compute: just $(1-p)^{\lfloor{t}\rfloor}$. 
- 
+% 
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Binomial distribution}}
+%  {\textcolor{magenta}{Situation:}  {\textcolor{cyan}{$n$ sequential Bernoulli experiments, with success rate
+% $p$ for a single trial. Single trials are independent from each other.}} \\[.1in]
+% We are only interested in the number of successes in total after $n$ trials, random variable $X$ is then:
+% \[
+% X = \text{``number of successes in } n \text{ trials''}
+% \]\\[-.5in]
+% This leads to a sample space of
+% \[
+% \mOmega = \{ 0 , 1 , 2 , \ldots, n \}
+% \]\\[-.5in]
+%  {\textcolor{magenta}{ What is the general expression for $p_X(k)$ for all possible
+% $k = 0, \ldots, n$}
+% $$p_X(k) = P( X = k)$$
+% 
+% 
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Derivation of Binomial pmf }}
+% We want to find the probability, that
+% in a sequence of $n$ trials there are exactly $k$ successes. If $s$ is a
+% particular sequence with $k$ successes and $n-k$ failures, we
+% already know the probability:
+% \[
+% P(s) = p^{k}(1-p)^{n-k}.
+% \]
+%  {\textcolor{red}{ Think:} Now we need to know, how
+% many} possibilities there are, to have $k$ successes in $n$ trials:}
+% think of the $n$ trials as numbers from 1 to $n$. \\[.1in]
+% There are $n \choose k$ possible ways of selecting $k$  numbers out of the
+% $n$ possible numbers. $p_X(k)$ is therefore (by summation rule):
+% \[
+% p_X(k) = {n \choose k} p^{k}(1-p)^{n-k}.
+% \]
+% This probability mass function is called the  {\textcolor{red}{  Binomial mass
+% function.}
+% 
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Binomial distribution (cont'd)}}
+%  {\textcolor{red} {Remark:}} Any Binomial variable $X$ can be represented as a sum of \emph{iid} Bernoulli variables:\\[.1in]
+% \hspace*{1.5in}$X=X_1+\cdots+X_n$\\[.1in]
+% where $X_i\sim$ Bernoulli$(p)$\\[.1in]
+%   {\textcolor{magenta}{Expected value and Variance of Binomial random variable:}}\\[.1in]
+% \h  \bul $E[X]=\sum\limits_{i=1}^n E(X_i)=np$\\[.1in]
+% \h  \bul $\text{Var}[X]=\sum\limits_{i=1}^n\text{Var}(X_i)=np(1-p)$ (since $X_1, X_2,\ldots,x_n$ are iid)\\[.1in]
+% The cdf of X, $F_X$ is:
+% \[
+% F_X(t) = P(X\leq t)=\sum_{i=0}^{\lfloor{t}\rfloor} {n \choose i} p^{i}(1-p)^{n-i} =:
+% B_{n,p}(t)
+% \]
+% 
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Binomial distribution: Example}}
+%  {\textcolor{blue} {Example:}} Compute the probabilities for the following events: \\[.1in]
+%     A box contains 15 components that each have a failure rate of 5\%.
+%     What is the probability that
+%     \begin{enumerate}
+% 	\item exactly two out of the fifteen components are defective?
+% 	\item at most two components are defective?
+% 	\item more than three components are defective?
+% 	\item more than 1 but less than 4 are defective?
+%     \end{enumerate}
+%    {\textcolor{blue} {Solution:}}   Let $X$ be the number of defective components. Then $X$ has a
+%     $B_{15,0.05}$ distribution.
+%     %We shall look-up values of $B_{15,0.05}$ from Table A2.  of Baron.
+% 
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Binomial distribution: Example (Continued...)}}
+%  \begin{enumerate}
+% 	\item
+% 	$\displaystyle P( \text{exactly two out of the fifteen components are
+% 	defective} ) = p_X(2) = {15 \choose 2} 0.05^{2} 0.95^{13} = 0.1348.$
+% 	\item
+% 	$\displaystyle P( \text{at most two components are defective} ) = P(X \le 2) =
+% 	B_{15,0.05}(2) = 0.9638.$
+% 	\item $\displaystyle P(\text{ more than three components are defective }) = P(X > 3) =
+% 	1 - P( X \le 3) = 1 - 0.9945 = 0.0055.$
+% 	\item $\displaystyle P(\text{ more than 1 but less than 4 are defective }) = P( 1 <
+% 	X < 4) = P(X \le 3) - P(X \le 1) = 0.9945 - 0.8290 = 0.1655.$
+%     \end{enumerate}
+% \foilhead[-.8in]{\textcolor{blue}{Example from Baron}}
+% {\textcolor{magenta}{Example from Baron: }}{\textcolor{cyan}{As part of a business strategy, randomly selected 20\% of new internet service subscribers receive a special promotion from the provider. A group of 10 neighbors signs up for the service. What is the probability that at least 4 of them get a special promotion?}}\\[.1in]
+% {\textcolor{magenta}{Solution:}} \\[.1in]
+% Need to calculate $P(X \ge 4)$ where $X$ is the number of people out of 10 who will receive the special promotion.\\[.1in]
+% Modelling $X$ as the number of successes in 10 Bernoulli trials each with $P(\text{success})=0.2$, we have that $X \sim Bin(10,0.2)$\\[.1in]
+% Thus
+% $$ P(X \ge 4) = 1-P(X\le 3)= 1- B_{10,0.2}(3)=1-0.8791=0.1209$$
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Geometric distribution}}\vspace{5pt}
+%  {\textcolor{magenta}{Situation:} \\[.1in] {\textcolor{cyan}{1. We have a single Bernoulli experiment with probability for
+% success $p$. \\[.1in]
+% 2. Now, we repeat this experiment until we have a first success. \\[.1in]
+% 3. Denote by $X$ the number of repetitions of the experiment  until we
+% have the first success, i.e  $X = k$ implies that, we  have $k-1$ failures and the first
+% success in the $k$th repetition of the experiment.}} \\[.1in]
+%  {\textcolor{red}{Question:}  It is very natural to ask what is the probability distribution of $X$? \\[.1in]
+% {\textcolor{red}{Pmf: }The sample space $\mOmega$ is infinite and starts at 1 (we
+% need at least one success):
+% \[
+% \mOmega = \{ 1, 2, 3, 4, \ldots \}
+% \] and the pmf
+% \[
+% p_X(k) = P(X=k) = \underbrace{(1-p)^{k-1}}_{k-1 \text{ failures}} %\qquad \text{for} k=1,2,3,\ldots
+% \cdot \underbrace{p}_{\text{success!}}
+% \]
+%  
+%  
+% 
+% \foilhead[-.75in]{\textcolor{blue}{Geometric distribution (cont'd)}}
+%  This probability mass function is called the {\textcolor{red} {Geometric mass function.}} \\[.15in]
+%   {\textcolor{magenta}{Expectation and Variance of the Geometric random variable:}}\\[-.3in]
+% \begin{eqnarray*}
+%     E[X] &=& \sum_{i=1}^{\infty} i (1-p)^{i}p = \ldots = \frac{p}{(1-q)^2}=\frac{1}{p},
+%     \\
+%     Var[X] &=& \sum_{i=1}^{\infty} (i-\frac{1}{p})^{2} (1-p)^{i}p =
+%     \ldots = \frac{1-p}{p^{2}}.
+% \end{eqnarray*}
+% The {\textcolor{magenta} {c.d.f.} is given by :
+% \[
+% F_X(t) = 1 - (1-p)^{\lfloor {t}\rfloor} =: Geo_{p}(t)
+% \]
+%  {\textcolor{magenta}{Proof:}} If $X$ is greater than $t$, this means
+% that the first $\lfloor{t}\rfloor$ trials yields failures. This probability is easy to
+% compute: just $(1-p)^{\lfloor{t}\rfloor}$. 
+%  
  
 \end{document}
 
