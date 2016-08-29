@@ -205,6 +205,7 @@ These are the basic rules of operation of a probability model
 \item every valid model must obey these,
 \item any system that does, is a valid model.
 \end{itemize}
+\pause
 Whether or not a particular model is appropriate for a 
 specific application is another question.
 
@@ -239,14 +240,18 @@ Let $A,\,B\subset\mOmega$.
 
 \vspace{0.2in} \pause
 
-\begin{itemize}[<+->]
+\begin{itemize}
 \item Probability of the Complementary Event: 
-$ P(\overline{A}) = 1-P(A)$
+$ P(\overline{A}) = 1-P(A)$ \pause
 
-{\textcolor{red}{Corollary:}} $P(\emptyset)=0$
+{\textcolor{red}{Corollary:}} $P(\emptyset)=0$ \pause
+
 \item Addition Rule of Probability 
 \[ P(A \cup B) = P(A) + P(B) - P(A \cap B) \]
-\item If $A\subset B$, then $P(A)\leq P(B)$.
+
+\pause
+
+\item If $A\subset B$, then $P(A)\leq P(B)$. \pause
 
 {\textcolor{red}{Corollary:}} For any $A$, $P(A)\leq 1$. 
 \end{itemize}
