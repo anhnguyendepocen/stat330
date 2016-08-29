@@ -84,10 +84,6 @@ A complement of an event $A$ is an event that occurs when event $A$ does not hap
 \frametitle{Set comparison, operations, terminology (cont.)}
 \begin{enumerate}[<+->]
 \setcounter{enumi}{4}
-\item \alert{Complement} ($\bar A$): 
-A complement of an event $A$ is an event that occurs when event $A$ does not happen.
-\[ \bar A = \{\omega \mid \omega \notin A\} \]
-
 \item \alert{Set difference} ($A\setminus B$):
 All elements in $A$ that are not in $B$, i.e. 
 \[ 
