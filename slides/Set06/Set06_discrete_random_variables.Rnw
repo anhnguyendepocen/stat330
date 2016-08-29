@@ -3,7 +3,7 @@
 \input{../frontmatter}
 \input{../commands}
 
-\title{Set06 - Random variables}
+\title{Set06 - Discrete Random Variables}
 
 \begin{document}
 
