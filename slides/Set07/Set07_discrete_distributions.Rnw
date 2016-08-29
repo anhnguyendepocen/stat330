@@ -386,7 +386,160 @@ P(Z>z) = [1-p]^{\lfloor z \rfloor}.
 \end{frame}
 
 
+
+
+
+% \foilhead[-.8in]{\textcolor{blue}{Geometric distribution}}
+% \no  {\textcolor{magenta}{Review:} $X=$number of repetitions of the experiment  until we
+% have the first success in a {\textcolor{red}{Bernoulli experiment.}   \\[.1in]
+% \no  1. The {\textcolor{magenta}{pmf}} is: $p_{X}(k) = P(X=k) = \underbrace{(1-p)^{k-1}}_{k-1 \text{ failures}}
+% \cdot \underbrace{p}_{\text{success!}}$\\[.1in]
+% \no 2. Expectation $E[X]=\frac{1}{p}$,\h \h  Variance $\text{Var}[X]={\frac{1-p}{p^{2}}}$\\[.1in]
+% \no 3. The {\textcolor{magenta}{cdf}} is: $F_{X}(t) =P(X\leq t)= 1 - (1-p)^{\lfloor {t}\rfloor}$ \\[.1in]
+% \no  {\textcolor{magenta}{Example 1:} {\textcolor{cyan}{Examine the following programming statement:}}\\[.1in]
+% \no \hspace*{2in} {\textcolor{red}{ {\tt Repeat S until B}}}\\[.1in]
+% \no  {\textcolor{magenta}{Solution:}   Assume $P(\tt{B} = \text{true}) = 0.1$ and let $X$ be the number of times {\tt S} is executed. Then, $X$ has a geometric distribution  with pmf:\\[.1in]
+% \no \hspace*{1in} $P(X = k) = p_{X}(k) = 0.9^{k-1}\cdot 0.1 $\\[.1in]
+% \no How often is {\tt S} executed on average? - What is $E[X]$?
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Geometric distribution Example 2}}
+%  \no  {\textcolor{magenta}{Example 2.}   {\textcolor{cyan}{Watch the input queue at the alpha farm for a job that times out.
+%     The probability that a job times out is 0.05. Let $Y$  be the index of the first job to time out,
+%     then $Y \sim Geo_{0.05}$. What's then the probability that}}
+%     \begin{itemize}
+% 	\item  {\textcolor{cyan}{the third job times out?}}
+% 	
+% 	{\it $P(Y = 3) = 0.95^{2} 0.05 = 0.045$
+% 	}
+% 	\item  {\textcolor{cyan}{$Y$ is less than 3?}}
+% 	
+% 	{\it $P( Y < 3) = P( Y \le 2) = 1 - 0.95^{2} = 0.0975$
+% 	}
+% 	\item  {\textcolor{cyan}{the first job to time out is between the third and the seventh?}}
+% 	
+% 	{\it $P( 3 \le Y \le 7) = P(Y \le 7) - P(Y \le 2) = 1-0.95^{7} - (1 -
+% 	0.95^{2}) = 0.204$}
+%     \end{itemize}
+% \foilhead[-.8in]{\textcolor{blue}{Geometric distribution Example 2 (cont'd)}}    
+% \no   {\textcolor{cyan}{ What are the expected value for $Y$, what is $Var[Y]$?}}\\[.1in]
+% \no {\it Plugging in $p=0.05$ in the above formulas gives us:
+% \vspace*{-.2in}
+% \begin{eqnarray*}
+% 	E[Y] &=& \frac{1}{p} = 20 \hspace{2cm} \text{\small we expect the
+% 	20th job to be the first to time out}\\
+% 	Var[Y] &=& \frac{1-p}{p^{2}} = 380 \hspace{2cm} \text{\small very
+% 	 spread out!}
+% \end{eqnarray*}} 
+% 
+% \no  {\textcolor{magenta}{Interesting property of the Geometric distribution}}\\[.1in]
+% \no If $X \sim Geo_p$, then $P(X\ge i+j|X\ge i)= P(X\ge j)$ for $i,j=0,1,2,\ldots$\\[.1in]
+% %\no   {\textcolor{cyan}{That is , the fact that  one has already observed $i$ successive failures does not change the the distribution of the number of trials required to obtain the first success.}}
+% \no {\textcolor{cyan}{That is, $X$ is memoryless: ``does not remember that it counts up to $i$ already"!}}
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Poisson distribution}}
+% \no  {\textcolor{magenta}{Situation:}} {\textcolor{cyan}{The Poisson distribution follows from a certain set of assumptions about the occurrence of ``rare'' events in time or space.}} \\[.1in]
+% \no  {\textcolor{magenta}{Examples:} \\[.1in]
+% \no $X$ = \# of alpha particles emitted from a polonium bar in an 8 minute
+% period.\\[.1in]
+% \no $Y$ = \# of flaws on a standard size piece of manufactured product
+% (e.g., 100m coaxial cable, 100 sq.meter plastic sheeting)\\[.2in]
+% \no $Z$ = \# of hits on a web page in a 24h period.\\[.1in]
+% \no {\textcolor{red}{Definition:}  The Poisson probability mass function {\textcolor{magenta}{(pmf)}} is defined as:\\[.15in]
+% \no \hspace*{1.5in} $p(x) = \frac{e^{-\lambda}\lambda^{x}}{x!} \hspace{1cm} \text{ for }
+% x = 0,1,2,3,\ldots$\\[.15in]
+% \no \hspace*{1.5in}  $\lambda$ is called the {\textcolor{magenta}{{\it rate parameter}}}.\\[.1in]
+% \no  We denote the {\textcolor{magenta}{cdf} by $Po_{\lambda}(t)$ 
+% 
+% 
+% \foilhead[-.75in]{\textcolor{blue}{Poisson pmf (cont'd)}}   
+% \no  {\textcolor{cyan}{Check that $p(x)$ defined above is actually a probability mass function. How?}} \\[.1in]
+% \no 1. Obviously, all values of $p(x)\geq 0$ for $x\geq 0$. \\[.1in]
+% \no 2. Do all probabilities sum to 1? 
+% $$\sum\limits_{x=0}^\infty p(x)=\sum\limits_{x=0}^\infty e^{-\lambda}\frac{\lambda^x}{x!}
+% =e^{-\lambda} \cdot \sum\limits_{x=0}^\infty \frac{\lambda^x}{x!} =e^{-\lambda}e^\lambda=1$$
+% \no Expected Value and Variance of $X \sim Po_{\lambda}$ are:}\\[.1in]
+% \no \h \h  \bul  $E[X]= \sum_{x=0}^{\infty} x\frac{e^{-\lambda}\lambda^{x}}{x!} = 0 + e^{-\lambda}\sum\limits_{\textcolor{magenta}{x=1}}^\infty\frac{\lambda^x}{(x-1)!}=e^{-\lambda}\lambda\sum\limits_{x=1}^\infty \frac{\lambda^{x-1}}{(x-1)!}$\\[.1in]
+% \no \hspace*{2in} $= e^{-\lambda}\lambda\sum\limits_{y=0}^\infty \frac{\lambda^y}{y!}=\lambda$\\[.1in]
+% \no \h \h  \bul $\text{Var}[X] = \ldots = \lambda$ (left as an exercise)
+% \foilhead[-.7in]{\textcolor{blue}{Poisson distribution: Example 3.22 (Baron) }}
+% \no {\textcolor{magenta}{New Accounts} {\textcolor{cyan}{Customers of an internet service provider initiate new accounts at the average rate of 10 accounts per day.}}\\[.1in] 
+% \no {\textcolor{magenta}{Part (a)}} {\textcolor{cyan}{ What is the probability that more than 8 new accounts will be initiated today?}}\\[.1in]
+% \no The number of initiation per day $X$ has a Poisson distribution with parameter $\lambda=10$.\\[.1in]
+% \no ( The above assumes that account initiations is a rare event within the time period of one day because no two customers can open an account at the same time.)\\[.1in]
+% \no Then we have $P(X>8)= 1-Po_{10}(8)=1-0.333=.667$\\[.1in]
+% \foilhead[-.7in]{\textcolor{blue}{Poisson distribution: Example 3.22 (Baron) (Cont'd }}
+% \no {\textcolor{magenta}{Part (b)}} {\textcolor{cyan}{ What is the probability that more than 16 new accounts will be initiated in two days?}}\\[.1in]
+% \no The number of initiation in a two-day period $Y$ has a Poisson distribution with parameter $\lambda=20$\\[.1in]
+% \no (Note carefully that the average number of initiation for a two-day period is 20)\\[.1in]
+% \no Then we have $$P(Y>16)= 1-Po_{20}(16)=1-0.221=.779$$
+% \no Note that $X$ and $Y$ are random variables with different Poisson distributions because the events they represent occur during different time intervals.\\[.1in]
+% \no This is a key step in solving Poisson distribution related problems.
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Poisson distribution: Another Example }}
+% \no How do we choose $\lambda$ in an example? - look at the expected
+% value! \\[.1in]
+% \no  {\textcolor{magenta}{Example:} {\textcolor{cyan}{ A manufacturer of chips produces 1\%  defectives.
+%     What is the probability that in a box of 100 chips no defective is found?}}\\[.1in] 
+% \no  {\textcolor{magenta}{Solution:}     Let $X$ be the number of defective chips found in the box.
+% Model $X$ as a \textbf{Binomial} variable with distribution $B_{100,0.01}$.
+% Then $$P(X=0) = {100 \choose 0} 0.99^{100} 0.01^{0} = 0.366.$$\\[-.2in] 
+% \no  {\textcolor{magenta}{Approximation:}  On the other hand, a defective chip
+%   can be
+% considered to be a rare event, since $p$ is small ($p = 0.01$). So, approximate $X$
+% as \textbf{Poisson} variable.\\[.1in] 
+% \no We need to obtain a value for $\lambda$!
+% \foilhead[-.8in]{\textcolor{blue}{Poisson distribution: Example (cont'd)}}
+% \no Note that we expect $100 \cdot 0.01$ = 1 chip out of the box to be defective.\\[.1in] 
+% \no We know that the expected value of $X$ is $\lambda$. In this example, therefore, we take $\lambda = 1$.\\[.1in] 
+% \no Then $$P(X=0) = \frac{e^{-1}1^{0}}{0!} = 0.3679.$$\\[.1in] 
+% %\no  {\textcolor{red}{Remark!} {\textcolor{cyan}{ No big differences between the two approaches!}}\\[.1in] 
+% 
+% \no  {\textcolor{red}{Ramification:} For larger $k$, however, the binomial coefficient ${n \choose k}$
+%      becomes hard to compute, and it is easier to use the Poisson
+%      distribution instead of the Binomial distribution. 
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Poisson to approximate Binomial}}
+% \no  {\textcolor{red}{Result (not a theorem):} For large $n$, the Binomial distribution can be  approximated by the
+% Poisson distribution, where $\lambda$ is taken as $np$:
+% \[
+% {n \choose k} p^{k}(1-p)^{n-k} \approx e^{-np}\frac{(np)^{k}}{k!}
+% \]
+% \no {\textcolor{red}{Rule of thumb:} use Poisson approximation if $n \ge 20$ and (at the
+% same time) $p \le 0.05$.\\[.1in] 
+% \no {\textcolor{red}{Theorem:}} $\{X_n\}$ is a sequence of random variables s.t. $X_n\sim \text{Bin}(N_n,p_n)$ with $N_n\to \infty$, $p_n\to 0$ and $N_np_n\to \lambda\in (0,\infty)$, then\\[.1in]
+% \hspace*{2in} $X_n\to X\sim \text{Poisson}(\lambda)$\\[.1in]
+%  in distribution.\\[.1in] 
+% \no Such a beautiful result requires very delicate mathematics.
+% %: Levy-Cramer continuity theorem and concept of weak convergence on metric spaces. 
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Poisson to approximate Binomial (example)}}
+% \no {\textcolor{magenta}{Example: (Typos)} } {\textcolor{cyan}{Imagine you are supposed to proofread a paper. Let us assume that there are on average 2 typos on a page and a page has 1000 words. This gives a probability of 0.002 for each word to contain a typo. The number of typos on a page $X$ is then a Binomial random variable, i.e. $X\sim B_{1000, 0.002}$.}}\\[.1in] 
+% \no The probability for no typo on a page is $P(X=0)$, i.e 
+% $$P(X=0)=(1-0.002)^{1000}=0.998^{1000}=0.13506$$
+% alternatively 
+% $$P(X=0)=\Big(1-\frac2{1000}\Big)^{1000}\approx e^{-2}=0.13534$$
+% since $(1-x/n)^n\to e^x$. \\[.1in] 
+% \no The probability of one typo on a page is 
+% $$P(X=1)= {1000 \choose 1}0.002\cdot 0.998^{999}=0.27067$$
+% and 
+% $$P(X=1)=1000\cdot \frac2{1000}\Big(1-\frac2{1000}\Big)^{999}\approx 2\cdot e^{-2}=0.27067!$$
+% \no {\textcolor{cyan}{So basically, we are calculating this probability using the Poisson pmf with $\lambda=1000 \cdot 0.002=2$}}\\[.1in]
+% \no That is use  $P(X=x)= \frac{e^{-\lambda}\lambda^{x}}{x!}$ to calculate 
+% $$ P(X=1) \approx \frac{e^{-2} 2^{1}}{1!}=2\cdot e^{-2}=0.27067$$ 
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Poisson to approximate Binomial (example cont'd)}}
+% \no The probability for two typos on a page is $P(X=2)$, i.e
+% $$P(X=2)={1000 \choose 2}(1-0.002)^{998}0.002^2=0.27094$$
+% \no alternatively, using $X \approx Po_2$
+% $$P(X=2) \approx \frac{e^{-2} 2^{2}}{2!}=0.27067$$
+
+
+
+
+
 \end{document}
+
+
 
 
 
