@@ -19,9 +19,10 @@ opts_chunk$set(comment=NA,
 options(width=120)
 @
 
-<<libraries, message=FALSE, warning=FALSE>>=
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE>>=
 library(dplyr)
 library(ggplot2)
+library(gridExtra)
 @
 
 <<set_seed>>=
@@ -215,28 +216,97 @@ P(X\le x) & \frac{1}{6} & \frac{2}{6} & \frac{3}{6} & \frac{4}{6} & \frac{5}{6} 
 \begin{frame}[fragile]
 \frametitle{Dragonwood}
 \begin{example}
-Dragonwood has 6-sided dice with the following \# of pips: $\{1,2,2,3,3,4\}$. 
-=======
-\end{frame}
+Dragonwood has 6-sided dice with the following \# on the 6 sides: $\{1,2,2,3,3,4\}$. 
 
 \vspace{0.1in} \pause
 
-What is the image, pmf, and cdf for the sum of the number of pips when rolling 3 dice? \pause
-<<dragonwood, echo=TRUE>>=
+What is the image, pmf, and cdf for the sum of the upturned numbers when rolling 3 Dragonwood dice? \pause
+<<dragonwood, echo=TRUE, tidy=FALSE>>=
 # Three dice
 die   = c(1,2,2,3,3,4)
 rolls = expand.grid(die1 = die, die2 = die, die3 = die)
-sum   = rowSums(rolls)
-pdf   = table(sum)/length(sum)
-cdf   = cumsum(pdf)
+sum   = rowSums(rolls); tsum = table(sum)
+dragonwood3 = data.frame(x   = as.numeric(names(tsum)),
+                         pdf = as.numeric(table(sum)/length(sum))) %>%
+	mutate(cdf = cumsum(pdf))
 
-round(pdf,3)
-round(cdf,3)
+round(dragonwood3$pdf,3)
+round(dragonwood3$cdf,3)
 @
 \end{example}
 \end{frame}
 
 
+\begin{frame}
+\frametitle{Dragonwood - pdf and cdf}
+
+<<dragonwood_plots, dependson='dragonwood', fig.width=8>>=
+g_pdf = ggplot(dragonwood3, aes(x=x, y=pdf)) + 
+	geom_point() + 
+	scale_x_continuous(breaks=3:12) + 
+	ylim(0,1)
+
+# set  up cdf plot
+cdf = bind_rows(data.frame(x=2,pdf=0,cdf=0), dragonwood3) %>% 
+	mutate(xend = c(x[-1],13))
+
+
+g_cdf = ggplot(cdf, aes(x=x, y=cdf, xend=xend, yend=cdf)) +
+	#      geom_vline(aes(xintercept=x), linetype=2, color="grey") +
+	geom_point() +  # Solid points to left
+	geom_point(aes(x=xend, y=cdf), shape=1) +  # Open points to right
+	geom_segment() + 
+	scale_x_continuous(breaks=3:12) +
+	coord_cartesian(xlim=c(3,12))
+
+grid.arrange(g_pdf,g_cdf, nrow=1)
+@
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Properties of pmf and cdf}
+
+Properties of probability mass function $p_X(x)$:
+\begin{itemize}
+\item $0 \le p_X(x) \le 1$ for all $x \in \mathbb{R}$.
+\item $\sum_{x\in S} p_X(x) = 1$ where $S$ is the support.
+\end{itemize}
+
+\vspace{0.2in} \pause
+
+Properties of cumulative distribution function $F_X(x)$:
+\begin{itemize}
+\item $0 \le F_{X}(x) \le 1$ for all $x \in \mathbb{R}$
+\item $F_{X}$ is nondecreasing, (i.e. if $x_{1} \le x_{2}$ then $F_{X}(x_{1}) \le F_{X}(x_{2})$.)
+\item $\lim_{x \rightarrow -\infty}F_{X}(x) = 0$ and $\lim_{x \rightarrow \infty}F_{X}(x) = 1$.
+\item %$F_{X}(t)$ has a positive jump equal to $p_{X}(x_{i})$ at $\{
+    %x_{1}, x_{2}, x_{3}, \ldots \}$; $F_{X}$ is constant in the interval $[x_{i},
+    %x_{i+1})$, i.e.
+    $F_X(x)$ is right continuous with respect to $x$
+\end{itemize}
+
+
+\end{frame}
+
+% \foilhead[-.8in]{\textcolor{blue}{Properties of $F_X$}}\vspace{.2cm}
+% %\no  {$F_X(x)=P(X\leq x)$ is cumulative distribution function, cdf }\\[.2in]
+% \no  \no {\textcolor{red}{Properties of $F_{X}$:} }   
+% The following properties hold for the cdf
+% $F_{X}$ of a  random variable $X$.
+%  \begin{itemize}
+%     \item $ 0 \le F_{X}(t) \le 1$ for all $t \in \mathbb{R}$
+%     \item $F_{X}$ is nondecreasing, (i.e. if $x_{1} \le x_{2}$
+%     then $F_{X}(x_{1}) \le F_{X}(x_{2})$.)
+%     \item $\lim_{t \rightarrow -\infty}F_{X}(t) = 0$ and $\lim_{t \rightarrow \infty}F_{X}(t) = 1$.
+%     \item %$F_{X}(t)$ has a positive jump equal to $p_{X}(x_{i})$ at $\{
+%     %x_{1}, x_{2}, x_{3}, \ldots \}$; $F_{X}$ is constant in the interval $[x_{i},
+%     %x_{i+1})$, i.e. 
+%     $F_X(t)$ is right continuous with respect to $t$
+% \end{itemize}
+% %\no If $x\leq y$, what how will $F_X(x)$ and $F_Y(y)$ be related? 
 
  
 \begin{frame}
@@ -255,7 +325,7 @@ Which monster should your attack?
 \vspace{0.1in} \pause
 
 We can calculate the probability of defeating each monster by computing one minus the cdf evaluated at ``defense minus 1''. \pause
-Let $X$ be the sum of the number of pips on 3 Dragonwood dice. \pause
+Let $X$ be the sum of the number on 3 Dragonwood dice. \pause
 Then
 \begin{itemize}
 \item $P(X\ge 3) = 1-P(X\le 2) = 1$
@@ -298,9 +368,7 @@ Expected values are \emph{weighted averages} of the possible values weighted by 
 
 What is the expectation of the sum of 3 Dragonwood dice? 
 <<dragonwood_expectation, dependson='dragonwood', echo=TRUE>>=
-x = as.numeric(names(pdf))
-x
-expectation = sum(x*pdf)
+expectation = with(dragonwood3, sum(x*pdf))
 expectation
 @
 
@@ -308,10 +376,10 @@ expectation
 
 The expectation can be thought of as the \emph{center of gravity} of masses $p_X(x)$ placed at corresponding points $x$. \pause
 <<dragonwood_center_of_gravity, dependson='dragonwood_expectation', fig.height=2>>=
-opar = par(mar=c(4,4,1,0)+.1)
-plot(x,pdf,type="h")
-axis(1, 3:12)
-par(opar)
+ggplot(dragonwood3 %>% mutate(y=0), aes(x=x, xend=x, y=y, yend=pdf)) + 
+	geom_segment(size=2) + 
+  geom_point(data = data.frame(x=7.5,y=-0.01,pdf=0), aes(x,y), shape=24, color='red', fill='red') + 
+	scale_x_continuous(breaks=3:12)
 @
 \end{frame}
 
@@ -334,14 +402,13 @@ What is the expected value? % E[Y] = p
 
 If $p=0.9$, 
 <<biased_coin, fig.height=2>>=
-y = c(0,1)
-py = c(.1,.9)
+d = data.frame(x=c(0,1), pdf=c(0.1,0.9))
 
-opar = par(mar=c(4,4,1,0)+.1)
-plot(y,py,type='h',ylab='pdf', axes=F, frame=TRUE, ylim=c(0,1))
-axis(1, c(0,1))
-axis(2, c(0,1))
-par(opar)
+ggplot(d %>% mutate(y=0), aes(x=x, xend=x, y=y, yend=pdf)) + 
+	geom_segment(size=2) + 
+  geom_point(data = data.frame(x=0.9,y=-0.04,pdf=0), aes(x,y), shape=24, color='red', fill='red') + 
+	scale_x_continuous(breaks=3:12) + 
+	labs(x='y', y='pdf')
 @
 \end{frame}
 
@@ -441,10 +508,10 @@ The symbol $\sigma$ is commonly used for the standard deviation.
 \begin{frame}[fragile]
 \frametitle{Dragonwood (cont.)}
 
-What is the variance for the sum of the pips on 3 Dragonwood dice?
+What is the variance for the sum of the 3 Dragonwood dice?
 
 <<dragonwood_variance, dependson='dragonwood_expectation', echo=TRUE>>=
-variance = sum((x-expectation)^2*pdf)
+variance = with(dragonwood3, sum((x-expectation)^2*pdf))
 variance
 @
 
@@ -493,34 +560,79 @@ par(opar)
 
 
 
-
-
-
-\subsection{Properties of variances}
-\begin{frame}
-\frametitle{Properties of variance}
-
-\begin{theorem}
-Let $X$ and $Y$ be random variables and $a$, $b$, and $c$ be constants. \pause
-Then 
-\[ \begin{array}{rl}
-Var[aX + bY+c] &= a^2Var[X] + b^2Var[Y] + 2ab Cov(X,Y).
-\end{array} \]
-\end{theorem}
-
-\pause
-
-% needs to be fixed
-% In particular
-% \begin{corollary}
-% \begin{itemize}[<+->]
-% \item $Var[X+Y] = Var[X]+Var[Y]$,
-% \item $Var[aX] = a Var[X]$, and
-% \item $Var[c] = c$.
-% \end{itemize}
-% \end{corollary}
-
-\end{frame}
+% \begin{frame}
+% \frametitle{Multiple random variables}
+% 
+% \begin{definition}
+% The \alert{joint probability mass function} of two random variables $X$ and $Y$ is 
+% \[ 
+% p_{X,Y}(x,y) = P(X=x,Y=y).
+% \]
+% \pause
+% The \alert{joint probability mass function} of a random vector $X=(X_1,\ldots,X_p)$ is 
+% \[ 
+% p_X(x) = P(X=x). 
+% \]
+% \end{definition}
+% 
+% \end{frame}
+% 
+% 
+% \subsection{Covariance}
+% \begin{frame}
+% \frametitle{Covariance}
+% 
+% \begin{definition}
+% The \alert{covariance} between two random variables $X$ and $Y$ is 
+% \[ \begin{array}{rl}
+% Cov[X,Y] 
+% &= E\left[ (X-E[X])(Y-E[Y]) \right] \\
+% &= E[XY] - E[X]E[Y]
+% \end{array} \]
+% \end{definition}
+% 
+% \pause
+% 
+% \begin{definition}
+% The \alert{correlation} coefficient between two random variables $X$ and $Y$ is 
+% \[ \begin{array}{rl}
+% \rho = \frac{Cov[X,Y]}{\sqrt{Var[X] Var[Y]}} = \frac{Cov[X,Y]}{SD[X] SD[Y]}.
+% \end{array} \]
+% \pause
+% If $rho=0$, we say that $X$ and $Y$ are uncorrelated. 
+% \end{definition}
+% 
+% \end{frame}
+% 
+% 
+% 
+% 
+% 
+% \subsection{Properties of variances}
+% \begin{frame}
+% \frametitle{Properties of variance}
+% 
+% \begin{theorem}
+% Let $X$ and $Y$ be random variables and $a$, $b$, and $c$ be constants. \pause
+% Then 
+% \[ \begin{array}{rl}
+% Var[aX + bY+c] &= a^2Var[X] + b^2Var[Y] + 2ab Cov(X,Y).
+% \end{array} \]
+% \end{theorem}
+% 
+% \pause
+% 
+% % needs to be fixed
+% % In particular
+% % \begin{corollary}
+% % \begin{itemize}[<+->]
+% % \item $Var[X+Y] = Var[X]+Var[Y]$,
+% % \item $Var[aX] = a Var[X]$, and
+% % \item $Var[c] = c$.
+% % \end{itemize}
+% % \end{corollary}
+% 
+% \end{frame}
 
 
 \end{document}
