@@ -216,6 +216,8 @@ P(X\le x) & \frac{1}{6} & \frac{2}{6} & \frac{3}{6} & \frac{4}{6} & \frac{5}{6} 
 \frametitle{Dragonwood}
 \begin{example}
 Dragonwood has 6-sided dice with the following \# of pips: $\{1,2,2,3,3,4\}$. 
+=======
+\end{frame}
 
 \vspace{0.1in} \pause
 

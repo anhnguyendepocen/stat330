@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[handout]{beamer}
 
 
 \input{../frontmatter}
@@ -341,7 +341,7 @@ A \alert{combination} is a selection of all or part of a set of objects without 
 \end{definition}
 {\tiny \url{http://stattrek.com/online-calculator/combinations-permutations.aspx}}
 
-\vspace{-0.2in} \pause
+\vspace{0.2in} \pause
 
 \begin{theorem}
 The number of combinations of $k\le n$ objects chosen from $n$ objects without replacement is 
@@ -361,7 +361,8 @@ You choose 5 numbers and win if you pick at least 3 of the same numbers that the
 \item What is the probability that you win? \pause % ??? [C(5,3)C(44,2)+C(5,4)C(44,1)+C(5,5)]/C(49,5) \approx 9681/1906884 \approx 0.005
 	\begin{enumerate}
 	\item Addition rule: we could win with 3, 4, or 5 matching cards. 
-	\item Number of ways we could match $k$ cards is $C(5,k)$. 
+	\item Number of ways we could match $k$ cards is $C(5,k)$.
+	\item Number of ways we could {\bf not} match $5-k$ cards is $C(44,5-k)$.
 	\end{enumerate}
 \end{itemize}
 
@@ -385,7 +386,7 @@ A standard deck of cards has 4 suits (clubs, diamonds, hearts, and spades) and 1
 
 \vspace{0.1in} \pause
 
-\begin{itemize}
+\begin{itemize}[<+->]
 \item What is $|\mOmega|$ (all possible 5-card hands)? \pause % C(13*4,5) \approx 2.6 million
 \item What is $|A|$ where $A$ is the full house event? \pause
 	\begin{enumerate}
@@ -394,6 +395,8 @@ A standard deck of cards has 4 suits (clubs, diamonds, hearts, and spades) and 1
 	\item Then, for next 2 cards, choose 1 suit out of remaining 12.
 	\item Then choose 2 cards out of the 4 of this suit.
 	\end{enumerate}
+	\pause
+	
 	Thus, we have
 	\[
 	|A| = {13\choose 1}{4\choose 3}{12\choose 1}{4\choose 2} \approx 3744
