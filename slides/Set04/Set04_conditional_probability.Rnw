@@ -73,7 +73,7 @@ Now what is the probability the second CPU is defective?
 Let $A$ be the event \emph{the second CPU is defective}, but the sample space ($\mOmega$) has also changed. \pause Assuming each draw is equally likely, we have
 
 \[ 
-P(A) = \frac{|A|}{|\mOmega|} \pause = \frac{2}{P(4,1)} = 0.5
+P(A) = \frac{|A|}{|\mOmega|} \pause = \frac{3 \times 2}{3 \times P(4,1)} = 0.5
 \]
 
 Monte Carlo:
@@ -192,7 +192,7 @@ P(A|B) = P(A).
 
 \pause
 
-Intuitively, the occurrence of one event does not effect the probability of the other. 
+Intuitively, the occurrence of one event does not affect the probability of the other. 
 
 \pause
 
@@ -275,7 +275,7 @@ A \alert{parallel} system consists of $K$ components $c_{1}, \ldots, c_{K}$ arra
 \begin{frame}
 \frametitle{Serial system}
 \begin{definition}
-A \alert{serial} system consists of $K$ components $c_{1}, \ldots, c_{K}$ arranged in such a way that the system works if an only if {\bf all} of the components function properly.
+A \alert{serial} system consists of $K$ components $c_{1}, \ldots, c_{K}$ arranged in such a way that the system works if and only if {\bf all} of the components function properly.
 \end{definition}
 \centerline{\includegraphics{series-system}}
 \end{frame}
@@ -348,7 +348,7 @@ Each component in the system shown below is opearable with probability 0.92 inde
 \pause
 
 \begin{enumerate}
-\item Serial components A B can be replace with a component F that operates with probability $P(A\cap B)=(0.92)^2=0.8464$.
+\item Serial components A B can be replaced by a component F that operates with probability $P(A\cap B)=(0.92)^2=0.8464$.
 \item Parallel components D and E can be replaced by component G that operates with probability $P(D\cup E)=1-(1-0.92)^2=0.9936$.
 \end{enumerate}
 \end{frame}
