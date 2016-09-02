@@ -40,7 +40,7 @@ Treasure hunt:
 \item Box 1 has two gold coins.
 \item Box 2 has one gold coin and one silver coin.
 \item Box 3 has two silver coins. 
-\end{itemize}
+\end{itemize} \pause
 Suppose that you 
 \begin{enumerate}
 \item randomly select one of the boxes at random \pause and then
@@ -138,7 +138,7 @@ The branches of our tree $(B_1,B_2,B_3)$ formed a partition.
 If  the collection of events $B_{1}, \ldots, B_{K}$ is a partition of $\mOmega$, and $A$ is an event, then 
 \[ P(A) = \sum_{k=1}^{K}P(A|B_{k})P(B_{k}). \]
 \end{theorem}
-
+\pause
 \begin{proof}
 \[ \begin{array}{rll}
 P(A) &= P\left( \bigcup_{k=1}^K A\intersection B_k \right) & \mbox{$B_1,\ldots,B_K$ is a partition} \pause \\
@@ -177,7 +177,7 @@ P(G) &= P(G|B_1)P(B_1) + P(G|B_2)P(B_2) + P(G|B_3)P(B_3) \pause \\
 \frametitle{Inverse probability}
 
 \begin{example}
-What if we know a gold coin was chosen, but we want to know which box it was drawn from. \pause
+What if we know a gold coin was chosen, but now we want to know which box it was drawn from. \pause
 That is, we want to know 
 \begin{itemize}
 \item $P(B_1|G)$
@@ -231,15 +231,15 @@ P(B_k|A) &= \frac{P(A\intersection B_k)}{P(A)} & \mbox{by definition of conditio
 \begin{frame}
 \frametitle{CPU testing}
 \begin{example}
-A given lot of chips contains 2\%  defective chips. \pause
-Each chip is tested before delivery. \pause
+A given lot of CPUs contains 2\%  defective CPUs. \pause
+Each CPU is tested before delivery. \pause
 However, the tester is not wholly reliable: \pause
 \[ \begin{array}{rl}
-    P(\text{ ``tester says chip is good'' } | \text{  ``chip is good'' }) &= 0.95 \pause \\
-    P(\text{ ``tester says chip is defective'' } | \text{ ``chip is defective'' }) &=  0.94
+    P(\text{ ``tester says CPU is good'' } | \text{  ``CPU is good'' }) &= 0.95 \pause \\
+    P(\text{ ``tester says CPU is defective'' } | \text{ ``CPU is defective'' }) &=  0.94
 \end{array} \]
 \pause
-If the test device says the chip is defective, what is the probability that the chip actually is defective?
+If the test device says the CPU is defective, what is the probability that the CPU actually is defective?
 \end{example}
 \end{frame}
 
@@ -249,8 +249,8 @@ If the test device says the chip is defective, what is the probability that the 
 
 Let
 \begin{itemize}
-\item $C_g$ ($C_d$) be the event the chip is good (defective) \pause
-\item $T_g$ ($T_d$) be the event the tester says the chip is good (defective)
+\item $C_g$ ($C_d$) be the event the CPU is good (defective) \pause
+\item $T_g$ ($T_d$) be the event the tester says the CPU is good (defective)
 \end{itemize}
 
 We know \pause
