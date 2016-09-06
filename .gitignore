@@ -18,3 +18,5 @@ syllabus.pdf
 *.synctex.gz
 !syllabus_stat330A.tex
 *.pdf
+
+*.DS_Store
