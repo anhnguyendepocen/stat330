@@ -411,7 +411,7 @@ Let $X$ be the number of times $S$ is executed. \pause Then $X\sim Geo(0.1)$ and
 
 Watch the input queue at the alpha farm for a job that times out.
 The probability that a job times out is 0.05. 
-Let $Y$ be the index of the first job to time out, then $Y \sim Geo_{0.05}$. 
+Let $Y$ be the index of the first job to time out, then $Y \sim Geo(0.05)$. 
 \begin{itemize}
 \item What is the probability that
   \begin{itemize}
@@ -465,11 +465,13 @@ P(X\ge i+j|X\ge j) &= \frac{P(X\ge i+j,X\ge j)}{P(X\ge j)} = \frac{P(X\ge i+j)}{
 
 Many experiments can be thought of as ``how many \emph{rare} events will occur in a certain amount of time or space?'' \pause 
 For example,
+{\small
 \begin{itemize}
 \item \# of alpha particles emitted from a polonium bar in an 8 minute period
 \item \# of flaws on a standard size piece of manufactured product, e.g., 100m coaxial cable, 100 sq.meter plastic sheeting
 \item \# of hits on a web page in a 24h period
 \end{itemize}
+}
 
 \pause
 
@@ -592,7 +594,7 @@ in distribution.
 \pause
 
 
-For large $n$, the binomial dsitribution ($Bin(n,p)$) can be approximated by a Poisson distribution ($Po(np)$) since 
+For large $n$, the binomial dsitribution, $Bin(n,p)$, can be approximated by a Poisson distribution, $Po(np)$, since 
 \[ 
 {n \choose k} p^{k}(1-p)^{n-k} \approx e^{-np}\frac{(np)^{k}}{k!}.
 \]

@@ -60,13 +60,13 @@ This count is a random variable!
 
 \begin{itemize}
 \item Let $X$ the number of times that the red area is hit out of three throws. \pause
-\item $X(\mOmega)=  x$, if the outcome $\mOmega$ has $x$ hits to the red area, and $3-x$ hits to the gray area. \pause
-\item Thus, the set of possible values for $X(\mOmega)$ is $\{0,1,2,3\}$. \pause
+\item $X(\omega)=  x$, if the outcome $\omega$ has $x$ hits to the red area, and $3-x$ hits to the gray area. \pause
+\item Thus, the set of possible values for $X(\omega)$ is $\{0,1,2,3\}$. \pause
 \item To avoid cumbersome notation, we write
 \[ \{X = x\} \]
 for the event
 \[
-\{ \mOmega | \mOmega \in \mOmega\ \text{ and }\ X(\mOmega) = x \}.
+\{ \omega | \omega \in \mOmega\ \text{ and }\ X(\omega) = x \}.
 \]
 \item By convention, we use a capital letter to indicate the random variable and a lower case letter to indicate a realized value of the random variable.
 \end{itemize}
@@ -109,7 +109,7 @@ We are interested in the number of bits that are received incorrectly.
 \begin{definition}
 The \alert{image} of a random variable $X$ is defined as 
 \[ 
-Im(X) := \{x: x=X(\mOmega) \text{ for some }\mOmega \in \mOmega \}
+Im(X) := \{x: x=X(\omega) \text{ for some }\omega \in \mOmega \}
 \]
 \pause
 If the image is finite or countable, we have a \alert{discrete} random variable. \pause
@@ -150,7 +150,7 @@ is the \alert{probability mass function} (pmf) \pause and the \alert{cumulative 
 F(x) = P(X\le x) =\sum_{y\le x} P(y).
 \]
 \pause 
-The set of possible values of $X$ is called the \alert{support} of the distribution $F$. 
+The set of possible values of $X$ is called the \alert{support} of the distribution $F$ and is the same as the image of $X$. 
 \end{frame}
 
 
@@ -226,12 +226,13 @@ What is the image, pmf, and cdf for the sum of the upturned numbers when rolling
 die   = c(1,2,2,3,3,4)
 rolls = expand.grid(die1 = die, die2 = die, die3 = die)
 sum   = rowSums(rolls); tsum = table(sum)
-dragonwood3 = data.frame(x   = as.numeric(names(tsum)),
-                         pdf = as.numeric(table(sum)/length(sum))) %>%
+dragonwood3 = data.frame(x   = round(as.numeric(names(tsum)),3),
+                         pdf = round(as.numeric(table(sum)/length(sum)),3)) %>%
 	mutate(cdf = cumsum(pdf))
 
-round(dragonwood3$pdf,3)
-round(dragonwood3$cdf,3)
+t(dragonwood3)
+# round(dragonwood3$pdf,3)
+# round(dragonwood3$cdf,3)
 @
 \end{example}
 \end{frame}
