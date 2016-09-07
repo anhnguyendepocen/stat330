@@ -48,7 +48,7 @@ Simple dartboard:
 
 \end{example}
 \begin{center}
-\includegraphics{dartboard.pdf}
+\includegraphics{dartboard}
 \end{center}
 Imagine we throw three darts on this board one by one and we are interested in the number of times the red area has been hit. \pause
 This count is a random variable!
@@ -95,7 +95,7 @@ We are interested in the number of bits that are received incorrectly.
 	\item No incorrect bits received: \pause $\{X=0\}$. \pause
 	\item At least one incorrect bit received: \pause $\{X\ge 1\}$. \pause
 	\item Exactly two incorrect bits received: \pause $\{X=2\}$. \pause
-	\item Between two and seven (inclusive) incorrect bits received: \pause $\{2\ge X \ge 7\}$.
+	\item Between two and seven (inclusive) incorrect bits received: \pause $\{2\le X \le 7\}$.
 	\end{itemize}
 \end{itemize}
 \end{frame}
@@ -120,10 +120,10 @@ If the image is uncountably infinite, we have a \alert{continuous} random variab
 
 \begin{example}
 \begin{itemize}
-\item Put a disk drive into service, measure $Y$ = ``time till the first major failure'' and thus
+\item Put a disk drive into service, measure $Y$ = ``time till the first major failure'' \pause and thus
 		$Im(Y) = (0, \infty)$. \pause Image of $Y$ is an interval (uncountable image), so $Y$ is a
   continuous random variable.
-\item Communication channel: $X$ = ``\# of incorrectly received bits'' with 
+\item Communication channel: $X$ = ``\# of incorrectly received bits'' \pause with 
 		$Im(X) = \{ 0,1,2,3,4,5,6,7,8 \}$. \pause Image of $X$ is a finite set, so $X$ is
 	a discrete random variable.
 \end{itemize}
@@ -227,11 +227,11 @@ die   = c(1,2,2,3,3,4)
 rolls = expand.grid(die1 = die, die2 = die, die3 = die)
 sum   = rowSums(rolls); tsum = table(sum)
 dragonwood3 = data.frame(x   = round(as.numeric(names(tsum)),3),
-                         pdf = round(as.numeric(table(sum)/length(sum)),3)) %>%
-	mutate(cdf = cumsum(pdf))
+                         pmf = round(as.numeric(table(sum)/length(sum)),3)) %>%
+	mutate(cdf = cumsum(pmf))
 
 t(dragonwood3)
-# round(dragonwood3$pdf,3)
+# round(dragonwood3$pmf,3)
 # round(dragonwood3$cdf,3)
 @
 \end{example}
@@ -239,16 +239,16 @@ t(dragonwood3)
 
 
 \begin{frame}
-\frametitle{Dragonwood - pdf and cdf}
+\frametitle{Dragonwood - pmf and cdf}
 
 <<dragonwood_plots, dependson='dragonwood', fig.width=8>>=
-g_pdf = ggplot(dragonwood3, aes(x=x, y=pdf)) + 
+g_pmf = ggplot(dragonwood3, aes(x=x, y=pmf)) + 
 	geom_point() + 
 	scale_x_continuous(breaks=3:12) + 
 	ylim(0,1)
 
 # set  up cdf plot
-cdf = bind_rows(data.frame(x=2,pdf=0,cdf=0), dragonwood3) %>% 
+cdf = bind_rows(data.frame(x=2,pmf=0,cdf=0), dragonwood3) %>% 
 	mutate(xend = c(x[-1],13))
 
 
@@ -260,7 +260,7 @@ g_cdf = ggplot(cdf, aes(x=x, y=cdf, xend=xend, yend=cdf)) +
 	scale_x_continuous(breaks=3:12) +
 	coord_cartesian(xlim=c(3,12))
 
-grid.arrange(g_pdf,g_cdf, nrow=1)
+grid.arrange(g_pmf,g_cdf, nrow=1)
 @
 
 \end{frame}
@@ -369,7 +369,7 @@ Expected values are \emph{weighted averages} of the possible values weighted by 
 
 What is the expectation of the sum of 3 Dragonwood dice? 
 <<dragonwood_expectation, dependson='dragonwood', echo=TRUE>>=
-expectation = with(dragonwood3, sum(x*pdf))
+expectation = with(dragonwood3, sum(x*pmf))
 expectation
 @
 
@@ -377,9 +377,9 @@ expectation
 
 The expectation can be thought of as the \emph{center of gravity} of masses $p_X(x)$ placed at corresponding points $x$. \pause
 <<dragonwood_center_of_gravity, dependson='dragonwood_expectation', fig.height=2>>=
-ggplot(dragonwood3 %>% mutate(y=0), aes(x=x, xend=x, y=y, yend=pdf)) + 
+ggplot(dragonwood3 %>% mutate(y=0), aes(x=x, xend=x, y=y, yend=pmf)) + 
 	geom_segment(size=2) + 
-  geom_point(data = data.frame(x=7.5,y=-0.01,pdf=0), aes(x,y), shape=24, color='red', fill='red') + 
+  geom_point(data = data.frame(x=7.5,y=-0.01,pmf=0), aes(x,y), shape=24, color='red', fill='red') + 
 	scale_x_continuous(breaks=3:12)
 @
 \end{frame}
@@ -403,13 +403,13 @@ What is the expected value? % E[Y] = p
 
 If $p=0.9$, 
 <<biased_coin, fig.height=2>>=
-d = data.frame(x=c(0,1), pdf=c(0.1,0.9))
+d = data.frame(x=c(0,1), pmf=c(0.1,0.9))
 
-ggplot(d %>% mutate(y=0), aes(x=x, xend=x, y=y, yend=pdf)) + 
+ggplot(d %>% mutate(y=0), aes(x=x, xend=x, y=y, yend=pmf)) + 
 	geom_segment(size=2) + 
-  geom_point(data = data.frame(x=0.9,y=-0.04,pdf=0), aes(x,y), shape=24, color='red', fill='red') + 
+  geom_point(data = data.frame(x=0.9,y=-0.04,pmf=0), aes(x,y), shape=24, color='red', fill='red') + 
 	scale_x_continuous(breaks=3:12) + 
-	labs(x='y', y='pdf')
+	labs(x='y', y='pmf')
 @
 \end{frame}
 
@@ -512,7 +512,7 @@ The symbol $\sigma$ is commonly used for the standard deviation.
 What is the variance for the sum of the 3 Dragonwood dice?
 
 <<dragonwood_variance, dependson='dragonwood_expectation', echo=TRUE>>=
-variance = with(dragonwood3, sum((x-expectation)^2*pdf))
+variance = with(dragonwood3, sum((x-expectation)^2*pmf))
 variance
 @
 
