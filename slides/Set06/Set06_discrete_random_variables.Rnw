@@ -143,7 +143,7 @@ The collection of all the probabilities related to $X$ is the \alert{distributio
 
 For a discrete random variable, the function
 \[ 
-P(x) = P(X=x) 
+p_X(x) = P(X=x) 
 \]
 is the \alert{probability mass function} (pmf) \pause and the \alert{cumulative distribution function} (cdf) is 
 \[ 
@@ -270,10 +270,10 @@ grid.arrange(g_pmf,g_cdf, nrow=1)
 \begin{frame}
 \frametitle{Properties of pmf and cdf}
 
-Properties of probability mass function $p_X(x)$:
+Properties of probability mass function $P(X=x)$:
 \begin{itemize}
-\item $0 \le p_X(x) \le 1$ for all $x \in \mathbb{R}$.
-\item $\sum_{x\in S} p_X(x) = 1$ where $S$ is the support.
+\item $0 \le P(X=x) \le 1$ for all $x \in \mathbb{R}$.
+\item $\sum_{x\in S} P(X=x) = 1$ where $S$ is the support.
 \end{itemize}
 
 \vspace{0.2in} \pause
@@ -375,7 +375,7 @@ expectation
 
 \pause
 
-The expectation can be thought of as the \emph{center of gravity} of masses $p_X(x)$ placed at corresponding points $x$. \pause
+The expectation can be thought of as the \emph{center of gravity} of masses $P(X=x)$ placed at corresponding points $x$. \pause
 <<dragonwood_center_of_gravity, dependson='dragonwood_expectation', fig.height=2>>=
 ggplot(dragonwood3 %>% mutate(y=0), aes(x=x, xend=x, y=y, yend=pmf)) + 
 	geom_segment(size=2) + 
@@ -414,9 +414,9 @@ ggplot(d %>% mutate(y=0), aes(x=x, xend=x, y=y, yend=pmf)) +
 \end{frame}
 
 
-\subsection{Properties of expectations and variances}
+\subsection{Properties of expectations}
 \begin{frame}
-\frametitle{Properties of expectations and variance}
+\frametitle{Properties of expectations}
 
 \begin{theorem}
 Let $X$ and $Y$ be random variables and $a$, $b$, and $c$ be constants. \pause
@@ -572,7 +572,7 @@ par(opar)
 % \pause
 % The \alert{joint probability mass function} of a random vector $X=(X_1,\ldots,X_p)$ is 
 % \[ 
-% p_X(x) = P(X=x). 
+% P_X(x) = P(X=x). 
 % \]
 % \end{definition}
 % 
