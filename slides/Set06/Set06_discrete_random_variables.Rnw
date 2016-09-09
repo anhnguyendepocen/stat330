@@ -348,7 +348,7 @@ The \alert{expected value} of a function of a (discrete) random variable is
 E[h(X)] = \sum_i h(x_i) \cdot p_X(x_i).
 \]
 \pause
-If $h(x)=x)$, then 
+If $h(x)=x$, then 
 \[ 
 E[X] = \sum_i x_i \cdot p_X(x_i)
 \]
@@ -486,7 +486,7 @@ E[4Y+2] = 4E[Y]+2 = 12.
 The \alert{variance} of a random variable is defined as the expected squared deviation from the mean. \pause 
 For discrete random variables, variance is
 \[
-Var[X] = E[(X-E[X])^2] = \sum_i (x_i-\mu)^2 \cdot p_X(x_i)
+Var[X] = E[(X-\mu)^2] = \sum_i (x_i-\mu)^2 \cdot p_X(x_i)
 \]
 where $\mu = E[X]$. \pause
 The symbol $\sigma^2$ is commonly used for the variance.
