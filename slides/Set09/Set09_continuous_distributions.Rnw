@@ -1,0 +1,279 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set09 - Continuous distributions}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE>>=
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+\frame{\maketitle}
+
+
+\section{Continuous distributions}
+\begin{frame}
+\frametitle{Continuous distributions}
+\begin{itemize}
+\item Uniform
+\item Exponential 
+\item Gamma 
+\item Normal 
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+Note: the image is always uncountably infinite.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Uniform distribution}
+
+%  \foilhead[-.75in]{\textcolor{blue}{Some special continuous density functions}}
+% \no 	 {\textcolor{magenta}{Uniform Density}}\\[.1in]
+% \no  One of the most basic continuous density is the {\it 
+% uniform density}.\\[.1in] 
+% \no 	 {\textcolor{magenta}{The pdf is:}\\[-.2in]
+% \[
+% f(x) = \left \{ 
+% \begin{array}{cl}
+%     \frac{1}{b-a} & \text{ if } a < x < b \\
+%     0 & \text{ otherwise}
+% \end{array} \right .
+% \]
+% \no We say that $X \sim U(a,b)$ i.e., the random variable $X$ is distributed as the \emph{Uniform distribution with parameters $a$ and $b$}\\[.15in]
+% %
+% \centerline{\includegraphics[scale=0.6]{uniform.pdf}}
+% %
+% \foilhead[-.75in]{\textcolor{blue}{Properties of the Uniform distribution}}
+% \no The cumulative distribution function $F_{X}$ is
+% \vspace*{-.3in}
+% 
+% \[
+% U_{a,b}(x) := F_{X}(x) = \left \{ 
+% \begin{array}{cl}
+%     0 & \text{ if } x \le a \\
+%     \frac{x-a}{b-a} & \text{ if } a < x < b \\
+%     1 & \text{ if } x \ge b.
+% \end{array} \right .
+% \]
+% \vspace*{-.25in}
+% 
+% \no We now compute the expected value and variance of a 
+%  a uniform distribution on $(a,b)$.
+% \begin{eqnarray*}
+%     E[X] &=& \int_{a}^{b} x \frac{1}{b-a} dx = \frac{1}{b-a} 
+%     \frac{1}{2} x^{2}|_{a}^{b} = \\
+%     &=& \frac{b^{2}-a^{2}}{2(b-a)} = 
+%     \underline{\frac{1}{2}(a+b)}.  \\
+%     Var[X] &=& \int_{a}^{b}(x - \frac{a+b}{2})^{2} \frac{1}{b-a} dx = 
+%     \ldots = \underline{\frac{(b-a)^{2}}{12}}.
+% \end{eqnarray*}
+% \foilhead[-.75in]{\textcolor{blue}{Uniform distribution: Example}}
+% \no    {\textcolor{cyan}{The(pseudo) random number generator on my calculator is supposed to create 
+% realizations of $U(0,1)$ random variables.}\\[.15in]
+% \no Define $U$ as the next random number the calculator produces.\\[.15in]
+% \no What is the probability, that the next number is larger than 0.85?\\[.15in]
+% \no To answer that, we will compute $P( U \ge 0.85)$.\\[.15in]
+% \no We know the density function of $U$: $f_{U}(u) = \frac{1}{1-0} = 1$.\\[.1in]
+% \no Therefore
+% \[
+% P(U \ge 0.85) = \int_{0.85}^{1}1 du = 1 - 0.85 = 0.15.
+% \]
+
+
+\end{frame}
+
+
+
+\subsection{Exponential}
+\begin{frame}
+\frametitle{Exponential distribution}
+
+A distribution commonly used to model waiting times between occurrences of \emph{rare} events, e.g. lifetimes of electrical or mechanical devices, is the exponential distribution.
+
+\vspace{0.1in} \pause
+
+Let $X$ be the time until the event. \pause 
+
+
+\end{frame}
+
+
+% \foilhead[-.75in]{\textcolor{blue}{Exponential Distribution}}\vspace{.01in}
+% \no This distribution is commonly used to model waiting times between 
+% occurrences of \emph{rare} events, lifetimes of electrical or mechanical 
+% devices.\\[.1in]
+% \no  {\textcolor{magenta}{Exponential density}} {\textcolor{cyan}{A random variable $X$ has {\it exponential density} if}}
+%   \vspace*{-.3in}
+%    
+%     \[
+%     f_{X}(x) = \left \{
+%     \begin{array}{cl}
+% 	\lambda e^{-\lambda x} & \text{ if } x \ge 0 \\
+% 	0 & \text{ otherwise}
+%     \end{array}
+%     \right .
+%     \]
+%   \vspace*{-.1in}  
+% \no {\textcolor{cyan}{$\lambda$ is called the {\it rate parameter}}}. We say that the random variable $X \sim Exp(\lambda)$\\[.15in]
+% \no Mean, variance and cumulative distribution function are easy to compute. They 
+% are:
+% \vspace*{-.2in}
+% \begin{eqnarray*}
+%     E[X] &=& \frac{1}{\lambda} \\
+%     Var[X] &=& \frac{1}{\lambda^{2}}\\
+%     Exp_{\lambda}(t) &=& F_{X}(t) = \left \{
+%         \begin{array}{cl}
+% 	    0  & \text{ if } t < 0 \\
+% 	    1 - e^{-\lambda t} & \text{ if } t \ge 0 \\
+% 	\end{array}
+%     \right .
+% \end{eqnarray*}
+%  
+%  
+% \foilhead[-.7in]{\textcolor{blue}{Density functions of exponential variables for different 
+%     rate parameters 0.5, 1, and 2.}}\vspace{10pt}
+%     \centerline{\includegraphics[scale=.8]{exponential.pdf}}
+%     
+%  \foilhead[-.7in]{\textcolor{blue}{Example 4.5 (Baron)}}\vspace{.01in}
+%   \no {\textcolor{magenta}{Example:}}{\textcolor{cyan}{Jobs are sent to a printer  at an average of 3 jobs per hour. (a) What is the expected time between jobs? (b) What is the  probability that the next job is sent within 5 minutes?}}\\[.1in]
+%  \no {\textcolor{magenta}{Solution:}} Job arrivals represent rare events, thus the time $T$ between them is Exponential with rate 3 jobs/hour i.e. $\lambda=3$.\\[.1in]
+% \no \h (a) Thus $E(T)=1/\lambda= 1/3$ hours or $20$ minutes.\\[.1in]
+% \no \h (b) Using the same units (hours) we have 5 min.=1/12 hours. Thus we compute 
+% $$P(T<1/12) = Exp_{3}(1/12)=1-e^{-3 \cdot\frac{1}{12}}=1-e^{-\frac{1}{4}}=0.2212$$
+%     
+% \foilhead[-.7in]{\textcolor{blue}{Exponential Distribution: Example}}\vspace{.01in}    
+% \no {\textcolor{red}{Note: The following example will be continued throughout the remainder of this class.}}\\[.1in]
+% \no {\textcolor{magenta}{Example:}} {\textcolor{cyan}{Hits on a webpage}}\\[.1in]
+% \no Suppose we are told that, on average, there are 2 hits per minute on a specific web page. \\[.1in]
+% \no I start to observe this web page at a certain time point 0, and decide to model the waiting time till the first hit $Y$ ({\textcolor{magenta}{in minutes}}) using an {\textcolor{cyan}{exponential distribution}}.\\[.1in]
+% \no For modeling the distribution of $Y$ using the exponential, we need an appropriate value for $\lambda$, the rate parameter\\[.1in]
+% \no {\textcolor{red}{Since, on average there are 2 hits per minute, the average waiting time between hits of 0.5 minutes.}}\\[.1in]
+% \no That is we may use this value as the expected value for $Y$: $E[Y] = 0.5$.
+%     
+% \foilhead[-.75in]{\textcolor{blue}{Exponential Distribution: Example (continued...)}}\vspace{.01in}  
+% \no Since we know, that $E[Y]$ for an exponential RV is  $1/\lambda$, setting  $1/\lambda=0.5$ we get $ \lambda=2 $ as a 
+% reasonable choice for the rate parameter.\\[.1in]
+% \no If our model is correct, $\lambda$ describes the rate, at which this web page is hit!\\[.1in]
+% \no {\textcolor{magenta}{Using the above model we can answer questions like...}}\\[.1in]   
+% \no {\textcolor{cyan}{What is the probability that we have to wait at most 40 seconds to observe the 
+%     first hit?}}\\[.1in]
+% \no {\it (Since we are working in time units of minutes, we need to express the 40 seconds above as $2/3$ minutes.)}\\[.1in] 
+% \no {\textcolor{cyan}{Thus, we compute the probability that we have to wait at most 2/3 min to 
+%     observe the first hit:}}\\[-.2in]
+%     \[
+%     P(Y \le 2/3) =  Exp_{\lambda}(2/3) = 1 - e^{-2/3 \cdot 2} \approx 0.736
+%     \]
+% \no {\textcolor{red}{Note carefully that we just used the cdf of $Y$ (that we know) for the above calculation.}}
+% 
+% \foilhead[-.75in]{\textcolor{blue}{Exponential Distribution: Example (continued...)}}\vspace{.01in}  
+% \no {\textcolor{cyan}{How long do we have to wait at most, to observe a first hit with 
+%     a probability of 0.9?}\\[.1in]  
+%     {\it This is the reverse of what we have computed  
+%     so far, because here we want to find a $t$, for which $P(Y \le t) = 0.9$:}
+%     \begin{eqnarray*}
+%     && P(Y \le t) = 0.9 \\
+%     && \iff 1 - e^{-2t} = 0.9 \\
+%     && \iff e^{-2t} = 0.1 \\
+%     && \iff t = -0.5 \ln{0.1} \approx 1.15 \text{ (min) - that's 
+%     approx. 69 seconds.}
+%     \end{eqnarray*}
+% \foilhead[-.75in]{\textcolor{blue}{Memoryless property of the Exponential distribution}}\vspace{.01in}      
+% \no {\textcolor{magenta}{  In the \emph{Hits on a web page example} we said that we start to observe the web page 
+% a time point 0.}}\\[.1in]
+% \no   {\textcolor{cyan}{Does the choice of this time point affect our analysis in any way? }} \\[.1in]   
+% \no If there is no hit after the first minute after we started, what is the probability, that
+%  we have to wait for another $40$ seconds for the first hit?\\[.1in]
+% \no {\textcolor{cyan}{The probability we want to compute is a conditional probability.}}\\[.1in]
+% \no The probability we need is\\[.1in]
+% \no \h \h   $P(\text{wait for 1 min and 40 sec for the first hit}|\text{no hits during the 1st min})$\\[.1in]
+% \no Recall that, we used  the random variable $Y$ to denote the waiting time till the first hit.\\[.2in]
+% \no It is easy to see that the required probability is then $P(Y \le 5/3|Y>1)$
+% \foilhead[-.75in]{\textcolor{blue}{Memoryless property (continued...)}}\vspace{.01in}
+% \no Now, recall that under the  model we assumed, $Y \sim Exp(2.0)$
+% \begin{eqnarray*}
+% P(Y \le 5/3|Y>1) &=&\frac{P( Y \le 5/3 \cap Y > 1)}{P(Y > 1)} =\frac{P(1 < Y \le 5/3)}{1- P(Y < 1)}\\
+% &=&  \frac{Exp_2(5/3)-Exp_2(1)}{1-Exp_2(1)}=\frac{e^{-2} - e^{-10/3}}{e^{-2}} = 0.736.\\[.1in]
+% \end{eqnarray*}
+% \no {\textcolor{red}{This is  exactly the same probability as when we started at time 0!!!}}\\[.1in]
+% \no Note again that we are using the cdf of the Exponential distribution with $\lambda=2$.
+% \no That is, $P(X\le t)=F_{X}(t) = 1 - e^{-2 x}  \text{ if } x \ge 0 $\\[.1in]
+% \no The result of this example is no coincidence. We can state this as a theorem.
+% 
+% \foilhead[-.75in]{\textcolor{blue}{Memoryless property of the Exponential distribution}}\vspace{.1in} 
+% \no \hspace*{1in} $P(Y \le t + s | Y \ge s) = 1 - e^{-\lambda t} = P(Y \le t)$\\[.15in]
+% \no A proof of this result is given in Baron (p.84).\\[.2in] 
+% \no This means: a random variable with an exponential distribution 
+%  {\textcolor{cyan}{forgets}} about its past. This is called the {\it memoryless 
+% property} of the exponential distribution.\\[.1in]
+% \no An electrical or mechanical device whose lifetime  {\textcolor{cyan}{we model as an 
+% exponential variable}} therefore \emph{stays as good as new} until it 
+% suddenly breaks, i.e. we assume that there's no aging process.
+% 
+% \no Exponential is the only continuous distribution that has this property. We earlier saw that a discrete distribution (Geometric) had a similar property.
+% 
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Gamma Distribution}}\vspace{.1in} 
+% \no This distribution is used to model total waiting time of a procedure that consists of 
+% $\alpha$ independent stages, each stage with a waiting time having a distribution $Exp_{\lambda}$.\\[.1in]
+% \no Then the total time has a Gamma disribution with parameters $\alpha$ and $\lambda$.\\[.1in]
+% \no  {\textcolor{magenta}{Gamma density}} {\textcolor{cyan}{A random variable $X$ has {\it gamma density} if}}\\[.15in]
+% \hspace*{1.5in} $ f(x)= \frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x},\qquad x>0$\\[.15in]
+% \no {\textcolor{cyan}{$\lambda$ is called the \emph{rate parameter} and $\alpha$ is called the \emph{shape parameter}}}\\[.1in]
+% \no {\textcolor{cyan}{$\Gamma(\alpha)$ is the {\textcolor{red}{Gamma function}}, an integral that is defined on p.433 (Baron)}}\\[.1in]
+% \no We say that the random variable $X \sim Gamma(\alpha,\lambda)$\\[.1in]
+% \no When $\alpha$ is an integer (this is the case with most applications we'll discuss), the gamma random variable can be represented as the sum of $\alpha \ iid\ Exp_{\lambda}$ random variables. It follows that $Gam_{1,\lambda} \equiv Exp_{\lambda}$
+% \foilhead[-.8in]{\textcolor{blue}{Density functions of gamma variables for different 
+%     shape parameters 0.5, 1, and 1.5.}}\vspace{10pt}
+%     \centerline{\includegraphics[scale=.7]{gamma_pdf2.pdf}}
+% \foilhead[-.75in]{\textcolor{blue}{Properties of the  Gamma Distribution}}\vspace{.1in} 
+% \no {\textcolor{red}{Mean}} and {\textcolor{red}{Variance}} are obtained using integration (see p. 85/86 of Baron). They 
+% are:
+% \vspace*{-.2in}
+% \begin{eqnarray*}
+%     E[X] &=& \frac{\alpha}{\lambda} \\
+%     Var[X] &=& \frac{\alpha}{\lambda^{2}}
+% \end{eqnarray*}
+% The {\textcolor{red}{cdf}},  $Gam_{\alpha,\lambda}(t) = F_{X}(t)$ is of the form
+% $$ F_{X}(t)=\int_0^t f(x)dx=\frac{\lambda^\alpha}{\Gamma(\alpha)}\int_0^tx^{\alpha-1}e^{-\lambda x}dx$$
+% The computation of the cdf is not trivial. Tabulated values of the \emph{incomplete Gamma function} is to evaluate the gamma
+% cdf. It can be computed for small integer values of $\alpha$ by repeated integration by parts.
+
+
+
+\end{document}   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
