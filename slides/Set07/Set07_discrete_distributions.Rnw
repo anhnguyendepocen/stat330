@@ -37,16 +37,16 @@ set.seed(2)
 \frametitle{Special discrete distributions}
 
 \begin{itemize}
-\item Bernoulli distribution
-\item Binomial distribution
-\item Geometric distribution
-\item Poisson distribution
-%\item Compounded distribution
+\item Bernoulli 
+\item Binomial 
+\item Geometric 
+\item Poisson 
+%\item Compounded 
 \end{itemize}
 
 \vspace{0.1in} \pause
 
-Note: The sample space is always finite or countable.
+Note: The image is always finite or countable.
 
 \end{frame}
 
