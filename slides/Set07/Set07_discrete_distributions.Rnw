@@ -41,7 +41,7 @@ set.seed(2)
 \item Binomial distribution
 \item Geometric distribution
 \item Poisson distribution
-\item Compounded distribution
+%\item Compounded distribution
 \end{itemize}
 
 \vspace{0.1in} \pause
