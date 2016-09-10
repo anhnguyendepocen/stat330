@@ -9,7 +9,7 @@
 
 <<options, results='hide', echo=FALSE, purl=FALSE>>=
 opts_chunk$set(comment=NA, 
-               fig.width=6, fig.height=5, 
+               fig.width=7, fig.height=5, 
                size='tiny', 
                out.width='0.8\\textwidth', 
                fig.align='center', 
@@ -20,6 +20,9 @@ options(width=120)
 @
 
 <<libraries, message=FALSE, warning=FALSE, cache=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(tidyr)
 @
 
 <<set_seed>>=
@@ -45,7 +48,7 @@ Note: the image is always uncountably infinite.
 \end{frame}
 
 
-
+\subsection{Uniform}
 \begin{frame}
 \frametitle{Uniform distribution}
 
@@ -129,54 +132,79 @@ A distribution commonly used to model waiting times between occurrences of \emph
 
 \vspace{0.1in} \pause
 
-Let $X$ be the time until the event. \pause 
+The pdf of an exponential random variable is
+\[
+f(x) = \left\{ 
+\begin{array}{cl}
+    \lambda e^{-\lambda x} & \text{ if } x\ge 0 \\
+    0 & \mbox{otherwise}
+\end{array} \right.
+\]
+\pause
+
+We use $X \sim Exp(\lambda)$ to denote the random variable $X$ has an exponential distribution with \alert{rate} parameter $\lambda$. 
+
+\vspace{0.1in} \pause
+
+You should check the following results:
+\[ \begin{array}{rl}
+F(x) &= \left\{ \begin{array}{ll} 0 & x<0 \\ 1-e^{-\lambda x} & x\ge 0 \end{array} \right. \\
+E[X] &= 1/\lambda \\
+Var[X] &= 1/\lambda^2
+\end{array} \]
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Exponential pdfs}
+
+<<>>=
+d = data.frame(x = seq(0,3, length=101)) %>%
+  mutate(exp1 = dexp(x),
+         exp0.5 = dexp(x,rate=1/2),
+         exp2   = dexp(x,rate=2)) %>%
+  gather(rate, density, exp1, exp0.5, exp2) %>%
+  mutate(rate = gsub("exp","", rate))
+
+ggplot(d, aes(x, density, color=rate, linetype=rate)) + 
+  geom_line() +
+  theme_bw()
+@
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Print jobs}
+
+Jobs are sent to a printer at an average of 3 jobs per hour. \pause
+\begin{enumerate}
+\item What is the expected time between jobs?
+\item What is the probability that the next job is sent within 5 minutes?
+\end{enumerate}
+
+\vspace{0.1in} \pause
+
+Let $T$ represent the time until the next job \pause and assume $T\sim Exp(\lambda)$ where $\lambda = 3$ jobs per hour. \pause
+\begin{enumerate}
+\item $E[T] = 1/\lambda = 1/3$ hours or, equivalently, 20 minutes. \pause
+\item First, 5 minutes = 1/12 hours. \pause  Then 
+\[ 
+P(T<1/12) = 1-e^{-3\times \frac{1}{12}} = 1-e^{-\frac{1}{4}} = 0.22
+\]
+or, in R,
+<<>>=
+pexp(1/12,3)
+@
+\end{enumerate}
+
 
 
 \end{frame}
 
 
-% \foilhead[-.75in]{\textcolor{blue}{Exponential Distribution}}\vspace{.01in}
-% \no This distribution is commonly used to model waiting times between 
-% occurrences of \emph{rare} events, lifetimes of electrical or mechanical 
-% devices.\\[.1in]
-% \no  {\textcolor{magenta}{Exponential density}} {\textcolor{cyan}{A random variable $X$ has {\it exponential density} if}}
-%   \vspace*{-.3in}
-%    
-%     \[
-%     f_{X}(x) = \left \{
-%     \begin{array}{cl}
-% 	\lambda e^{-\lambda x} & \text{ if } x \ge 0 \\
-% 	0 & \text{ otherwise}
-%     \end{array}
-%     \right .
-%     \]
-%   \vspace*{-.1in}  
-% \no {\textcolor{cyan}{$\lambda$ is called the {\it rate parameter}}}. We say that the random variable $X \sim Exp(\lambda)$\\[.15in]
-% \no Mean, variance and cumulative distribution function are easy to compute. They 
-% are:
-% \vspace*{-.2in}
-% \begin{eqnarray*}
-%     E[X] &=& \frac{1}{\lambda} \\
-%     Var[X] &=& \frac{1}{\lambda^{2}}\\
-%     Exp_{\lambda}(t) &=& F_{X}(t) = \left \{
-%         \begin{array}{cl}
-% 	    0  & \text{ if } t < 0 \\
-% 	    1 - e^{-\lambda t} & \text{ if } t \ge 0 \\
-% 	\end{array}
-%     \right .
-% \end{eqnarray*}
-%  
-%  
-% \foilhead[-.7in]{\textcolor{blue}{Density functions of exponential variables for different 
-%     rate parameters 0.5, 1, and 2.}}\vspace{10pt}
-%     \centerline{\includegraphics[scale=.8]{exponential.pdf}}
-%     
-%  \foilhead[-.7in]{\textcolor{blue}{Example 4.5 (Baron)}}\vspace{.01in}
-%   \no {\textcolor{magenta}{Example:}}{\textcolor{cyan}{Jobs are sent to a printer  at an average of 3 jobs per hour. (a) What is the expected time between jobs? (b) What is the  probability that the next job is sent within 5 minutes?}}\\[.1in]
-%  \no {\textcolor{magenta}{Solution:}} Job arrivals represent rare events, thus the time $T$ between them is Exponential with rate 3 jobs/hour i.e. $\lambda=3$.\\[.1in]
-% \no \h (a) Thus $E(T)=1/\lambda= 1/3$ hours or $20$ minutes.\\[.1in]
-% \no \h (b) Using the same units (hours) we have 5 min.=1/12 hours. Thus we compute 
-% $$P(T<1/12) = Exp_{3}(1/12)=1-e^{-3 \cdot\frac{1}{12}}=1-e^{-\frac{1}{4}}=0.2212$$
+
 %     
 % \foilhead[-.7in]{\textcolor{blue}{Exponential Distribution: Example}}\vspace{.01in}    
 % \no {\textcolor{red}{Note: The following example will be continued throughout the remainder of this class.}}\\[.1in]
