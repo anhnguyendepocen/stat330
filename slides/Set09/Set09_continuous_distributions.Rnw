@@ -49,58 +49,73 @@ Note: the image is always uncountably infinite.
 \begin{frame}
 \frametitle{Uniform distribution}
 
-%  \foilhead[-.75in]{\textcolor{blue}{Some special continuous density functions}}
-% \no 	 {\textcolor{magenta}{Uniform Density}}\\[.1in]
-% \no  One of the most basic continuous density is the {\it 
-% uniform density}.\\[.1in] 
-% \no 	 {\textcolor{magenta}{The pdf is:}\\[-.2in]
-% \[
-% f(x) = \left \{ 
-% \begin{array}{cl}
-%     \frac{1}{b-a} & \text{ if } a < x < b \\
-%     0 & \text{ otherwise}
-% \end{array} \right .
-% \]
-% \no We say that $X \sim U(a,b)$ i.e., the random variable $X$ is distributed as the \emph{Uniform distribution with parameters $a$ and $b$}\\[.15in]
-% %
-% \centerline{\includegraphics[scale=0.6]{uniform.pdf}}
-% %
-% \foilhead[-.75in]{\textcolor{blue}{Properties of the Uniform distribution}}
-% \no The cumulative distribution function $F_{X}$ is
-% \vspace*{-.3in}
-% 
-% \[
-% U_{a,b}(x) := F_{X}(x) = \left \{ 
-% \begin{array}{cl}
-%     0 & \text{ if } x \le a \\
-%     \frac{x-a}{b-a} & \text{ if } a < x < b \\
-%     1 & \text{ if } x \ge b.
-% \end{array} \right .
-% \]
-% \vspace*{-.25in}
-% 
-% \no We now compute the expected value and variance of a 
-%  a uniform distribution on $(a,b)$.
-% \begin{eqnarray*}
-%     E[X] &=& \int_{a}^{b} x \frac{1}{b-a} dx = \frac{1}{b-a} 
-%     \frac{1}{2} x^{2}|_{a}^{b} = \\
-%     &=& \frac{b^{2}-a^{2}}{2(b-a)} = 
-%     \underline{\frac{1}{2}(a+b)}.  \\
-%     Var[X] &=& \int_{a}^{b}(x - \frac{a+b}{2})^{2} \frac{1}{b-a} dx = 
-%     \ldots = \underline{\frac{(b-a)^{2}}{12}}.
-% \end{eqnarray*}
-% \foilhead[-.75in]{\textcolor{blue}{Uniform distribution: Example}}
-% \no    {\textcolor{cyan}{The(pseudo) random number generator on my calculator is supposed to create 
-% realizations of $U(0,1)$ random variables.}\\[.15in]
-% \no Define $U$ as the next random number the calculator produces.\\[.15in]
-% \no What is the probability, that the next number is larger than 0.85?\\[.15in]
-% \no To answer that, we will compute $P( U \ge 0.85)$.\\[.15in]
-% \no We know the density function of $U$: $f_{U}(u) = \frac{1}{1-0} = 1$.\\[.1in]
-% \no Therefore
-% \[
-% P(U \ge 0.85) = \int_{0.85}^{1}1 du = 1 - 0.85 = 0.15.
-% \]
+One of the most basic continuous densities is the \alert{uniform} density. \pause
+The pdf is
+\[
+f(x) = \left \{ 
+\begin{array}{cl}
+    \frac{1}{b-a} & \text{ if } a < x < b \\
+    0 & \text{ otherwise}
+\end{array} \right .
+\]
+\pause
 
+We use $X \sim U(a,b)$ to denote the random variable $X$ is distributed as the \emph{uniform distribution with parameters $a$ and $b$}. \pause
+
+<<fig.width=11>>=
+curve(dunif, -1, 2, 10001, axes=F, frame=TRUE, ylab="f(x)")
+axis(1, c(0,1), c("a","b"))
+axis(2, 1, "1/(b-a)")
+@
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Uniform properties}
+
+The cumulative distribution function is 
+\[ 
+F(x) = \left\{ \begin{array}{ll} 0 & x<a \\ \frac{x}{b-a} & a\le x \le b \\ 1 & x>b \end{array} \right.
+\]
+\pause
+i.e. it's a straight line. 
+
+\vspace{0.1in} \pause
+
+The expectation is 
+\[ 
+E[X] = \int_x x \, f(x) dx = \int_a^b  x \frac{1}{b-a} dx = \frac{x^2}{b-a} |_a^b = \frac{b^2}{b-a} - \frac{a^2}{b-a} = \frac{a+b}{2}.
+\]
+The variance is 
+\[ 
+V[X] = \int_x (x-\mu)^2 f(x) dx = \int_a^b \left( x - \frac{a+b}{2} \right)^2 \frac{1}{b-a} dx = \cdots = \frac{(b-a)^{2}}{12}.
+\]
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Pseudo-random number generators}
+
+Pseudo-random number generators are typically designed to produce sequences of \alert{independent} Unif(0,1) random variables. 
+
+\vspace{0.1in} \pause
+
+What is the probability the next pseudo-random number is larger than 0.85? 
+
+\vspace{0.1in} \pause
+
+Let $X$ be the value of the next pseudo-random number \pause and assume $X\sim Unif(0,1)$. \pause
+\[ 
+P(X< 0.85)  = 1-P(X\le 0.85) = 1- \frac{0.85}{1-0} = 0.15.
+\]
+\pause
+
+Do these pseudo-random numbers appear independent?
+
+<<fig.width=20>>=
+plot(runif(1e3), pch=19, xlab="i", ylab=expression(X[i]))
+@
 
 \end{frame}
 
