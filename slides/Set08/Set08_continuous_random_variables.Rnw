@@ -239,6 +239,52 @@ var(x); 3/80
 
 \end{frame}
 
+
+\section{Comparison of discrete and continuous random variables}
+\begin{frame}
+\frametitle{Comparison of discrete and continuous random variables}
+
+For simplicity here and later, we drop the subscript $X$. \pause
+
+
+{\scriptsize
+\begin{center}
+\begin{tabular}{lcc}
+& discrete & continuous \pause \\
+\hline
+image & finite or countable & uncountable \pause \\ \\
+pmf &  $p(x) = P(X=x)$ & \pause \\ \\
+pdf && $p(x) = f(x) = F'(x)$ \pause \\ \\
+cdf & 
+\[\begin{array}{rl}F(x) &= P(X\le x) \\
+                        &= \sum_{t\le x} p(x)\end{array} \] & 
+\[\begin{array}{rl}F(x) &= P(X\le x) \\
+                        &= \int_{-\infty}^x p(t) dt\end{array} \]
+\pause \\ \\
+expected value & $E[h(X)] = \sum_x h(x) p(x)$ & $E[h(X)] = \int_x h(x) p(x)$ \pause \\ \\
+expectation & $\mu = E[h(X)] = \sum_x x \, p(x)$ & $\mu = E[h(X)] = \int_x x \, p(x)$ \pause \\ \\
+variance & 
+\[ \begin{array}{rl} Var[X] &= E[(X-\mu)^2] \\
+                            &= \sum_x (x-\mu)^2 p(x)
+\end{array} \] & 
+\[ \begin{array}{rl}
+Var[X] &= E[(X-\mu)^2] \\
+       &= \int_x (x-\mu)^2 p(x)dx
+\end{array} \] \\ \\
+\hline
+\end{tabular}
+\end{center}
+}
+
+\vspace{0.05in}\pause
+
+Note: we replace summations with integrals when using continuous as opposed to discrete random variables
+
+
+
+\end{frame}
+
+
 % \foilhead[-.75in]{\textcolor{blue}{Example: pdf}}}\vspace{1mm}
 % \no {\textcolor{magenta}{Let $Y$ be the time until the first major failure of a new disk 
 %     drive.}}\\[.1in]
