@@ -256,21 +256,21 @@ image & finite or countable & uncountable \pause \\ \\
 pmf &  $p(x) = P(X=x)$ & \pause \\ \\
 pdf && $p(x) = f(x) = F'(x)$ \pause \\ \\
 cdf & 
-\[\begin{array}{rl}F(x) &= P(X\le x) \\
-                        &= \sum_{t\le x} p(x)\end{array} \] & 
-\[\begin{array}{rl}F(x) &= P(X\le x) \\
-                        &= \int_{-\infty}^x p(t) dt\end{array} \]
+$\begin{array}{rl}F(x) &= P(X\le x) \\
+                        &= \sum_{t\le x} p(x)\end{array} $ & 
+$\begin{array}{rl}F(x) &= P(X\le x) \\
+                        &= \int_{-\infty}^x p(t) dt\end{array} $
 \pause \\ \\
-expected value & $E[h(X)] = \sum_x h(x) p(x)$ & $E[h(X)] = \int_x h(x) p(x)$ \pause \\ \\
-expectation & $\mu = E[h(X)] = \sum_x x \, p(x)$ & $\mu = E[h(X)] = \int_x x \, p(x)$ \pause \\ \\
+expected value & $E[h(X)] = \sum_x h(x) p(x)$ & $E[h(X)] = \int_x h(x) p(x) dx$ \pause \\ \\
+expectation & $\mu = E[X] = \sum_x x \, p(x)$ & $\mu = E[X] = \int_x x \, p(x) dx$ \pause \\ \\
 variance & 
-\[ \begin{array}{rl} Var[X] &= E[(X-\mu)^2] \\
+$ \begin{array}{rl} Var[X] &= E[(X-\mu)^2] \\
                             &= \sum_x (x-\mu)^2 p(x)
-\end{array} \] & 
-\[ \begin{array}{rl}
+\end{array} $ & 
+$ \begin{array}{rl}
 Var[X] &= E[(X-\mu)^2] \\
-       &= \int_x (x-\mu)^2 p(x)dx
-\end{array} \] \\ \\
+       &= \int_x (x-\mu)^2 p(x) dx
+\end{array} $ \\ \\
 \hline
 \end{tabular}
 \end{center}
@@ -279,9 +279,6 @@ Var[X] &= E[(X-\mu)^2] \\
 \vspace{0.05in}\pause
 
 Note: we replace summations with integrals when using continuous as opposed to discrete random variables
-
-
-
 \end{frame}
 
 
