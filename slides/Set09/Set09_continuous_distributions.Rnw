@@ -272,7 +272,9 @@ If we have no hits in the first minute, what is the probability we will have a h
 
 We have 
 \[ \begin{array}{rl}
-P(Y<2|Y\ge 1) &= 1- P(Y\ge 2|Y\ge 1) = 1-P(Y\ge 1) = P(Y<1) = 1-e^{-\lambda}
+P(Y<2|Y\ge 1) &= 1- P(Y\ge 2|Y\ge 1) \\
+&= 1-P(Y\ge 1) = P(Y<1) \\
+&= 1-e^{-\lambda}
 \end{array} \]
 \end{frame}
 
@@ -286,7 +288,7 @@ Now suppose, we ask how long it will take until we observe two hits. \pause
 \item Let $X_1$ be the time until the first hit and assume $X_1\sim Exp(\lambda)$. \pause 
 \item Let $X_2$ be the time after the first hit until the second hit and, due to the memoryless property of the exponential distribution, $X_2 \sim Exp(\lambda)$ independent of $X_1$. \pause
 \end{itemize}
-Now we are interested 
+Now we are interested in
 \[ Y = X_1 + X_2. \]
 \pause
 More generally, if we ask how long it will take until we observe $\alpha$ hits, we are interested in 
@@ -305,17 +307,17 @@ where $X_i\ind Exp(\lambda)$.
 The sum of $\alpha$ independent exponential distributions with rate $\lambda$ is a gamma random variable. \pause
 A random variable $X$ has gamma density if 
 \[ 
-f(x) = \left\{ \begin{array}{ll} \frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x} & x>0 \\
-0 & mbox{otherwise} \end{array} \right.
+f(x) = \left\{ \begin{array}{ll} \frac{\lambda^\alpha}{\mGamma(\alpha)}x^{\alpha-1}e^{-\lambda x} & x>0 \\
+0 & \mbox{otherwise} \end{array} \right.
 \]
 with shape parameter $\alpha>0$ and rate parameter $\lambda>0$ 
 \pause
 where 
-\[ \Gamma(\alpha) = \int_0^\infty x^{\alpha-1}e^{-\alpha} dx \]
+\[ \mGamma(\alpha) = \int_0^\infty x^{\alpha-1}e^{-\alpha} dx \]
 \pause 
 and when $\alpha$ is a positive integer
 \[ 
-\Gamma(\alpha) = (\alpha-1)!
+\mGamma(\alpha) = (\alpha-1)!
 \]
 
 \end{frame}
@@ -329,8 +331,8 @@ The mean and variance can be computed using the sum of $\alpha$ exponentials. \p
 
 \[ \begin{array}{rl}
 E[X] &= \frac{\alpha}{\lambda}  \\
-Var[X] &= \frac{\alpha}{\lambda^2}  \\
-F(x) &= \int_0^x f(t)dt=\frac{\lambda^\alpha}{\Gamma(\alpha)}\int_0^x t^{\alpha-1}e^{-\lambda t} dt 
+Var[X] &= \frac{\alpha}{\lambda^2}  \pause \\ \\
+F(x) &= \int_0^x f(t)dt=\frac{\lambda^\alpha}{\mGamma(\alpha)}\int_0^x t^{\alpha-1}e^{-\lambda t} dt 
 \end{array} \]
 \pause
 Although the gamma distribution was motivated by the sum of $\alpha$ exponentials, there is no requirement for $\alpha$ to actually be an integer. \pause
