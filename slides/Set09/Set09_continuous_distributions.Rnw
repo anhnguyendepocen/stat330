@@ -195,7 +195,7 @@ P(T<1/12) = 1-e^{-3\times \frac{1}{12}} = 1-e^{-\frac{1}{4}} = 0.22
 \]
 or, in R,
 <<echo=TRUE>>=
-pexp(1/12,3)
+pexp(1/12, rate=3)
 @
 \end{enumerate}
 \end{frame}
@@ -390,7 +390,105 @@ round(qgamma(c(0.025,.975), shape=alpha, rate=lambda),1)
 \subsection{Normal}
 \begin{frame}
 \frametitle{Normal distribution}
+
+The \alert{normal (or Gaussian) density} is a ``bell-shaped'' curve. \pause
+The density has two parameters: $\mu$ and $\sigma^{2}$ and is
+\[
+f(x) = \frac{1}{\sqrt{2 \pi \sigma^{2}}} 
+e^{-(x-\mu)^{2}/2 \sigma^{2}} \qquad \text{ for } -\infty<x<\infty
+\]
+\pause
+The expected value and variance of a normal distributed r.v. $X$ are:
+\[ \begin{array}{rll}
+E[X] &= \int_{-\infty}^{\infty} x\, f(x) dx               = \ldots &= \mu \\
+Var[X] &= \int_{-\infty}^{\infty} (x - \mu)^{2}\, f(x) dx = \ldots &= \sigma^{2}. \\
+\end{array} \]
+\pause
+Thus, the parameters $\mu$ and $\sigma^{2}$ are actually the mean and the variance of the $N(\mu,\sigma^2)$ distribution. 
+
+\vspace{0.1in} \pause
+
+There is no closed form cumulative distribution function for a normal random variable. 
+
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Example probability density functions}
+
+<<>>=
+d = data.frame(mu=c(0,0,1,1), sigma=c(1,2,1,2))
+d$legend_name = paste("mu=", d$mu, ", sigma=", d$sigma)
+plot(0,0, type="n", xlim=c(-4,4), ylim=c(0,0.5))
+for (i in 1:nrow(d)) {
+	mu = d$mu[i]; sigma = d$sigma[i]
+	curve(dnorm(x, mu, sigma), add=TRUE, lty=mu+1, col = sigma)
+}
+legend("topleft", legend = d$legend_name,
+			 lty=d$mu+1, col = d$sigma)
+@
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Properties of the normal distribution}
+
+Let $Z\sim N(0,1)$, i.e. a \alert{standard normal} random variable. \pause
+Then for constants $m$ and $s$ 
+\[ 
+X = m+sZ \sim N(m,s^2).
+\]
+alternatively
+\[ 
+Z = \frac{X-m}{s}
+\]
+which is called \alert{standardizing}.
+
+\vspace{0.1in} \pause
+
+Let $X_1,\ldots,X_n \ind N(m_n,s_n^2)$. Then 
+\[
+Z = \frac{X_i-m_i}{s_i} \sim N(0,1) \quad\mbox{for all } i
+\]
+and 
+\[ 
+Y = \sum_{i=1}^n X_i \sim N\left(\sum_{i=1}^n m_n, \sum_{i=1}^n s_n^2 \right).
+\]
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Calculating the standard normal cumulative distribution function}
+
+If $Z\sim N(0,1)$, what is $P(Z\le 1.5)$? \pause 
+Although the cdf does not have a closed form, very good approximations exist and are available as tables or in software, \pause e.g.
+<<echo=TRUE>>=
+pnorm(1.5) # default is mean=0, sd=1
+@
+A standard normal random variable is often denoted $Z$, the standard normal cdf is often denoted $\mPhi(z)$, and tables are called \emph{standard normal tables} or \emph{Z tables}. \pause
+Sometimes these tables only have positive $z$ values, but we can still compute $\mPhi(z)$ for any $z$ since the normal distribution is \alert{symmetric}, i.e. $\mPhi(-z)=1-\mPhi(z)$. \pause
+Finally, these tables usually only extend to $|z|<4$, but that's okay since $P(Z<-4) = P(Z>4) \approx 0.00003$. 
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Calculating any normal cumulative distribution function}
+If $X\sim N(15,2)$ what is $P(X>18)$? \pause
+\[ \begin{array}{rl}
+P(X>18) &= 1-P(X\le 18) \\
+&= 1-P\left(\frac{X-15}{2} \le \frac{18-15}{2} \right) \\
+&= 1-P(Z\le 1.5) = 0.067
+\end{array} \]
+
+<<echo=TRUE>>=
+1-pnorm(18, mean=15, sd=2)
+@
+
+\end{frame}
+
 
 \end{document}   
 
