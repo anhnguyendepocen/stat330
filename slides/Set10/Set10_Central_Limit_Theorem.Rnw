@@ -1,139 +1,236 @@
-\documentclass[20pt,landscape]{foils}
-\usepackage{amsmath, amssymb, amsthm}
-\usepackage{amstext}
-\usepackage{amsgen}
-\usepackage{amsxtra}
-\usepackage{amsgen}
-\usepackage{amsthm}
-\usepackage{color}
-\usepackage{hyperref}
-%\usepackage{pause}
-\usepackage{graphicx}
-\usepackage{epsfig}
-%\usepackage{geometry}
-%\geometry{headsep=3ex,hscale=0.9}
-\newcommand{\bd}{\textbf}
-\newcommand{\no}{\noindent}
-\newcommand{\un}{\underline}
-\newcommand{\bi}{\begin{itemize}}
-\newcommand{\ei}{\end{itemize}}
-\newcommand{\be}{\begin{enumerate}}
-\newcommand{\ee}{\end{enumerate}}
-\newcommand{\bc}{\begin{center}}
-\newcommand{\ec}{\end{center}}
-\newcommand \h {\hspace*{.3in}}
-\newcommand{\bul}{\hspace*{.3in}{\textcolor{red}{$\bullet$ \ }}}
-\newcommand{\xbar}{\bar{x}}
-\rightheader{Stat 330 (Fall 2016): slide set 15}
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set10 - Central Limit Theorem}
 
 \begin{document}
-\LogoOff
 
-\foilhead[1.3in]{}
-\centerline{\LARGE \textcolor{blue}{Slide set 15}}
-\vspace{0.3in}
-\centerline{\large Stat 330 (Fall 2016)}
-\vspace{0.2in}
-\centerline{\tiny Last update: \today}
-\setcounter{page}{0}
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=7, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
 
-\foilhead[-.75in]{\textcolor{blue}{ Central Limit Theorem (CLT)}}
-\no {\textcolor{magenta}{Main Idea:}} {\textcolor{cyan}{Sums and averages of random variables from arbitrary distributions have approximate normal distributions for sufficiently large sample sizes.}}\\[.1in]
-\no Suppose $X_1,X_2,\ldots,X_n$ are iid random variables with 
-$$ E[X_i]=\mu \hspace*{.5in} Var[X_i]=\sigma^2, \qquad i=1,\ldots,n$$ 
-\no  Define 
-$$ \mbox{Sample Average:}\qquad \overline{X}_n=\frac{(X_1+X_2+\dots+X_n)}{n}$$
-$$\mbox{Sample Sum:}\qquad S_n=X_1+X_2+\dots+X_n$$
-\no For large $n$
-$$ \overline{X}_n \dot{\sim} N(\mu,\sigma^2/n)$$
-$$ S_n \dot{\sim} N(n\mu,n\sigma^2)$$
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+@
 
-\foilhead[-.75in]{\textcolor{blue}{ Central Limit Theorem (CLT) (cont'd)}}
-\no {\textcolor{magenta}{Use of CLT: }}  Calculate probabilities associated with averages or sums of iid random variable. these approximate distributional statements. For e.g.,\\[.1in]
-\no  \hspace*{.5in} $P(a<\overline{X}_n<b)  \approx P(a<X<b)$= $\Phi\left(\frac{b-\mu}{\sigma/\sqrt{n}}\right)-\Phi\left(\frac{a-\mu}{\sigma/\sqrt{n}}\right)$\\[.1in] 
-\no Recall: $\Phi$ is the cdf of the standard normal distribution i.e., $Z \sim N(0,\,1)$\\[.1in]
-\no {\textcolor{magenta}{Some Example Applications of the Central Limit Theorem}}\\[.1in]
-\no {\textcolor{magenta}{Example 1:}} {\textcolor{cyan}{The time I spend waiting for the bus in a day has a Uniform distribution between 2 minutes and 5 minutes.}}\\[.1in]
-\no (a) {\textcolor{cyan} {How much time do I expect to spent waiting for the bus in one month (30 days)?}}\\[.1in]
-\no  \hspace*{1in} Let $X_i=$ time I wait for the bus on day $i$. \\[.1in]
-\no \hspace*{.5in} Then $X_1,X_2,\ldots X_{30} \sim iid\ U(2,5)$ and it follows that\\[.1in]
-\no  $E[X_i]=(2+5)/2=3.5\,min,\ Var(X_i)=(5-2)^2/12=9/12=.75\,min.^2$
+<<set_seed>>=
+set.seed(2)
+@
 
-\foilhead[-.75in]{\textcolor{blue}{ CLT Examples (cont'd)}}
-\no {\textcolor{magenta} {Let $T\equiv$ random variable representing the total waiting time for a month.}}\\[.1in] 
-\no $T$ is the sum of 30 iid random variables: $T=X_1+X_2+\ldots +X_{30} $\\[.1in]
-\no $E[T]= \sum_{i=1}^{30} X_i=30\mu$ where $\mu=E[X_i]=3.5$.\\[.1in] 
-Thus the expected waiting time for a month $E[T]=30\times 3.5=105 \,min.$\\[.15in]
-\no (b) {\textcolor{cyan} {Approximately, find the probability that I spend more than 2 hours waiting for a bus in a month.}}\\[.1in]
-\no From the CLT, we have $T\dot{\sim} N(30\times 3.5, 30\times 0.75) \quad \mbox{i.e. } {\textcolor{magenta} {T\dot{\sim} N(105, 22.5)}}$\\[.1in]
-\no We need the probability that $T$ is greater than 120 minutes, i.e., $P(T>120)$
-\begin{eqnarray*}
-P(T>120) & = & 1 -P(T \le 120)\\
- &\approx & 1-P(Z \le \frac{(120-105)}{\sqrt{22.5}})\qquad \mbox{by CLT}\\
- &=& 1- \Phi(3.16)=1-.9992112=.00079
-\end{eqnarray*}
-\foilhead[-.75in]{\textcolor{blue}{ CLT Example from Baron}}
-\no  {\textcolor{magenta} {Example 4.13 (Allocation of Disk Space)}} {\textcolor{cyan} { A disk has free space of 330 megabytes. Is it likely to be sufficient for 300 independent images, if each image has expected size of 1 megabyte with a standard deviation of 0.5 megabytes?}}\\[.1in]
-\no We have $n=300, \mu=1$ and $\sigma=0.5$. The number of images $n$ is large, so the CLT applies. Then
-\begin{eqnarray*}
-P(\text{sufficient space})&=& P(S_n\le 330))\\
- & = & P\left(\frac{S_n-n\mu}{\sigma \sqrt{n}}\le \frac {330-(300)(1)}{0.5\sqrt{300}})\right)\\
- &\approx &\Phi(3.46)=.9997
-\end{eqnarray*} 
-Since this probability is very high, the available disk space is very likely to be sufficient.
-\foilhead[-.75in]{\textcolor{blue}{ CLT Big Example}}
-\no  {\textcolor{cyan} {An astronomer wants to measure the distance, $d$, from the observatory to a star. Due to the variation of atmospheric conditions and imperfections in the measurement method, a single measurement will not produce the exact distance $d$. The astronomer takes $n$ measurements of the distance and uses  the sample average  to estimate the true distance. From past records of these measurements the astronomer knows the variance of a single measurement is $4\ \mbox{parsec}^2$. How many measurement should the astronomer make so that the chance that his estimate differs by $d$ by more than .5 parsecs is at most .05?}}\\[.1in]
-\no \hspace*{.5in} Let $X_i$ be the $i^{th}$ measurement. The astronomer assumes that \\[.1in]
-\no \hspace*{1in} $ X_1,X_2,\ldots X_n \sim iid \mbox{ with } E[X_i]=d \mbox{ and } Var[X_i]=4$\\[.1in]
-\no \hspace*{2in}The estimate of $d$ is $\overline{X}_n=\frac{(X_1+X_2+\dots+X_n)}{n}$\\[.1in]
-\no \hspace*{.5in} We want to find the number of measurements $n$ so that\\[.1in]
-\no  \hspace*{3in} $ P(|\overline{X}_n-d|>.5)\le .05$
 
-\foilhead[-.75in]{\textcolor{blue}{ CLT Big Example (cont'd)}}
-\no We know that \\[.1in]
-\no \hspace*{1in} $P(|\overline{X}_n-d|>.5) =P(\overline{X}_n-d>.5)+P(\overline{X}_n-d<-.5)$\\[.1in]
-\no We use the CLT to approximate each of the probabilities on the right. From the CLT we have that\\[.1in]
-\no \hspace*{3in} $ \overline{X}_n \dot{\sim} N(d,4/n)$\\[.1in]
-Thus 
-\begin{eqnarray*}
- P(|\overline{X}_n-d|>.5) &= &P(\overline{X}_n-d>.5)+P(\overline{X}_n-d<-.5)\\
- &=& P\left(\frac{\overline{X}_n-d}{\sqrt{4/n}}>\frac{.5}{\sqrt{4/n}}\right)+
- P\left(\frac{\overline{X}_n-d}{\sqrt{4/n}}<\frac{-.5}{\sqrt{4/n}}\right)\\
- & \approx & P\left(Z>\frac{.5}{\sqrt{4/n}}\right)+P\left(Z<\frac{-.5}{\sqrt{4/n}}\right)
-\end{eqnarray*} 
-\foilhead[-.75in]{\textcolor{blue}{ CLT Big Example (cont'd)}}
-\begin{eqnarray*} 
- &=& 1- \Phi(\sqrt{n}/4)+\Phi(-\sqrt{n}/4)\\
- &=& 2(1-\Phi(\sqrt{n}/4))
-\end{eqnarray*}
-\no \bul We need to find an integer $n$ so that $2(1-\Phi(\sqrt{n}/4))$ is just less than or equal to $.05$.\\[.1in]
-\no \bul We will set $2(1-\Phi(\sqrt{n^*}/4))=.05$, solve for $n^*$ and take the required number of 
-measurements to be the $\lceil n^* \rceil$.\\[.1in]
-\no \bul Observe that $2(1-\Phi(\sqrt{n}/4))=.05$ implies that $\Phi(\sqrt{n}/4))=.975$.\\[.1in] 
-\no \bul Using the Normal cdf tables, this gives $\sqrt{n}/4=1.96$; thus $n^*=61.47$. \\[.1in]
-\no \bul Thus the astronomer must take at least 62 measurements to have the accuracy specified above.
+\begin{frame}
+\frametitle{Central Limit Theorem (CLT)}
 
-\foilhead[-.8in]{\textcolor{blue}{Normal approximation to the Binomial}}
-\no  {\textcolor{magenta} {For large $n$, the binomial distribution $B_{n, p}$ is 
-	approximately normal $N_{np, np(1-p)}$. Why?}}\\[.1in]	
-\no Let $Y$ be a variable with a $B_{n,p}$ distribution. We know, that $Y$ is the number of successes in $n$ independent Bernoulli experiments with $P(\text{success})=p$.\\[.1in]
-\no Write $Y$ as the sum of $n\ iid$ Bernoulli variables each with $\mu=E(X_i)=p$ and $\sigma^2=Var(X_i)=p(1-p)$: $ Y= X_{1} + X_{2} + \ldots + X_{n}$\\[.1in]
-\no  {\textcolor{cyan} {Applying the CLT result for $S_n$, we have that  $ Y \dot{\sim} N(n \mu ,n \sigma^2)$ where $\mu=p$ and $\sigma^2=p(1-p)$. That is, $ Y \dot{\sim} N(np ,np(1-p)).$}}\\[.1in]
-\no Use this approximation only when $np$	and $n(1-p)$ are both $>5$; the approximation is  pretty good when $np$	and $n(1-p)$ are both $>20$.\\[.1in]
-\no When either of  $np$	or $n(1-p)$ are $<20$, a {\textcolor{magenta} {continuity correction} is needed (see Baron p.94).
+\alert{Main Idea}: Sums and averages of random variables from arbitrary distributions have approximate normal distributions for sufficiently large sample sizes.
+
+\pause
+
+\begin{theorem}[Central Limit Theorem]
+Suppose $X_1,X_2,\ldots$ are iid random variables with 
+\[ E[X_i]=\mu \quad Var[X_i]=\sigma^2. \]
+\pause 
+Define 
+\[ \begin{array}{rl}
+\text{Sample Sum: } S_n &=X_1+X_2+\dots+X_n \\
+\text{Sample Average: } \overline{X}_n&=S_n/n.
+\end{array} \] 
+Then 
+\[ \begin{array}{rl}
+\overline{X}_n &\stackrel{d}{\to} N(\mu,\sigma^2/n) \\
+S_n &\stackrel{d}{\to} N(n\mu,n\sigma^2) 
+\end{array} \]
+as $n\to \infty$.
+\end{theorem}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Customer prize example}
+
+Recall the company who will give out a prize to the 1,000th customer where customers arrive at a rate of 150/day. \pause
+Let $X_i$ between customer $i-1$ and $i$ (where customer $0$ has time 0) and assume $X_i\ind Exp(\lambda)$ with $\lambda=150$. \pause
+Then 
+\[
+Y =X_1+\cdots+X_{n} = \sum_{i=1}^{n} X_i
+\]
+is the time for the $n$th customer. \pause 
+If $n$ is large, we can use the CLT to say 
+\[ 
+Y \dot{\sim} N(n/\lambda, n/\lambda^2).
+\]
+\pause
+A 95\% interval for the arrival of the 1,000 customer is approximately
+<<gamma_example_data, echo=TRUE>>=
+n = 1000
+lambda = 150
+# normal distribution in R is parameterized by the standard deviation
+qnorm(c(.025,.975), mean=n/lambda, sd=sqrt(n/lambda^2)) %>% round(1) 
+@
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Normal approximation to a gamma}
+
+Normal approximation to the gamma works when there is little probability of negative values in the normal approximation, e.g. 
+<<dependson="gamma_example_data", echo=TRUE>>=
+pnorm(0,mean = n/lambda, sd = sqrt(n/lambda^2))
+@
+
+<<fig.width=9>>=
+curve(dnorm(x, mean=n/lambda, sd=sqrt(n/lambda^2)), 5, 8,
+			xlab="days",ylab="density")
+curve(dgamma(x, shape=n, rate=lambda), add=TRUE, col = "red", lty=2)
+legend("topright", c("normal","gamma"), lty=1:2, col=c("black","red"))
+@
+
+\end{frame}
+
+
+\subsection{Normal approximation to a binomial}
+\begin{frame}[fragile]
+\frametitle{Normal approximation to a binomial}
+
+Recall that a binomial distribution can be considered as a sum of iid Bernouli random variables. \pause
+Thus, if 
+\[ 
+Y \sim Bin(n,p) 
+\]
+\pause 
+then, for large $n$, 
+\[ 
+Y \dot{\sim} \pause N(np, np(1-p)).
+\]
+
+One issue is that the binomial is discrete whereas the normal is continuous. \pause
+Thus, the approximation 
+
+\end{frame}
+
+
+
+
+
+\begin{frame}
+\frametitle{Roulette example}
+
+A European roulette wheel has 39 slots: one green, 19 black, and 19 red. \pause
+If I play black everytime, what is the probability that I will have won more than I lost after 99 spins of the wheel? 
+
+\vspace{0.1in} \pause
+
+Let $Y$ indicate the total number of wins \pause and assume $Y\sim Bin(n,p)$ with $n=99$ and $p=19/39$. \pause
+The desired probability is $P(Y\ge 50)$. \pause
+Then 
+\[ 
+P(Y\ge 50) = 1- P(Y\le 49) = \sum_{y=0}^{49} {n\choose y} p^y (1-p)^{n-y} \approx P\left(Z\ge \frac{50-np}{sqrt{np(1-p)}}   \right)
+\]
+\pause
+<<>>=
+n = 99
+p = 19/39
+1-pbinom(49, size=n, prob=p)
+1-pnorm(49, mean=n*p, sd= sqrt(n*p*(1-p)))
+1-pnorm(49+0.5, mean=n*p, sd= sqrt(n*p*(1-p))) # with continuity correction
+@
+
+<<>>=
+@
+
+\end{frame}
+
+
+
+% \foilhead[-.75in]{\textcolor{blue}{ Central Limit Theorem (CLT) (cont'd)}}
+% \no {\textcolor{magenta}{Use of CLT: }}  Calculate probabilities associated with averages or sums of iid random variable. these approximate distributional statements. For e.g.,\\[.1in]
+% \no  \hspace*{.5in} $P(a<\overline{X}_n<b)  \approx P(a<X<b)$= $\Phi\left(\frac{b-\mu}{\sigma/\sqrt{n}}\right)-\Phi\left(\frac{a-\mu}{\sigma/\sqrt{n}}\right)$\\[.1in] 
+% \no Recall: $\Phi$ is the cdf of the standard normal distribution i.e., $Z \sim N(0,\,1)$\\[.1in]
+% \no {\textcolor{magenta}{Some Example Applications of the Central Limit Theorem}}\\[.1in]
+% \no {\textcolor{magenta}{Example 1:}} {\textcolor{cyan}{The time I spend waiting for the bus in a day has a Uniform distribution between 2 minutes and 5 minutes.}}\\[.1in]
+% \no (a) {\textcolor{cyan} {How much time do I expect to spent waiting for the bus in one month (30 days)?}}\\[.1in]
+% \no  \hspace*{1in} Let $X_i=$ time I wait for the bus on day $i$. \\[.1in]
+% \no \hspace*{.5in} Then $X_1,X_2,\ldots X_{30} \sim iid\ U(2,5)$ and it follows that\\[.1in]
+% \no  $E[X_i]=(2+5)/2=3.5\,min,\ Var(X_i)=(5-2)^2/12=9/12=.75\,min.^2$
+% 
+% \foilhead[-.75in]{\textcolor{blue}{ CLT Examples (cont'd)}}
+% \no {\textcolor{magenta} {Let $T\equiv$ random variable representing the total waiting time for a month.}}\\[.1in] 
+% \no $T$ is the sum of 30 iid random variables: $T=X_1+X_2+\ldots +X_{30} $\\[.1in]
+% \no $E[T]= \sum_{i=1}^{30} X_i=30\mu$ where $\mu=E[X_i]=3.5$.\\[.1in] 
+% Thus the expected waiting time for a month $E[T]=30\times 3.5=105 \,min.$\\[.15in]
+% \no (b) {\textcolor{cyan} {Approximately, find the probability that I spend more than 2 hours waiting for a bus in a month.}}\\[.1in]
+% \no From the CLT, we have $T\dot{\sim} N(30\times 3.5, 30\times 0.75) \quad \mbox{i.e. } {\textcolor{magenta} {T\dot{\sim} N(105, 22.5)}}$\\[.1in]
+% \no We need the probability that $T$ is greater than 120 minutes, i.e., $P(T>120)$
+% \begin{eqnarray*}
+% P(T>120) & = & 1 -P(T \le 120)\\
+%  &\approx & 1-P(Z \le \frac{(120-105)}{\sqrt{22.5}})\qquad \mbox{by CLT}\\
+%  &=& 1- \Phi(3.16)=1-.9992112=.00079
+% \end{eqnarray*}
+% \foilhead[-.75in]{\textcolor{blue}{ CLT Example from Baron}}
+% \no  {\textcolor{magenta} {Example 4.13 (Allocation of Disk Space)}} {\textcolor{cyan} { A disk has free space of 330 megabytes. Is it likely to be sufficient for 300 independent images, if each image has expected size of 1 megabyte with a standard deviation of 0.5 megabytes?}}\\[.1in]
+% \no We have $n=300, \mu=1$ and $\sigma=0.5$. The number of images $n$ is large, so the CLT applies. Then
+% \begin{eqnarray*}
+% P(\text{sufficient space})&=& P(S_n\le 330))\\
+%  & = & P\left(\frac{S_n-n\mu}{\sigma \sqrt{n}}\le \frac {330-(300)(1)}{0.5\sqrt{300}})\right)\\
+%  &\approx &\Phi(3.46)=.9997
+% \end{eqnarray*} 
+% Since this probability is very high, the available disk space is very likely to be sufficient.
+% \foilhead[-.75in]{\textcolor{blue}{ CLT Big Example}}
+% \no  {\textcolor{cyan} {An astronomer wants to measure the distance, $d$, from the observatory to a star. Due to the variation of atmospheric conditions and imperfections in the measurement method, a single measurement will not produce the exact distance $d$. The astronomer takes $n$ measurements of the distance and uses  the sample average  to estimate the true distance. From past records of these measurements the astronomer knows the variance of a single measurement is $4\ \mbox{parsec}^2$. How many measurement should the astronomer make so that the chance that his estimate differs by $d$ by more than .5 parsecs is at most .05?}}\\[.1in]
+% \no \hspace*{.5in} Let $X_i$ be the $i^{th}$ measurement. The astronomer assumes that \\[.1in]
+% \no \hspace*{1in} $ X_1,X_2,\ldots X_n \sim iid \mbox{ with } E[X_i]=d \mbox{ and } Var[X_i]=4$\\[.1in]
+% \no \hspace*{2in}The estimate of $d$ is $\overline{X}_n=\frac{(X_1+X_2+\dots+X_n)}{n}$\\[.1in]
+% \no \hspace*{.5in} We want to find the number of measurements $n$ so that\\[.1in]
+% \no  \hspace*{3in} $ P(|\overline{X}_n-d|>.5)\le .05$
+% 
+% \foilhead[-.75in]{\textcolor{blue}{ CLT Big Example (cont'd)}}
+% \no We know that \\[.1in]
+% \no \hspace*{1in} $P(|\overline{X}_n-d|>.5) =P(\overline{X}_n-d>.5)+P(\overline{X}_n-d<-.5)$\\[.1in]
+% \no We use the CLT to approximate each of the probabilities on the right. From the CLT we have that\\[.1in]
+% \no \hspace*{3in} $ \overline{X}_n \dot{\sim} N(d,4/n)$\\[.1in]
+% Thus 
+% \begin{eqnarray*}
+%  P(|\overline{X}_n-d|>.5) &= &P(\overline{X}_n-d>.5)+P(\overline{X}_n-d<-.5)\\
+%  &=& P\left(\frac{\overline{X}_n-d}{\sqrt{4/n}}>\frac{.5}{\sqrt{4/n}}\right)+
+%  P\left(\frac{\overline{X}_n-d}{\sqrt{4/n}}<\frac{-.5}{\sqrt{4/n}}\right)\\
+%  & \approx & P\left(Z>\frac{.5}{\sqrt{4/n}}\right)+P\left(Z<\frac{-.5}{\sqrt{4/n}}\right)
+% \end{eqnarray*} 
+% \foilhead[-.75in]{\textcolor{blue}{ CLT Big Example (cont'd)}}
+% \begin{eqnarray*} 
+%  &=& 1- \Phi(\sqrt{n}/4)+\Phi(-\sqrt{n}/4)\\
+%  &=& 2(1-\Phi(\sqrt{n}/4))
+% \end{eqnarray*}
+% \no \bul We need to find an integer $n$ so that $2(1-\Phi(\sqrt{n}/4))$ is just less than or equal to $.05$.\\[.1in]
+% \no \bul We will set $2(1-\Phi(\sqrt{n^*}/4))=.05$, solve for $n^*$ and take the required number of 
+% measurements to be the $\lceil n^* \rceil$.\\[.1in]
+% \no \bul Observe that $2(1-\Phi(\sqrt{n}/4))=.05$ implies that $\Phi(\sqrt{n}/4))=.975$.\\[.1in] 
+% \no \bul Using the Normal cdf tables, this gives $\sqrt{n}/4=1.96$; thus $n^*=61.47$. \\[.1in]
+% \no \bul Thus the astronomer must take at least 62 measurements to have the accuracy specified above.
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Normal approximation to the Binomial}}
+% \no  {\textcolor{magenta} {For large $n$, the binomial distribution $B_{n, p}$ is 
+% 	approximately normal $N_{np, np(1-p)}$. Why?}}\\[.1in]	
+% \no Let $Y$ be a variable with a $B_{n,p}$ distribution. We know, that $Y$ is the number of successes in $n$ independent Bernoulli experiments with $P(\text{success})=p$.\\[.1in]
+% \no Write $Y$ as the sum of $n\ iid$ Bernoulli variables each with $\mu=E(X_i)=p$ and $\sigma^2=Var(X_i)=p(1-p)$: $ Y= X_{1} + X_{2} + \ldots + X_{n}$\\[.1in]
+% \no  {\textcolor{cyan} {Applying the CLT result for $S_n$, we have that  $ Y \dot{\sim} N(n \mu ,n \sigma^2)$ where $\mu=p$ and $\sigma^2=p(1-p)$. That is, $ Y \dot{\sim} N(np ,np(1-p)).$}}\\[.1in]
+% \no Use this approximation only when $np$	and $n(1-p)$ are both $>5$; the approximation is  pretty good when $np$	and $n(1-p)$ are both $>20$.\\[.1in]
+% \no When either of  $np$	or $n(1-p)$ are $<20$, a {\textcolor{magenta} {continuity correction} is needed (see Baron p.94).
+
 \end{document}   
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-

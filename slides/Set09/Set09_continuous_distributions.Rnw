@@ -380,7 +380,7 @@ par(opar)
 
 <<gamma_example_interval, dependson="gamma_example_data", echo=TRUE>>=
 # 95% interval that contains the prize award time in days
-round(qgamma(c(0.025,.975), shape=alpha, rate=lambda),1)
+qgamma(c(0.025,.975), shape=alpha, rate=lambda) %>% round(1)
 @
 
 
