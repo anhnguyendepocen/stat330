@@ -30,6 +30,7 @@ set.seed(2)
 @
 
 
+\section{Central Limit Theorem}
 \begin{frame}
 \frametitle{Central Limit Theorem (CLT)}
 
@@ -119,17 +120,75 @@ then, for large $n$,
 \[ 
 Y \dot{\sim} \pause N(np, np(1-p)).
 \]
+\end{frame}
 
-One issue is that the binomial is discrete whereas the normal is continuous. \pause
-Thus, the approximation 
+
+
+\begin{frame}
+\frametitle{Continuity correction}
+
+When approximating a probability mass function with a normal probability density function, we can improve the approximation using the \alert{continuity correction}. \pause
+Let $X$ be a discrete random variable and $Y\sim N(E[X], Var[X])$. \pause
+The \alert{continuity correction} requires the \emph{addition or subtraction of 0.5} to the value used in the approximating probability calculation. 
+
+\vspace{0.2in} \pause
+
+Specifically
+\[ \begin{array}{rl}
+P(X\le c) &\approx P(Y\le c+0.5) \\
+P(X< c) &\approx P(Y< c-0.5) \\
+P(X\ge c) &\approx P(Y\ge c-0.5) \\
+P(X> c) &\approx P(Y > c+0.5) 
+\end{array} \]
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Continuity correction intuition}
+
+Let $X\sim Bin(10,0.5)$, $Y\sim N(5, 2.5)$, and we are trying to calculate $P(X\le 4)$. 
+
+<<>>=
+n = 10; p = 0.5
+x = 0:n
+
+d = data.frame(x=0:n) %>%
+	mutate(pmf = dbinom(x,n,p))
+
+normal_lessthan4 = data.frame(x = seq(min(x)-1, 4, length=101)) %>%
+	mutate(pdf = dnorm(x, n*p, sqrt(n*p*(1-p))))
+
+
+
+ggplot(d %>% mutate(color = x<=4), aes(x=x,y=pmf,fill=color)) + 
+	geom_bar(stat="identity", width=1, alpha=0.5) + 
+	stat_function(fun=dnorm, args=list(mean=n*p, sd=sqrt(n*p*(1-p)))) +
+#	geom_polygon(data=normal_lessthan4, aes(x,pdf)) + 
+	scale_x_continuous(breaks=x) + 
+	scale_fill_manual(values=c("gray","red")) +
+	guides(fill=FALSE) +
+	theme_bw()
+
+
+
+graphics:::plot.histogram(list(mid = x, 
+															 density = dbinom(x,n,p),
+															 breaks = c(x,n+1)-.5,
+															 counts = dbinom(x,n,p)),
+													main = "Probability mass/density functions",
+													xlab = "x",
+													ylab = "p(x)")
+curve(dnorm(x,mean=n*p, sd=sqrt(n*p*(1-p))), add=TRUE)
+
+@
 
 \end{frame}
 
 
 
 
-
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Roulette example}
 
 A European roulette wheel has 39 slots: one green, 19 black, and 19 red. \pause
@@ -140,11 +199,12 @@ If I play black everytime, what is the probability that I will have won more tha
 Let $Y$ indicate the total number of wins \pause and assume $Y\sim Bin(n,p)$ with $n=99$ and $p=19/39$. \pause
 The desired probability is $P(Y\ge 50)$. \pause
 Then 
-\[ 
-P(Y\ge 50) = 1- P(Y\le 49) = \sum_{y=0}^{49} {n\choose y} p^y (1-p)^{n-y} \approx P\left(Z\ge \frac{50-np}{sqrt{np(1-p)}}   \right)
-\]
+\[ \begin{array}{rl|}
+P(Y\ge 50) &= 1- P(Y\le 49) = \sum_{y=0}^{49} {n\choose y} p^y (1-p)^{n-y} \\
+&=\approx P\left(Z\ge \frac{50-np}{\sqrt{np(1-p)}}\right) 
+\end{array} \]
 \pause
-<<>>=
+<<echo=TRUE>>=
 n = 99
 p = 19/39
 1-pbinom(49, size=n, prob=p)
