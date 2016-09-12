@@ -340,7 +340,57 @@ When $\alpha$ is an integer, this is also called the \alert{Erlang} distribution
 
 
 
+\begin{frame}
+\frametitle{Gamma example}
 
+A online company that normally has 100 customers per day is offering a prize to the 1,000th customer. \pause
+Based on past experience, the company expects a 50\% increase in customers due to the competition. \pause
+When should we expect the prize to be awarded? (intentionally vague)
+
+\vspace{0.1in} \pause
+
+Let $Y$ be the time for the 1,000th customer and assume $Y\sim Ga(1000,150)$. \pause
+We could 
+\begin{itemize}
+\item provide the probability density function, 
+\item provide the cumulative distribution function,
+\item provide an interval that will contain the award time with some probability,
+\item $\ldots$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Gamma example (cont.)}
+
+<<gamma_example_data>>=
+alpha = 1000
+lambda = 150
+@
+
+<<gamma_example_plots, dependson="gamma_example_data", fig.width=8>>=
+xmin = 6; xmax = 7.5
+opar = par(mfrow=c(1,2))
+curve(dgamma(x, shape=alpha, rate=lambda), xmin, xmax, 
+			xlab="y", ylab="f(y)", main="Probability density function")
+curve(pgamma(x, shape=alpha, rate=lambda), xmin, xmax,
+			xlab="y", ylab="F(y)", main="Cumulative distribution function")
+par(opar)
+@
+
+<<gamma_example_interval, dependson="gamma_example_data", echo=TRUE>>=
+# 95% interval that contains the prize award time in days
+round(qgamma(c(0.025,.975), shape=alpha, rate=lambda),1)
+@
+
+
+\end{frame}
+
+
+\subsection{Normal}
+\begin{frame}
+\frametitle{Normal distribution}
+\end{frame}
 
 \end{document}   
 
