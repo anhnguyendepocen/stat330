@@ -524,11 +524,32 @@ In R,
 \end{frame}
 
 
+
+\begin{frame}
+\frametitle{Sum of Poisson random variables}
+
+\begin{theorem}
+Let $X_i\ind Po(\lambda_i)$ for $i=1,\ldots,n$. \pause Then 
+\[ 
+Y = \sum_{i=1}^n X_i \sim Po\left( \sum_{i=1}^n \lambda_i \right).
+\]
+\end{theorem}
+\pause
+\begin{corollary}
+Let $X_i\iid Po(\lambda)$ for $i=1,\ldots,n$. \pause Then 
+\[ 
+Y = \sum_{i=1}^n X_i \sim Po\left( n\lambda \right).
+\]
+\end{corollary}
+
+\end{frame}
+
+
 \begin{frame}[fragile]
 \frametitle{Poisson distribution - example}
 
 Customers of an internet service provider initiate new accounts at the average rate of 10 accounts per day. \pause
-What is the probability that more than 16 new accounts will be initiated in two days?
+What is the probability that more than 16 new accounts will be initiated in the next two days?
 
 \vspace{0.1in} \pause
 
