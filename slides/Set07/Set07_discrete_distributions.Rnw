@@ -355,7 +355,7 @@ P_Z(z) = P(Z=z) = p(1-p)^{z-1}.
 
 \pause
 
-{\bf Note:} An alternative version of the Geometric distribution does not record the successful attempt, but rather the number of failures.
+{\bf Note:} An alternative version of the geometric distribution does not record the successful attempt, but rather the number of failures.
 
 \end{frame}
 
@@ -409,27 +409,23 @@ Let $X$ be the number of times $S$ is executed. \pause Then $X\sim Geo(0.1)$ and
 \begin{frame}
 \frametitle{Geometric distribution - example 2}
 
-Watch the input queue at the alpha farm for a job that times out.
-The probability that a job times out is 0.05. 
-Let $Y$ be the index of the first job to time out, then $Y \sim Geo(0.05)$. 
+Watch the input queue at the alpha farm for a job that times out. \pause
+The probability that a job times out is 0.05. \pause
+Let $Y$ be the index of the first job to time out and assume $Y \sim Geo(0.05)$. \pause
 \begin{itemize}
 \item What is the probability that
   \begin{itemize}
-	\item  the third job times out? \pause $P(Y = 3) = 0.95^{2} 0.05 = 0.045$ \pause
-	\item  $Y$ is less than 3? \pause$P( Y < 3) = P( Y \le 2) = 1 - 0.95^{2} = 0.0975$ \pause
-	\item  the first job to time out is between the third and the seventh? \pause 
+	\item the third job is the first to time out? \pause $P(Y = 3) = 0.95^{2} 0.05 = 0.045$ \pause
+	\item one of the first three jobs times out? \pause$P( Y < 3) = P( Y \le 2) = 1 - 0.95^{2} = 0.0975$ \pause
+	\item  the first job to time out is between the third and the seventh (inclusive)? \pause 
 	$P( 3 \le Y \le 7) = P(Y \le 7) - P(Y \le 2) = 1-0.95^{7} - (1 - 0.95^{2}) = 0.204$
   \end{itemize}
 \item What is 
 	\begin{itemize}
 	\item expected value of $Y$. \pause $E[Y] = 1/0.05 = 20$ \pause
-	\item variance of $Y$. pause $V[y] = \frac{1-0.05}{0.05^2} = 380$ \pause
+	\item variance of $Y$. \pause $V[y] = \frac{1-0.05}{0.05^2} = 380$ 
 	\end{itemize}
 \end{itemize}
-\pause
-
-
-
 \end{frame}
 
 
@@ -521,10 +517,9 @@ Assume $X\sim Po(10)$. \pause
 In R, 
 <<echo=TRUE>>=
 # Using pmf
-1-sum(dpois(0:8,10))
-
+1-sum(dpois(0:8, lambda=10))
 # Using cdf
-1-ppois(8,10)
+1-ppois(8, lambda=10)
 @
 \end{frame}
 
@@ -535,7 +530,7 @@ In R,
 Customers of an internet service provider initiate new accounts at the average rate of 10 accounts per day. \pause
 What is the probability that more than 16 new accounts will be initiated in two days?
 
-\vspace{0.2in} \pause
+\vspace{0.1in} \pause
 
 Since the rate is 10/day, then for two days we expect, on average, to have 20. \pause
 Let $Y$ be he number initiated in a two-day period and assume $Y\sim Po(20)$. \pause
@@ -546,10 +541,9 @@ P(Y>16) = 1-P(Y\le 16) = \sum_{x=0}^{16} \frac{\lambda^x e^{-\lambda}}{x!} = 1-0
 In R,
 <<echo=TRUE>>=
 # Using pmf
-1-sum(dpois(0:16,20))
-
+1-sum(dpois(0:16, lambda=20))
 # Using cdf
-1-ppois(16,20)
+1-ppois(16, lambda=20)
 @
 
 \end{frame}
@@ -620,12 +614,12 @@ Let $X$ represent the number of typos on the page and assume $X\sim Bin(1000,0.0
 $P(X=0)$ using R is
 <<typo_binomial, echo=TRUE>>=
 n = 1000; p = 0.002
-dbinom(0,n,p)
+dbinom(0, size=n, prob=p)
 @
 Alternatively, let $Y$ represent the number of defectives and assume $Y\sim Po(1000\times 0.002)$. \pause
 $P(Y=0)$ using R is
 <<typo_poisson, echo=TRUE, dependson='typo_binomial'>>=
-dpois(0,n*p)
+dpois(0, lambda=n*p)
 @
 \end{frame}
 
