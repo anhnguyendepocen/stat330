@@ -276,33 +276,69 @@ P(Y<2|Y\ge 1) &= 1- P(Y\ge 2|Y\ge 1) = 1-P(Y\ge 1) = P(Y<1) = 1-e^{-\lambda}
 \end{array} \]
 \end{frame}
 
-% 
-% 
-% \foilhead[-.8in]{\textcolor{blue}{Gamma Distribution}}\vspace{.1in} 
-% \no This distribution is used to model total waiting time of a procedure that consists of 
-% $\alpha$ independent stages, each stage with a waiting time having a distribution $Exp_{\lambda}$.\\[.1in]
-% \no Then the total time has a Gamma disribution with parameters $\alpha$ and $\lambda$.\\[.1in]
-% \no  {\textcolor{magenta}{Gamma density}} {\textcolor{cyan}{A random variable $X$ has {\it gamma density} if}}\\[.15in]
-% \hspace*{1.5in} $ f(x)= \frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x},\qquad x>0$\\[.15in]
-% \no {\textcolor{cyan}{$\lambda$ is called the \emph{rate parameter} and $\alpha$ is called the \emph{shape parameter}}}\\[.1in]
-% \no {\textcolor{cyan}{$\Gamma(\alpha)$ is the {\textcolor{red}{Gamma function}}, an integral that is defined on p.433 (Baron)}}\\[.1in]
-% \no We say that the random variable $X \sim Gamma(\alpha,\lambda)$\\[.1in]
-% \no When $\alpha$ is an integer (this is the case with most applications we'll discuss), the gamma random variable can be represented as the sum of $\alpha \ iid\ Exp_{\lambda}$ random variables. It follows that $Gam_{1,\lambda} \equiv Exp_{\lambda}$
-% \foilhead[-.8in]{\textcolor{blue}{Density functions of gamma variables for different 
-%     shape parameters 0.5, 1, and 1.5.}}\vspace{10pt}
-%     \centerline{\includegraphics[scale=.7]{gamma_pdf2.pdf}}
-% \foilhead[-.75in]{\textcolor{blue}{Properties of the  Gamma Distribution}}\vspace{.1in} 
-% \no {\textcolor{red}{Mean}} and {\textcolor{red}{Variance}} are obtained using integration (see p. 85/86 of Baron). They 
-% are:
-% \vspace*{-.2in}
-% \begin{eqnarray*}
-%     E[X] &=& \frac{\alpha}{\lambda} \\
-%     Var[X] &=& \frac{\alpha}{\lambda^{2}}
-% \end{eqnarray*}
-% The {\textcolor{red}{cdf}},  $Gam_{\alpha,\lambda}(t) = F_{X}(t)$ is of the form
-% $$ F_{X}(t)=\int_0^t f(x)dx=\frac{\lambda^\alpha}{\Gamma(\alpha)}\int_0^tx^{\alpha-1}e^{-\lambda x}dx$$
-% The computation of the cdf is not trivial. Tabulated values of the \emph{incomplete Gamma function} is to evaluate the gamma
-% cdf. It can be computed for small integer values of $\alpha$ by repeated integration by parts.
+
+\subsection{Gamma}
+\begin{frame}
+\frametitle{Multiple waiting times}
+
+Now suppose, we ask how long it will take until we observe two hits. \pause
+\begin{itemize}
+\item Let $X_1$ be the time until the first hit and assume $X_1\sim Exp(\lambda)$. \pause 
+\item Let $X_2$ be the time after the first hit until the second hit and, due to the memoryless property of the exponential distribution, $X_2 \sim Exp(\lambda)$ independent of $X_1$. \pause
+\end{itemize}
+Now we are interested 
+\[ Y = X_1 + X_2. \]
+\pause
+More generally, if we ask how long it will take until we observe $\alpha$ hits, we are interested in 
+\[ 
+Y = X_1+X_2+\cdots+X_\alpha = \sum_{i=1}^\alpha X_i
+\]
+where $X_i\ind Exp(\lambda)$. 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Gamma distribution}
+
+The sum of $\alpha$ independent exponential distributions with rate $\lambda$ is a gamma random variable. \pause
+A random variable $X$ has gamma density if 
+\[ 
+f(x) = \left\{ \begin{array}{ll} \frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x} & x>0 \\
+0 & mbox{otherwise} \end{array} \right.
+\]
+with shape parameter $\alpha>0$ and rate parameter $\lambda>0$ 
+\pause
+where 
+\[ \Gamma(\alpha) = \int_0^\infty x^{\alpha-1}e^{-\alpha} dx \]
+\pause 
+and when $\alpha$ is a positive integer
+\[ 
+\Gamma(\alpha) = (\alpha-1)!
+\]
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Gamma distribution properties}
+
+The mean and variance can be computed using the sum of $\alpha$ exponentials. \pause
+
+\[ \begin{array}{rl}
+E[X] &= \frac{\alpha}{\lambda}  \\
+Var[X] &= \frac{\alpha}{\lambda^2}  \\
+F(x) &= \int_0^x f(t)dt=\frac{\lambda^\alpha}{\Gamma(\alpha)}\int_0^x t^{\alpha-1}e^{-\lambda t} dt 
+\end{array} \]
+\pause
+Although the gamma distribution was motivated by the sum of $\alpha$ exponentials, there is no requirement for $\alpha$ to actually be an integer. \pause
+When $\alpha$ is an integer, this is also called the \alert{Erlang} distribution. 
+
+\end{frame}
+
+
 
 
 
