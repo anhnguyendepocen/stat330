@@ -456,7 +456,7 @@ Z = \frac{X_i-m_i}{s_i} \sim N(0,1) \quad\mbox{for all } i
 \]
 and 
 \[ 
-Y = \sum_{i=1}^n X_i \sim N\left(\sum_{i=1}^n m_n, \sum_{i=1}^n s_n^2 \right).
+Y = \sum_{i=1}^n X_i \sim N\left(\sum_{i=1}^n m_i, \sum_{i=1}^n s_i^2 \right).
 \]
 
 \end{frame}
