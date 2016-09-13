@@ -146,10 +146,13 @@ P(X> c) &\approx P(Y > c+0.5)
 
 \begin{frame}
 \frametitle{Continuity correction intuition}
-
+{\small
 Let $X\sim Bin(10,0.5)$, $Y\sim N(5, 2.5)$, and we are trying to calculate $P(X\le 4)$. 
+}
 
-<<>>=
+\vspace{0.1in} \pause
+
+<<continuity_correction_binomial>>=
 n = 10; p = 0.5
 x = 0:n
 
@@ -157,30 +160,19 @@ d = data.frame(x=0:n) %>%
 	mutate(pmf = dbinom(x,n,p))
 
 normal_lessthan4 = data.frame(x = seq(min(x)-1, 4, length=101)) %>%
-	mutate(pdf = dnorm(x, n*p, sqrt(n*p*(1-p))))
+	mutate(pdf = dnorm(x, n*p, sqrt(n*p*(1-p)))) %>%
+	bind_rows(data.frame(x=4,pdf=0))
 
-
-
-ggplot(d %>% mutate(color = x<=4), aes(x=x,y=pmf,fill=color)) + 
-	geom_bar(stat="identity", width=1, alpha=0.5) + 
-	stat_function(fun=dnorm, args=list(mean=n*p, sd=sqrt(n*p*(1-p)))) +
-#	geom_polygon(data=normal_lessthan4, aes(x,pdf)) + 
+g = ggplot(d %>% mutate(color = x<=4), aes(x=x,y=pmf,fill=color)) + 
+	geom_bar(stat="identity", width=1, alpha=0.5, color='black') +
 	scale_x_continuous(breaks=x) + 
 	scale_fill_manual(values=c("gray","red")) +
 	guides(fill=FALSE) +
-	theme_bw()
+	theme_bw() + 
+	ylim(0,0.3) + 
+	xlim(-1,11)
 
-
-
-graphics:::plot.histogram(list(mid = x, 
-															 density = dbinom(x,n,p),
-															 breaks = c(x,n+1)-.5,
-															 counts = dbinom(x,n,p)),
-													main = "Probability mass/density functions",
-													xlab = "x",
-													ylab = "p(x)")
-curve(dnorm(x,mean=n*p, sd=sqrt(n*p*(1-p))), add=TRUE)
-
+g
 @
 
 \end{frame}
@@ -188,7 +180,25 @@ curve(dnorm(x,mean=n*p, sd=sqrt(n*p*(1-p))), add=TRUE)
 
 
 
-\begin{frame}[fragile]
+\begin{frame}
+\frametitle{Continuity correction intuition}
+{\small
+Let $X\sim Bin(10,0.5)$, $Y\sim N(5, 2.5)$, and we are trying to calculate $P(X\le 4)$. 
+}
+
+\vspace{0.1in} \pause
+
+<<contintuity_correction_normal, dependson="continuity_correction_binomial">>=
+g + geom_polygon(data=normal_lessthan4, aes(x,pdf), color=NA, fill="blue", alpha=0.5) + 
+	stat_function(fun=dnorm, args=list(mean=n*p, sd=sqrt(n*p*(1-p))))
+@
+
+\end{frame}
+
+
+
+
+\begin{frame}
 \frametitle{Roulette example}
 
 A European roulette wheel has 39 slots: one green, 19 black, and 19 red. \pause
@@ -199,98 +209,84 @@ If I play black everytime, what is the probability that I will have won more tha
 Let $Y$ indicate the total number of wins \pause and assume $Y\sim Bin(n,p)$ with $n=99$ and $p=19/39$. \pause
 The desired probability is $P(Y\ge 50)$. \pause
 Then 
-\[ \begin{array}{rl|}
-P(Y\ge 50) &= 1- P(Y\le 49) = \sum_{y=0}^{49} {n\choose y} p^y (1-p)^{n-y} \\
-&=\approx P\left(Z\ge \frac{50-np}{\sqrt{np(1-p)}}\right) 
+\[ \begin{array}{rll}
+P(Y\ge 50) &= \sum_{y=50}^{99} {n\choose y} p^y (1-p)^{n-y} \\
+&= 0.399048 \\
+\\
+&\approx P(X\ge 50-0.5) & \mbox{continuity correction}\\ 
+&= P\left(Z\ge \frac{49.5-np}{\sqrt{np(1-p)}}\right) \\
+&= P(Z\ge 0.2552089) \\
+&= P(Z\le -0.2552089) & \mbox{symmetric} \\
+&= 0.3974 & \mbox{$Z$ table}
 \end{array} \]
-\pause
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Roulette example (solutions in R)}
 <<echo=TRUE>>=
 n = 99
 p = 19/39
 1-pbinom(49, size=n, prob=p)
-1-pnorm(49, mean=n*p, sd= sqrt(n*p*(1-p)))
-1-pnorm(49+0.5, mean=n*p, sd= sqrt(n*p*(1-p))) # with continuity correction
-@
+1-pnorm((50  -n*p)/sqrt(n*p*(1-p))) # Standardized
+1-pnorm((49.5-n*p)/sqrt(n*p*(1-p))) # Standardized with continuity correction
+1-pnorm(50, mean=n*p, sd= sqrt(n*p*(1-p)))     # Original scale
+1-pnorm(49+0.5, mean=n*p, sd= sqrt(n*p*(1-p))) # Original scale with continuity correction
 
-<<>>=
 @
 
 \end{frame}
 
 
 
-% \foilhead[-.75in]{\textcolor{blue}{ Central Limit Theorem (CLT) (cont'd)}}
-% \no {\textcolor{magenta}{Use of CLT: }}  Calculate probabilities associated with averages or sums of iid random variable. these approximate distributional statements. For e.g.,\\[.1in]
-% \no  \hspace*{.5in} $P(a<\overline{X}_n<b)  \approx P(a<X<b)$= $\Phi\left(\frac{b-\mu}{\sigma/\sqrt{n}}\right)-\Phi\left(\frac{a-\mu}{\sigma/\sqrt{n}}\right)$\\[.1in] 
-% \no Recall: $\Phi$ is the cdf of the standard normal distribution i.e., $Z \sim N(0,\,1)$\\[.1in]
-% \no {\textcolor{magenta}{Some Example Applications of the Central Limit Theorem}}\\[.1in]
-% \no {\textcolor{magenta}{Example 1:}} {\textcolor{cyan}{The time I spend waiting for the bus in a day has a Uniform distribution between 2 minutes and 5 minutes.}}\\[.1in]
-% \no (a) {\textcolor{cyan} {How much time do I expect to spent waiting for the bus in one month (30 days)?}}\\[.1in]
-% \no  \hspace*{1in} Let $X_i=$ time I wait for the bus on day $i$. \\[.1in]
-% \no \hspace*{.5in} Then $X_1,X_2,\ldots X_{30} \sim iid\ U(2,5)$ and it follows that\\[.1in]
-% \no  $E[X_i]=(2+5)/2=3.5\,min,\ Var(X_i)=(5-2)^2/12=9/12=.75\,min.^2$
-% 
-% \foilhead[-.75in]{\textcolor{blue}{ CLT Examples (cont'd)}}
-% \no {\textcolor{magenta} {Let $T\equiv$ random variable representing the total waiting time for a month.}}\\[.1in] 
-% \no $T$ is the sum of 30 iid random variables: $T=X_1+X_2+\ldots +X_{30} $\\[.1in]
-% \no $E[T]= \sum_{i=1}^{30} X_i=30\mu$ where $\mu=E[X_i]=3.5$.\\[.1in] 
-% Thus the expected waiting time for a month $E[T]=30\times 3.5=105 \,min.$\\[.15in]
-% \no (b) {\textcolor{cyan} {Approximately, find the probability that I spend more than 2 hours waiting for a bus in a month.}}\\[.1in]
-% \no From the CLT, we have $T\dot{\sim} N(30\times 3.5, 30\times 0.75) \quad \mbox{i.e. } {\textcolor{magenta} {T\dot{\sim} N(105, 22.5)}}$\\[.1in]
-% \no We need the probability that $T$ is greater than 120 minutes, i.e., $P(T>120)$
-% \begin{eqnarray*}
-% P(T>120) & = & 1 -P(T \le 120)\\
-%  &\approx & 1-P(Z \le \frac{(120-105)}{\sqrt{22.5}})\qquad \mbox{by CLT}\\
-%  &=& 1- \Phi(3.16)=1-.9992112=.00079
-% \end{eqnarray*}
-% \foilhead[-.75in]{\textcolor{blue}{ CLT Example from Baron}}
-% \no  {\textcolor{magenta} {Example 4.13 (Allocation of Disk Space)}} {\textcolor{cyan} { A disk has free space of 330 megabytes. Is it likely to be sufficient for 300 independent images, if each image has expected size of 1 megabyte with a standard deviation of 0.5 megabytes?}}\\[.1in]
-% \no We have $n=300, \mu=1$ and $\sigma=0.5$. The number of images $n$ is large, so the CLT applies. Then
-% \begin{eqnarray*}
-% P(\text{sufficient space})&=& P(S_n\le 330))\\
-%  & = & P\left(\frac{S_n-n\mu}{\sigma \sqrt{n}}\le \frac {330-(300)(1)}{0.5\sqrt{300}})\right)\\
-%  &\approx &\Phi(3.46)=.9997
-% \end{eqnarray*} 
-% Since this probability is very high, the available disk space is very likely to be sufficient.
-% \foilhead[-.75in]{\textcolor{blue}{ CLT Big Example}}
-% \no  {\textcolor{cyan} {An astronomer wants to measure the distance, $d$, from the observatory to a star. Due to the variation of atmospheric conditions and imperfections in the measurement method, a single measurement will not produce the exact distance $d$. The astronomer takes $n$ measurements of the distance and uses  the sample average  to estimate the true distance. From past records of these measurements the astronomer knows the variance of a single measurement is $4\ \mbox{parsec}^2$. How many measurement should the astronomer make so that the chance that his estimate differs by $d$ by more than .5 parsecs is at most .05?}}\\[.1in]
-% \no \hspace*{.5in} Let $X_i$ be the $i^{th}$ measurement. The astronomer assumes that \\[.1in]
-% \no \hspace*{1in} $ X_1,X_2,\ldots X_n \sim iid \mbox{ with } E[X_i]=d \mbox{ and } Var[X_i]=4$\\[.1in]
-% \no \hspace*{2in}The estimate of $d$ is $\overline{X}_n=\frac{(X_1+X_2+\dots+X_n)}{n}$\\[.1in]
-% \no \hspace*{.5in} We want to find the number of measurements $n$ so that\\[.1in]
-% \no  \hspace*{3in} $ P(|\overline{X}_n-d|>.5)\le .05$
-% 
-% \foilhead[-.75in]{\textcolor{blue}{ CLT Big Example (cont'd)}}
-% \no We know that \\[.1in]
-% \no \hspace*{1in} $P(|\overline{X}_n-d|>.5) =P(\overline{X}_n-d>.5)+P(\overline{X}_n-d<-.5)$\\[.1in]
-% \no We use the CLT to approximate each of the probabilities on the right. From the CLT we have that\\[.1in]
-% \no \hspace*{3in} $ \overline{X}_n \dot{\sim} N(d,4/n)$\\[.1in]
-% Thus 
-% \begin{eqnarray*}
-%  P(|\overline{X}_n-d|>.5) &= &P(\overline{X}_n-d>.5)+P(\overline{X}_n-d<-.5)\\
-%  &=& P\left(\frac{\overline{X}_n-d}{\sqrt{4/n}}>\frac{.5}{\sqrt{4/n}}\right)+
-%  P\left(\frac{\overline{X}_n-d}{\sqrt{4/n}}<\frac{-.5}{\sqrt{4/n}}\right)\\
-%  & \approx & P\left(Z>\frac{.5}{\sqrt{4/n}}\right)+P\left(Z<\frac{-.5}{\sqrt{4/n}}\right)
-% \end{eqnarray*} 
-% \foilhead[-.75in]{\textcolor{blue}{ CLT Big Example (cont'd)}}
-% \begin{eqnarray*} 
-%  &=& 1- \Phi(\sqrt{n}/4)+\Phi(-\sqrt{n}/4)\\
-%  &=& 2(1-\Phi(\sqrt{n}/4))
-% \end{eqnarray*}
-% \no \bul We need to find an integer $n$ so that $2(1-\Phi(\sqrt{n}/4))$ is just less than or equal to $.05$.\\[.1in]
-% \no \bul We will set $2(1-\Phi(\sqrt{n^*}/4))=.05$, solve for $n^*$ and take the required number of 
-% measurements to be the $\lceil n^* \rceil$.\\[.1in]
-% \no \bul Observe that $2(1-\Phi(\sqrt{n}/4))=.05$ implies that $\Phi(\sqrt{n}/4))=.975$.\\[.1in] 
-% \no \bul Using the Normal cdf tables, this gives $\sqrt{n}/4=1.96$; thus $n^*=61.47$. \\[.1in]
-% \no \bul Thus the astronomer must take at least 62 measurements to have the accuracy specified above.
-% 
-% \foilhead[-.8in]{\textcolor{blue}{Normal approximation to the Binomial}}
-% \no  {\textcolor{magenta} {For large $n$, the binomial distribution $B_{n, p}$ is 
-% 	approximately normal $N_{np, np(1-p)}$. Why?}}\\[.1in]	
-% \no Let $Y$ be a variable with a $B_{n,p}$ distribution. We know, that $Y$ is the number of successes in $n$ independent Bernoulli experiments with $P(\text{success})=p$.\\[.1in]
-% \no Write $Y$ as the sum of $n\ iid$ Bernoulli variables each with $\mu=E(X_i)=p$ and $\sigma^2=Var(X_i)=p(1-p)$: $ Y= X_{1} + X_{2} + \ldots + X_{n}$\\[.1in]
-% \no  {\textcolor{cyan} {Applying the CLT result for $S_n$, we have that  $ Y \dot{\sim} N(n \mu ,n \sigma^2)$ where $\mu=p$ and $\sigma^2=p(1-p)$. That is, $ Y \dot{\sim} N(np ,np(1-p)).$}}\\[.1in]
-% \no Use this approximation only when $np$	and $n(1-p)$ are both $>5$; the approximation is  pretty good when $np$	and $n(1-p)$ are both $>20$.\\[.1in]
-% \no When either of  $np$	or $n(1-p)$ are $<20$, a {\textcolor{magenta} {continuity correction} is needed (see Baron p.94).
+\begin{frame}
+\frametitle{Astronomy example}
+
+{\small
+An astronomer wants to measure the distance, $d$, from the observatory to a star. \pause 
+Due to the variation of atmospheric conditions and imperfections in the measurement method, a single measurement will not produce the exact distance $d$. \pause 
+The astronomer takes $n$ measurements of the distance and uses the sample average to estimate the true distance. \pause 
+From past records of these measurements the astronomer knows the variance of a single measurement is $4\ \mbox{parsec}^2$. \pause
+How many measurement should the astronomer make so that the chance that his estimate differs from $d$ by more than 0.5 parsecs is at most 0.05?
+
+\vspace{0.1in} \pause
+
+Let $X_i$ be the $i^{th}$ measurement. \pause The 
+The astronomer assumes that $X_1,X_2,\ldots X_n$ are iid with $E[X_i]=d$ and $Var[X_i]=4$. \pause 
+The estimate of $d$ is 
+\[ \overline{X}_n=\frac{(X_1+X_2+\dots+X_n)}{n}. \]
+We want to find the number of measurements $n$ so that 
+\[ P\left(|\overline{X}_n-d|>0.5\right)\le 0.05. \]
+}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Astronomy solution}
+
+From the CLT, we have the 
+\[ 
+X_n \sim N(d, 4/n).
+\]
+\pause
+Now, we solve
+{\small
+\[ \begin{array}{rll}
+P(|\overline{X}_n-d|>.5) &= P(\overline{X}_n-d>.5)+P(\overline{X}_n-d<-.5)\\
+ &= P\left(\frac{\overline{X}_n-d}{\sqrt{4/n}}>\frac{.5}{\sqrt{4/n}}\right)+
+ P\left(\frac{\overline{X}_n-d}{\sqrt{4/n}}<\frac{-.5}{\sqrt{4/n}}\right)\\
+ & \approx P\left(Z>\frac{.5}{\sqrt{4/n}}\right)+P\left(Z<\frac{-.5}{\sqrt{4/n}}\right) \\
+ &= 2P\left(Z<\frac{-.5}{\sqrt{4/n}}\right) \\
+ &\le 0.05
+\end{array} \]
+}
+\pause
+On a $Z$ table, we find that $P(Z<-1.96)\approx 0.025$ \pause and thus $n=61.47$\pause which we round up to 62. \pause
+So the astronomer needs 62 measurements to obtained the desired accuracy. 
+
+\end{frame}
 
 \end{document}   
