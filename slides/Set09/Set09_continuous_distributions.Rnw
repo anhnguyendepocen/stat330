@@ -63,7 +63,7 @@ f(x) = \left \{
 \]
 \pause
 
-We use $X \sim U(a,b)$ to denote the random variable $X$ is distributed as the \emph{uniform distribution with parameters $a$ and $b$}. \pause
+We use $X \sim Unif(a,b)$ to denote the random variable $X$ is distributed as the \emph{uniform distribution with parameters $a$ and $b$}. \pause
 
 <<fig.width=11>>=
 curve(dunif, -1, 2, 10001, axes=F, frame=TRUE, ylab="f(x)")
@@ -110,7 +110,7 @@ What is the probability the next pseudo-random number is larger than 0.85?
 
 Let $X$ be the value of the next pseudo-random number \pause and assume $X\sim Unif(0,1)$. \pause
 \[ 
-P(X< 0.85)  = 1-P(X\le 0.85) = 1- \frac{0.85}{1-0} = 0.15.
+P(X> 0.85)  = 1-P(X\le 0.85) = 1- \frac{0.85}{1-0} = 0.15.
 \]
 \pause
 
@@ -347,7 +347,6 @@ When $\alpha$ is an integer, this is also called the \alert{Erlang} distribution
 
 A online company that normally has 100 customers per day is offering a prize to the 1,000th customer. \pause
 Based on past experience, the company expects a 50\% increase in customers due to the competition. \pause
-When should we expect the prize to be awarded? (intentionally vague)
 
 \vspace{0.1in} \pause
 
@@ -450,9 +449,9 @@ which is called \alert{standardizing}.
 
 \vspace{0.1in} \pause
 
-Let $X_1,\ldots,X_n \ind N(m_n,s_n^2)$. Then 
+Let $X_i \ind N(m_i,s_i^2)$. Then 
 \[
-Z = \frac{X_i-m_i}{s_i} \sim N(0,1) \quad\mbox{for all } i
+Z_i = \frac{X_i-m_i}{s_i} \iid N(0,1) \quad\mbox{for all } i
 \]
 and 
 \[ 
