@@ -1,18 +1,49 @@
 %!TEX root = exam1.tex
 
-\item Problem statements
+% This is the CIP question and the students must get part b) mostly correct to meet expectations
+
+\item Let $X$ represent a discrete random variable with the following probability mass function
+\[ \begin{array}{r|cccc}
+\hline
+x      & 1 & 2 & 3 & 4 \\
+P(X=x) & 0.1 & 0.2 & 0.3 & c \\
+\hline
+\end{array} \]
 
 \begin{enumerate}
 
-\item Part a (10 pts)
+\item What is the value for $c$ that makes this a valid probability mass function? (6 pts)
 
 \ansfont{
+We need 
+\[ 
+\sum_{x=1}^4 P(X=x) = 1
+\]
+which occurs if $c=0.4$. 
 }
 \vfill
 
-\item Part b (10 pts)
+\item What is the expectation of $X$? (6 pts)
 
 \ansfont{
+\[ \begin{array}{rl}
+E[X] &= \sum_{x=1}^4 x \cdot P(X=x) \\
+&= 1\times 0.1 + 2\times 0.2 + 3\times 0.3 + 4\times 0.4 \\
+&= 0.1+0.4+0.9+1.6 \\
+&= 3
+\end{array} \]
+}
+\vfill
+
+\item What is the variance of $X$? (7 pts)
+
+\ansfont{
+\[ \begin{array}{rl}
+Var[X] &= \sum_{x=1}^4 (x-\mu)^2 P(X=x) \\
+& = (1-3)^2\times 0.1 + (2-3)^2\times 0.2 + (3-3)^2\times 0.3 + (4-3)^2\times 0.4 \\
+& = 4\times 0.1+1\times 0.2+0\times 0.3+1\times 0.4 \\
+&= 0.4+0.2+0+0.4 = 1
+\end{array} \]
 }
 \vfill
 
