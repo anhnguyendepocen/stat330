@@ -1,19 +1,54 @@
 %!TEX root = exam1.tex
 
-\item Problem statements
+\item An eyewitness testifies that he saw the suspect in a blue car, but the sighting was late at night under poor conditions. 
+The defense team tests the ability of the eyewitness under those conditions and finds the following probabilities
 
-\begin{enumerate}
+\begin{center}
+\begin{tabular}{l|rrr|}
+& \multicolumn{3}{c|}{Eyewitness reports} \\
+True color & Blue & Green & Red \\
+\hline
+Blue & 0.8 & 0.1 & 0.1 \\ 
+Green & 0.2 & 0.7 & 0.1 \\
+Red & 0.1 & 0.3 & 0.6 \\
+\hline
+\end{tabular}
+\end{center}
 
-\item Part a (10 pts)
+% \begin{itemize}
+% \item if the car is blue, the eyewitness reports blue 90\% of the time
+% \item if the car is green, the eyewitness reports blue 20\% of the time 
+% \item if the care is red, the eyewitness reports blue 10\% of the time
+% \end{itemize}
+For example, if the car is red, the eyewitness reports green 30\% of the time. 
+If this city has 50\% red cars, 30\% green cars, and 20\% blue cars, what is the probability the car is actually blue? (20 pts)
+
 
 \ansfont{
+
+Notation
+\begin{itemize}
+\item Let $E_B$, $E_G$, and $E_R$ be the events that the eyewitness reports blue, green, and red, respectively. 
+\item Let $C_B$, $C_G$, and $C_R$ be the events that the car is truly blue, green, and red, respectively. 
+\end{itemize}
+The following probabilities are relevant for the calculation
+\[ \begin{array}{rl}
+P(C_B) &= 0.2 \\
+P(C_G) &= 0.3 \\
+P(C_R) &= 0.5 \\
+P(E_B|C_B) &= 0.8 \\
+P(E_B|C_G) &= 0.2 \\
+P(E_B|C_R) &= 0.1 \\
+\end{array} \]
+We need to calculate 
+\[ \begin{array}{rll}
+P(C_B|E_B) &= \frac{P(E_B|C_B)P(C_B)}{P(E_B|C_B)P(C_B)+P(E_B|C_G)P(C_G)+P(E_B|C_R)P(C_R)} & \mbox{by Bayes' Rule} \\
+&= \frac{0.8 \times 0.2}{0.8 \times 0.2 + 0.2 \times 0.3 + 0.1 \times 0.5} \\
+&= \frac{0.16}{0.16+0.06+0.05} \\
+&= 0.59
+\end{array} \]
+
 }
 \vfill
 
-\item Part b (10 pts)
 
-\ansfont{
-}
-\vfill
-
-\end{enumerate}
