@@ -4,7 +4,7 @@
 \rhead{\sffamily Due: September 14, 2016}
 
 % Uncomment the following line to remove answers, and comment line out to show answers:
-\renewcommand{\ansfont}[1]{}
+%\renewcommand{\ansfont}[1]{}
 
 
 \begin{document}
@@ -113,25 +113,23 @@ P(T=0|R=010) &= \frac{P(R=010|T=0)P(T=0)}{P(R=010|T=0)P(T=0)+P(R=010|T=1)P(T=1)}
 	\item $E[X] = 0 \cdot P(X=0) + 1 \cdot P(X=1) + 2 \cdot P(X=2) + 3 \cdot P(X=3) = 0 + 0.25 + 0.2+0.45 = 0.9$. To find the variance, we will use the formula $Var[X] = E[X^2]-(E[X])^2$. 
 	\[ E[X^2] = 0 \cdot P(X=0) + 1 \cdot P(X=1) + 4 \cdot P(X=2) + 9 \cdot P(X=3) = 0 + 0.25 + 0.4+1.35 = 2 \]
 and therefore $Var[X] = E[X^2] - \left( E[X] \right)^2 = 2 - 0.9^2 = 1.19$.
-	\item Since $X$ has image $Im(X) = \{0,1,2,3\}$, the image of $Y$ has to be $Im(Y) = \{ 5, 3, 1, -1\}$.
-	\item $Y$
-	\begin{enumerate}
-	\item $E[Y] = E[5-2X] = 5 - 2 E[X] = 5 - 1.8 = 3.2$
-	\item $Var[Y] = Var[5 - 2 X] = Var[-2X] = (-2)^2 Var[X] = 4 \cdot1.19 = 2.38$
-	\end{enumerate}
+ \item  $Y$
+\begin{enumerate}
+\item Since $X$ has image $Im(X) = \{0,1,2,3\}$, the image of $Y$ has to be $Im(Y) = \{ 5, 3, 1, -1\}$. 	 
+\item	$E[Y] = E[5-2X] = 5 - 2 E[X] = 5 - 1.8 = 3.2$ \\
+	$Var[Y] = Var[5 - 2 X] = Var[-2X] = (-2)^2 Var[X] = 4 \cdot1.19 = 2.38$
+\end{enumerate}
 	\item $Z$
-		\begin{enumerate}
-	\item Expectation
+	 Expectation
 	\begin{align*}
 	E[Z] &= E\left[ \frac{1}{n} \sum_{i=1}^n X_i \right] \\
-	&= \frac{1}{n} \sum_{i=1}^n E[X_i] = \frac{1}{n} n (0.9) = 0.9
+	&= \sum_{i=1}^n E[X_i] = 0.9n
 	\end{align*}
-	\item Variance
+         Variance
 	\begin{align*}
-	Var[Z] &= Var\left[ \frac{1}{n} \sum_{i=1}^n X_i \right] \\
-	&= \frac{1}{n^2} \sum_{i=1}^n Var[X_i] = \frac{1}{n^2} n (1.19) = 1.19/n
+	Var[Z] &= Var\left[  \sum_{i=1}^n X_i \right] \\
+	&= \sum_{i=1}^n Var[X_i] = 1.19n
 	\end{align*}
-	\end{enumerate}
 	\end{enumerate}
 }
 
