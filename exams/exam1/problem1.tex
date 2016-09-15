@@ -1,19 +1,30 @@
 %!TEX root = exam1.tex
 
-\item Problem statements
+\item The events $A_1$, $A_2$, $A_3$, and $A_4$ are a partition (or cover) of the sample space $\Omega$.
 
 \begin{enumerate}
 
-\item Part a (10 pts)
+\item What is $P(A_1 \cap A_2)$? Why? (4 points)
 
 \ansfont{
+0 because they are a partition and therefore disjoint
 }
 \vfill
 
-\item Part b (10 pts)
+\item If their individual probabilities are each 0.5, describe why this violates Kolmogorov's Axioms and therefore is not a valid probability model. (8 points)
 
 \ansfont{
+Since these events are a partition, $A_1\cup A_2 \cup A_3 \cup A_4 = \Omega$. 
+Axiom (ii) states that $P(\Omega)=1$, but by axiom (iii)
+\[ P(\Omega) = P(A_1 \cup A_2 \cup A_3 \cup A_4) = P(A_1)+P(A_2)+P(A_3)+P(A_4) = 2 \]
 }
-\vfill
+\vfill \vfill
+
+\item If their individual probabilities are each 0.25, what is $P(\overline{A_1 \cup A_2 \cup A_3})$? (8 points)
+
+\ansfont{
+\[ P(\overline{A_1 \cup A_2 \cup A_3}) = 1-P(A_1 \cup A_2 \cup A_3) = 1-P(A_1)-P(A_2)-P(A_3) = P(A_4) = 0.25 \] 
+}
+\vfill \vfill
 
 \end{enumerate}
