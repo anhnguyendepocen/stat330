@@ -1,18 +1,25 @@
 %!TEX root = exam1.tex
 
-\item Problem statements
+\item On a evening, a customer support helpline receives an average of three calls per hour. Assume that we can model the time between calls using an exponential distribution.
 
 \begin{enumerate}
 
-\item Part a (10 pts)
+\item Find the expected amount of time between the first and second calls.(5 pts)
 
-\ansfont{
+\ansfont{ Let $X$ represent time between the first and second call. Then $X\sim Exp(3)$, so $E(X)=\frac{1}{3}$ hours, or 20 minutes. 
 }
 \vfill
 
-\item Part b (10 pts)
+\item Find the probability that the time between the first and second calls is less than 10 minutes. (7 points)
 
-\ansfont{
+\ansfont{Using the exponential cdf, $P(X<\frac{1}{6})=1-e^{-3(\frac{1}{6})}\approx0.3935$.
+}
+\vfill
+
+
+\item Let $Y$ represent amount of time until the fifth call. Calculate $E(Y)$ and $Var(Y)$. (8 points)
+
+\ansfont{$Y$ follows a gamma distribution with $\alpha=5$, and $\lambda=3$. Then $E(Y)=\frac{\alpha}{\lambda}=\frac{5}{3}$ hours, or 100 minutes. $Var(Y)=\frac{\alpha}{\lambda^2}=\frac{5}{3^2}=\frac{5}{9} \text{ hours}^2$, or $2,000 \text{ minutes}^2$.
 }
 \vfill
 
