@@ -310,7 +310,7 @@ A random variable $X$ has gamma density if
 f(x) = \left\{ \begin{array}{ll} \frac{\lambda^\alpha}{\mGamma(\alpha)}x^{\alpha-1}e^{-\lambda x} & x>0 \\
 0 & \mbox{otherwise} \end{array} \right.
 \]
-with shape parameter $\alpha>0$ and rate parameter $\lambda>0$ 
+with \alert{shape} parameter $\alpha>0$ and \alert{rate} parameter $\lambda>0$ 
 \pause
 where 
 \[ \mGamma(\alpha) = \int_0^\infty x^{\alpha-1}e^{-x} dx \]
