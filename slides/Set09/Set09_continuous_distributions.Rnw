@@ -310,10 +310,10 @@ A random variable $X$ has gamma density if
 f(x) = \left\{ \begin{array}{ll} \frac{\lambda^\alpha}{\mGamma(\alpha)}x^{\alpha-1}e^{-\lambda x} & x>0 \\
 0 & \mbox{otherwise} \end{array} \right.
 \]
-with shape parameter $\alpha>0$ and rate parameter $\lambda>0$ 
+with \alert{shape} parameter $\alpha>0$ and \alert{rate} parameter $\lambda>0$ 
 \pause
 where 
-\[ \mGamma(\alpha) = \int_0^\infty x^{\alpha-1}e^{-\alpha} dx \]
+\[ \mGamma(\alpha) = \int_0^\infty x^{\alpha-1}e^{-x} dx \]
 \pause 
 and when $\alpha$ is a positive integer
 \[ 
@@ -477,7 +477,7 @@ Finally, these tables usually only extend to $|z|<4$, but that's okay since $P(Z
 
 \begin{frame}[fragile]
 \frametitle{Calculating any normal cumulative distribution function}
-If $X\sim N(15,2)$ what is $P(X>18)$? \pause
+If $X\sim N(15,4)$ what is $P(X>18)$? \pause
 \[ \begin{array}{rl}
 P(X>18) &= 1-P(X\le 18) \\
 &= 1-P\left(\frac{X-15}{2} \le \frac{18-15}{2} \right) \\
