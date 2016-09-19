@@ -110,15 +110,19 @@ legend("topright", c("normal","gamma"), lty=1:2, col=c("black","red"))
 \begin{frame}[fragile]
 \frametitle{Normal approximation to a binomial}
 
-Recall that a binomial distribution can be considered as a sum of iid Bernouli random variables. \pause
-Thus, if 
+Recall that a binomial distribution can be considered as a sum of iid Bernouli random variables, i.e. if $Y=\sum_{i=1}^n X_i$ where $X_i\ind Ber(p)$, then \pause
 \[ 
-Y \sim Bin(n,p) 
+Y \sim Bin(n,p).
 \]
 \pause 
-then, for large $n$, 
+For a binomial random variable, we have 
 \[ 
-Y \dot{\sim} \pause N(np, np(1-p)).
+E[Y] = \pause np \qquad \mbox{and} \qquad V[Y] = \pause np(1-p).
+\]
+\pause
+Now, if $n$ is large, 
+\[ 
+Y \dot{\sim} \pause N(np, np[1-p]).
 \]
 \end{frame}
 
@@ -207,14 +211,14 @@ If I play black everytime, what is the probability that I will have won more tha
 \vspace{0.1in} \pause
 
 Let $Y$ indicate the total number of wins \pause and assume $Y\sim Bin(n,p)$ with $n=99$ and $p=19/39$. \pause
-The desired probability is $P(Y\ge 50)$. \pause
+The desired probability is $P(X\ge 50)$. \pause
 Then 
 \[ \begin{array}{rll}
-P(Y\ge 50) &= \sum_{y=50}^{99} {n\choose y} p^y (1-p)^{n-y} \\
+P(Y\ge 50) &= \sum_{Y=50}^{99} {n\choose y} p^y (1-p)^{n-y} \\
 &= 0.399048 \\
-\\
-&\approx P(X\ge 50-0.5) & \mbox{continuity correction}\\ 
-&= P\left(Z\ge \frac{49.5-np}{\sqrt{np(1-p)}}\right) \\
+&& X\sim N(np,np[1-p]) \\
+&\approx P(X\ge 50-0.5) & \mbox{continuity correction} \pause\\ 
+&\approx P\left(Z\ge \frac{49.5-np}{\sqrt{np(1-p)}}\right) \\
 &= P(Z\ge 0.2552089) \\
 &= P(Z\le -0.2552089) & \mbox{symmetric} \\
 &= 0.3974 & \mbox{$Z$ table}
@@ -226,14 +230,14 @@ P(Y\ge 50) &= \sum_{y=50}^{99} {n\choose y} p^y (1-p)^{n-y} \\
 \begin{frame}[fragile]
 \frametitle{Roulette example (solutions in R)}
 <<echo=TRUE>>=
-n = 99
-p = 19/39
-1-pbinom(49, size=n, prob=p)
-1-pnorm((50  -n*p)/sqrt(n*p*(1-p))) # Standardized
-1-pnorm((49.5-n*p)/sqrt(n*p*(1-p))) # Standardized with continuity correction
-1-pnorm(50, mean=n*p, sd= sqrt(n*p*(1-p)))     # Original scale
-1-pnorm(49+0.5, mean=n*p, sd= sqrt(n*p*(1-p))) # Original scale with continuity correction
+v = 49; cc = 0.5                              # P(Y>=50) = 1-P(Y <= 49) ~= P(X<=49+0.5), X~ N(E[Y],V[Y])
+n = 99; p  = 19/39
 
+1-pbinom(q=v, size=n, prob=p)                 # Truth 
+1-pnorm( q=(v   -n*p)/sqrt(n*p*(1-p)))        # Standardized
+1-pnorm( q=(v+cc-n*p)/sqrt(n*p*(1-p)))        # Standardized with continuity correction
+1-pnorm(q=v   , mean=n*p, sd=sqrt(n*p*(1-p))) # Original scale
+1-pnorm(q=v+cc, mean=n*p, sd=sqrt(n*p*(1-p))) # Original scale with continuity correction
 @
 
 \end{frame}
