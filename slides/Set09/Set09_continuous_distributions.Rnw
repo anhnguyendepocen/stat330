@@ -481,7 +481,8 @@ If $X\sim N(15,2)$ what is $P(X>18)$? \pause
 \[ \begin{array}{rl}
 P(X>18) &= 1-P(X\le 18) \\
 &= 1-P\left(\frac{X-15}{2} \le \frac{18-15}{2} \right) \\
-&= 1-P(Z\le 1.5) = 0.067
+&= 1-P(Z\le 1.5) \\
+&\approx 1-0.933 = 0.067
 \end{array} \]
 
 <<echo=TRUE>>=
