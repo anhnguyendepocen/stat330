@@ -439,23 +439,23 @@ legend("topleft", legend = d$legend_name,
 Let $Z\sim N(0,1)$, i.e. a \alert{standard normal} random variable. \pause
 Then for constants $m$ and $s$ 
 \[ 
-X = m+sZ \sim N(m,s^2).
+X = \mu+\sigma Z \sim N(\mu,\sigma^2).
 \]
 alternatively
 \[ 
-Z = \frac{X-m}{s}
+Z = \frac{X-\mu}{\sigma} \sim N(0,1)
 \]
 which is called \alert{standardizing}.
 
 \vspace{0.1in} \pause
 
-Let $X_i \ind N(m_i,s_i^2)$. Then 
+Let $X_i \ind N(\mu_i,\sigma_i^2)$. Then 
 \[
-Z_i = \frac{X_i-m_i}{s_i} \iid N(0,1) \quad\mbox{for all } i
+Z_i = \frac{X_i-\mu_i}{\sigma_i} \iid N(0,1) \quad\mbox{for all } i
 \]
 and 
 \[ 
-Y = \sum_{i=1}^n X_i \sim N\left(\sum_{i=1}^n m_i, \sum_{i=1}^n s_i^2 \right).
+Y = \sum_{i=1}^n X_i \sim N\left(\sum_{i=1}^n \mu_i, \sum_{i=1}^n \sigma_i^2 \right).
 \]
 
 \end{frame}
