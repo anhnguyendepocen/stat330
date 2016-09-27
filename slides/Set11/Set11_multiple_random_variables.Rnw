@@ -117,7 +117,7 @@ Probability mass function:
 \begin{frame}
 \frametitle{Example (cont.)}
 
-What is the probability for $X=Y$?
+What is the probability of $X=Y$?
 
 \vspace{0.1in} \pause
 
@@ -128,7 +128,7 @@ P(X=Y) &= p_{X,Y}(400,400) + p_{X,Y}(450, 450) + p_{X,Y}(500,500) \\
 
 \vspace{0.1in} \pause
 
-What is the probability for $X>Y$?
+What is the probability of $X>Y$?
 
 \[ \begin{array}{rl}
 P(X>Y) &= p_{X,Y}(450,400) + p_{X,Y}(500, 400)+ p_{X,Y}(500, 450)  \\
@@ -358,31 +358,5 @@ Var(X+Y) &= Var(X) + Var(Y).
 \end{array} \]
 
 \end{frame}
-
-% 
-% \foilhead[-.8in]{\textcolor{blue}{More theorems on statistics}}
-% 
-%  \no  {\textcolor{red}{Theorem:}}   If two random variables $X$ and $Y$ are independent,
-%     \begin{eqnarray*}
-% 	E[X \cdot Y] &=& = E[X] \cdot E[Y] \\
-% 	Var[X + Y] &=& Var[X] + Var[Y]
-%     \end{eqnarray*}
-%     
-%   \no  {\textcolor{red}{Theorem:}}    For two random variables $X$ and $Y$ and three real numbers
-%     $a,b,c$ holds:
-%     \[
-%     Var[aX + bY + c] = a^{2} Var[X] + b^{2} Var[Y] + 2ab \cdot Cov(X,Y)
-%     \]
-%     
-% %\no {\textcolor{magenta}{Exercise:}} Apply these results to  the previous example by yourself.
-
-
-
-
-
-
-
-
-
 
 \end{document}
