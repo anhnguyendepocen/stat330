@@ -246,38 +246,45 @@ n = 99; p  = 19/39
 
 \begin{frame}
 \frametitle{Astronomy example}
+\small
 
-{\small
-An astronomer wants to measure the distance, $d$, from the observatory to a star. \pause 
-Due to the variation of atmospheric conditions and imperfections in the measurement method, a single measurement will not produce the exact distance $d$. \pause 
-The astronomer takes $n$ measurements of the distance and uses the sample average to estimate the true distance. \pause 
-From past records of these measurements the astronomer knows the variance of a single measurement is $4\ \mbox{parsec}^2$. \pause
-How many measurement should the astronomer make so that the chance that his estimate differs from $d$ by more than 0.5 parsecs is at most 0.05?
+\vspace{-0.05in}
+
+An astronomer wants to measure the distance, $d$, from the observatory to a star. \pause
+The astronomer takes 30 measurements that she believes are unbiased and finds the average of these measurements to be 29.4 parsecs and variance to be 4 parsecs$^2$.
+What is the probability the average is within 0.5 parsecs?
 
 \vspace{0.1in} \pause
 
-Let $X_i$ be the $i^{th}$ measurement. \pause The 
-The astronomer assumes that $X_1,X_2,\ldots X_n$ are iid with $E[X_i]=d$ and $Var[X_i]=4$. \pause 
-The estimate of $d$ is 
-\[ \overline{X}_n=\frac{(X_1+X_2+\dots+X_n)}{n}. \]
-We want to find the number of measurements $n$ so that 
-\[ P\left(|\overline{X}_n-d|>0.5\right)\le 0.05. \]
-}
+Let $X_i$ be the $i^{th}$ measurement. \pause The
+The astronomer assumes that $X_1,X_2,\ldots X_n$ are iid with $E[X_i]=d$ (unbiased) and $Var[X_i]=\sigma^2=4$. \pause
+The estimate of $d$ is
+\[ \overline{X}_n=\frac{(X_1+X_2+\dots+X_n)}{n} = 29.4. \]
+and, by the Central Limit Theorem, we believe $\overline{X}_n \sim N(d, \sigma^2/n)$ where $n=30$. \pause
+We want to find
+\[ \begin{array}{rl}
+P\left(|\overline{X}_n-d|>0.5\right)
+&= P\left(-0.5 < \overline{X}_n-d < 0.5\right) \\
+&= P\left(\frac{-0.5}{\sigma/\sqrt{n}} < \frac{\overline{X}_n-d}{\sigma/\sqrt{n}} < \frac{0.5}{\sigma/\sqrt{n}} \right) \\
+&= P\left(\frac{-0.5}{\sigma/\sqrt{n}} < Z < \frac{0.5}{\sigma/\sqrt{n}} \right) \\
+&\approx P(-1.37 < Z < 1.37) \\
+&= P(Z<1.37) - P(Z<-1.37) \\
+& \approx 0.915 - 0.085 = 0.830
+\end{array} \]
+
 \end{frame}
 
 
-
-
 \begin{frame}
-\frametitle{Astronomy solution}
+\frametitle{Astronomy example (cont.)}
+\small
 
-From the CLT, we have the 
-\[ 
-X_n \sim N(d, 4/n).
-\]
-\pause
-Now, we solve
-{\small
+Suppose the astronomer want to be within 0.5 parsecs with 95\% probability. How many more samples would she need to take?
+
+\vspace{0.1in} \pause
+
+We solve
+
 \[ \begin{array}{rll}
 P(|\overline{X}_n-d|>.5) &= P(\overline{X}_n-d>.5)+P(\overline{X}_n-d<-.5)\\
  &= P\left(\frac{\overline{X}_n-d}{\sqrt{4/n}}>\frac{.5}{\sqrt{4/n}}\right)+
@@ -286,10 +293,10 @@ P(|\overline{X}_n-d|>.5) &= P(\overline{X}_n-d>.5)+P(\overline{X}_n-d<-.5)\\
  &= 2P\left(Z<\frac{-.5}{\sqrt{4/n}}\right) \\
  &\le 0.05
 \end{array} \]
-}
+
 \pause
-On a $Z$ table, we find that $P(Z<-1.96)\approx 0.025$ \pause and thus $n=61.47$\pause which we round up to 62. \pause
-So the astronomer needs 62 measurements to obtained the desired accuracy. 
+On a $Z$ table, we find that $P(Z<-1.96)\approx 0.025$ \pause and thus $n=61.47$ \pause which we round up to 62. \pause
+So the astronomer needs 62-30=32 more measurements to obtained the desired accuracy.
 
 \end{frame}
 
