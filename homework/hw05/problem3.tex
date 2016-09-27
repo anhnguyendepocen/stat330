@@ -1,0 +1,31 @@
+\item Suppose $X_i\stackrel{ind}{\sim} Exp(\lambda)$ for $\lambda>0$ and 
+\[ Y_n = \sum_{i=1}^n X_n \]
+for $n\ge 1$.
+  \begin{enumerate}
+  \item What is the distribution for $Y_n$?
+  \item What is the distribution for $Y_{n+1}-Y_{n}$?
+  \item What is the distribution for $Y_{n+j}-Y_{n}$ for $j\ge 1$? 
+  \item Are $Y_n$ and $Y_{n+1}$ independent? Why or why not?
+  \item Calculate the covariance between $Y_1$ and $Y_2$. 
+  \end{enumerate}
+  
+  \ansfont{
+  \begin{enumerate}
+  \item This is the sum of $n$ exponential waiting times and thus is $Y_n \sim Ga(n,\lambda)$.
+  \item $Y_{n+1}-Y_n = X_{n+1} \sim Exp(\lambda)$.
+  \item $Y_{n+j}-Y_{n} = \sum_{i=n+1}^{j} X_i \sim Ga(j,\lambda)$. 
+  \item We know that the marginal distributions are $Y_n \sim Ga(n,\lambda)$ and $Y_{n+1}\sim Ga(n+1,\lambda)$. The definition of independence requires that $f_{y_n,y_{n+1}}(y_n,y_{n+1}) = f_{y_n}(y_n)f_{y_{n+1}}(y_{n+1})$. So, let $y_n=2$ and $y_{n+1}=1$ which is an impossible event because it states that the $n+1$th event occurred before the $n$th event. Therefore we know $f(2,1)=0$, but 
+  \[ 
+f_{y_n}(2)f_{y_{n+1}}(1) = \frac{\lambda^n}{\mathrm{\Gamma}(n)} 2^{n-1}e^{-2\lambda}\frac{\lambda^{n+1}}{\mathrm{\Gamma}(n+1)} 1^{n+1-1}e^{-1\lambda} > 0.
+  \]
+  Thus, the two events are not independent.
+  \item By the properties of covariance on page 52 of Baron, we have 
+  \[ \begin{array}{rl}
+  Cov(Y_1,Y_2) 
+  &= Cov(X_1,X_1+X_2) \\
+  &= Cov(X_1,X_1)+Cov(X_1,X2) \\
+  &= Var(X_1)+0 \\
+  &= 1/\lambda^2.
+  \end{array} \]
+  \end{enumerate}
+  }

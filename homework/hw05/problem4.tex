@@ -1,0 +1,42 @@
+\item An iid sample of $n$ observations is drawn from a population with mean
+    equal to 20 and standard deviation equal to 16. Let $\bar{X}$ be the sample
+    mean.
+    \begin{enumerate}
+      \item Given $n=64$. Find $P(\bar{X}<16)$.
+      \item Given $n=64$. Find $P(16<\bar{X}<23)$.
+      \item What is the smallest sample size so that
+        the chance that $|\bar{X}-20|>0.5$ is at most 0.05?
+    \end{enumerate}
+
+    \ansfont{
+      \begin{enumerate}
+        \item By CLT, $\bar{X}\sim N(20, 16^2/64)$ approximately.
+          \begin{align*}
+            P(\bar{X}<16)
+            &= P\left(\frac{\bar{X}-20}{\sqrt{4}} <
+              \frac{16-20}{\sqrt{4}}\right)\\
+            &\simeq P(Z < -2) \quad\quad\quad Z\sim N(0,1)\\
+            &= 0.0228
+          \end{align*}
+        \item
+          \begin{align*}
+            P(16<\bar{X}<23)
+            &= P\left(\frac{16-20}{\sqrt{4}}<\frac{\bar{X}-20}{\sqrt{4}} <
+              \frac{23-20}{\sqrt{4}}\right)\\
+            &\simeq P(-2 < Z < 1.5) \quad\quad\quad Z\sim N(0,1)\\
+            &= P(Z <1.5) - P(Z\le -2)\\
+            &= 0.9332 - 0.0228 = 0.9104
+          \end{align*}
+        \item
+          \begin{align*}
+            P(|\bar{X}-20|>0.5) &\le 0.05\\
+            P(\bar{X}-20<-0.5) + P(\bar{X}-20>0.5) &\le 0.05\\
+            P(Z < -0.5/(16/\sqrt{n})) + P(Z > 0.5/(16/\sqrt{n})) &\le 0.05\\
+            2P(Z < -\sqrt{n}/32) &\le 0.05\\
+            \Phi( -\sqrt{n}/32) &\le 0.025
+          \end{align*}
+          which implies $-\sqrt{n}/32\le-1.96$ and thus $n\ge3933.798$. The
+          smallest sample size is 3934.
+      \end{enumerate}
+    }
+    
