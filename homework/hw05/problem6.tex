@@ -1,0 +1,41 @@
+\item Among all the computer chips produced by a certain factory, 6 percent are defective. A sample of 400 chips is selected for inspection. What is the probability that this samples contains between 20 and 25 (inclusive) defective chips. 
+	\begin{enumerate}
+	\item Use the binomial distribution
+	\item Use the central limit theorem
+	\item Use the central limit theorem with continuity correction
+	\end{enumerate}
+	
+\ansfont{
+	\begin{enumerate}
+	\item Let $X$ be the number of defective chips in the sample. Then if we assume independence amongst the chips. $X\sim Bin(n,p)$ with $n=400$ and $p=0.06$.
+	
+	% R code: n=400; p=.06; x=c(20,25); sum(dbinom(x[1]:x[2],n,p))
+	
+	\[ 
+	P(20\le X\le 25) = \sum_{x=20}^{25} {n\choose x}p^x(1-p)^{n-x} \approx 0.46
+	\]
+	
+	\item Let $Y\sim N(np,np(1-p))$ which is an approximation to the distribution of $X$. Then 
+	
+	% R code: diff(pnorm(x),n*p,sqrt(n*p*(1-p))))
+	
+	\[ \begin{array}{rl}
+	P(20\le Y \le 25) &= P\left(\frac{20-np}{\sqrt{np(1-p)}} \le \frac{Y-np}{\sqrt{np(1-p)}} \le \frac{25-np}{\sqrt{np(1-p)}}  \right) \\
+	& = P\left(\frac{20-np}{\sqrt{np(1-p)}} \le Z \le \frac{25-np}{\sqrt{np(1-p)}}  \right) \\
+	& = P\left(Z\le \frac{20-np}{\sqrt{np(1-p)}}\right) - P\left(Z\le \frac{25-np}{\sqrt{np(1-p)}}\right) \\
+	& \approx P(Z\le 0.21) - P(Z\le -0.84) \\
+	& \approx 0.38
+	\end{array} \]
+	
+	\item To use the continuity correction, we need to expand each side by 0.5. So we have 
+	
+	% R code: diff(pnorm(x+c(-.5,0.5),n*p,sqrt(n*p*(1-p))))
+	
+	\[ \begin{array}{rl}
+	P(20-0.5\le Y \le 25+0.5) &= P\left(Z\le \frac{19.5-np}{\sqrt{np(1-p)}}\right) - P\left(Z\le \frac{25.5-np}{\sqrt{np(1-p)}}\right) \\
+	& \approx P(Z\le 0.32) - P(Z\le -0.95) \\
+	& \approx 0.45
+	\end{array} \] 
+	
+	\end{enumerate}
+}
