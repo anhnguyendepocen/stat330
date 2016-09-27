@@ -1,0 +1,28 @@
+%!TEX root = exam1.tex
+
+\item Nine ping-pong balls, numbered 1 through 9 are placed into an urn. Four are randomly drawn, without replacement.
+
+\begin{enumerate}
+
+\item How many sets of four numbers are possible if the order of the numbers does not matter? (6 pts)
+
+\ansfont{ There are $9\choose4$=$\frac{9!}{4!5!}=126$ different sets.
+}
+\vfill
+
+\item What is the probability that exactly one of the four numbers is even? (7 pts)
+
+\ansfont{ Let A=\{``Exactly one Even''\}. \\
+Then $P(A)=\frac{|A|}{|\Omega|}$. $|A|$=$4\choose1$$5\choose3$=40. Thus $P(A)=\frac{40}{126}\approx 0.3175.$
+}
+\vfill
+
+
+\item What is the probability that at least three of the four numbers are even? (7 pts)
+
+\ansfont{ Let B=\{``At least three of the numbers are even''\}. \\
+Then $|B|$=${4 \choose 3}{5 \choose 1}+{4 \choose 4}{5 \choose 0}$=21, so $P(B)=\frac{|B|}{|\Omega|}=\frac{21}{126}\approx 0.1667.$ 
+}
+\vfill
+
+\end{enumerate}
