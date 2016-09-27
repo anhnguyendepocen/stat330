@@ -1,0 +1,59 @@
+  \item
+    Driving to work, a commuter passes through a sequence of three
+    intersections with traffic lights. At each light, she either stops, $s$, or continues, $c$.
+    \begin{enumerate}
+      \item % Rice 1.2 Ex A
+        \label{lights}
+        Determine the set of possible outcomes in the sample space.
+        \emph{Notation: use `$csc$' to denote the outcome where she must stop only at the second traffic light.}
+
+
+
+      \item % my addition, cont.
+        If each of the outcomes is equally likely in (\ref{lights}), then
+        what is the probability (or chance) that she doesn't have to stop at any of these lights?
+        Comment if  this value seems reasonable to you.
+
+      \item \label{eventlights}
+        Let $A$ be an event in the sample space defined in problem (\ref{lights}),
+        and have event $A$ be the commuter stops at the first light.
+        Let $B$ be the event in (\ref{lights}) that the commuter stops at the second light.
+        Following the above notation, list the outcomes in each event:
+        \begin{enumerate}
+          \item $A$
+          \item $B$
+          \item $\bar{B}$
+          \item $A \cup B$
+          \item $A \cap B$
+          \item $A \cap \bar{B}$
+        \end{enumerate}
+    \end{enumerate}
+    \ansfont{
+      \begin{enumerate}
+          %Denote $csc$ as the outcome where she must stop only at the second traffic light.
+        \item Following the above notation, the set of all outcomes is
+          \[\Omega = \{ccc, ccs, css, csc, sss, ssc, scc, scs\}.\]
+        \item
+          The outcome of her not stopping at any light is $ccc$. This is one outcome
+          out of the possible 8, so the probability of this is
+          \[P(\{ccc\}) = \frac{\mathcal{N}_F}{\mathcal{N}_T}=\frac18.
+          \]
+          This probability (.125) is reasonable--it's the value if stopping at any light is independent
+          of any of the others. In perspective, a value of .95 or .01 would seem unreasonable.
+        \item
+          \begin{enumerate}
+            \item
+              {$A=\{sss, ssc, scc, scs\}$.}
+            \item
+              {$B=\{sss, ssc, css, csc\}$.}
+            \item
+              {$\bar{B}=\Omega\setminus B = \{ccc, ccs, scc, scs\}$.}
+            \item
+              {$A\cup B=\{sss, ssc, scc, scs, css, csc\}$.}
+            \item
+              {$A\cap B=\{sss, ssc\}$.}
+            \item
+              {$A\cap \bar{B}=\{scc, scs\}$.}
+          \end{enumerate}
+      \end{enumerate}
+    }
