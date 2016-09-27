@@ -262,6 +262,7 @@ The estimate of $d$ is
 \[ \overline{X}_n=\frac{(X_1+X_2+\dots+X_n)}{n} = 29.4. \]
 and, by the Central Limit Theorem, we believe $\overline{X}_n \sim N(d, \sigma^2/n)$ where $n=30$. \pause
 We want to find
+{\footnotesize
 \[ \begin{array}{rl}
 P\left(|\overline{X}_n-d|>0.5\right)
 &= P\left(-0.5 < \overline{X}_n-d < 0.5\right) \\
@@ -271,6 +272,7 @@ P\left(|\overline{X}_n-d|>0.5\right)
 &= P(Z<1.37) - P(Z<-1.37) \\
 & \approx 0.915 - 0.085 = 0.830
 \end{array} \]
+}
 
 \end{frame}
 
@@ -279,19 +281,17 @@ P\left(|\overline{X}_n-d|>0.5\right)
 \frametitle{Astronomy example (cont.)}
 \small
 
-Suppose the astronomer want to be within 0.5 parsecs with 95\% probability. How many more samples would she need to take?
+Suppose the astronomer want to be outside 0.5 parsecs with at most 5\% probability. How many more samples would she need to take?
 
 \vspace{0.1in} \pause
 
 We solve
-
 \[ \begin{array}{rll}
-P(|\overline{X}_n-d|>.5) &= P(\overline{X}_n-d>.5)+P(\overline{X}_n-d<-.5)\\
- &= P\left(\frac{\overline{X}_n-d}{\sqrt{4/n}}>\frac{.5}{\sqrt{4/n}}\right)+
- P\left(\frac{\overline{X}_n-d}{\sqrt{4/n}}<\frac{-.5}{\sqrt{4/n}}\right)\\
- & \approx P\left(Z>\frac{.5}{\sqrt{4/n}}\right)+P\left(Z<\frac{-.5}{\sqrt{4/n}}\right) \\
- &= 2P\left(Z<\frac{-.5}{\sqrt{4/n}}\right) \\
- &\le 0.05
+0.05 \ge P\left(\left|\overline{X}_n-d\right|>.5\right) &= P\left(\overline{X}_n-d>.5\right)+P\left(\overline{X}_n-d<-.5\right)\\
+ &= P\left(\frac{\overline{X}_n-d}{\sqrt{\sigma^2/n}}>\frac{.5}{\sqrt{\sigma^2/n}}\right)+
+ P\left(\frac{\overline{X}_n-d}{\sqrt{\sigma^2/n}}<\frac{-.5}{\sqrt{\sigma^2/n}}\right)\\
+ & \approx P\left(Z>\frac{.5}{\sqrt{\sigma^2/n}}\right)+P\left(Z<\frac{-.5}{\sqrt{\sigma^2/n}}\right) \\
+ &= 2P\left(Z<\frac{-.5}{\sqrt{\sigma^2/n}}\right) 
 \end{array} \]
 
 \pause
