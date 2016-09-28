@@ -135,7 +135,7 @@ A \alert{Markov chain} is a discrete-time, discrete-state Markov process.
 % }
 % \begin{definition}
 \begin{itemize}
-\item The \alert{transition probability matrix}  is 
+\item The \alert{transition (probability) matrix}  is 
 \[ 
 p_{ij}(t) = P(X_{t+1}=j|X_t=i).
 \]
@@ -157,7 +157,28 @@ p_{ij}(t) = p_{ij}.
 \begin{frame}
 \frametitle{Example Markov chain}
 
+In the summer, each day in Ames is either sunny or rainy. 
+A sunny day is followed by another sunny day with probability 0.7, whereas a rainy day is followed by a sunny day with probability 0.4.
+It rains on Monday. 
+Make weather forecasts for Tuesday, Wednesday, and Thursday, using a homogeneous Markov chain model.
 
+\vspace{0.1in} \pause
+
+Let 
+\[ 
+X(t) = \left\{ \begin{array}{ll}
+0 & \mbox{if it rains on day $t$} \\
+1 & \mbox{if it sunny on day $t$}
+\end{array} \right.
+\]
+Then a homogeneous Markov chain model has transition matrix 
+\[
+  p = \bordermatrix{
+    & 0 & 1 \\
+    0 & 0.4 & 0.6 \\
+    1 & 0.3 & 0.7
+  }
+\]
 
 \end{frame}
 
