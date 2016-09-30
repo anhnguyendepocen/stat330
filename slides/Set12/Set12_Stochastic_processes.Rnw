@@ -364,11 +364,11 @@ where element $p_{ij}^{(h)}$ is the probability of being in state $j$ if you sta
 The following results hold:
 \begin{itemize}
 \item $P^{(2)} = P \times P = P^2$ and
-\item $P^{(t)} = P^{(t-1)} \times P$.
+\item $P^{(h)} = P^{(t-1)} \times P$.
 \end{itemize}
 \pause
-Thus if $P_0$ is our initial state, then the probability distribution for the state at time $t$ is 
-\[ P_t = P_0 P^{(t)}.\]
+Thus if $P_0$ is our initial state, then the probability distribution for the state at time $h$ is 
+\[ P_h = P_0 P^{(h)}.\]
 
 \pause
 
