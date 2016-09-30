@@ -294,6 +294,15 @@ and thus there is a weak negative (linear) association.
 \begin{frame}
 \frametitle{Example (cont.)} 
 
+\begin{definition}
+Two discrete random variables are \alert{independent} if 
+\[ 
+P(X=x,Y=y) = P(X=x)P(Y=y).
+\]
+\end{definition}
+\pause
+
+
 Are $X$ and $Y$ independent? 
 
 \vspace{0.1in} \pause
@@ -350,9 +359,9 @@ E[h(X,Y)] = \int \int p_{X,Y}(x,y) dx dy.
 
 For any random variables $X$, $Y$, $W$ and $Z$,
 \[ \begin{array}{rl}
-Var(aX+bY+c) &= a^2 Var(X) + b^2Var(Y) + 2ab Cov(X,Y) \\
-Var(aX+bY,cZ+dW) &= acCov(X,Z) + adCov(X,W) \\
-&+ bc Cov(Y,Z) + bd Cov(Y,W) \\
+Var(aX+bY+c) &= a^2 Var(X) + b^2Var(Y) + 2ab Cov(X,Y) \pause \\
+Cov(aX+bY,cZ+dW) &= acCov(X,Z) + adCov(X,W) \\
+&+ bc Cov(Y,Z) + bd Cov(Y,W) \pause \\
 Cov(X,Y) &= Cov(Y,X) \\
 \rho(X,Y) &= \rho(Y,X)
 \end{array} \]
