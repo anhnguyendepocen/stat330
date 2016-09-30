@@ -1,0 +1,137 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set13 - Poisson process}
+
+\begin{document}
+
+
+\begin{frame}
+\frametitle{Poisson process}
+
+\begin{definition}
+A stochastic process $X(t)$ is called a \alert{homogenous Poisson process} with rate $\lambda$ if 
+\begin{itemize}
+\item For $t>0$, $X(t)$ takes values in \{0,1,2,}
+\end{itemize}
+\end{definition}
+
+\end{frame}
+
+
+% \foilhead[-.8in]{\textcolor{blue}{Poisson Process}}
+% \no  {\textcolor{magenta}{Review: What is Exponential distribution? and Poisson distribution?}}  \\[.1in]
+% \no  1. {\textcolor{magenta}{Exponential}}:  $P(T\leq t)=1-e^{-\lambda t}$ for all $t\geq 0$ where $T$ is waiting time for rare event to happen (once).\\[.1in]
+% \no 2. {\textcolor{magenta}{Poisson}}: $P(X=k)=e^{-\lambda}\lambda^x/x!$ where $X$ is the number of observations of rare event during certain time period (or space).\\[.1in]
+% \no 3. \emph{pdf} of Exponential distribution: $f_T(t)=\lambda e^{-\lambda t}$ for $t\geq 0$, and $\lambda$ is the rate,  $1/\text{time}$. What is $E(T)$, and $\text{Var}(T)$? What is $E(X)$ and $\text{Var}(X)$)\\[.1in]
+% \no 4. Lack of memory property for Exponential: $$P(T>t+s|T>t)=P(T>s)$$ (this is key for Poisson process later)\\[.1in]
+% \no 5.  Exponential race: $P(\min (S,T)>t)=P(S>t, T>t)=e^{-(\lambda+\mu)t}$ if $T,S$ independent. What about $P(\min (T_1,\cdots, T_n)>t)$? 
+% \foilhead[-.8in]{\textcolor{blue}{Poisson process}}
+% \no  {\textcolor{magenta}{Definition:}  A stochastic process $X(t)$ is called {\it homogenous Poisson
+%     process with rate $\lambda$}, if
+%     \begin{enumerate}
+% 	\item for $t > 0$, $X(t)$ takes values in $\{ 0,1,2,3, \ldots \}$.
+% 	\item {distribution depends only on length of interval} for any $0 \le t_{1} < t_{2}$:
+% 	\[
+% 	X(t_{2}) - X(t_{1}) \sim Po_{\lambda (t_{2} - t_{1})}
+% 	\]
+% 	\item {non-overlapping intervals are independent} for any $0
+% 	\le t_{1} < t_{2} \le t_{3} < t_{4}$
+% 	\[
+% 	X(t_{2}) - X(t_{1}) \text{ is independent from } X(t_{4}) -X(t_{3})
+% 	\]
+%     \end{enumerate}
+% \no Jargon: $X(t)$ is a ``counting process'' with independent Poisson
+% increments.
+%  
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Example}}
+% \no $\clubsuit$ A counter of the number of hits on our webpage is an example for a Poisson process with rate $\lambda=2$/min. \\[.1in]
+% \no $\heartsuit$ Here \emph{arrival} times are generated from $Exp(2).$ $X(t)$ \emph{counts} numbers of hits until time $t$ min.\\[.1in]
+% \no \hspace*{2in} \includegraphics*[scale=.8]{poisson_counter.pdf}
+% \vspace*{-.4in}
+% 
+% \no $\diamondsuit$ For example, we find that  $X(t)=3$ for $t\in [5,8]$ minutes; i.e., only 3 hits upto any time within 5 to 8 minutes.
+% \foilhead[-.8in]{\textcolor{blue}{Example (cont'd)}}
+% \no {\textcolor{magenta}{Remarks} \\[.1in]
+% \no 1. $X(t)$ can be thought of as the number of occurrences until time $t$.\\[.1in]
+% \no 2. Similarly, $X(t_{2}) - X(t_{1})$ is the number of occurrences in the interval $(t_{1}, t_{2}]$.\\[.1in]
+% \no 3. Assume $X(0) = 0$\\[.1in]
+% \no 4. The distribution of $X(t)$ is Poisson with rate $\lambda t$, since:
+%    $$X(t) = X(t) - X(0) \sim Po_{\lambda(t-0)}$$\\[.1in]
+%   
+%   
+% \foilhead[-.8in]{\textcolor{blue}{Example (Cont'd)}}  
+% \no {\textcolor{red}{Based on the last example:} \\[.1in]
+% For a given Poisson process $X(t)$ we define {\it occurrences}
+% $$
+%     O_{0}=0 ,\    O_{j} = \text{time of the } j^{th} \text{occurrence} =\text{the first } t\ \text{ for which } X(t) \ge j
+% $$
+% and the {\it inter-arrival time} between successive hits:
+% $$
+%     I_{j} = O_{j} - O_{j-1} \text{ for } j = 1, 2, \ldots
+% $$
+% The time until the $k^{th}$ hit $O_{k}$ is therefore given as the sum of
+% inter-arrival times $O_{k} = I_{1} + \ldots + I_{k}$.
+% 
+% 
+% 
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Equivalence theorem }}
+% \no {\textcolor{red}{Equivalence theorem:} \\[.1in]
+% \no $X(t)$ is a Poisson process with rate $\lambda$ \textbf{iff} the inter-arrival times $I_{1}, I_{2},
+%     \ldots$ are i.i.d. $Exp_{\lambda}$.\\[.1in]
+% \no {\textcolor{red}{Corollary:} \\[.1in]    
+% \no The time until the $k$th hit $O_{k}$ is an Erlang$_{k,
+% \lambda}$ distributed variable, $\iff$ $X(t)$ is a Poisson process
+% with rate $\lambda$.\\[.1in]
+% \no {\textcolor{red}{Note:} This theorem is very important! - it links the Poisson, Exponential,
+% and Erlang distributions tightly together!
+% %\no {\textcolor{red}{Some thoughts:}\\[.1in]
+% %\no \bul Why Poisson so important?!\\[.1in]
+% %\no \bul We mention homogeneous Poisson process; What is meant by {\textcolor{magenta}{homogeneous}}?\\[.1in]
+% %\no \bul What is a  nonhomogeneous process?   
+% 
+% \foilhead[-.8in]{\textcolor{blue}{Example}}\vspace{.5cm}
+% \no  {\textcolor{magenta}{Hits on a website:}} {\textcolor{cyan}{Hits on a popular Web page occur according to a Poisson Process with
+% a rate of 10  hits/min. One begins observation at exactly noon.}}\\[.1in]
+% \no 1. {\textcolor{cyan}{Evaluate the probability of 2 or less hits in the first minute.}}\\[.1in]
+% {\it
+% Let $X$ be the number of hits in the first minute, then $X$ is a
+% Poisson variable with $\lambda = 10$:
+% \[
+% P(X \le 2) = Po_{10}(2) = e^{-10} + 10 \cdot  e^{-10}  + 10^{2}/2
+% e^{-10} = 0.0028.
+% \]
+% }\\[.1in]
+% \no 2. {\textcolor{cyan}{Evaluate the probability that the time till the first hit exceeds 10 seconds.}}\\[.1in]
+% {\it Let $Y$ be the time until the first hit - then $Y$ has an
+% Exponential distribution with parameter $\lambda = 10$ per minute or
+% $\lambda = 1/6$ per second.
+% \[
+% P(Y \ge 10) = 1 - P(Y \le 10) = 1 - (1 - e^{-10 \cdot 1/6}) =
+% e^{-5/3} = 0.1889.
+% \]}
+% \no 3. {\textcolor{cyan}{Evaluate the mean and the variance of the time till the 4th hit.}}\\[.1in]
+% {\it Let $T$ be the time till the 4th hit. Then $T$ has an Erlang
+% distribution with stage parameter $k = 4$ and $\lambda = 10$ per minute.
+% \begin{eqnarray*}
+%     E[T] &=& \frac{k}{\lambda} = \frac{4}{10} = 0.4 \text{ minutes} \\
+%     Var[T] &=& \frac{k}{\lambda^{2}} = \frac{4}{100} = 0.04 \text{minutes}^{2}.
+% \end{eqnarray*}}
+% %
+% \no 4. {\textcolor{cyan}{Evaluate the probability that the time till the 4th hit exceeds 24 seconds.}}
+% \no Need $P(T > 24/60)$ where $T \sim Erlang(4,10)$ and $T$ is in minutes; so we'll use the Gamma-Poisson formula:
+% \begin{eqnarray*}
+%     P(T > 0.4) &=& P(X<4) \ \ \mbox{ where } X \sim Poi(\lambda \cdot t)\\
+%     &=& P(X \le 3)\ \mbox{where}\ X \sim Poi(10 \cdot 0.4)\\
+%     &=& Po_{4}(3)=0.433% \ \ \text{Website table,p.786 or Baron p.384}
+% \end{eqnarray*}
+
+\end{document}
+
+
+
+
