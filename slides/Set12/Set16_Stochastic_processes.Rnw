@@ -26,7 +26,7 @@ library(tidyr)
 @
 
 <<set_seed>>=
-set.seed(2)
+set.seed(1)
 @
 
 \frame{\maketitle}
@@ -296,7 +296,7 @@ P(X(2)=1|X(0)=2) = 1-P(X(2)=2|X(0)=2) = 1-0.444 = 0.556
 \begin{frame}[fragile]
 \frametitle{Simulate an answer}
 
-<<echo=TRUE, tidy=FALSE>>=
+<<echo=TRUE, dependson='set_seed'>>=
 library(dplyr)
 library(tidyr)
 
@@ -306,11 +306,12 @@ one_step = function(x,p=transition_matrix) {
 	sample(x = 1:2, size = 1, prob=p[x,])
 }
 
-plyr::rdply(1e4, {
+n_sims = 1e4
+plyr::rdply(n_sims, {
 	data.frame(monday=2) %>%
 		dplyr::mutate(tuesday   = one_step(monday   ),
-									wednesday = one_step(tuesday  ),
-									thursday  = one_step(wednesday))
+                              wednesday = one_step(tuesday  ),
+                              thursday  = one_step(wednesday))
 }) %>%
 	gather(day,state, -.n) %>%
 	group_by(day) %>%
@@ -319,6 +320,9 @@ plyr::rdply(1e4, {
 	select(monday,tuesday,wednesday,thursday) %>% 
 	as.data.frame %>% round(3)
 @
+
+{\tiny above are Monte Carlo estimates of the probabilities we derived earlier 
+based on \Sexpr{n_sims} simulations}
 
 \end{frame}
 
