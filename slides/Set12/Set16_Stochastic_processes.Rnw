@@ -167,86 +167,160 @@ Make weather forecasts for Tuesday, Wednesday, and Thursday, using a homogeneous
 Let 
 \[ 
 X(t) = \left\{ \begin{array}{ll}
-0 & \mbox{if it rains on day $t$} \\
-1 & \mbox{if it sunny on day $t$}
+1 & \mbox{if it is sunny on day $t$} \\
+2 & \mbox{if it rains on day $t$} 
 \end{array} \right.
 \]
 Then a homogeneous Markov chain model has transition matrix 
+\[ % I'd like to do this with bordermatrix
+  p = \left( \begin{array}{cc} 0.7 & 0.3 \\ 0.4 & 0.6 \end{array} \right)
+\]
+\pause
+which means 
+{\tiny
+\[ \begin{array}{rl}
+P(X(t)=1|X(t-1)=1) &= 0.7 \\
+P(X(t)=2|X(t-1)=1) &= 0.3 \\
+P(X(t)=2|X(t-1)=2) &= 0.6 \\
+P(X(t)=1|X(t-1)=2) &= 0.4 
+\end{array} \]
+}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Tuesday forecast}
+
+Let 
+\begin{itemize}
+\item $t=0$ be Monday
+\item $t=1$ be Tuesday
+\end{itemize}
+\pause
+Then we know 
+\[ 
+P(\mbox{M rain}) = P(X(0)=2) = 1
+\]
+because (we know) it rained on Monday. 
+
+\vspace{0.1in} \pause
+
+Thus, our Tuesday forecast is 
 \[
-  p = \bordermatrix{
-    & 0 & 1 \\
-    0 & 0.4 & 0.6 \\
-    1 & 0.3 & 0.7
-  }
+P(\mbox{T rain}|\mbox{M rain}) = P(X(1)=2|X(0)=2) = 0.6
+\]
+\pause
+i.e. a 60\% chance of rain \pause and a 40\% chance of sun since
+\[ \begin{array}{rl}
+P(\mbox{T sun}|\mbox{M rain}) &= 1-P(\mbox{T rain}|\mbox{M rain}) \\
+&= 1-P(X(1)=2|X(0)=2) \\
+&= 1-0.6=0.4.
+\end{array} \]
+
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Wednesday forecast}
+\small
+
+Let 
+\begin{itemize}
+\item $t=2$ be Wednesday
+\end{itemize}
+and we know
+\[ 
+P(X(1)=2|X(0)=2) = 0.6
+\]
+then 
+{\tiny
+\[ \begin{array}{rll}
+P(X(2)=2|X(0)=2) =& 
+P(X(2)=2|X(1)=2,X(0)=2)P(X(1)=2|X(0)=2) \\ 
+&+ 
+P(X(2)=2|X(1)=1,X(0)=2)P(X(1)=1|X(0)=2) & \mbox{by Law of Total Probability} \\ \\
+=& P(X(2)=2|X(1)=2)P(X(1)=2|X(0)=2) \\
+&+ 
+P(X(2)=2|X(1)=1)P(X(1)=1|X(0)=2) & \mbox{by Markov property} \\ \\
+=& 0.6\times 0.6 + 0.3\times 0.4 \\
+=& 0.48
+\end{array}\]
+}
+i.e. a 48\% chance of rain on Wednesday 
+\pause
+and thus
+\[
+P(X(2)=1|X(0)=2) = 1-P(X(2)=2|X(0)=2) = 1-0.48 = 0.52
 \]
 
 \end{frame}
 
 
-% \foilhead[-.8in]{\textcolor{blue}{Markov Chains : Example}} 
-% \no In the summer, each day in Ames is either sunny or rainy. A sunny
-% day is followed by another sunny day with probability 0.7, whereas
-% a rainy day is followed by a sunny day with probability 0.4. It rains
-% on Monday. Make weather forecasts for Tuesday, Wednesday, and Thursday, using a homogeneous Markov chain model.\\[.1in]
-% \no Let 1=''sunny'' and 2=''rainy'' and M,T,W,R denotes days of the week.\\[.1in]
-% Given $p_{11}=.7$; it follows that for the complementary event  $p_{12}=.3$\\[.1in]
-% Similarly, given $p_{21}=.4$ it follows that $p_{22}=.6$\\[.15in]
-% {\textcolor{blue}{Forecast for Tuesday:}}\\[.1in]
-% Consider Monday(M) to Tuesday(T) as a one-step transition:\\[.1in]
-% \hspace*{1in} $P(\text{T sunny}|\text{M rainy})=p_{21}=.4$\\[.1in]
-% \hspace*{1in} $P(\text{T rainy}|\text{M rainy})=p_{22}=.6$\\[.1in]
-% {\textcolor{magenta}{Prediction:}} 60\% chance of rain for Tuesday.
-% \newpage
-% \no {\textcolor{blue}{Forecast for Wednesday:}}\\[.01in]
-% Consider Monday(M) to Wednesday(W) as a 2-step transition:\\[.1in]
-% $P(\text{W sunny}|\text{M rainy})=p_{21}^{(2)}=$ ({\textcolor{magenta}{By Total Probability Law}})\\[.1in]
-% \hspace*{1in} $P(\text{W sunny}|\text{T rainy},\text{M rainy})\cdot P(\text{T rainy}|\text{M rainy})$\\
-% \hspace*{2.5in} $+P(\text{W sunny}|\text{T sunny},\text{M rainy})\cdot P(\text{T sunny}|\text{M rainy})$ \\[.1in]
-% \no Using {\textcolor{magenta}{Markov property}}, above equals to\\[.1in]
-% {\small $P(\text{W sunny}|\text{T rainy})\cdot P(\text{T rainy}|\text{M rainy})+P(\text{W sunny}|\text{T sunny})\cdot P(\text{T sunny}|\text{M rainy})$} \\[.1in]
-% \hspace*{1.5in} $=p_{21}\cdot p_{22}+p_{11} \cdot p_{21}=(.4)(.6)+(.7)(.4)=.52$\\[.1in]
-% For the complementary event, $P(\text{W rainy}|\text{M rainy})=p_{21}^{(2)}=1-.52=.48$\\[.1in]
-% {\textcolor{magenta}{Prediction:}} 48\% chance of being sunny on Wednesday.\\[.1in]
-% Using this method, computations of 3-step probabilities follow similar arguments:
-% $p_{21}^{(3)}=p_{21}\cdot p_{22}^{(2)}+p_{11} \cdot p_{22}^{(2)}=(.4)(.48)+(.7)(.52)=.556$\\[.1in]
-% {\textcolor{magenta}{Prediction:}} 44.4\% chance of rain for Thursday.
-% \foilhead[-.8in]{\textcolor{blue}{Transition Probability Matrix}} 
-% \no Let $\{1,\,2,\,...,\, n\}$ be the state space. The 1-step
-% transition probability matrix is
-% \[P=\begin{pmatrix}p_{11} & p_{12} & \cdots & p_{1n}\\
-% p_{21} & p_{22} & \cdots & p_{2n}\\
-% \vdots & \vdots & \ddots & \vdots\\
-% p_{n1} & p_{n2} & \cdots & p_{nn}
-% \end{pmatrix}.\]
-% The element from the $i$-th row and $j$-th column is $p_{ij}$,
-% which is the transition probability from state $i$ to state $j$.
-% Similarly, one can define a $h$-step transition probability matrix\\
-% \[P^{(h)}=\begin{pmatrix}p_{11}^{(h)} & p_{12}^{(h)} & \cdots & p_{1n}^{(h)}\\
-% p_{21}^{(h)} & p_{22}^{(h)} & \cdots & p_{2n}^{(h)}\\
-% \vdots & \vdots & \ddots & \vdots\\
-% p_{n1}^{(h)} & p_{n2}^{(h)} & \cdots & p_{nn}^{(h)}
-% \end{pmatrix}.\]
-% \newpage
-% \no Using the matrix notation the following results follow:\\[.15in]
-% \bul 2-step transition matrix $P^{(2)}=P\cdot P=P^{2}$\\[.1in]
-% \bul $h$-step transition matrix $P^{(h)}=P^{h}$\\[.1in]
-% \bul  The distribution of $X(h)$ is given by $P_{h}=P_{0}P^{h}$\\[.1in]
-% {\textcolor{blue}{Rain in Ames Example:}}\\
-% \[P=\begin{pmatrix}.7 & .3 \\
-% .4 & .6\\
-% \end{pmatrix}, \ \ P^{(2)}=\begin{pmatrix}.7 & .3 \\
-% .4 & .6\\
-% \end{pmatrix} \cdot \begin{pmatrix}.7 & .3 \\
-% .4 & .6\\
-% \end{pmatrix}=\begin{pmatrix} .61 &  .39 \\ .52 & .48 \end{pmatrix}\]
-%  \[P^{(3)}=\begin{pmatrix} .61 &  .39 \\ .52 & .48 \end{pmatrix} \cdot \begin{pmatrix} .7 & .3 \\
-% .4 & .6\\
-% \end{pmatrix}=\begin{pmatrix} .583 & .417  \\ .556 & .444 \end{pmatrix}\]\\
-% Just read-off values needed for predictions: \\[.1in]
-% \hspace*{1.5in} $P(\text{W rainy}|\text{M rainy})=p_{22}^{(2)}=.48$\\[.1in] 
-% \hspace*{1.5in} $P(\text{R sunny}|\text{M rainy})=p_{21}^{(3)}=.556$ 
 
 
+\begin{frame}
+\frametitle{Thursday forecast}
+\small
+
+Let 
+\begin{itemize}
+\item $t=3$ be Thursday
+\end{itemize}
+and we know
+\[ 
+P(X(2)=2|X(0)=2) = 0.48
+\]
+then 
+{\tiny
+\[ \begin{array}{rll}
+P(X(3)=2|X(0)=2) =& 
+P(X(3)=2|X(2)=2)P(X(2)=2|X(0)=2) \\
+& + P(X(3)=2|X(2)=1)P(X(2)=1|X(0)=2)  \\ \\ 
+=& 0.6\times 0.48 + 0.3\times 0.52 \\
+=& 0.444
+\end{array}\]
+}
+i.e. 44.4\% chance of rain on Thursday 
+\pause
+and thus
+\[
+P(X(2)=1|X(0)=2) = 1-P(X(2)=2|X(0)=2) = 1-0.444 = 0.556
+\]
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Simulate an answer}
+
+<<echo=TRUE, tidy=FALSE>>=
+library(dplyr)
+library(tidyr)
+
+transition_matrix = matrix(c(.7,.3,.4,.6), nrow=2, byrow=TRUE)
+
+one_step = function(x,p=transition_matrix) {
+	sample(x = 1:2, size = 1, prob=p[x,])
+}
+
+plyr::rdply(1e4, {
+	data.frame(monday=2) %>%
+		dplyr::mutate(tuesday   = one_step(monday   ),
+									wednesday = one_step(tuesday  ),
+									thursday  = one_step(wednesday))
+}) %>%
+	gather(day,state, -.n) %>%
+	group_by(day) %>%
+	summarize(rainy_percent = mean(state==2)) %>%
+	spread(day, rainy_percent) %>%
+	select(monday,tuesday,wednesday,thursday) %>% 
+	as.data.frame %>% round(3)
+@
+
+\end{frame}
 
 
 \end{document}
