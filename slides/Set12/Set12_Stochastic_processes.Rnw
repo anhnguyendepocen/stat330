@@ -43,7 +43,7 @@ where
 \begin{itemize}[<+->]
 \item $\mathcal{T}$ is a set of possible times, e.g. $[0,\infty),\{0, 1, 2, ...\}$.
 \item $\omega\in\mOmega$ is an outcome from the whole sample space $\mOmega$.
-\item Values of $X(t,\omega)$ are called \alert{states}.
+\item Values of $X(t,\omega)$ are called \alert{states} and the set of possible values $\mathcal{X}$ is the \alert{state space}.
 \item For any fixed time $t$, we see a random variable $X_t(\omega)$, a function of an outcome.
 \item For any fixed $\omega$, we have a function of time $X_\omega(t)$. This function is called a \alert{realization, sample path, or trajectory} of a process $X(t,\omega)$.
 \item $X(t,\omega)$ is \alert{discrete-state} (\alert{continuous-state}) if $X_t(\omega)$ is discrete (continuous).
