@@ -296,7 +296,7 @@ P(X(2)=1|X(0)=2) = 1-P(X(2)=2|X(0)=2) = 1-0.444 = 0.556
 \begin{frame}[fragile]
 \frametitle{Simulate an answer}
 
-<<echo=TRUE, dependson='set_seed'>>=
+<<simulation, echo=TRUE, dependson='set_seed'>>=
 library(dplyr)
 library(tidyr)
 
@@ -323,6 +323,65 @@ plyr::rdply(n_sims, {
 
 {\tiny above are Monte Carlo estimates of the probabilities we derived earlier 
 based on \Sexpr{n_sims} simulations}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Transition probability matrix}
+
+
+Let $\{1,2,\ldots,n\}$ be the state space. \pause
+The \alert{1-step transition probability matrix} is 
+\[ P = \left( \begin{array}{cccc} 
+p_{11} & p_{12} & \cdots & p_{1n} \\
+p_{21} & p_{22} & \cdots & p_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+p_{n1} & p_{n2} & \cdots & p_{nn} \\
+\end{array} \right) \]
+\pause
+
+\vspace{0.1in} \pause
+
+Similary we can define an $h$-step transition probability matrix as 
+\[ P^{(h)} = \left( \begin{array}{cccc} 
+p_{11}^{(h)} & p_{12}^{(h)} & \cdots & p_{1n}^{(h)} \\
+p_{21}^{(h)} & p_{22}^{(h)} & \cdots & p_{2n}^{(h)} \\
+\vdots & \vdots & \ddots & \vdots \\
+p_{n1}^{(h)} & p_{n2}^{(h)} & \cdots & p_{nn}^{(h)} \\
+\end{array} \right) \]
+\pause 
+where element $p_{ij}^{(h)}$ is the probability of being in state $j$ if you started in state $i$ after $h$ steps. 
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Calculating transition probability matrices}
+\small
+
+The following results hold:
+\begin{itemize}
+\item $P^{(2)} = P \times P = P^2$ and
+\item $P^{(t)} = P^{(t-1)} \times P$.
+\end{itemize}
+\pause
+Thus if $P_0$ is our initial state, then the probability distribution for the state at time $t$ is 
+\[ P_t = P_0 P^{(t)}.\]
+
+\pause
+
+<<dependson="simulation", echo=TRUE>>=
+P = transition_matrix
+P2 = P  %*% P
+P3 = P2 %*% P; P3
+
+P_M = c(0,1)            # Monday
+P_R = P_M %*% P3; P_R   # Thursday
+@
+
+{\tiny so the probability of rain on Thursday is \Sexpr{P_R[2]}}
 
 \end{frame}
 
