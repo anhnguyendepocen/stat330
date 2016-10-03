@@ -89,19 +89,88 @@ We have
 
 
 \begin{frame}
-\frametitle{Arrival rate}
+\frametitle{Binomial process a Markov chain}
+
+\begin{corollary}
+A binomial process is a stochastic process is \pause
+\begin{itemize}
+\item Markov chain, \pause
+\item homogeneous, \pause and
+\item irregular.
+\end{itemize}
+\pause
+Thus a binomial process has no steady-state distribution. 
+\end{corollary}
+
+\pause
+
+The one-step transition matrix is 
+{\tiny 
+\[ P = \left( \begin{array}{ccccc}
+1-p & p & 0 & 0 & \cdots \\
+0 & 1-p & p & 0 & \cdots \\
+0 & 0 & 1-p & p & \cdots \\
+\vdots & \vdots & \vdots & \ddots & \cdots
+\end{array} \right). \]
+}
+The $h$-step transition matrix is defined by the binomial distribution
+{\tiny
+\[ p_{ij}^{(h)} = P(j-i\mbox{ successes in $h$ trials}) =
+\left\{ \begin{array}{cl}
+{h \choose j-i}p^{j-i}(1-p)^{h-j+i} & \mbox{if }0\le j-i\le h \\
+0 & \mbox{otherwise}
+\end{array} \right. . \]
+}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Poisson process}
 
 
 
 \begin{definition}
-\alert{Arrival rate} $\lambda=p/\Delta$ is the average number of successes per one unit of time. \pause
-The time interval $\Delta$ of each Bernoulli trial is called a \alert{frame}. \pause
+\alert{Arrival rate} $\lambda=p/\Delta$ is the average number of successes per 
+one unit of time. \pause
+The time interval $\Delta$ of each Bernoulli trial is called a \alert{frame}. 
+\pause
 The \alert{interarrival time} is the time between successes. 
 \end{definition}
 
-\pause
+\vspace{0.1in} \pause
+
+\begin{definition}
+\alert{Poisson process} is a continuous-time counting stochastic process 
+obtained from a binomial counting process when its frame size $\Delta$ decrease 
+to 0 while the arrival rate $\lambda$ remains constant.
+\end{definition}
+\end{frame}
 
 
+
+\begin{frame}
+\frametitle{Poisson process derivation}
+\small
+
+Let $X(t)$ be a binomial counting process and let $\Delta \to 0$ while 
+$\lambda=p/\Delta$ remains constant. \pause
+
+\begin{itemize}[<+->]
+\item The number of frames $n = \frac{t}{\Delta} \to \infty.$
+\item The probability of an arrival $p = \lambda\Delta \to 0.$
+\item The number of arrivals $E[X(t)] = np = \frac{tp}{\Delta} = \lambda t$. 
+\item The distribution $X(t) \sim Bin(n,p) \to Po(\lambda t)$.
+\item The interarrival time $T=\Delta Y$ 
+\[ \begin{array}{rll}
+F_T(t) &= P(T\le t) \pause = P(Y\le n) & \mbox{definition of }T\\
+&= 1-(1-p)^n &\mbox{geometric cdf} \\
+&= 1-\left( 1-\frac{\lambda t}{n}\right)^n & \mbox{definition of }p,\Delta\\
+&= 1-e^{-\lambda t} &\mbox{Euler limit}.
+\end{array} \]
+Thus $T\sim Exp(\lambda)$ or, equivalently, $T_n\ind Exp(\lambda)$. 
+\end{itemize}
 
 \end{frame}
 
