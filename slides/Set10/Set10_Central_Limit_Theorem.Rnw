@@ -264,7 +264,7 @@ and, by the Central Limit Theorem, we believe $\overline{X}_n \sim N(d, \sigma^2
 We want to find
 {\footnotesize
 \[ \begin{array}{rl}
-P\left(|\overline{X}_n-d|>0.5\right)
+P\left(|\overline{X}_n-d|<0.5\right)
 &= P\left(-0.5 < \overline{X}_n-d < 0.5\right) \\
 &= P\left(\frac{-0.5}{\sigma/\sqrt{n}} < \frac{\overline{X}_n-d}{\sigma/\sqrt{n}} < \frac{0.5}{\sigma/\sqrt{n}} \right) \\
 &= P\left(\frac{-0.5}{\sigma/\sqrt{n}} < Z < \frac{0.5}{\sigma/\sqrt{n}} \right) \\
