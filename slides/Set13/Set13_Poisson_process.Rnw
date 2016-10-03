@@ -7,18 +7,117 @@
 
 \begin{document}
 
+\begin{frame}
+\maketitle
+\end{frame}
+
 
 \begin{frame}
-\frametitle{Poisson process}
+\frametitle{Counting process}
 
 \begin{definition}
-A stochastic process $X(t)$ is called a \alert{homogenous Poisson process} with rate $\lambda$ if 
-\begin{itemize}
-\item For $t>0$, $X(t)$ takes values in \{0,1,2,}
-\end{itemize}
+A stochastic process $X$ is a \alert{counting process} if $X(t)$ is the number of items counted by time $t$. 
 \end{definition}
 
+\vspace{0.1in} \pause
+
+Examples
+\begin{itemize}
+\item The number of head count flips out of $t$ flips.
+\item The number of on time flights out of $t$ flights.
+\item The number of on time flights in the next $t$ hours.
+\item The number of router requests processed in the next $t$ minutes.
+\item The number of successful router requests out of $t$ requests.
+\end{itemize}
 \end{frame}
+
+
+
+\begin{frame}
+\frametitle{Binomial process}
+\begin{definition}
+A \alert{binomial process} $X(n)$ is the number of success in the first $n$ independent Bernoulli trials where $n=0,1,2,\ldots$. \pause
+If a trial occurs every $\Delta$ seconds, then $t=n\Delta$ seconds. \pause
+Let $X(t)$ be the \alert{binomial counting process} that records the number of successes in the first $t$ time. 
+\end{definition}
+
+\vspace{0.1in} \pause
+
+<<echo=FALSE, fig.height=2.8>>=
+set.seed(1)
+library(magrittr)
+n = 100; p = 0.3
+x = rbinom(n = n, size = 1, prob = p) %>% cumsum
+Delta = 2
+
+opar = par(mfrow=c(1,2), mar=c(5,4,2,2)+.1)
+plot(1:n,x, type="s", xlab="Number of attempts", ylab="Number of successes")
+plot(Delta*(1:n), x, type="s", xlab="Time (seconds)", ylab="")
+par(opar)
+@
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Binomial and binomial count process moments}
+\small
+
+We have
+\begin{itemize}
+\item $E[X(n)] \pause = np$, \pause
+\item $Var[X(n)] \pause = np(1-p)$, \pause
+\item $E[X(t)] \pause = np$ for $t\in [n\Delta, (n+1)\Delta)$, \pause and
+\item $Var[X(t)] \pause = np(1-p)$ for $t\in [n\Delta, (n+1)\Delta)$. 
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+Let $Y_n$ be the number of attempts after the $n-1$th success until the $n$th success. \pause
+Let $T_n$ be the time between the $n-1$th success and the $n$th success.
+We have 
+\begin{itemize}
+\item the distribution of $Y_n \pause \ind Geo(p)$, \pause
+\item $E[Y_n] \pause = 1/p$, \pause
+\item $Var[Y_n] \pause = (1-p)/p^2$, \pause
+\item the distribution of $T_n \pause = \Delta Y_n$ is a scaled geometric, \pause
+\item $E[T_n] \pause = E[\Delta Y_n] = \Delta E[Y_n] = \Delta/p$, \pause and
+\item $Var[T_n] \pause = Var[\Delta Y_n] = \Delta^2 Var[Y_n] = \Delta^2 (1-p)/p^2$.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Arrival rate}
+
+
+
+\begin{definition}
+\alert{Arrival rate} $\lambda=p/\Delta$ is the average number of successes per one unit of time. \pause
+The time interval $\Delta$ of each Bernoulli trial is called a \alert{frame}. \pause
+The \alert{interarrival time} is the time between successes. 
+\end{definition}
+
+\pause
+
+
+
+\end{frame}
+
+
+
+% \begin{frame}
+% \frametitle{Poisson process}
+% 
+% \begin{definition}
+% A stochastic process $X(t)$ is called a \alert{homogenous Poisson process} with rate $\lambda$ if
+% \begin{itemize}
+% \item For $t>0$, $X(t)$ takes values in \{0,1,2,\}
+% \end{itemize}
+% \end{definition}
+% 
+% \end{frame}
 
 
 % \foilhead[-.8in]{\textcolor{blue}{Poisson Process}}
@@ -43,7 +142,7 @@ A stochastic process $X(t)$ is called a \alert{homogenous Poisson process} with 
 % 	X(t_{2}) - X(t_{1}) \text{ is independent from } X(t_{4}) -X(t_{3})
 % 	\]
 %     \end{enumerate}
-% \no Jargon: $X(t)$ is a ``counting process'' with independent Poisson
+% \no Jargon: $X(t)$ is a ``counting process'with independent Poisson
 % increments.
 %  
 % 
