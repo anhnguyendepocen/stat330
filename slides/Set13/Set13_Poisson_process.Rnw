@@ -11,7 +11,7 @@
 \maketitle
 \end{frame}
 
-
+\section{Counting process}
 \begin{frame}
 \frametitle{Counting process}
 
@@ -32,7 +32,7 @@ Examples
 \end{frame}
 
 
-
+\subsection{Binomial process}
 \begin{frame}
 \frametitle{Binomial process}
 \begin{definition}
@@ -126,11 +126,9 @@ The $h$-step transition matrix is defined by the binomial distribution
 
 
 
+\subsection{Poisson process}
 \begin{frame}
-\frametitle{Poisson process}
-
-
-
+\frametitle{Poisson process definition}
 \begin{definition}
 \alert{Arrival rate} $\lambda=p/\Delta$ is the average number of successes per 
 one unit of time. \pause
@@ -147,6 +145,8 @@ obtained from a binomial counting process when its frame size $\Delta$ decrease
 to 0 while the arrival rate $\lambda$ remains constant.
 \end{definition}
 \end{frame}
+
+
 
 
 
@@ -171,97 +171,99 @@ F_T(t) &= P(T\le t) \pause = P(Y\le n) & \mbox{definition of }T\\
 \end{array} \]
 Thus $T\sim Exp(\lambda)$ or, equivalently, $T_n\ind Exp(\lambda)$. 
 \end{itemize}
+\end{frame}
 
+
+\begin{frame}
+\frametitle{Poisson process results}
+\small
+
+If 
+\begin{itemize}[<+->]
+\item $X(t)$ is a Poisson process with rate $\lambda$,
+\item with arrival time $O_j$ for event $j$ with $O_0=0$, and 
+\item interarrival time $I_j = O_j-O_{j-1}$ for $j>0$,
+\end{itemize}
+\pause
+then 
+\begin{itemize}[<+->]
+\item $X(t)$ has state space $\{0,1,2,\ldots\}$, 
+\item if $0\le t_1<t_2$, 
+\[ 
+X(t_2)-X(t_1) \sim Po(\lambda[t_2-t_1]),
+\]
+\item if $0\le t_1<t_2\le t_3<t_4$, 
+\[ 
+X(t_2)-X(t_1) \mbox{ is independent of } X(t_4)-X(t_3)
+\]
+\item $I_j \ind Exp(\lambda)$, and
+\item $O_j \sim Ga(j, \lambda)$. 
+\end{itemize}
 \end{frame}
 
 
 
-% \begin{frame}
-% \frametitle{Poisson process}
-% 
-% \begin{definition}
-% A stochastic process $X(t)$ is called a \alert{homogenous Poisson process} with rate $\lambda$ if
-% \begin{itemize}
-% \item For $t>0$, $X(t)$ takes values in \{0,1,2,\}
-% \end{itemize}
-% \end{definition}
-% 
-% \end{frame}
+\begin{frame}
+\frametitle{Web page visits}
+
+Suppose a web page has visits that correspond to a Poisson process with a rate 
+of 10 visits per minute. \pause
+
+\begin{itemize}
+\item What is the probability of 2 or less hits in the first minute? \pause
+Let $\lambda=10$/min. \pause
+Two solutions:
+
+	\begin{itemize}
+	\item Let $X(1)\sim Po(\lambda\times 1)$ be the number of hits 
+	in 1 minute. \pause Then 
+	\[ 
+	P(X(1) \le 2) = \sum_{x=0}^2 P(X(1)=x) = 
+	\sum_{x=0}^2 \frac{\lambda^x e^{-\lambda}}{x!} \approx 0.0028
+	\]
+	\pause
+	\item Let $Y_3\sim Ga(3,\lambda)$ be the time of the 3rd arrival. \pause Then
+	\[ 
+	P(Y_3>1) = 1- P(Y_3<1) = 
+	1-\int_0^\infty \frac{\lambda^3}{\Gamma(3)}y^{3-1} e^{-\lambda y} dy 
+	\approx 0.0028
+	\]
+	\end{itemize}
+\end{itemize}
+\end{frame}
 
 
-% \foilhead[-.8in]{\textcolor{blue}{Poisson Process}}
-% \no  {\textcolor{magenta}{Review: What is Exponential distribution? and Poisson distribution?}}  \\[.1in]
-% \no  1. {\textcolor{magenta}{Exponential}}:  $P(T\leq t)=1-e^{-\lambda t}$ for all $t\geq 0$ where $T$ is waiting time for rare event to happen (once).\\[.1in]
-% \no 2. {\textcolor{magenta}{Poisson}}: $P(X=k)=e^{-\lambda}\lambda^x/x!$ where $X$ is the number of observations of rare event during certain time period (or space).\\[.1in]
-% \no 3. \emph{pdf} of Exponential distribution: $f_T(t)=\lambda e^{-\lambda t}$ for $t\geq 0$, and $\lambda$ is the rate,  $1/\text{time}$. What is $E(T)$, and $\text{Var}(T)$? What is $E(X)$ and $\text{Var}(X)$)\\[.1in]
-% \no 4. Lack of memory property for Exponential: $$P(T>t+s|T>t)=P(T>s)$$ (this is key for Poisson process later)\\[.1in]
-% \no 5.  Exponential race: $P(\min (S,T)>t)=P(S>t, T>t)=e^{-(\lambda+\mu)t}$ if $T,S$ independent. What about $P(\min (T_1,\cdots, T_n)>t)$? 
-% \foilhead[-.8in]{\textcolor{blue}{Poisson process}}
-% \no  {\textcolor{magenta}{Definition:}  A stochastic process $X(t)$ is called {\it homogenous Poisson
-%     process with rate $\lambda$}, if
-%     \begin{enumerate}
-% 	\item for $t > 0$, $X(t)$ takes values in $\{ 0,1,2,3, \ldots \}$.
-% 	\item {distribution depends only on length of interval} for any $0 \le t_{1} < t_{2}$:
-% 	\[
-% 	X(t_{2}) - X(t_{1}) \sim Po_{\lambda (t_{2} - t_{1})}
-% 	\]
-% 	\item {non-overlapping intervals are independent} for any $0
-% 	\le t_{1} < t_{2} \le t_{3} < t_{4}$
-% 	\[
-% 	X(t_{2}) - X(t_{1}) \text{ is independent from } X(t_{4}) -X(t_{3})
-% 	\]
-%     \end{enumerate}
-% \no Jargon: $X(t)$ is a ``counting process'with independent Poisson
-% increments.
-%  
-% 
-% \foilhead[-.8in]{\textcolor{blue}{Example}}
-% \no $\clubsuit$ A counter of the number of hits on our webpage is an example for a Poisson process with rate $\lambda=2$/min. \\[.1in]
-% \no $\heartsuit$ Here \emph{arrival} times are generated from $Exp(2).$ $X(t)$ \emph{counts} numbers of hits until time $t$ min.\\[.1in]
-% \no \hspace*{2in} \includegraphics*[scale=.8]{poisson_counter.pdf}
-% \vspace*{-.4in}
-% 
-% \no $\diamondsuit$ For example, we find that  $X(t)=3$ for $t\in [5,8]$ minutes; i.e., only 3 hits upto any time within 5 to 8 minutes.
-% \foilhead[-.8in]{\textcolor{blue}{Example (cont'd)}}
-% \no {\textcolor{magenta}{Remarks} \\[.1in]
-% \no 1. $X(t)$ can be thought of as the number of occurrences until time $t$.\\[.1in]
-% \no 2. Similarly, $X(t_{2}) - X(t_{1})$ is the number of occurrences in the interval $(t_{1}, t_{2}]$.\\[.1in]
-% \no 3. Assume $X(0) = 0$\\[.1in]
-% \no 4. The distribution of $X(t)$ is Poisson with rate $\lambda t$, since:
-%    $$X(t) = X(t) - X(0) \sim Po_{\lambda(t-0)}$$\\[.1in]
-%   
-%   
-% \foilhead[-.8in]{\textcolor{blue}{Example (Cont'd)}}  
-% \no {\textcolor{red}{Based on the last example:} \\[.1in]
-% For a given Poisson process $X(t)$ we define {\it occurrences}
-% $$
-%     O_{0}=0 ,\    O_{j} = \text{time of the } j^{th} \text{occurrence} =\text{the first } t\ \text{ for which } X(t) \ge j
-% $$
-% and the {\it inter-arrival time} between successive hits:
-% $$
-%     I_{j} = O_{j} - O_{j-1} \text{ for } j = 1, 2, \ldots
-% $$
-% The time until the $k^{th}$ hit $O_{k}$ is therefore given as the sum of
-% inter-arrival times $O_{k} = I_{1} + \ldots + I_{k}$.
-% 
-% 
-% 
-% 
-% \foilhead[-.8in]{\textcolor{blue}{Equivalence theorem }}
-% \no {\textcolor{red}{Equivalence theorem:} \\[.1in]
-% \no $X(t)$ is a Poisson process with rate $\lambda$ \textbf{iff} the inter-arrival times $I_{1}, I_{2},
-%     \ldots$ are i.i.d. $Exp_{\lambda}$.\\[.1in]
-% \no {\textcolor{red}{Corollary:} \\[.1in]    
-% \no The time until the $k$th hit $O_{k}$ is an Erlang$_{k,
-% \lambda}$ distributed variable, $\iff$ $X(t)$ is a Poisson process
-% with rate $\lambda$.\\[.1in]
-% \no {\textcolor{red}{Note:} This theorem is very important! - it links the Poisson, Exponential,
-% and Erlang distributions tightly together!
-% %\no {\textcolor{red}{Some thoughts:}\\[.1in]
-% %\no \bul Why Poisson so important?!\\[.1in]
-% %\no \bul We mention homogeneous Poisson process; What is meant by {\textcolor{magenta}{homogeneous}}?\\[.1in]
-% %\no \bul What is a  nonhomogeneous process?   
-% 
+
+\begin{frame}
+\frametitle{Web page visits (cont.)}
+Suppose a web page has visits that correspond to a Poisson process with a rate 
+of 10 visits per minute. \pause
+
+\begin{itemize}
+\item What is the probability that the time until the first hit exceeds 10 
+seconds? \pause
+First, 10 seconds is 1/6 of a minute. \pause
+Two solutions:
+
+	\begin{itemize}
+	\item Let $X(1/6)\sim Po(\lambda/6)$ be the number of hits in 10 seconds 
+	\pause 
+	Then 
+	\[ 
+	P(X(1/6) = 0) = \frac{(\lambda/6)^x e^{-\lambda/6}}{x!} \approx 0.1889
+	\]
+	\pause
+	\item Let $I_1\sim Exp(\lambda)$ be the time of the 1st arrival. \pause Then
+	\[ 
+	P(I_1>1) = 1- P(I_1<1) = 1-\left[1-e^{-\lambda/6}\right] = e^{-\lambda/6} 
+	\approx 0.1889
+	\]
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
 % \foilhead[-.8in]{\textcolor{blue}{Example}}\vspace{.5cm}
 % \no  {\textcolor{magenta}{Hits on a website:}} {\textcolor{cyan}{Hits on a popular Web page occur according to a Poisson Process with
 % a rate of 10  hits/min. One begins observation at exactly noon.}}\\[.1in]
