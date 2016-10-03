@@ -399,14 +399,14 @@ be the number of concurrent users at time $t$ (minutes).
 \pause
 
 \begin{enumerate}
-\item What are the states of this process? \pause \{1,2,3\} \pause
+\item What are the states of this process? \pause \{0,1,2\} \pause
 \item What are the transition probabilities? \pause
 
 \[ \begin{array}{l|ccc}
 & p_{x0} & p_{x1}& p_{x2} \\
 \hline
 x=0 & 0.8^2 & 2\times 0.2 \times 0.8 & 0.2^2 \\
-x=1 & 0.5\times 0.2 & 0.5\times 0.2 + 0.5\times 0.8 & 0.5\times 0.8 \\
+x=1 & 0.5\times 0.8 & 0.5\times 0.2 + 0.5\times 0.8 & 0.5\times 0.2 \\
 x=2 & 0.5^2 & 2\times 0.5^2 & 0.5^2 \\
 \hline
 \end{array} \]
@@ -416,7 +416,7 @@ Thus
 \[ 
 P = \left( \begin{array}{ccc}
 0.64 & 0.32 & 0.04 \\
-0.1 & 0.5 & 0.4 \\
+0.4 & 0.5 & 0.1 \\
 0.25 & 0.5 & 0.25 
 \end{array}\right)
  \]
@@ -439,7 +439,7 @@ and thus
 P_2 = P_0 \times P^{(2)}.
 \]
 <<transition_matrix, echo=TRUE>>=
-P = matrix(data = c(.64,.1,.25,.32,.5,.5,.04,.4,.25), nrow=3)
+P = matrix(data = c(.64,.4,.25,.32,.5,.5,.04,.1,.25), nrow=3)
 P2 = P %*% P
 P_0 = c(1,0,0)
 P_0 %*% P2
