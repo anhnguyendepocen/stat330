@@ -181,8 +181,8 @@ Thus $T\sim Exp(\lambda)$ or, equivalently, $T_n\ind Exp(\lambda)$.
 If 
 \begin{itemize}[<+->]
 \item $X(t)$ is a Poisson process with rate $\lambda$,
-\item with arrival time $O_j$ for event $j$ with $O_0=0$, and 
-\item interarrival time $I_j = O_j-O_{j-1}$ for $j>0$,
+\item with arrival time $A_j$ for event $j$ with $A_0=0$, and 
+\item interarrival time $I_j = A_j-A_{j-1}$ for $j>0$,
 \end{itemize}
 \pause
 then 
@@ -197,7 +197,7 @@ X(t_2)-X(t_1) \sim Po(\lambda[t_2-t_1]),
 X(t_2)-X(t_1) \mbox{ is independent of } X(t_4)-X(t_3)
 \]
 \item $I_j \ind Exp(\lambda)$, and
-\item $O_j \sim Ga(j, \lambda)$. 
+\item $A_j \sim Ga(j, \lambda)$. 
 \end{itemize}
 \end{frame}
 
@@ -264,41 +264,37 @@ Two solutions:
 \end{frame}
 
 
-% \foilhead[-.8in]{\textcolor{blue}{Example}}\vspace{.5cm}
-% \no  {\textcolor{magenta}{Hits on a website:}} {\textcolor{cyan}{Hits on a popular Web page occur according to a Poisson Process with
-% a rate of 10  hits/min. One begins observation at exactly noon.}}\\[.1in]
-% \no 1. {\textcolor{cyan}{Evaluate the probability of 2 or less hits in the first minute.}}\\[.1in]
-% {\it
-% Let $X$ be the number of hits in the first minute, then $X$ is a
-% Poisson variable with $\lambda = 10$:
-% \[
-% P(X \le 2) = Po_{10}(2) = e^{-10} + 10 \cdot  e^{-10}  + 10^{2}/2
-% e^{-10} = 0.0028.
-% \]
-% }\\[.1in]
-% \no 2. {\textcolor{cyan}{Evaluate the probability that the time till the first hit exceeds 10 seconds.}}\\[.1in]
-% {\it Let $Y$ be the time until the first hit - then $Y$ has an
-% Exponential distribution with parameter $\lambda = 10$ per minute or
-% $\lambda = 1/6$ per second.
-% \[
-% P(Y \ge 10) = 1 - P(Y \le 10) = 1 - (1 - e^{-10 \cdot 1/6}) =
-% e^{-5/3} = 0.1889.
-% \]}
-% \no 3. {\textcolor{cyan}{Evaluate the mean and the variance of the time till the 4th hit.}}\\[.1in]
-% {\it Let $T$ be the time till the 4th hit. Then $T$ has an Erlang
-% distribution with stage parameter $k = 4$ and $\lambda = 10$ per minute.
-% \begin{eqnarray*}
-%     E[T] &=& \frac{k}{\lambda} = \frac{4}{10} = 0.4 \text{ minutes} \\
-%     Var[T] &=& \frac{k}{\lambda^{2}} = \frac{4}{100} = 0.04 \text{minutes}^{2}.
-% \end{eqnarray*}}
-% %
-% \no 4. {\textcolor{cyan}{Evaluate the probability that the time till the 4th hit exceeds 24 seconds.}}
-% \no Need $P(T > 24/60)$ where $T \sim Erlang(4,10)$ and $T$ is in minutes; so we'll use the Gamma-Poisson formula:
-% \begin{eqnarray*}
-%     P(T > 0.4) &=& P(X<4) \ \ \mbox{ where } X \sim Poi(\lambda \cdot t)\\
-%     &=& P(X \le 3)\ \mbox{where}\ X \sim Poi(10 \cdot 0.4)\\
-%     &=& Po_{4}(3)=0.433% \ \ \text{Website table,p.786 or Baron p.384}
-% \end{eqnarray*}
+
+\begin{frame}
+\frametitle{Web page visits (cont.)}
+Suppose a web page has visits that correspond to a Poisson process with a rate 
+of 10 visits per minute. \pause
+
+\begin{itemize}
+\item Calculate the mean and the variance of the time until the 4th hit? \pause
+
+Let $A_k \sim Ga(k,\lambda)$ be the time until the $k$th hit. \pause Then 
+\[ \begin{array}{rl}
+E[A_4] &= k/\lambda = 4/10 = 0.4 \mbox{ minutes} \\
+Var[A_4] &= k/\lambda^2 = 4/10^2 = 0.04 \mbox{ minutes}^2 
+\end{array} \]
+
+\item Evaluate the probability that the time until the 4th hit exceeds 24 
+seconds. \pause
+First, 24 seconds is 24/60=0.4 minutes. \pause
+\begin{itemize}
+\item Use $A_k \sim Ga(k,\lambda)$ to find 
+\[ 
+P(A_4>0.4) = 0.433
+\]
+\item Use $X(t) \sim Po(\lambda t)$ to find 
+\[ 
+P(X(0.4) < 4) = P(X(0.4) \le 3) = 0.433
+\]
+\end{itemize}
+\end{itemize}
+\end{frame}
+
 
 \end{document}
 
