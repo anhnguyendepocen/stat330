@@ -1,0 +1,42 @@
+\item Every second in a hockey game, we recorded the possession status of a hockey puck where the possibilities are that team A possesses the puck, team B possesses the puck, or nobody possesses the puck (this is called a loose puck). Then a Markov chain model of the possession status of the puck is 
+\[ P = \begin{blockarray}{cccc}
+& A & B & L \\
+\begin{block}{c(ccc)}
+A & 0.8 & 0.1 & 0.1 \\
+B & 0.1 & 0.6 & 0.3 \\
+L & 0.5 & 0.4 & 0.1 \\
+\end{block}
+\end{blockarray}
+\]
+
+\begin{enumerate}
+\item If team A has the puck at a given time, what is the probability that team A retains possession of the puck 1 second later? 
+\item If team B has the puck at a given time, what is the probability that team B losses the puck to team A in 1 second?
+\item Which team is better at picking up loose pucks? Why?
+\item If a puck is loose at a given time, what is the probability that it stays loose for the next 2 seconds, (i.e. is loose after 1 second and also after 2 seconds)?
+\item If a puck is loose now, what is the probability that it will be loose after 2 seconds? (This probability is different than the previous.)
+\item Find the steady-state distribution of this Markov chain. Use a computer program that can do matrix multiplication. 
+\item At the end of the game, what is the expected proportion of time that team A will possess the puck? A hockey game has 3 20-minute periods for a total of 3600 seconds in the game.
+\end{enumerate}
+
+\ansfont{
+\begin{enumerate}
+\item 0.8
+\item 0.1
+\item Team A is better at picking up loose pucks since the probability of a loose puck being picked up by A (0.5) is greater than the probability of a loose puck being picked up by B (0.4) .
+\item In order for the puck to \emph{still} be loose, the Markov chain must be $L\to L\to L$. Since each of these transitions has probability 0.1 and they are independent of each other, then the probability of these set of transitions is $0.1^2=0.001$. 
+\item This is the two step transition probability ($P^2 = P\cdot P$) starting from $L$ and ending at $L$, i.e. the bottom right element. Note that it is different than the previous question because the transitions $L\to A \to L$ and $L\to B\to L$ are also possibilities. Since 
+\[ P^2 =  \begin{blockarray}{cccc}
+& A & B & L \\
+\begin{block}{c(ccc)}
+A & 0.70 & 0.18 & 0.12 \\
+B & 0.29 & 0.49 & 0.22 \\
+L & 0.49 & 0.33 & 0.18 \\
+\end{block}
+\end{blockarray}, 
+\]
+the probability is 0.18. 
+\item The steady state distribution of the chain can be found by solving $\pi = \pi P$ or, by multiplying $P$ by itself until all rows are the same. Using the second strategy, it turns out the steady-state is $\pi = (0.5454545, 0.2954545, 0.1590909)$.
+\item Team A will be expected to control the puck for about 55\% of the game. 
+\end{enumerate}
+}

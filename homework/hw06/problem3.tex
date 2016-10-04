@@ -1,0 +1,50 @@
+\item A Markov chain has 4 possible states: A, B, C and D. From state A, it transitions to either state B or state C with equal probability. From state B, the chain transitions to state A with probability 0.5, remains in B with probability 0.25, and transitions to C with probability 0.25. From state C, it always transitions to state D. From state D, the chain transitions to either state B or state C with equal probability. 
+\begin{enumerate}
+\item If the initial distribution for states A, B, C, and D is $P_0 = (0.25, 0.25, 0.25, 0.25)$, find the distribution of $X_2$
+
+\ansfont{
+$X_2 = P_0\times P^2$ where 
+\[ P = \begin{blockarray}{ccccc}
+& A & B & C &D \\
+\begin{block}{c(cccc)}
+A & 0 & 0.5 & 0.5 &0 \\
+B & 0.5 & 0.25 & .25 &0 \\
+C & 0 & 0 & 0 & 1 \\
+D & 0 & 0.5 & 0.5 & 0 \\
+\end{block}
+\end{blockarray}
+\]
+and 
+\[ P^2 = \begin{blockarray}{ccccc}
+& A & B & C & D \\
+\begin{block}{c(cccc)}
+A & 0.125 & 0.125 & 0.5 &0 \\
+B & 0.125 & 0.3125 & 0.3125 &0.25 \\
+C & 0 & 0.5 & 0.5 & 0 \\
+D & 0.25 & 0.125 & 0.125 & 0.5 \\
+\end{block}
+\end{blockarray}
+\]
+Thus $X_2 = (0.25, 0.25, 0.25, 0.25)\times P^2 = (0.125, 0.3125, 0.3125, 0.25)$
+}
+
+
+\item Find the steady state distribution by solving $\pi P = \pi$.
+
+\ansfont{
+\[
+    \begin{cases}
+      0.5 \pi_B  = \pi_A\\
+      0.5 \pi_A+0.25\pi_B+0.5\pi_D=\pi_B \\
+      0.5 \pi_A+0.25\pi_B+0.5\pi_D=\pi_C \\
+      \pi_C=\pi_D
+    \end{cases}
+    \implies
+    \begin{cases}
+      \pi_A=0.5\pi_B\\
+      \pi_B= \pi_C=\pi_D\\
+    \end{cases}
+    \implies \pi_A=1/7, \quad \pi_B=\pi_C=\pi_D=2/7
+  \]
+} 
+\end{enumerate}

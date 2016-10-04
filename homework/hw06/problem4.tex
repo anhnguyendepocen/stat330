@@ -1,0 +1,33 @@
+
+\item Jobs are sent to a server at a rate of 2 jobs per minute. We will model job arrivals using a homogenous Poisson process. 
+\begin{enumerate}
+\item What is the probability of receiving more than 3 jobs in a period of one minute?
+\item What is the probability of receiving more than 30 jobs in a period of 10 minutes?
+\item What is the expected value and the variance of the time between two consecutive arrivals?
+\item Compute the probability that the next job does not arrive during the next 30 seconds?
+\item Compute the probability that the time till the fourth job arrives exceeds 40 seconds?
+\end{enumerate}
+
+\ansfont{
+\begin{enumerate}
+\item Let $X(t)$ be the number of calls in $t$ minutes, then $X(t) \sim Po(\lambda t)$ where $\lambda=2$ jobs per minute. 
+\[ P[X(1)>3]=1-P[X(1) \le 3]=1-0.8571=0.1429\]
+
+\item \[ P[X(10)>30]=1-P[X(10) \le 30]=1-0.9865=0.0135 \]
+
+\item Let $I_j=$ be the inter-arrival time for the $j$th job. Then $I_j \stackrel{iid}{\sim} Exp(2)$ and
+\[ E(I_j)=\frac{1}{\lambda}=0.5 \mbox{ min} \qquad Var(I_j)=\frac{1}{\lambda^2}=0.25 \mbox{ min}^2\]
+
+\item Since 30 seconds equals 0.5 minutes, we have 
+\[P[I_1>0.5 \mbox{ min}]=e^{-\lambda(0.5)}=e^{-1}=0.3679\]
+
+\item Let $O_4=(I_1+I_2+I_3+I_4)$ be the time until the fourth job, then $O_4 \sim\ Gamma(4,2)$. Now 40 seconds is 2/3 of a minute. We could get this answer directly by using the gamma cumulative distribution function to find $P(O_4>2/3) = 1-P(O_4\le 2/3) = 0.9535$. 
+
+Alternatively, we could use the Poisson-Gamma formula by recognizing the only way the 4th job can take longer than 40 seconds is if, only 0, 1, 2, or 3 jobs arrive in the first 40 seconds (2/3 of a minute). So remembering that $X(2/3) \sim Po(2\times 2/3)$, we can calculate 
+\begin{align*}
+P(O_4>40/60)&= P(X(2/3) \le 3) \\
+&= P(X(2/3) = 0) +  P(X(2/3) = 1) + P(X(2/3) = 2) + P(X(2/3) = 3)\\
+&= 0.9539
+\end{align*}
+\end{enumerate}
+}

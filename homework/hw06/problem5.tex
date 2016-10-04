@@ -1,0 +1,23 @@
+\item Suppose that the telephone calls 
+arriving at the switchboard of a small corporation follows a Poisson process.
+Let $X(t)$ be the number of calls received by time $t$ that day, with $X(0)=0$.
+Suppose that $\lambda=0.5$ calls per minute.
+Assume that the number of calls arriving during any period has a Poisson distribution.
+
+\begin{enumerate}
+\item What is the probability that no calls will arrive in a 5-minute period?
+\item What is the expected amount of time between the 10th and 11th callers?
+\item On average, how much time is needed to get their 100th caller of the day?
+\end{enumerate}
+
+\ansfont{
+\begin{enumerate}
+\item As $X(t)$ values follows a Poisson($\lambda\,t$)
+probability distribution, then $X(5) \sim Poisson(\lambda\cdot5=2.5)$, so 
+\[P\left(X(5) = 0\right) = e^{-2.5}=.0821.\]
+\item Let $I$ be the interarrival time between any two calls, and $I\sim Exp(\lambda)$,
+so $E(I) = \frac1\lambda = 2$ minutes.
+\item Let $T$ be the time needed until the 100th caller. Then $T\sim Gamma(100, 0.5)$
+so $E(T)=\frac{100}{0.5}=200$ minutes.
+\end{enumerate}
+}

@@ -1,0 +1,55 @@
+ \item  During any minute, a computer device is either in a busy mode or in an idle mode. A busy mode is followed by an idle mode with probability 0.1. An idle mode is followed by a busy mode with probability 0.6. 
+    \begin{enumerate}
+      \item What is the 1-step transition matrix?
+      \item Suppose that the device was in idle mode at 10:00 a.m. What is the
+        probability that it will be busy at 10:02 a.m.?
+      \item Suppose that the device was in idle mode at 10:00 a.m. today. Approximate the probability that it will be busy at noon tomorrow via steady state.
+    \end{enumerate}
+
+\ansfont{
+\begin{enumerate}
+\item Let State 1"=``busy" and State 2 = ``idle". Then the transition matrix is
+  \[ P = \begin{blockarray}{ccc}
+& 1 & 2 \\
+\begin{block}{c(cc)}
+1 & 0.9 & 0.1 \\
+2 & 0.6 & 0.4 \\
+\end{block}
+\end{blockarray}
+\]
+\item The two-step transition matrix is
+  \[ P^{(2)} = P^2=
+\begin{pmatrix}
+0.9 & 0.1 \\
+0.6 & 0.4 \\
+\end{pmatrix}
+\begin{pmatrix}
+0.9 & 0.1 \\
+0.6 & 0.4 \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+0.87 & 0.13 \\
+0.78 & 0.22 \\
+\end{pmatrix}
+\]
+Thus $P(\mbox{``busy at 10:02am"}|\mbox{``idle at 10:00am"}) = 0.78$.
+\item We need to calculate the steady-state distribution $\pi=(\pi_1, \pi_2)$.
+  Solve $\pi P = \pi$ with $\pi_1+\pi_2=1$:
+  \[
+    \begin{cases}
+      0.9 \pi_1 + 0.6 \pi_2 = \pi_1\\
+      0.1\pi_1 + 0.4\pi_2 = \pi_2\\
+      \pi_1+ \pi_2=1
+    \end{cases}
+    \implies
+    \begin{cases}
+      \pi_1=6\pi_2\\
+      \pi_1+ \pi_2=1
+    \end{cases}
+    \implies \pi_1=6/7, \quad \pi_2=1/7
+  \]
+  Thus $P(\mbox{``busy at noon tomorrow"}|\mbox{``idle at 10:00am"}) \approx 6/7$.
+\end{enumerate}
+}
+
