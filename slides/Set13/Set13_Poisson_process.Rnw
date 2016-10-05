@@ -36,7 +36,9 @@ Examples
 \begin{frame}
 \frametitle{Binomial process}
 \begin{definition}
-A \alert{binomial process} $X(n)$ is the number of success in the first $n$ independent Bernoulli trials where $n=0,1,2,\ldots$. \pause
+A \alert{binomial process} $X(n)$ is the number of success in the first $n$ 
+independent Bernoulli trials where $n=0,1,2,\ldots$ with common success 
+probability $p$. \pause
 If a trial occurs every $\Delta$ seconds, then $t=n\Delta$ seconds. \pause
 Let $X(t)$ be the \alert{binomial counting process} that records the number of successes in the first $t$ time. 
 \end{definition}
@@ -130,19 +132,22 @@ The $h$-step transition matrix is defined by the binomial distribution
 \begin{frame}
 \frametitle{Poisson process definition}
 \begin{definition}
-\alert{Arrival rate} $\lambda=p/\Delta$ is the average number of successes per 
-one unit of time. \pause
-The time interval $\Delta$ of each Bernoulli trial is called a \alert{frame}. 
-\pause
-The \alert{interarrival time} is the time between successes. 
+\alert{Arrival rate} is the average number of successes per 
+one unit of time, i.e. 
+\[ 
+\lambda = \frac{E[X(t)]}{t} = \frac{np}{t} = \frac{tp/\Delta}{t} =\frac{p}{\Delta}.
+\] \pause
+% The time interval $\Delta$ of each Bernoulli trial is called a \alert{frame}. 
+% \pause
+% The \alert{interarrival time} is the time between successes. 
 \end{definition}
 
 \vspace{0.1in} \pause
 
 \begin{definition}
-\alert{Poisson process} is a continuous-time counting stochastic process 
-obtained from a binomial counting process when its frame size $\Delta$ decrease 
-to 0 while the arrival rate $\lambda$ remains constant.
+\alert{Poisson (counting) process} is a continuous-time counting stochastic process 
+obtained from a binomial counting process when $\Delta\to 0$ while the arrival 
+rate $\lambda$ remains constant.
 \end{definition}
 \end{frame}
 
