@@ -198,26 +198,55 @@ P(X>0) = 1-P(X=0) = 1-\pi_0 = r
 \pause
 Equivalently, $r$ is the proportion of time the server is busy. 
 \end{definition}
-
-
-
-
 \end{frame}
+
 
 
 
 \begin{frame}
-\frametitle{Balance equations}
+\frametitle{System characteristics}
+\small
 
-\begin{definition}
-The \alert{balance equations} are constructed from the flow-in, flow-out 
-principle. \pause The \alert{flow-in, flow-out principle} states that at 
-\emph{steady-state}, the flow in to a state must equal the flow out of that 
-state. The \alert{flow} is the probability of being in that state times the 
-rate 
-\end{definition}
+\begin{itemize}
+\item Expected waiting time: job arrives with $X$ jobs in the system\pause, thus
+\[ 
+E[W] = E[S_1+\cdots + S_X] \stackrel{iid}{=} E[SX] \stackrel{ind}{=} E[S]E[X] = 
+\frac{\mu_s r}{1-r} = \frac{r}{\lambda_S(1-r)}
+\]
+\item Expected response time
+\[ 
+E[R] = E[W+S] = E[W]+E[S] = \frac{\mu_Sr}{1-r} + \mu_S = \frac{\mu_S}{1-r} 
+= \frac{1}{\lambda_S(1-r)}
+\]
+\item Expected queue length
+\[ 
+E[X_w] = E[X-X_s] = E[X]-E[X_s] = \frac{r}{1-r}-r = \frac{r^2}{1-r}
+\]
+% \item Others by Little's Law
+% \[ \begin{array}{rl}
+% \lambda_A E[R] &= E[X] \\
+% \lambda_A E[S] &= E[X_s] \\
+% \lambda_A E[W] &= E[X_w] \\
+% \end{array}\]
+\end{itemize}
 
 \end{frame}
+
+
+
+% 
+% \begin{frame}
+% \frametitle{Balance equations}
+% 
+% \begin{definition}
+% The \alert{balance equations} are constructed from the flow-in, flow-out 
+% principle. \pause The \alert{flow-in, flow-out principle} states that at 
+% \emph{steady-state}, the flow in to a state must equal the flow out of that 
+% state. The \alert{flow} is the probability of being in that state times the 
+% rate 
+% \end{definition}
+% 
+% \end{frame}
 
 
 
