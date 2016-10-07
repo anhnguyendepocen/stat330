@@ -224,9 +224,9 @@ We will be interested in answer questions such as
 \end{frame}
 
 
-\subsection{$F_Y/F_S/c/K$ }
+\subsection{$A/S/n/C$ }
 \begin{frame}
-\frametitle{$F_Y/F_S/c/K$ notation}
+\frametitle{$A/S/n/C$ notation}
 
 To quickly denote a queuing system, we use the notation $A/S/n/C$ to represent
 \begin{itemize}[<+->]
