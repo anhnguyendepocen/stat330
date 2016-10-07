@@ -16,6 +16,7 @@
 \maketitle
 \end{frame}
 
+\section{Queuing systems}
 \begin{frame}
 \frametitle{Queuing systems}
 
@@ -25,38 +26,7 @@ designed to process jobs and a queue of jobs waiting to be processed.
 \end{definition}
 \pause
 
-       \begin{figure}
-       \centering
-       \begin{tikzpicture}[start chain=going right,>=latex,node distance=0pt]
-         \node[draw,rectangle,on chain,minimum size=1.5cm] (rr) {$I$};
-         \node[draw,rectangle,on chain,draw=white,minimum size=1.3cm]{};
-         % the rectangular shape with vertical lines
-        \node[rectangle split, rectangle split parts=6,
-        draw, rectangle split horizontal,text height=1cm,text depth=0.5cm,on chain,inner ysep=0pt] (wa) {};
-         \fill[white] ([xshift=-\pgflinewidth,yshift=-\pgflinewidth]wa.north west) rectangle ([xshift=-15pt,yshift=\pgflinewidth]wa.south);
-        \node at (wa.east) (A){};
-        \draw [-latex] (A) --+(30:1.5) coordinate (B1);
-        \draw [-latex] (A) --+(-30:1.5) coordinate (B2);
-         % the circle
-         \node [draw,circle,on chain,minimum size=1cm] at (B1) (se1) {$U_1$};
-         \node [draw,circle,on chain,minimum size=1cm] at (B2) (se2) {$U_2$};
-         \draw [-latex] (se1.east) --+(-25:1.65) coordinate (C1);
-          \draw [-latex] (se2.east) --+(25:1.65) coordinate (C2);
-         \node (O) at ($(C1)!0.5!(C2)$) {};
-         \node [draw,circle,on chain,minimum size=3pt] at (O) (C3){};
-         \draw [-latex] (C3)--+(0:2)node[right] {$\mu$};
-         % the arrows and labels
-      %   \draw[->] (se.east) -- +(20pt,0) node[right] {$\mu$};
-         \draw[<-] (wa.west) -- +(-20pt,0) node[left] {$\lambda$};
-         \node[align=center,below] at (rr.south) {Input \\ process};
-         \node[align=center,below] at (wa.south) {Queue \\ subsystem};
-        \node[align=center,below] at (se2.south) {Server \\ process};
-
-       \end{tikzpicture}
-          \caption{A queuing system.}
-             \label{fig:queue}
-             {\tiny \url{http://tex.stackexchange.com/questions/168113/multi-server-queuing-system-using-tikz}}
-       \end{figure}
+\input{mm2}
        
 \end{frame}
 
@@ -71,6 +41,7 @@ designed to process jobs and a queue of jobs waiting to be processed.
 \item Customer call centers
 \item Email inbox
 \item Emergency room
+\item Bus transit system
 \item $\vdots$
 \end{itemize}
 \end{frame}
@@ -116,8 +87,8 @@ Parameters:
 \begin{tabular}{ll}
 $\lambda_A$ & arrival rate \\
 $\lambda_S$ & service rate \\
-$\mu_A$     & expected interarrival time \\
-$\mu_S$     & expected service time \pause \\
+$\mu_A=1/\lambda_A$     & expected interarrival time \\
+$\mu_S=1/\lambda_S$     & expected service time \pause \\
 $r = \lambda_A/\lambda_S = \mu_S/\mu_A$ & utilization, or arrival-to-service ratio
 \end{tabular}
 
@@ -136,7 +107,7 @@ Random variables:
 \begin{tabular}{ll}
 $S_k$ & service time of the $k$th job \pause \\
 $W_k$ & waiting time of the $k$th job \pause \\
-$R_k=S_k+W_k$ & response time (total time in system)
+$R_k=S_k+W_k$ & response time (total time in system) for the $k$th job
 \end{tabular}
 
 \end{frame}
@@ -248,6 +219,34 @@ We will be interested in answer questions such as
 \item What is the expected amount of time a job will wait?
 \item What is the probability the amount of time a job will wait exceeds a threshold?
 \item What is the probability there will be no jobs waiting?
+\end{itemize}
+
+\end{frame}
+
+
+\subsection{$F_Y/F_S/c/K$ }
+\begin{frame}
+\frametitle{$F_Y/F_S/c/K$ notation}
+
+To quickly denote a queuing system, we use the notation $A/S/n/C$ to represent
+\begin{itemize}[<+->]
+\item $A$ the distribution of interarrival times
+\item $S$ the distribution of service times
+\item $n$ the number of servers
+\item $C$ the maximum capacity of the system, if $C=\infty$ it is omitted
+\end{itemize}
+
+\pause
+
+In this course we will only consider the \underline{M}emoryless exponential 
+distribution for $A$ and $S$. \pause 
+Specifically, we will cover
+\begin{itemize}
+\item $M/M/1$
+\item $M/M/k$
+\item $M/M/\infty$
+\item $M/M/1/C$
+\item $M/M/k/C$
 \end{itemize}
 
 \end{frame}
