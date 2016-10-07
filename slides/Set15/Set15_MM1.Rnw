@@ -1,0 +1,228 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\usepackage{tikz}
+\usetikzlibrary{chains,shapes.multipart}
+\usetikzlibrary{shapes,calc}
+\usetikzlibrary{automata,positioning}
+
+\title{Set15 - M/M/1}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\section{Bernoulli single-server queuing system}
+\begin{frame}
+\frametitle{Bernoulli single-server queuing system}
+\footnotesize
+
+\begin{definition}
+A \alert{Bernoulli single-server queuing system} is a discrete-time queuing 
+process with the following characteristics:
+\begin{itemize}
+\item one server
+\item unlimited capacity
+\item arrivals occur according to a binomial process with probability $p_A$ for
+each frame
+\item probability of a service completion is $p_S$ for each frame
+\item service times and interarrival times are independent
+\end{itemize}
+\end{definition}
+
+\vspace{0.1in} \pause
+
+This is a \emph{homogeneous Markov chain} with transition probability matrix
+{\tiny
+\[ 
+P = \left( \begin{array}{cccc}
+1-p_A & p_A & 0 & 0  \\
+(1-p_A)p_S & (1-p_A)(1-p_S)+p_Ap_S & p_A(1-p_S) & 0 \\
+0 & (1-p_A)p_S & (1-p_A)(1-p_S)+p_Ap_S & p_A(1-p_S)  \\
+0 & 0 & (1-p_A)p_S & (1-p_A)(1-p_S)+p_Ap_S \\
+\vdots & \vdots & \vdots & \ddots 
+\end{array} \right)
+\]
+}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{$M/M/1$ queue}
+\footnotesize
+
+Letting $\lambda_A = p_A/\Delta$, $\lambda_S = p_S/\Delta$, and $\Delta \to 0$ 
+while fixing $\lambda_A$ and $\lambda_S$ \pause results in
+\begin{definition}
+A \alert{$M/M/1$ queueing process} is a continuous-time Markov queuing process
+with the following characteristics
+\begin{itemize}
+\item one server,
+\item unlimited capacity,
+\item exponential interarrival times with arrival rate $\lambda_A$,
+\item exponential service times with service rate $\lambda_S$, and 
+\item independent service and arrival times. 
+\end{itemize}
+\end{definition}
+
+\vspace{0.1in} \pause
+
+This is a continuous-time, homogeneous stochastic process with transition rate
+{\tiny
+\[ 
+P \approx \left( \begin{array}{cccc}
+1-\lambda_A \Delta & \lambda_A \Delta & 0 & 0  \\
+\lambda_S \Delta & 1-\lambda_A \Delta - \lambda_S \Delta & \lambda_A \Delta & 0 \\
+0 & \lambda_S \Delta & 1-\lambda_A \Delta - \lambda_S \Delta  & \lambda_A \Delta  \\
+0 & 0 & \lambda_S \Delta & 1-\lambda_A \Delta - \lambda_S \Delta  \\
+\vdots & \vdots & \vdots & \ddots 
+\end{array} \right)
+\]
+}
+
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Initial balance equations}
+
+For a steady state, we need 
+\[ \pi P = \pi 
+\quad \mbox{ and } \quad 
+\sum \pi_i = 1.
+\]
+\pause
+Multiplying $\pi$ by the first column of $P$ gives us 
+\[ 
+\pi_0(1-\lambda_A\Delta) + \pi_1 \lambda_S \Delta = \pi_0 \implies 
+\lambda_A\pi_0 = \lambda_S \pi_1
+\]
+\pause
+which is known as the \alert{first balance equation}. 
+
+\vspace{0.1in} \pause
+
+Multiplying $\pi$ by the second column of $P$ gives us 
+\[ 
+\pi_0(1-\lambda_A\Delta) + \pi_1 \lambda_S \Delta = \pi_0 \implies 
+(\lambda_A+\lambda_S)\pi_1 = \lambda_A\pi_0 \lambda_S \pi_2
+\]
+\pause
+and combining with the first balance, we have 
+\[ 
+\lambda_A \pi_1 = \lambda_S \pi_2
+\]
+\pause
+which is known as the \alert{second balance equation}.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Steady-state distributions}
+
+For any $i$, we have 
+\[ 
+\lambda_A \pi_{i-1} = \lambda_S \pi_i 
+\quad\mbox{ and }\quad
+\pi_i = r \pi_{i-1}
+\]
+where $r=\lambda_A/\lambda_S$ is the \alert{utilization}. 
+
+\vspace{0.1in} \pause
+
+For any $i$, we have 
+\[ \pi_i = r \pi_{i-1} = r^2 \pi_{i-2} = r^3\pi_{i-3} = \cdots = r^i \pi_0 \]
+and 
+\[ 
+1 = \sum_{i=0}^\infty \pi_i = \sum_{i=0}^\infty r^i \pi_0 = \frac{\pi_0}{1-r}
+\implies \left\{ 
+\begin{array}{cl}
+\pi_0 &= 1-r \\
+\pi_1 &= r\pi_0 = r(1-r) \\
+\pi_2 &= r\pi_1 = r^2(1-r) \\
+& \vdots \\
+\end{array}
+\right.
+\]
+\pause
+If $X$ has this distribution, it is a \alert{shifted Geometric} because $Y=X+1$ 
+has a standard Geometric distribution with parameter $p=1-r$. 
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Steady-state distribution}
+
+The steady-state distribution of an $M/M/1$ queue has probability mass function
+\[ 
+\pi_x = P(X=x) = r^x(1-r), \quad \mbox{for }x=0,1,2,\ldots
+\]
+\pause 
+which has expected value 
+\[ 
+E[X] = E[Y-1] = E[Y]-1 = \frac{1}{1-r} - 1 = \frac{r}{1-r}
+\]
+\pause
+and variance
+\[ 
+Var[X] = Var[Y-1] = Var[Y] = \frac{r}{(1-r)^2}
+\]
+where $r = \lambda_A/\lambda_S$. \pause
+This steady-state only exists for $r<1$. 
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Utilization}
+
+\begin{definition}
+The \alert{utilization} is the probability there are jobs in the system at 
+steady state. \pause
+\[ 
+P(X>0) = 1-P(X=0) = 1-\pi_0 = r
+\]
+\pause
+Equivalently, $r$ is the proportion of time the server is busy. 
+\end{definition}
+
+
+
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Balance equations}
+
+\begin{definition}
+The \alert{balance equations} are constructed from the flow-in, flow-out 
+principle. \pause The \alert{flow-in, flow-out principle} states that at 
+\emph{steady-state}, the flow in to a state must equal the flow out of that 
+state. The \alert{flow} is the probability of being in that state times the 
+rate 
+\end{definition}
+
+\end{frame}
+
+
+
+
+
+\end{document}
+
+
