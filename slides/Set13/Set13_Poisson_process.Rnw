@@ -137,9 +137,9 @@ one unit of time, i.e.
 \[ 
 \lambda = \frac{E[X(t)]}{t} = \frac{np}{t} = \frac{tp/\Delta}{t} =\frac{p}{\Delta}.
 \] \pause
-% The time interval $\Delta$ of each Bernoulli trial is called a \alert{frame}. 
-% \pause
-% The \alert{interarrival time} is the time between successes. 
+The time interval $\Delta$ of each Bernoulli trial is called a \alert{frame}.
+\pause
+The \alert{interarrival time} is the time between successes.
 \end{definition}
 
 \vspace{0.1in} \pause
