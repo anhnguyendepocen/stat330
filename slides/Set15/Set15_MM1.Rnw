@@ -22,7 +22,7 @@
 \footnotesize
 
 \begin{definition}
-A \alert{Bernoulli single-server queuing system} is a discrete-time queuing 
+A \alert{Bernoulli single-server queuing process} is a discrete-time queuing 
 process with the following characteristics:
 \begin{itemize}
 \item one server
@@ -135,11 +135,11 @@ For any $i$, we have
 \quad\mbox{ and }\quad
 \pi_i = r \pi_{i-1}
 \]
-where $r=\lambda_A/\lambda_S$ is the \alert{utilization}. 
+where $r=\lambda_A/\lambda_S$ is the \alert{utilization} 
 
 \vspace{0.1in} \pause
 
-For any $i$, we have 
+Thus
 \[ \pi_i = r \pi_{i-1} = r^2 \pi_{i-2} = r^3\pi_{i-3} = \cdots = r^i \pi_0 \]
 and 
 \[ 
@@ -191,12 +191,12 @@ This steady-state only exists for $r<1$.
 
 \begin{definition}
 The \alert{utilization} is the probability there are jobs in the system at 
-steady state. \pause
+steady state\pause, i.e. 
 \[ 
 P(X>0) = 1-P(X=0) = 1-\pi_0 = r
 \]
 \pause
-Equivalently, $r$ is the proportion of time the server is busy. 
+equivalently, $r$ is the proportion of time the server is busy. 
 \end{definition}
 \end{frame}
 
@@ -205,29 +205,84 @@ Equivalently, $r$ is the proportion of time the server is busy.
 
 \begin{frame}
 \frametitle{System characteristics}
-\small
+\footnotesize
 
 \begin{itemize}
+\item Expected total jobs in the system:
+\[ 
+E[X] = \frac{r}{1-r}.
+\]
+\item Expected service time:
+\[ 
+E[S] = \mu_S = 1/\lambda_S.
+\]
 \item Expected waiting time: job arrives with $X$ jobs in the system\pause, thus
 \[ 
 E[W] = E[S_1+\cdots + S_X] \stackrel{iid}{=} E[SX] \stackrel{ind}{=} E[S]E[X] = 
-\frac{\mu_s r}{1-r} = \frac{r}{\lambda_S(1-r)}
+\frac{\mu_s r}{1-r} = \frac{r}{\lambda_S(1-r)}.
 \]
-\item Expected response time
+\item Expected response time:
 \[ 
 E[R] = E[W+S] = E[W]+E[S] = \frac{\mu_Sr}{1-r} + \mu_S = \frac{\mu_S}{1-r} 
-= \frac{1}{\lambda_S(1-r)}
+= \frac{1}{\lambda_S(1-r)}.
 \]
-\item Expected queue length
+\item Expected length of service line:
+\[ 
+E[X_s] = \lambda_A E[S] = \lambda_A/\lambda_S = r
+\]
+\item Expected queue length:
 \[ 
 E[X_w] = E[X-X_s] = E[X]-E[X_s] = \frac{r}{1-r}-r = \frac{r^2}{1-r}
 \]
-% \item Others by Little's Law
-% \[ \begin{array}{rl}
-% \lambda_A E[R] &= E[X] \\
-% \lambda_A E[S] &= E[X_s] \\
-% \lambda_A E[W] &= E[X_w] \\
-% \end{array}\]
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Printer queue}
+\tiny
+
+\begin{example}
+Jobs arrive to a printer at a rate of 3 jobs per hour. \pause
+On average, the printer finishes the job in 15 minutes. 
+\end{example}
+
+\pause
+
+We know $\lambda_A = 3$ jobs/hour and $\mu_S = 0.25$ hours. 
+Thus, $\lambda_S = 4$ jobs/hour, $r=3/4$ and the system has a steady-state.
+
+\vspace{0.1in} \pause
+
+At steady-state, what are 
+\begin{itemize}
+\item Expected number of jobs in the system \pause
+\[
+E[X] = \frac{r}{1-r} = \frac{\frac{3}{4}}{1-\frac{3}{4}} = 3 \mbox{ jobs}
+\]
+\pause
+\item Expect number of jobs being processed \pause
+\[ 
+E[X_s] = r = \frac{3}{4} \mbox{ jobs}
+\]
+\pause
+\item Expected number of jobs in the queue \pause
+\[ 
+E[X_w] = E[X]-E[X_s] = 3-\frac{3}{4} = 2\frac{1}{4} \mbox{ jobs}
+\]
+\pause
+\item Expected total time the job is in the system \pause
+\[ 
+E[R] = E[X]/\lambda_A = 3/3 = 1\mbox{ hour}
+\]
+\pause
+\item Expected time the job is in the queue \pause
+\[ 
+E[W] = E[X_w]/\lambda_A = \frac{2\frac{1}{4}}{3} = 0.75 \mbox{ hours}
+\]
 \end{itemize}
 
 \end{frame}
