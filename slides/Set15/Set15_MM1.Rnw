@@ -253,7 +253,7 @@ On average, the printer finishes the job in 15 minutes.
 \pause
 
 We know $\lambda_A = 3$ jobs/hour and $\mu_S = 0.25$ hours. 
-Thus, $\lambda_S = 4$ jobs/hour, $r=3/4$ and the system has a steady-state.
+Thus, $\lambda_S = 4$ jobs/hour, $r=3/4$ and the process has a steady-state.
 
 \vspace{0.1in} \pause
 
@@ -284,6 +284,131 @@ E[R] = E[X]/\lambda_A = 3/3 = 1\mbox{ hour}
 E[W] = E[X_w]/\lambda_A = \frac{2\frac{1}{4}}{3} = 0.75 \mbox{ hours}
 \]
 \end{itemize}
+
+\end{frame}
+
+
+
+% \begin{frame}
+% \frametitle{Printer queue (cont.)}
+% 
+% What is the probability a job spends less than 20 min in the queue?
+% 
+% The cdf for the time in the queue $Y$ is 
+% \[ 
+% 1-re^{y(\lambda_A-\lambda_S)}
+% \]
+% Thus, 
+% \[ 
+% P(X_w < 2/6) = 1-\frac{3}{4} e^{\frac{2}{6}(3-4)} = 0.4626
+% \]
+% 
+% \end{frame}
+
+
+\subsection{Limited capacity}
+\begin{frame}
+\frametitle{$M/M/1/K$}
+\small
+
+\begin{definition}
+An \alert{$M/M/1/K$} queuing process is an $M/M/1$ queuing process with a maximum 
+of $K$ for the system with \emph{attempted} arrival rate $\lambda$ and service 
+rate $\lambda_S$.
+\end{definition}
+
+\vspace{0.1in} \pause
+
+The steady-state probabilities are 
+\[ 
+\pi_k = r^k\pi_0, \quad \pi_0 = \frac{1-r}{1-r^{K+1}}.
+\]
+where $r=\lambda/\lambda_S$. 
+\pause 
+The average line length is 
+\[
+E[X] = \sum_{x=0}^K k \pi_k = \cdots 
+= \frac{r}{1-r}-\frac{(K+1)r^{K+1}}{1-r^{K+1}}.
+\]
+The probability the queue is full is $p_K$, thus the actually arrival rate is 
+\[ 
+\lambda_A = (1-p_K)\lambda
+\]
+since no jobs can arrive while the queue is full. 
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Remaining properties for $M/M/1/K$}
+\tiny
+
+\begin{itemize}
+\item Expected service time
+\[ 
+E[S] = \frac{1}{\lambda_S} = \mu_S
+\]
+\pause
+\item Expected time a job is in the system
+\[ 
+E[R] = E[X]/\lambda_A
+\]
+\pause
+\item Expected number of jobs being processed
+\[ 
+E[X_s] = \lambda_A E[S] = \frac{\lambda_A}{\lambda_S} 
+= \frac{(1-p_K)\lambda}{\lambda_S}
+\]
+\pause
+\item Expected number of jobs in queue
+\[ 
+E[X_w] = E[X]-E[X_s]
+\]
+\item Expected waiting time in queue
+\[
+E[W] = E[R]-E[S] = \frac{E[X]}{\lambda_A}- \frac{1}{\lambda_S}
+\]
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Printer queue}
+\tiny
+
+\begin{example}
+Jobs arrive to a printer at a rate of 3 jobs per hour. \pause
+On average, the printer finishes the job in 15 minutes. 
+But the printer can only accommodate 5 jobs at a time. 
+\end{example}
+
+\pause
+
+We know $\lambda = 3$, $\lambda_S = 4$ jobs/hour, and the process has a 
+steady-state because it is regular continuous-time Markov chain. 
+
+\pause
+
+At steady-state, we have 
+<<mm1K, echo=TRUE>>=
+K = 5
+lambda = 3
+lambda_S = 4; Ws = 1/lambda_S # E[S]
+r = lambda/lambda_S
+pi0 = (1-r)/(1-r^(K+1))
+pi = numeric(K); for (k in 1:K) pi[k] = pi[k] = r^k*pi0
+pi[K]
+lambda_A = (1-pi[K])*lambda
+L = sum(1:5*pi)  # E[X]
+W = L/lambda_A   # E[R]
+Wq = W-Ws        # E[W]
+Lq = Wq*lambda_A # E[X_w]
+Ls = L-Lq        # E[X_s]
+round(c(L, Ls, Lq, W, Ws, Wq),2)
+ @
 
 \end{frame}
 
