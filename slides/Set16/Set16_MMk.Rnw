@@ -1,0 +1,440 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set16 - M/M/k Queuing system}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\section{Bernoulli $k$-server queuing system}
+\begin{frame}
+\frametitle{Bernoulli $k$-server queuing system}
+\footnotesize
+
+\begin{definition}
+A \alert{Bernoulli $k$-server queuing process} is a discrete-time queuing 
+process with the following characteristics:
+\begin{itemize}
+\item \alert{$k$} servers
+\item unlimited capacity
+\item arrivals occur according to a binomial process with probability $p_A$ for
+each frame
+\item probability of a service completion is $p_S$ \alert{for each server} for each frame
+\item service times and interarrival times are independent
+\end{itemize}
+\end{definition}
+
+\vspace{0.1in} \pause
+
+The current number of jobs in the system is $n = \min(i,k)$. \pause
+Departures ($X_d$) have \pause these binomial distributions: \pause
+\begin{itemize}
+\item $i\le k, X_d \sim Bin(i,p_S)$ \pause and
+\item $i>k, X_d \sim Bin(k,p_S)$.
+\end{itemize}
+Arrivals ($X_a$) have a Bernoulli distribution, i.e. $X_a \sim Ber(p_A)$. 
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Bernoulli $k$-server queuing system (cont.)}
+
+Let A indicate arrival and D indicate departure. \pause
+
+Transition probabilities:
+\[ \begin{array}{rl}
+p_{i,i+1} &= P(\mbox{1 A, 0 D}) \\
+&= p_A(1-p_S)^n \\ \\
+p_{i,i} &= P(\mbox{1 A, 1 D}) + P(\mbox{0 A, 0 D}) \\
+&= p_A {n\choose 1} p_S(1-p_S^{n-1}) + (1-p_A)(1-p_S)^n \\ \\
+p_{i,i-1} &= P(\mbox{1 A, 2 D}) + P(\mbox{0 A, 1 D}) \\
+&= p_A {n\choose 2} p_S^2(1-p_S^{n-2}) + (1-p_A)p_S(1-p_S)^{n-1} \\
+& \qquad \vdots \\
+p_{i,i-n} &= P(\mbox{0 A, $n$ D}) \\
+&= (1-p_A)p_S^n
+\end{array} \]
+
+\end{frame}
+
+
+
+\section{$M/M/k$ queue}
+\begin{frame}
+\frametitle{$M/M/k$ queue}
+\footnotesize
+
+Letting $\lambda_A = p_A/\Delta$, $\lambda_S = p_S/\Delta$, and $\Delta \to 0$ 
+while fixing $\lambda_A$ and $\lambda_S$ \pause results in
+
+\vspace{0.1in} \pause
+
+\begin{definition}
+A \alert{$M/M/k$ queueing process} is a continuous-time Markov queuing process
+with the following characteristics
+\begin{itemize}
+\item \alert{$k$} server,
+\item unlimited capacity,
+\item exponential interarrival times with arrival rate $\lambda_A$,
+\item exponential service times with service rate $\lambda_S$ \alert{for each server}, and 
+\item independent service and arrival times. 
+\end{itemize}
+\end{definition}
+
+\vspace{0.1in} \pause
+
+Transition probabilities:
+\[ \begin{array}{rl}
+p_{i,i+1} &= \lambda_A \Delta \\ 
+p_{i,i} &= 1-\lambda_A\Delta-n\lambda_S\Delta\\
+p_{i,i-1} &= n\lambda_S\Delta \\
+p_{i,j} & 0 \mbox{ for all other }j
+\end{array} \]
+
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Balance equations}
+
+\begin{principle}[Flow-in equals flow-out]
+The \alert{flow-in equals flow-out principle} states that at steady-state the flow
+in to a state must equal the flow out of the state \pause where the \alert{flow} is 
+the probability of being in a state times the rate of movement.
+\end{principle}
+\pause
+The first balance equation:
+\[ 
+\pi_0 \lambda_A \Delta = \pi_1 \lambda_S \Delta 
+\implies 
+\pi_1 = r \pi_0
+\]
+where $r=\lambda_A/\lambda_S$. 
+\pause
+The second balance equation:
+\[ 
+\pi_1 (\lambda_S\Delta + \lambda_A \Delta) = \pi_0 \lambda_A \Delta + \pi_2 (2\lambda_S \Delta) 
+\implies \pi_2 = r\pi_1/2 = r^2\pi_0/2!
+\]
+Further balance equations:
+\[ \begin{array}{rl}
+\pi_k &= r^k\pi_0/k! \\
+\pi_{k+j} &= (r/k)^j r^k \pi_0/k!
+\end{array} \]
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Steady-state distribution}
+
+Using $\sum_i \pi_i = 1$ and $r=\lambda_A/\lambda_S$, we have 
+\[ 
+1 = \pi_0 \left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \frac{r^k}{(1-r/k)k!} \right)
+\]
+\pause
+which implies 
+\[ 
+\left\{ 
+\begin{array}{cl}
+\pi_0 &= \left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \frac{r^k}{(1-r/k)k!} \right)^{-1} \\
+\pi_x &= \left\{ 
+\begin{array}{ll}
+\frac{r^x}{x!}\pi_0 & \mbox{for }x\le k \\
+\frac{r^k}{k!}\pi_0 \left( \frac{r}{k} \right)^{x-k} & \mbox{for }x>k
+\end{array}
+\right.
+\end{array}
+\right. 
+\]
+\pause
+and 
+\[ 
+E[X_w] = \sum_{y=1}^\infty y P(X=k+y) = \pi_0 \frac{r^k}{k!}\frac{r/k}{(1-r/k)^2}
+\]
+\pause
+which exists if $r/k = \lambda_A/k\lambda_S < 1$.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Will I have to wait?}
+
+At steady-state, what is the probability I will have to wait in the queue?
+
+\vspace{0.1in} \pause
+
+\[ \begin{array}{rl}
+P(W>0) &= P(X\ge k) \\
+&= \sum_{c=k}^\infty p_c \\
+&= 1-\sum_{c=0}^{k-1} p_c \\
+&= \pi_0\left( \frac{1}{\pi_0} - \sum_{c=0}^{k-1} \frac{r^c}{c!} \right) \\
+&= \pi_0 \frac{r^k}{k!(1-r/k)}.
+\end{array} \]
+This is refered to as Erlang's C formula where $C$ refers to the number of 
+servers. \pause
+We'll denote this with $E_k(r)=P(X\ge k)$. 
+
+\vspace{0.1in} \pause
+
+Note that 
+\[ 
+E[X_w] = E_k(r)\frac{r/k}{1-r/k}.
+\]
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Other system characteristics}
+\footnotesize
+
+\begin{itemize}
+\item Expected waiting time
+\[ 
+E[W] \pause = E[X_w]/\lambda_A = \frac{1}{k\lambda_S(1-r/k)}E_k(r)
+\]
+\pause
+\item Expected service time
+\[ 
+E[S] \pause = \mu_S = 1/\lambda_S
+\]
+\pause
+\item Expected response time
+\[ 
+E[R] \pause = E[W] + E[S] = \frac{1}{\lambda_S}\left(1+\frac{1}{k(1-r/k)}E_k(r)\right)
+\]
+\pause
+\item Expected total jobs in the system
+\[ 
+E[X] \pause = \lambda_A E[R] = r + \frac{r/k}{(1-r/k)}E_k(r)
+\]
+\pause
+\item Expected jobs being processed
+\[ 
+E[X_s] \pause = E[X]-E[X_w] = r
+\]
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Call center}
+\scriptsize
+
+Suppose a call center has the following characteristics:
+\begin{itemize}
+\item 55 agents
+\item 360 calls per half hour
+\item call processed, on average, in 4 minutes
+\end{itemize}
+{\tiny \url{http://www.mitan.co.uk/erlang/elgcmath.htm}}
+
+\vspace{0.1in} \pause
+
+Determine the system characteristics:
+\begin{itemize}
+\item $k = 55$
+\item $\lambda_A = 0.2$ calls per second
+\item $E[W] = 240$ seconds
+\item $\lambda_S = 1/240$ calls per second
+\end{itemize}
+
+<<echo=TRUE, size='tiny'>>=
+pi_0 = function(k,r) {
+	ii = 0:(k-1)
+	1/(sum(r^ii/factorial(ii)) + r^k/(1-r/k)/factorial(k))
+}
+
+pi_x = function(x,k,r) {
+	pi0 = pi_0(k,r)
+	pi0 * ifelse(x<=k, r^x/factorial(x), r^k/factorial(x)*(r/k)^(x-k))
+}
+
+erlang_c = function(k,r) {
+	pi_0(k,r) * r^k/factorial(k)/(1-r/k)
+}
+@
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{}
+
+<<echo=TRUE, size='tiny'>>=
+k = 55
+lambda_A = 0.2
+Ws = 240                                # E[S]
+lambda_S = 1/Ws
+r = lambda_A/lambda_S; r/k
+pi0 = pi_0(k,r)
+
+Lq = pi0*r^k/factorial(k)*r/k/(1-r/k)^2 # E[X_w]
+Wq = Lq/lambda_A                        # E[W]
+W = Ws + Wq                             # E[R]
+Ls = lambda_A*Ws                        # E[X_s]
+L = Lq + Ls                             # E[X]
+	
+expectations = data.frame(characteristic = c("jobs_total", "jobs_processing", "jobs_waiting",
+															"time_total", "time_processing", "time_waiting"),
+					 value = round(c(L, Ls, Lq, W, Ws, Wq),1),
+					 units = c(rep("number",3), rep("seconds", 3)))
+expectations
+@
+
+\end{frame}
+
+
+
+
+
+\subsection{Limited capacity}
+\begin{frame}
+\frametitle{$M/M/k/K$}
+\small
+
+\vspace{-0.05in}
+
+\begin{definition}
+An \alert{$M/M/k/K$} queuing process is an $M/M/k$ queuing process with a 
+maximum capacity of $K$ for the system with \emph{attempted} arrival rate 
+$\lambda$ and service rate $\lambda_S$.
+\end{definition}
+
+\pause
+
+The steady-state probabilities are 
+\[ 
+\left\{ 
+\begin{array}{cl}
+\pi_0 &= \left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \sum_{i=k}^K \frac{r^k}{r!}(r/k)^{x-k} \right)^{-1} \\
+\pi_x &= \left\{ 
+\begin{array}{ll}
+\frac{r^x}{x!}\pi_0 & \mbox{for }x\le k \\
+\frac{r^k}{k!}\pi_0 \left( \frac{r}{k} \right)^{x-k} & \mbox{for }k<x\le K
+\end{array}
+\right.
+\end{array}
+\right. 
+\]
+where $r=\lambda/\lambda_S$. 
+\pause 
+The average line length is 
+\[
+E[X] = \sum_{x=0}^K x \pi_x.
+\]
+The probability the queue is full is $p_K$, thus the actually arrival rate is 
+\[ 
+\lambda_A = (1-p_K)\lambda
+\]
+since no jobs can arrive while the queue is at capacity.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Remaining properties for $M/M/k/K$}
+\tiny
+
+This is exactly the same as in the $M/M/1/K$ queuing process. 
+
+\begin{itemize}
+\item Expected service time
+\[ 
+E[S] \pause= \frac{1}{\lambda_S} = \mu_S
+\]
+\pause
+\item Expected time a job is in the system
+\[ 
+E[R] \pause= E[X]/\lambda_A
+\]
+\pause
+\item Expected number of jobs being processed
+\[ 
+E[X_s] \pause= \lambda_A E[S] = \frac{\lambda_A}{\lambda_S} 
+= \frac{(1-p_K)\lambda}{\lambda_S}
+\]
+\pause
+\item Expected number of jobs in queue
+\[ 
+E[X_w] \pause= E[X]-E[X_s]
+\]
+\item Expected waiting time in queue
+\[
+E[W] \pause= E[R]-E[S] = \frac{E[X]}{\lambda_A}- \frac{1}{\lambda_S}
+\]
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Printer queue}
+\tiny
+
+\begin{example}
+Suppose the call center can only handle 100 jobs in the system. 
+Now what are the system characteristics?
+\end{example}
+
+\pause
+
+At steady-state, we have 
+<<mmkK, echo=TRUE>>=
+pi_0 = function(k, r, K) {
+	ii = 0:(k-1); II = k:K
+	1/(sum(r^ii/factorial(ii)) + sum(r^k/factorial(k)*(r/k)^II-k))
+}
+
+pi_x = function(x, k, r, K) {
+	pi0 = pi_0(k, r, K)
+	pi0 * ifelse(x<=k, r^x/factorial(x), r^k/factorial(x)*(r/k)^(x-k))
+}
+
+K = 100
+pi0 = pi_0(k,r,K)
+pi = numeric(K); for (kk in 1:K) pi[k] = pi_x(kk, k, r, K)
+lambda = 0.2; lambda_A = (1-pi[K])*lambda
+round(c(pi[K],lambda_A),2)
+L = sum(1:K*pi)  # E[X]
+W = L/lambda_A   # E[R]
+Wq = W-Ws        # E[W]
+Lq = Wq*lambda_A # E[X_w]
+Ls = L-Lq        # E[X_s]
+@
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Comparison of the characteristics}
+
+<<size='tiny'>>=
+expectations$new_value = round(c(L, Ls, Lq, W, Ws, Wq),1)
+expectations[,c("characteristic","units","value","new_value")]
+@
+
+\end{frame}
+
+
+\end{document}
+
+
