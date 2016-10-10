@@ -3,11 +3,6 @@
 \input{../frontmatter}
 \input{../commands}
 
-\usepackage{tikz}
-\usetikzlibrary{chains,shapes.multipart}
-\usetikzlibrary{shapes,calc}
-\usetikzlibrary{automata,positioning}
-
 \title{Set15 - M/M/1 Queuing system}
 
 \begin{document}
@@ -58,6 +53,9 @@ P = \left( \begin{array}{cccc}
 
 Letting $\lambda_A = p_A/\Delta$, $\lambda_S = p_S/\Delta$, and $\Delta \to 0$ 
 while fixing $\lambda_A$ and $\lambda_S$ \pause results in
+
+\pause
+
 \begin{definition}
 A \alert{$M/M/1$ queueing process} is a continuous-time Markov queuing process
 with the following characteristics
@@ -131,7 +129,7 @@ which is known as the \alert{second balance equation}.
 
 
 \begin{frame}
-\frametitle{Steady-state distributions}
+\frametitle{Steady-state distribution}
 
 For any $i$, we have 
 \[ 
@@ -419,24 +417,6 @@ round(c(L, Ls, Lq, W, Ws, Wq),2)
  @
 
 \end{frame}
-
-
-
-% 
-% \begin{frame}
-% \frametitle{Balance equations}
-% 
-% \begin{definition}
-% The \alert{balance equations} are constructed from the flow-in, flow-out 
-% principle. \pause The \alert{flow-in, flow-out principle} states that at 
-% \emph{steady-state}, the flow in to a state must equal the flow out of that 
-% state. The \alert{flow} is the probability of being in that state times the 
-% rate 
-% \end{definition}
-% 
-% \end{frame}
-
-
 
 
 
