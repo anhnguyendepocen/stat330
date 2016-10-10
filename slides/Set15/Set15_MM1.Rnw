@@ -329,7 +329,7 @@ where $r=\lambda/\lambda_S$.
 \pause 
 The average line length is 
 \[
-E[X] = \sum_{x=0}^K k \pi_k = \cdots 
+E[X] = \sum_{x=0}^K x \pi_x = \cdots 
 = \frac{r}{1-r}-\frac{(K+1)r^{K+1}}{1-r^{K+1}}.
 \]
 The probability the queue is full is $p_K$, thus the actually arrival rate is 
