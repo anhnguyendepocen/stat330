@@ -261,7 +261,7 @@ pi_0 = function(k,r) {
 
 pi_x = function(x,k,r) {
 	pi0 = pi_0(k,r)
-	pi0 * ifelse(x<=k, r^x/factorial(x), r^k/factorial(x)*(r/k)^(x-k))
+	pi0 * ifelse(x<=k, r^x/factorial(x), r^k/factorial(k)*(r/k)^(x-k))
 }
 
 erlang_c = function(k,r) {
@@ -386,12 +386,13 @@ E[W] \pause= E[R]-E[S] = \frac{E[X]}{\lambda_A}- \frac{1}{\lambda_S}
 
 
 \begin{frame}[fragile]
-\frametitle{Printer queue}
+\frametitle{Call center with no queue}
 \tiny
 
 \begin{example}
-Suppose the call center can only handle 100 jobs in the system. 
-Now what are the system characteristics?
+Suppose the call center has no queue but instead you receive a busy signal
+when no agents are available. \pause 
+Then $K=k$. 
 \end{example}
 
 \pause
@@ -400,19 +401,18 @@ At steady-state, we have
 <<mmkK, echo=TRUE>>=
 pi_0 = function(k, r, K) {
 	ii = 0:(k-1); II = k:K
-	1/(sum(r^ii/factorial(ii)) + sum(r^k/factorial(k)*(r/k)^II-k))
+	1/(sum(r^ii/factorial(ii)) + r^k/factorial(k)*sum((r/k)^(II-k)))
 }
 
 pi_x = function(x, k, r, K) {
 	pi0 = pi_0(k, r, K)
-	pi0 * ifelse(x<=k, r^x/factorial(x), r^k/factorial(x)*(r/k)^(x-k))
+	pi0 * ifelse(x<=k, r^x/factorial(x), r^k/factorial(k)*(r/k)^(x-k))
 }
 
-K = 100
+K = k
 pi0 = pi_0(k,r,K)
-pi = numeric(K); for (kk in 1:K) pi[k] = pi_x(kk, k, r, K)
+pi = numeric(K); for (kk in 1:K) pi[kk] = pi_x(kk, k, r, K)
 lambda = 0.2; lambda_A = (1-pi[K])*lambda
-round(c(pi[K],lambda_A),2)
 L = sum(1:K*pi)  # E[X]
 W = L/lambda_A   # E[R]
 Wq = W-Ws        # E[W]
@@ -428,6 +428,13 @@ Ls = L-Lq        # E[X_s]
 \frametitle{Comparison of the characteristics}
 
 <<size='tiny'>>=
+# Probability of being at the threshold
+pi[K]
+
+# Observed arrival rate
+lambda_A
+
+# System characteristics
 expectations$new_value = round(c(L, Ls, Lq, W, Ws, Wq),1)
 expectations[,c("characteristic","units","value","new_value")]
 @
