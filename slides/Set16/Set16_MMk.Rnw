@@ -442,6 +442,57 @@ expectations[,c("characteristic","units","value","new_value")]
 \end{frame}
 
 
+
+\section{$M/M/\infty$}
+\begin{frame}
+\frametitle{$M/M/\infty$}
+
+With an infinite number of servers, there is no queue and thus
+\[
+X_w = 0, \, W=0, \, X = Xs, \mbox{ and }R = S.
+\]
+\pause
+The characteristics of this system can be obtained by taking the limit as 
+$k\to\infty$. \pause
+The steady-state of the system is
+\[
+\pi_0 = \left( \sum_{i=0}^\infty \frac{r^i}{i!} +
+\lim_{k\to\infty} \frac{r^k}{(1-r/k)k!} \right)^{-1} = (e^r+0)^{-1} = e^{-r}
+\]
+and
+\[
+\pi_x = \frac{r^x}{x!}\pi_0 = \frac{r^x e^{-r}}{x!}
+\]
+which is the probability mass function for a Poisson distribution with rate
+$r=\lambda_A/\lambda_S$.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{An automated call center}
+
+A fully automated call center can be modeled as an $M/M/\infty$ queuing process. 
+Assuming the same rates as previous (which is probably not reasonable), we have 
+\[ 
+E[X] = E[X_s] = r = \lambda_A/\lambda_S = \Sexpr{lambda/lambda_S} \mbox{ jobs}
+\]
+and 
+\[ 
+E[R] = E[S] = E[X]/\lambda_A = 1/\lambda_S = \Sexpr{1/lambda_S} \mbox{ seconds}.
+\]
+\pause
+This is fairly close to the results with $k=55$ because with $k=\Sexpr{k}$ 
+servers very few jobs have to wait, 
+$E[X_w]=\Sexpr{expectations$value[expectations$characteristic=="jobs_waiting"]}$
+jobs, and those that wait, don't have to wait very long, 
+$E[W] = \Sexpr{expectations$value[expectations$characteristic=="time_waiting"]}$
+ seconds.
+
+
+\end{frame}
+
+
 \end{document}
 
 
