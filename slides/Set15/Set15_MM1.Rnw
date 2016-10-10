@@ -405,7 +405,7 @@ lambda = 3
 lambda_S = 4; Ws = 1/lambda_S # E[S]
 r = lambda/lambda_S
 pi0 = (1-r)/(1-r^(K+1))
-pi = numeric(K); for (k in 1:K) pi[k] = pi[k] = r^k*pi0
+pi = numeric(K); for (k in 1:K) pi[k] = r^k*pi0
 lambda_A = (1-pi[K])*lambda
 round(c(pi[K],lambda_A),2)
 L = sum(1:5*pi)  # E[X]
