@@ -1,0 +1,16 @@
+---
+title: "Creating a new homework"
+author: Jarad Niemi
+date: 11 October 2016
+output:
+  md_document:
+    variant: markdown_github
+---
+
+To create a new homework use the `new_homework` function, e.g. 
+
+```
+source("new_homework.R")
+new_homework(7, due_date="2016/10/19")
+```
+    
