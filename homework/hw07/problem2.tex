@@ -1,1 +1,67 @@
-\item Entry problem 2 here
+  \item A network router operates as an M/M/1/10 queue, with data packets arriving as
+    a Poisson process, being stored in a buffer, and then, in the order of their arrival, sent onwards
+    by a processor. The arrival rate is $\lambda_A= 1/$millisecond, and the processor operates at a rate of
+    $\lambda_S = 1.2$/millisecond. Any packets arriving at times when the buffer is already full are discarded.
+   % {\it Note that since we are using an M/M/1/10 queue, $K=10$ is the number of packets in the entire system.}
+    \begin{enumerate}
+%      \item Draw the transition diagram for this system. 
+      \item Find the expected time until the next change of system state if the buffer is currently
+        \begin{enumerate}
+          \item empty;
+          \item full;
+          \item neither empty nor full.
+        \end{enumerate}
+      \item Find the steady-state distribution (pmf) of the system
+        (report probabilities with 4 decimal places).
+      \item Find the probability that the processer is busy.
+      \item Find the average number of packets in the system.
+      \item Find the rate that arriving packets are {\bf discarded}. 
+      \item Find the expected length of time spent by each packet in the system.
+    \end{enumerate}
+    \ansfont{
+      \begin{enumerate}
+        % \item
+        %   \[\includegraphics[height=4cm]{bd_pic4.pdf}\]
+        \item
+          \begin{enumerate}
+            \item 
+              In this case the only possible change is to $X(t)=1$. Let $I_1=$
+              inter-arrival time and know $I_1 \sim Exp(1)$. Thus expected  time
+              to change is $E(I_1)=1$ ms
+            \item
+              In this case the only possible change is to $X(t)=9$. Let $I_2=$
+              service time and know $I_2 \sim Exp(1.2)$. Thus the expected
+              time to change is  $E(I_2)=1/1.2=.83\bar{3}$ ms
+            \item
+              In this case the only possible change is to $X(t)=k-1$ or
+              $X(t)=k+1$. Let $Y= min(I_1,I_2)$ the smaller of the time of an
+              arrival or a death, and know $Y \sim Exp(2.2)$. Thus the expected
+              time to change is  $E(I_2)=1/2.2=.45\bar{5}$ ms
+          \end{enumerate}
+        \item
+          $a=\lambda/\mu=1/1.2=5/6$ and
+          $$S=\frac{1-a^{11}}{1-a}=\frac{1-(.83\bar{3})^{11}}{1-.83\bar{3}}=5.19$$
+          \begin{eqnarray*}
+            p_0 &=& 1/S=.1926\\
+            p_1 &=& ap_0=.1605\\
+            p_2 &=& a^2p_0=.1337\\
+            p_3 &=& .11145\\
+            p_4 &=& .092875\\
+            p_5 &=& .077396\\
+            p_6 &=& .064497\\
+            p_7 &=& .053747\\
+            p_8 &=& .04479\\
+            p_9 &=&  .037325\\
+            p_{10} &=& .031106
+          \end{eqnarray*}
+        \item
+          $P(\mbox{processor busy})=1-p_0=.8074$
+        \item
+          $$ E[X]=\frac{a}{1-a}-\frac{(K+1)a^{K+1}}{1-a^{K+1}}=\frac{5/6}{1/6}-\frac{11(5/6)^{11}}{1-(5/6)^{11}}=5-1.71=3.29 \mbox{ packets}$$
+          Or: $E[X]=\sum^{10}_{k=0} k p_k = 3.29$.
+        \item
+          $p_{10}\lambda=.031106 \times 1=.031106 $ (per millisecond).
+        \item
+          $\lambda_a=1- .031106=.96889$ and thus $E[W]=E[X]/\lambda_a=3.29/.96889=3.3956$ ms
+      \end{enumerate}
+    }
