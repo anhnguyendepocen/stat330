@@ -1,1 +1,50 @@
-\item Enter problem 5 here
+\item A small pizza shop has a single telephone number that can ring two 
+different phones. Each of these phones has the capability to put a single call 
+on hold and then whenever a call is completed the next waiting call (from either 
+phone) will automatically ring through. The average call lasts 5 minutes and, 
+during peak times, calls come in at a rate of one call every two minutes.
+\begin{enumerate}
+\item What is the state space for this queuing system?
+\item What is the steady-state distribution for this queuing system? Describe
+any assumptions you make.
+\item The owner of the pizza shop is contemplating adding an additional phone 
+line. Do you think the owner should? Why or why not?
+\end{enumerate}
+
+\ansfont{
+\begin{enumerate}
+\item The state space is $\{0,1,2,3,4\}$. 
+\item Let's assume this queuing system has independent exponentially distributed 
+arrival and service times and therefore can be treated as an $M/M/2/4$ system 
+with arrival rate $\lambda_A = 1/2$ calls per minute and service rate $\lambda_S
+ = 1/5$ calls per minute. Thus $r=\lambda_A/\lambda_S = (1/2)/(1/5) = 2.5$. First
+find 
+\[ \begin{array}{rl}
+\pi_0 &
+= \left( \sum_{x=0}^1 \frac{r^x}{x!} + 
+\sum_{x=2}^4 \frac{r^2}{2!}(r/2)^{x-2} \right)^{-1} \\
+&
+\left(
+= \frac{2.5^0}{0!}
++ \frac{2.5^1}{1!} 
++ \frac{2.5^2}{2!}(2.5/2)^{2-2} 
++ \frac{2.5^2}{2!}(2.5/2)^{3-2} 
++ \frac{2.5^2}{2!}(2.5/2)^{4-2} 
+\right)^{-1} \\
+&= 15.414^{-1} \\
+&= 0.065
+\end{array} \]
+Then 
+\[ \begin{array}{rl}
+\pi_1 &= \frac{r^1}{1!}\pi_0 = 2.5\pi_0 = 0.162 \\
+\pi_2 &= \frac{r^2}{2!}\pi_0 = 2.5^2\pi_0/2 = 0.203 \\
+\pi_3 &= \frac{r^k}{k!}(r/k)^{(3-k)}\pi_0 
+       = \frac{2.5^2}{2!}(2.5/2)^{(3-2)}\pi_0 = 0.253 \\
+\pi_4 &= \frac{r^k}{k!}(r/k)^{(4-k)}\pi_0 
+       = \frac{2.5^2}{2!}(2.5/2)^{(4-2)}\pi_0 = 0.317 \\
+\end{array} \]
+\item Yes since the system is at capacity 31.7\% of the time, the shop is 
+missing 31.7\% of the calls or $0.317\lambda_A=0.8$ calls per minute. Adding 
+another phone line would reduce the number of missed calls dramatically.
+\end{enumerate}
+}
