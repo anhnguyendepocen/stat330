@@ -33,13 +33,11 @@ each frame
 
 \vspace{0.1in} \pause
 
-The current number of jobs in the system is $n = \min(i,k)$. \pause
-Departures ($X_d$) have \pause these binomial distributions: \pause
+The current number of jobs being process is $n = \min(x,k)$. \pause
 \begin{itemize}
-\item $i\le k, X_d \sim Bin(i,p_S)$ \pause and
-\item $i>k, X_d \sim Bin(k,p_S)$.
+\item Departures ($X_d$) have \pause a binomial distribution: $X_d \sim Bin(n,p_S)$ 
+\item Arrivals ($X_a$) have a Bernoulli distribution: $X_a \sim Ber(p_A)$. 
 \end{itemize}
-Arrivals ($X_a$) have a Bernoulli distribution, i.e. $X_a \sim Ber(p_A)$. 
 \end{frame}
 
 
@@ -51,14 +49,14 @@ Let A indicate arrival and D indicate departure. \pause
 
 Transition probabilities:
 \[ \begin{array}{rl}
-p_{i,i+1} &= P(\mbox{1 A, 0 D}) \\
+p_{x,x+1} &= P(\mbox{1 A, 0 D}) \\
 &= p_A(1-p_S)^n \\ \\
-p_{i,i} &= P(\mbox{1 A, 1 D}) + P(\mbox{0 A, 0 D}) \\
+p_{x,x} &= P(\mbox{1 A, 1 D}) + P(\mbox{0 A, 0 D}) \\
 &= p_A {n\choose 1} p_S(1-p_S^{n-1}) + (1-p_A)(1-p_S)^n \\ \\
-p_{i,i-1} &= P(\mbox{1 A, 2 D}) + P(\mbox{0 A, 1 D}) \\
+p_{x,x-1} &= P(\mbox{1 A, 2 D}) + P(\mbox{0 A, 1 D}) \\
 &= p_A {n\choose 2} p_S^2(1-p_S^{n-2}) + (1-p_A)p_S(1-p_S)^{n-1} \\
 & \qquad \vdots \\
-p_{i,i-n} &= P(\mbox{0 A, $n$ D}) \\
+p_{x,x-n} &= P(\mbox{0 A, $n$ D}) \\
 &= (1-p_A)p_S^n
 \end{array} \]
 

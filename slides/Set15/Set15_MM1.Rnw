@@ -336,9 +336,9 @@ E[X] = \sum_{x=0}^K x \pi_x = \cdots
 = \frac{r}{1-r}-\frac{(K+1)r^{K+1}}{1-r^{K+1}}.
 \]
 \pause
-The probability the queue is full is $p_K$, \pause thus the actually arrival rate is 
+The probability the queue is full is $\pi_K$, \pause thus the actually arrival rate is 
 \[ 
-\lambda_A = (1-p_K)\lambda
+\lambda_A = (1-\pi_K)\lambda
 \]
 since no jobs can arrive while the queue is at capacity.
 \end{frame}
@@ -368,14 +368,12 @@ E[R] \pause= E[X]/\lambda_A
 \item Expected number of jobs being processed
 \[ 
 E[X_s] \pause= \lambda_A E[S] = \frac{\lambda_A}{\lambda_S} 
-= \frac{(1-p_K)\lambda}{\lambda_S}
+= \frac{(1-\pi_K)\lambda}{\lambda_S}
 \]
-\pause
 \item Expected number of jobs in queue
 \[ 
 E[X_w] \pause= E[X]-E[X_s]
 \]
-\pause
 \item Expected waiting time in queue
 \[
 E[W] \pause= E[R]-E[S] = \frac{E[X]}{\lambda_A}- \frac{1}{\lambda_S}
