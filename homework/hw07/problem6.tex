@@ -1,1 +1,27 @@
-\item Enter problem 6 here
+\item Internet users visit a certain web site according to an $M/M/\infty$ 
+queuing system with an arrival rate of 2/minute and an expected visit time of 
+5 minutes. 
+\begin{enumerate}
+\item What is the expected number of visitors of the web site at any time?
+\item What is the fraction of time when nobody is browsing the site?
+\item What is the probability there are more than 20 users on the site at a 
+time?
+\end{enumerate}
+
+\ansfont{
+The arrival rate is 2 per minute and the service rate is 1/5=0.2 per minute. 
+Thus $r = \lambda_A/\lambda_S = 2/0.2 = 10$. Since this is a $M/M/\infty$ 
+queuing system, the steady-state distribution is a Poisson distribution with 
+mean $r$, i.e. $X\sim Po(r)$. 
+\begin{enumerate}
+\item Thus the expected number of users at any given time is $E[X] = 10$ users.
+\item The fraction of time when nobody is at the website is 
+\[ 
+P(X=0) = e^{-r} = e^{-10} \approx 0.0000454.
+\]
+\item The probability that there are more than 20 users is 
+\[ 
+P(X>20) = 1-P(X\le 20) = 1-0.998 = 0.002.
+\]
+\end{enumerate}
+}
