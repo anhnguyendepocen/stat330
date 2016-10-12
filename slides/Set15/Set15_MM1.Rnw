@@ -335,7 +335,8 @@ The average line length is
 E[X] = \sum_{x=0}^K x \pi_x = \cdots 
 = \frac{r}{1-r}-\frac{(K+1)r^{K+1}}{1-r^{K+1}}.
 \]
-The probability the queue is full is $p_K$, thus the actually arrival rate is 
+\pause
+The probability the queue is full is $p_K$, \pause thus the actually arrival rate is 
 \[ 
 \lambda_A = (1-p_K)\lambda
 \]
@@ -374,6 +375,7 @@ E[X_s] \pause= \lambda_A E[S] = \frac{\lambda_A}{\lambda_S}
 \[ 
 E[X_w] \pause= E[X]-E[X_s]
 \]
+\pause
 \item Expected waiting time in queue
 \[
 E[W] \pause= E[R]-E[S] = \frac{E[X]}{\lambda_A}- \frac{1}{\lambda_S}
