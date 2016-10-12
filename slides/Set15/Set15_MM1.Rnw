@@ -207,7 +207,7 @@ equivalently, $r$ is the proportion of time the server is busy.
 
 \begin{frame}
 \frametitle{System characteristics}
-\footnotesize
+\tiny
 
 \begin{itemize}
 \item Expected total jobs in the system:
