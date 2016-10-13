@@ -1,3 +1,25 @@
 %!TEX root = exam2.tex
 
-\item Poisson process question
+\item On average a website receives 0.8 hits per second. Assume hits follow a homogeneous Poisson process.
+
+\begin{enumerate}
+
+\item Find the probability of the website receiving at least 1 hit in the next 2 seconds. (7 pts)
+
+\ansfont{ Let X(2) be the number of hits in the next 2 seconds. Then $X(2)\sim Po(0.8\times 2)$ So \[P(X(2)>0)=1-P(X(2)=0)=1-\frac{1.6^0e^{-1.6}}{0!}\approx 1-0.2019=0.7981.\] 
+}
+\vfill
+
+\item What is the probability that the amount of time between the first and second hits is less than 0.5 seconds. (7 pts)
+
+\ansfont{Let $I_1$ represent the time between the first and second hits. Then $I_1\sim Exp(0.8)$. 
+\[P(I_1<0.5)=1-e^{(0.8)(0.5)}\approx 1-0.6703=0.3297.\]
+}
+\vfill
+
+
+\item What is the expected amount of time between the 100th and 700th hits? (6 pts)
+
+\ansfont{Let $O$ represent the time between the 100th and 700th messages. Then $O\sim Ga(600,0.8)$, and $E(O)=\frac{600}{0.8}=750$ seconds. }
+\vfill
+\end{enumerate}

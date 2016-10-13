@@ -3,5 +3,74 @@
 % This is the CIP question which is calculate a 2-step transition probability
 % for a 2x2 transition matrix
 
-\item Markov chain question with a calculation of a 2-step transition 
-probability for a 2x2 transition matrix
+
+\item Suppose that if it snows on a winter day in a town, then there is a 80\% chance that it will snow again the next day. If it does not snow one day, then there is a 40\% chance that it will snow the next day. 
+
+
+\begin{enumerate}
+
+\item Write the 1-step transition probability matrix. (4 pts)
+
+\ansfont{ 
+\[ P = \begin{blockarray}{ccc}
+& S & N  \\
+\begin{block}{c(cc)}
+S & 0.8 & 0.2  \\
+N & 0.4 & 0.6  \\
+\end{block}
+\end{blockarray}
+\]
+}
+
+
+\vfill
+
+\item Find the 2-step transition probability matrix. (4 pts)
+
+\ansfont{ 
+\[P^{(2)}=P^2=
+ \begin{blockarray}{ccc}
+& S & N  \\
+\begin{block}{c(cc)}
+S & 0.72 & 0.28  \\
+N & 0.56 & 0.44  \\
+\end{block}
+\end{blockarray}
+\]
+}
+
+\vfill
+
+\item If it does not snow on Monday, what is the probability of it snowing on Wednesday? (2 pts)
+\ansfont{ From the 2-step transition matrix, this probability is 0.56. 
+}
+\vfill
+
+
+\item Use your answers to (a) and/or (b) to explain why this Markov chain must have a steady state distribution. (3 pts)
+
+\ansfont{ Because all one-step (or 2-step) transition probabilities are greater than zero, the steady state distribution must exist. (The Markov chain is regular.)}
+\vfill
+
+\item Find the steady state probability of snow on any winter day in this town.  (7 pts)
+\ansfont{
+Solve $\pi P = \pi$ with $\pi_1+\pi_2=1$:
+  \[
+    \begin{cases}
+      0.8 \pi_1 + 0.4 \pi_2 = \pi_1\\
+      0.2\pi_1 + 0.6\pi_2 = \pi_2\\
+      \pi_1+ \pi_2=1
+    \end{cases}
+    \implies
+    \begin{cases}
+      \pi_1=2\pi_2\\
+      \pi_1+ \pi_2=1
+    \end{cases}
+    \implies \pi_1=2/3, \quad \pi_2=1/3
+  \]
+  Thus the probability of snow is 2/3.
+  }
+\vfill
+\vfill
+
+\end{enumerate}
