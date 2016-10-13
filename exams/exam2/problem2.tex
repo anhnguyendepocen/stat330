@@ -1,3 +1,58 @@
 %!TEX root = exam2.tex
 
-\item Multiple random variables
+\item Let $X$ and $Y$ be random variables with joint distribution
+\begin{table}[h]
+\centering
+\begin{tabular}{rccc}
+& \multicolumn{3}{c}{$Y$} \\
+X & 0 & 1 & 2 \\
+\hline
+0 & 0.1 & 0.2 & 0.3 \\
+1 & 0.1 & 0.1 & 0.2 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{enumerate}
+\item Find $P(Y>X)$. (5 points)
+
+\ansfont{
+P(Y>X) = P(Y=2,X=0) + P(Y=2,X=1) + P(Y=1,X=0) = 0.3 + 0.2 + 0.2 = 0.7
+}
+\vfill
+
+\item Find the marginal distribution for $Y$. (5 points)
+
+\ansfont{
+The marginal distribution for $Y$ is 
+\begin{table}{h}
+\centering
+\begin{tabular}{r|ccc}
+y & 0 & 1 & 2 \\
+\hline
+P(Y=y) & 0.2 & 0.3 & 0.5 \\
+\hline
+\end{tabular}
+\end{table}
+}
+\vfill
+
+\item Find $E[Y]$. (5 points)
+
+\ansfont{
+E[Y] = \sum_{y} y \times P(Y=y) = 0\times 0.2 + 1\times 0.3 + 2 \times 0.5 = 1.3
+}
+\vfill
+
+
+\item Are $X$ and $Y$ independent? Why or why not? (5 points)
+
+\ansfont{
+We need the marginal distribution for $X$ which is $P(X=0) = 0.6 = 1-P(X=1)$. 
+No, because 
+\[ 
+0.1 = P(Y=0,X=0) \ne P(Y=0)P(X=0) = 0.2 \times 0.6 = 0.12.
+}
+\vfill
+
+\end{enumerate}
