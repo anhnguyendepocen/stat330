@@ -33,7 +33,8 @@ each frame
 
 \vspace{0.1in} \pause
 
-The current number of jobs being process is $n = \min(x,k)$. \pause
+The current number of jobs being processed is $n = \min(x,k)$, i.e. the minimum 
+of the number of jobs in the system $x$ and the number of servers $k$. \pause
 \begin{itemize}
 \item Departures ($X_d$) have \pause a binomial distribution: $X_d \sim Bin(n,p_S)$ 
 \item Arrivals ($X_a$) have a Bernoulli distribution: $X_a \sim Ber(p_A)$. 
@@ -277,20 +278,20 @@ erlang_c = function(k,r) {
 <<echo=TRUE, size='tiny'>>=
 k = 55
 lambda_A = 0.2
-Ws = 240                                # E[S]
-lambda_S = 1/Ws
+S = 240                                 # E[S]
+lambda_S = 1/S
 r = lambda_A/lambda_S; r/k
 pi0 = pi_0(k,r)
 
-Lq = pi0*r^k/factorial(k)*r/k/(1-r/k)^2 # E[X_w]
-Wq = Lq/lambda_A                        # E[W]
-W = Ws + Wq                             # E[R]
-Ls = lambda_A*Ws                        # E[X_s]
-L = Lq + Ls                             # E[X]
+X_w = pi0*r^k/factorial(k)*r/k/(1-r/k)^2 # E[X_w]
+W   = X_w/lambda_A                       # E[W]
+R   = W + S                              # E[R]
+X_s = lambda_A*W                         # E[X_s]
+X   = W + R                              # E[X]
 	
 expectations = data.frame(characteristic = c("jobs_total", "jobs_processing", "jobs_waiting",
 															"time_total", "time_processing", "time_waiting"),
-					 value = round(c(L, Ls, Lq, W, Ws, Wq),1),
+					 value = round(c(X, X_w, X_s, R, W, S),1),
 					 units = c(rep("number",3), rep("seconds", 3)))
 expectations
 @
@@ -303,14 +304,14 @@ expectations
 
 \subsection{Limited capacity}
 \begin{frame}
-\frametitle{$M/M/k/K$}
+\frametitle{$M/M/k/C$}
 \small
 
 \vspace{-0.05in}
 
 \begin{definition}
-An \alert{$M/M/k/K$} queuing process is an $M/M/k$ queuing process with a 
-maximum capacity of $K$ for the system with \emph{attempted} arrival rate 
+An \alert{$M/M/k/C$} queuing process is an $M/M/k$ queuing process with a 
+maximum capacity of $C$ for the system with \emph{attempted} arrival rate 
 $\lambda$ and service rate $\lambda_S$.
 \end{definition}
 
@@ -320,11 +321,11 @@ The steady-state probabilities are
 \[ 
 \left\{ 
 \begin{array}{cl}
-\pi_0 &= \left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \sum_{i=k}^K \frac{r^k}{r!}(r/k)^{x-k} \right)^{-1} \\
+\pi_0 &= \left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \sum_{i=k}^C \frac{r^k}{r!}(r/k)^{x-k} \right)^{-1} \\
 \pi_x &= \left\{ 
 \begin{array}{ll}
 \frac{r^x}{x!}\pi_0 & \mbox{for }x\le k \\
-\frac{r^k}{k!}\pi_0 \left( \frac{r}{k} \right)^{x-k} & \mbox{for }k<x\le K
+\frac{r^k}{k!}\pi_0 \left( \frac{r}{k} \right)^{x-k} & \mbox{for }k<x\le C
 \end{array}
 \right.
 \end{array}
@@ -334,11 +335,11 @@ where $r=\lambda/\lambda_S$.
 \pause 
 The average line length is 
 \[
-E[X] = \sum_{x=0}^K x \pi_x.
+E[X] = \sum_{x=0}^C x \pi_x.
 \]
-The probability the queue is full is $p_K$, thus the actually arrival rate is 
+The probability the queue is full is $\pi_C$, thus the actually arrival rate is 
 \[ 
-\lambda_A = (1-p_K)\lambda
+\lambda_A = (1-\pi_C)\lambda
 \]
 since no jobs can arrive while the queue is at capacity.
 \end{frame}
@@ -346,10 +347,10 @@ since no jobs can arrive while the queue is at capacity.
 
 
 \begin{frame}
-\frametitle{Remaining properties for $M/M/k/K$}
+\frametitle{Remaining properties for $M/M/k/C$}
 \tiny
 
-This is exactly the same as in the $M/M/1/K$ queuing process. 
+This is exactly the same as in the $M/M/1/C$ queuing process. 
 
 \begin{itemize}
 \item Expected service time
@@ -365,7 +366,7 @@ E[R] \pause= E[X]/\lambda_A
 \item Expected number of jobs being processed
 \[ 
 E[X_s] \pause= \lambda_A E[S] = \frac{\lambda_A}{\lambda_S} 
-= \frac{(1-p_K)\lambda}{\lambda_S}
+= \frac{(1-\pi_C)\lambda}{\lambda_S}
 \]
 \pause
 \item Expected number of jobs in queue
@@ -390,32 +391,32 @@ E[W] \pause= E[R]-E[S] = \frac{E[X]}{\lambda_A}- \frac{1}{\lambda_S}
 \begin{example}
 Suppose the call center has no queue but instead you receive a busy signal
 when no agents are available. \pause 
-Then $K=k$. 
+Then $C=k$. 
 \end{example}
 
 \pause
 
 At steady-state, we have 
-<<mmkK, echo=TRUE>>=
-pi_0 = function(k, r, K) {
-	ii = 0:(k-1); II = k:K
+<<mmkC, echo=TRUE>>=
+pi_0 = function(k, r, C) {
+	ii = 0:(k-1); II = k:C
 	1/(sum(r^ii/factorial(ii)) + r^k/factorial(k)*sum((r/k)^(II-k)))
 }
 
-pi_x = function(x, k, r, K) {
-	pi0 = pi_0(k, r, K)
+pi_x = function(x, k, r, C) {
+	pi0 = pi_0(k, r, C)
 	pi0 * ifelse(x<=k, r^x/factorial(x), r^k/factorial(k)*(r/k)^(x-k))
 }
 
-K = k
-pi0 = pi_0(k,r,K)
-pi = numeric(K); for (kk in 1:K) pi[kk] = pi_x(kk, k, r, K)
-lambda = 0.2; lambda_A = (1-pi[K])*lambda
-L = sum(1:K*pi)  # E[X]
-W = L/lambda_A   # E[R]
-Wq = W-Ws        # E[W]
-Lq = Wq*lambda_A # E[X_w]
-Ls = L-Lq        # E[X_s]
+C = k
+pi0 = pi_0(k,r,C)
+pi = numeric(C); for (kk in 1:C) pi[kk] = pi_x(kk, k, r, C)
+lambda = 0.2; lambda_A = (1-pi[C])*lambda
+X   = sum(1:C*pi) # E[X]
+R   = X/lambda_A  # E[R]
+W   = R-S         # E[W]
+X_w = W*lambda_A  # E[X_w]
+X_s = X-X_w       # E[X_s]
 @
 \end{frame}
 
@@ -427,13 +428,13 @@ Ls = L-Lq        # E[X_s]
 
 <<size='tiny'>>=
 # Probability of being at the threshold
-pi[K]
+pi[C]
 
 # Observed arrival rate
 lambda_A
 
 # System characteristics
-expectations$new_value = round(c(L, Ls, Lq, W, Ws, Wq),1)
+expectations$new_value = round(c(X, X_w, X_s, R, W, S), 1)
 expectations[,c("characteristic","units","value","new_value")]
 @
 

@@ -313,12 +313,12 @@ E[W] \pause= E[X_w]/\lambda_A = \frac{2\frac{1}{4}}{3} = 0.75 \mbox{ hours}
 
 \subsection{Limited capacity}
 \begin{frame}
-\frametitle{$M/M/1/K$}
+\frametitle{$M/M/1/C$}
 \small
 
 \begin{definition}
-An \alert{$M/M/1/K$} queuing process is an $M/M/1$ queuing process with a 
-maximum capacity of $K$ for the system with \emph{attempted} arrival rate 
+An \alert{$M/M/1/C$} queuing process is an $M/M/1$ queuing process with a 
+maximum capacity of $C$ for the system with \emph{attempted} arrival rate 
 $\lambda$ and service rate $\lambda_S$.
 \end{definition}
 
@@ -326,19 +326,19 @@ $\lambda$ and service rate $\lambda_S$.
 
 The steady-state probabilities are 
 \[ 
-\pi_k = r^k\pi_0, \quad \pi_0 = \frac{1-r}{1-r^{K+1}}.
+\pi_k = r^k\pi_0, \quad \pi_0 = \frac{1-r}{1-r^{C+1}}.
 \]
 where $r=\lambda/\lambda_S$. 
 \pause 
 The average line length is 
 \[
-E[X] = \sum_{x=0}^K x \pi_x = \cdots 
-= \frac{r}{1-r}-\frac{(K+1)r^{K+1}}{1-r^{K+1}}.
+E[X] = \sum_{x=0}^C x \pi_x = \cdots 
+= \frac{r}{1-r}-\frac{(C+1)r^{C+1}}{1-r^{C+1}}.
 \]
 \pause
-The probability the queue is full is $\pi_K$, \pause thus the actually arrival rate is 
+The probability the queue is full is $\pi_C$, \pause thus the actually arrival rate is 
 \[ 
-\lambda_A = (1-\pi_K)\lambda
+\lambda_A = (1-\pi_C)\lambda
 \]
 since no jobs can arrive while the queue is at capacity.
 \end{frame}
@@ -347,13 +347,13 @@ since no jobs can arrive while the queue is at capacity.
 
 
 \begin{frame}
-\frametitle{Remaining properties for $M/M/1/K$}
+\frametitle{Remaining properties for $M/M/1/C$}
 \tiny
 
 \begin{itemize}
 \item Expected number of jobs in the system
 \[ 
-E[X] = \frac{r}{1-r}-\frac{(K+1)r^{K+1}}{1-r^{K+1}}
+E[X] = \frac{r}{1-r}-\frac{(C+1)r^{C+1}}{1-r^{C+1}}
 \]
 \item Expected service time
 \[ 
@@ -368,7 +368,7 @@ E[R] \pause= E[X]/\lambda_A
 \item Expected number of jobs being processed
 \[ 
 E[X_s] \pause= \lambda_A E[S] = \frac{\lambda_A}{\lambda_S} 
-= \frac{(1-\pi_K)\lambda}{\lambda_S}
+= \frac{(1-\pi_C)\lambda}{\lambda_S}
 \]
 \item Expected number of jobs in queue
 \[ 
@@ -402,21 +402,21 @@ steady-state because it is regular continuous-time Markov chain.
 \pause
 
 At steady-state, we have 
-<<mm1K, echo=TRUE>>=
-K = 5
+<<mm1C, echo=TRUE>>=
+C = 5
 lambda = 3
-lambda_S = 4; Ws = 1/lambda_S # E[S]
+lambda_S = 4; S = 1/lambda_S # E[S]
 r = lambda/lambda_S
-pi0 = (1-r)/(1-r^(K+1))
-pi = numeric(K); for (k in 1:K) pi[k] = r^k*pi0
-lambda_A = (1-pi[K])*lambda
-round(c(pi[K],lambda_A),2)
-L = sum(1:5*pi)  # E[X]
-W = L/lambda_A   # E[R]
-Wq = W-Ws        # E[W]
-Lq = Wq*lambda_A # E[X_w]
-Ls = L-Lq        # E[X_s]
-round(c(L, Ls, Lq, W, Ws, Wq),2)
+pi0 = (1-r)/(1-r^(C+1))
+pi = numeric(C); for (k in 1:C) pi[k] = r^k*pi0
+lambda_A = (1-pi[C])*lambda
+round(c(pi[C],lambda_A),2)
+X = sum(1:5*pi)  # E[X]
+R = X/lambda_A   # E[R]
+W = R-S          # E[W]
+X_w = W*lambda_A # E[X_w]
+X_s = X-X_w      # E[X_s]
+round(c(X, X_w, X_s, R, W, S),2) # expectations
  @
 
 \end{frame}
