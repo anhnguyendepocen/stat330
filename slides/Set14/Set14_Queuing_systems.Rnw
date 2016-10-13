@@ -224,11 +224,11 @@ We will be interested in answer questions such as
 \end{frame}
 
 
-\subsection{$A/S/n/C$ }
+\subsection{$A/S/k/C$ }
 \begin{frame}
-\frametitle{$A/S/n/C$ notation}
+\frametitle{$A/S/k/C$ notation}
 
-To quickly denote a queuing system, we use the notation $A/S/n/C$ to represent
+To quickly denote a queuing system, we use the notation $A/S/k/C$ to represent
 \begin{itemize}[<+->]
 \item $A$ the distribution of interarrival times
 \item $S$ the distribution of service times
