@@ -1,98 +1,107 @@
 \documentclass{article}
 
-\usepackage[margin=1in]{geometry}
+\usepackage{rotating,fullpage}
 
-\renewcommand{\alpha}{a} % Need to change this when changing to good notation
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\utilization}{\rho}
 
 \begin{document}
 
 \section{Queueing systems}
 
-The notation in the book, slides, and notes all could be improved. Here is an attempt at improving the notation. A queueing system is a line of things, e.g. people, jobs, messages, etc. We will refer to the queueing system simply as the \emph{system} and an individual in the system as an \emph{individual}. The system has a certain number of servers $k$ and maximum length $K$ (which could be infinite). If the arrival rate of individuals to the system has an exponential distribution with rate $\lambda$ and the service rate of an individual has an exponential distribution with rate $\mu$, then we have an $M/M/k/K$ queueing system where the $M$ refers to the memoryless property and therefore implies an exponential distribution. If no $K$ is specified, e.g. $M/M/k$, then it is assumed that $K=\infty$, i.e. there is no maximum length of the queue. An $M/M/k/K$ queueing system is an example of a birth-death process. 
+The notation in the book could be improved. Here is an attempt at improving the notation. A queueing system is a line of things, e.g. people, jobs, messages, etc. We will refer to the queueing system simply as the \emph{system} and an individual in the system as \emph{job}. The system has a certain number of servers $k$ and maximum length $C$ (which could be infinite). If the arrival rate of jobs to the system has an exponential distribution with rate $\lambda$ and the service rate of an individual has an exponential distribution with rate $\mu$, then we have an $M/M/k/C$ queueing system where the $M$ refers to the memoryless property and therefore implies an exponential distribution. If no $C$ is specified, e.g. $M/M/k$, then it is assumed that $C=\infty$, i.e. there is no maximum length of the queue. An $M/M/k/C$ queueing system is an example of a birth-death process. 
 
-Define $X(t)$ as the number of individuals in the system at time $t$. The only way to say anything about $X(t)$ is to start with an initial number of individuals $X(0)$ and simulate the process. Instead of talking about $X(t)$ at a particular time $t$, we will instead ask questions about $X(t)$ in its steady-state distribution, i.e. for large $t$ although we cannot be explicit about how large is large enough. Assuming a steady-state distribution exists, we write $X(t)\stackrel{d}{\rightarrow} X$ and say `$X(t)$ converges in distribution to $X$.' Notice that $X(t)$ does not converge to a number, i.e. there aren't {\bf always} 3 people in line when $t$ is large, but rather converges to a distribution, i.e. we can say something about the probability that there are 3 people in line when $t$ is large. 
+Define $X(t)$ as the number of jobs in the system at time $t$. The only way to say anything about $X(t)$ is to start with an initial number of jobs $X(0)$ and simulate the process. Instead of talking about $X(t)$ at a particular time $t$, we will instead ask questions about $X(t)$ in its steady-state distribution, i.e. for large $t$ although we cannot be explicit about how large is large enough. Assuming a steady-state distribution exists, we write $X(t)\stackrel{d}{\rightarrow} X$ and say `$X(t)$ converges in distribution to $X$.' Notice that $X(t)$ does not converge to a number, i.e. there aren't {\bf always} 3 people in line when $t$ is large, but rather converges to a distribution, i.e. we can say something about the probability that there are 3 people in line when $t$ is large. 
 
-For each individual thing in the system, that thing can either be 1) waiting to be served or 2) currently being served. Thus there are two distinct parts of the line. Let $X_w$ and $X_s$ denote the number of people in the waiting line and currently being served, respectively, when the process is at steady-state and thus $X=X_w+X_s$. An observed number of individuals in the line is $x$. An individual thing spends some amount of time $T_w$ waiting and some amount of time $T_s$ being served and thus the total time for an individual is $T=T_w+T_s$. 
+For each job in the system, the job can either be 1) waiting to be processed or 2) currently being processed. Thus there are two distinct parts of the line. Let $X_w$ and $X_s$ denote the number of jobs waiting and currently being processed, respectively, when the process is at steady-state and thus $X=X_w+X_s$. An observed number of jobs in the line is $x$. Job $k$ spends some amount of time $T_{w,k}$ waiting and some amount of time $T_{s,k}$ being served and thus the total time for an individual is $T_k=T_{w,k}+T_{s,k}$. At steady-state, the distribution for these times are the same for all jobs and therefore we typically eliminate the $k$ subscript and discuss a generic waiting time $T_w$, service time $T_s$, and total time $T=T_w+T_s$.  
 
-%For an $M/M$ system, individuals arrive according to a Poisson process where $O_j$ is the occurrence/arrival time of the $j^{th}$ individual which has a $Ga(j,\lambda)$ distribution. The inter arrival time s$I_j-O_j-O_{j-1}$ (where $O_0=0$) are independent and identically distributed $Exp(\lambda)$. 
+%For an $M/M$ system, jobs arrive according to a Poisson process where $O_j$ is the occurrence/arrival time of the $j^{th}$ individual which has a $Ga(j,\lambda)$ distribution. The inter arrival time s$I_j-O_j-O_{j-1}$ (where $O_0=0$) are independent and identically distributed $Exp(\lambda)$. 
 
-Some relevant properties of a queueing system are 
+Some relevant steady-state properties of a queueing system are 
 \begin{itemize}
-\item $E[X(t)]$ the average number of individuals in the system as $t\to\infty$
-\item $E[X_s(t)]$ the average number of individuals being served as $t\to\infty$
-\item $E[X_w(t)]$ the average number of individuals waiting as $t\to\infty$
+\item $E[X] = \lim_{t\to\infty} E[X(t)]$:     the average number of jobs in the system at steady-state
+\item $E[X_s] = \lim_{t\to\infty} E[X_s(t)]$: the average number of jobs in process at steady-state
+\item $E[X_w] = \lim_{t\to\infty} E[X_w(t)]$: the average number of jobs waiting at steady-state
 \item $E[T]$ the average time spent in the system
 \item $E[T_s]$ the average time spent being served
 \item $E[T_w]$ the average time spent waiting
 \end{itemize}
 
-Table \ref{tab:notation} below tries to clarify the notation used in the slides, notes, and textbook relative to the notation presented here. If the cell is blank, then the notation is not introduced in that source. 
+Table \ref{tab:notation} below tries to clarify the notation used in the textbook relative to the notation presented here. If the cell is blank, then the notation is not introduced in that source. 
 
 \begin{table}[h]
 \caption{Notation for queueing systems used in this document (Here), in the lectures slides and Hoffman notes (Slides/notes), and used in the textbook.}
 \label{tab:notation}
-\[ \begin{array}{|c|c|c|}
+\[ \begin{array}{|c|c|}
 \hline
-\mbox{Here} & \mbox{Slides/notes} & \mbox{Textbook} \\
+\mbox{Here} & \mbox{Textbook} \\
 \hline
-x & k & x \\
-X(t) & X(t) \mbox{ and } N(t) & X(t) \\
-X_s(t) & & X_s(t) \\
-X_w(t) & & X_w(t) \\
-X & X(t)\mbox{ for large }t & X \\
-X_s && X_s \\
-X_w && X_w \\
-T && R \\
-T_s && S \\
-T_w & q(t)\mbox{ for large }t & W \\
+T & R \\
+T_s & S \\
+T_w & W \\
 \hline
-k & c & k \\
-K & K & K \\
-\lambda & \lambda & \lambda_A \\
-\mu & \mu & \lambda_S \\
-1/\lambda & 1/\lambda & \mu_A \\
-\alpha=\lambda/\mu & a = \lambda/\mu  & r = \lambda_A/\lambda_S \\
-\rho = \alpha/k & \rho=a/c & \\
+E[T] & E(R) \\
+E[T_s]  & E(S)\\
+E[T_w] & E(W) \\
 \hline
-E[X] & L & E(X) \\
-E[X_s] & L_s & E(X_s) \\
-E[X_w] & L_q & E(X_w) \\
-E[T] & W & E(R) \\
-E[T_s]=1/\mu & W_s=1/\mu & E(S) = \mu_S \\
-E[T_w] & W_q & E(W) \\
-\hline
-P(X=x) & p_x & \pi_x \\
+\utilization & r \\
+\kappa & r/k \\
 \hline
 \end{array} \]
 \end{table}
 
 The notation in this document tries to make explicit the distinction between random variables which are represented by capital letters, parameters which are represented by Greek letters, and expectations, i.e. properties of the system, which are real numbers. 
 
-\subsection{Properties of systems $M/M/k/K$ systems}
+\subsection{Properties of systems $M/M/k/C$ systems}
 
-Table \ref{tab:properties} below summarizes the properties of different queueing systems.
+$M/M/k/C$ queuing systems have two parameters: the \emph{attempted} arrival rate
+$\lambda$ and the service rate $\lambda_S$. When the system has no capacity 
+limit, i.e. $C=\infty$, then the \emph{observed} arrival rate is equal to the 
+attempted arrival rate, i.e. $\lambda=\lambda_A$. But when there is a capacity,
+i.e. $C<\infty$, then the \emph{observed} arrival rate is the arrival rate when
+the system is not at full capacity, i.e. $\lambda_A=(1-\pi_C)\lambda$. 
 
-\begin{table}[h]
-\caption{Properties for $M/M/k/K$ queueing systems}
+Little's Law describes how the steady-state properties are related to each other
+and the observed arrival rate $\lambda_A$. 
+\begin{theorem}[Little's Law]
+\[ \begin{array}{rl}
+E[X] &= \lambda_A E[T] \\
+E[X_s] &= \lambda_A E[T_s] \\
+E[X_w] &= \lambda_A E[T_w] \\
+\end{array} \]
+\end{theorem}
+
+
+Table \ref{tab:properties} below summarizes the properties of different queueing
+systems.
+
+\newpage
+
+{\renewcommand{\arraystretch}{1.5}
+\begin{sidewaystable}
+\caption{Properties for $M/M/k/C$ queueing systems}
 \label{tab:properties}
 \[ \begin{array}{c|ccccc}
-\mbox{System} & M/M/1 & M/M/1/K & M/M/k & M/M/k/K & M/M/\infty \\
+\mbox{System} & M/M/1 & M/M/1/C & M/M/k & M/M/k/C & M/M/\infty \\
 \hline
-P(X=0)=p_0 & 1-\alpha & \frac{1-\alpha}{1-\alpha^{K+1}} & \left(\left[\sum_{x=0}^{k-1} \frac{\alpha^x}{x!}\right] + \frac{\alpha^k}{(1-\rho)k!}\right)^{-1} &
-\left(\sum_{x=0}^{k-1} \frac{\alpha^x}{x!} + \sum_{x=k}^K \frac{\alpha^k}{k!}\rho^{x-k} \right)^{-1} 
-& e^{-\alpha} \\
-P(X=x)=p_x & \alpha^x (1-\alpha) & a^x p_0 & \left\{ \begin{array}{ll} \frac{\alpha^x}{x!}p_0 & x\le k \\ \frac{\alpha^x}{x!} \rho^{x-k}p_0 & x>k \end{array} \right. 
-& \left\{ \begin{array}{ll} \frac{\alpha^x}{x!}p_0 & x\le k \\ \frac{\alpha^k}{k!} \rho ^{x-k}p_0 & k<x\le K \end{array} \right.   & e^{-\alpha} \frac{\alpha^x}{x!} \\
+P(X=0)=\pi_0 & 1-\utilization & \frac{1-\utilization}{1-\utilization^{C+1}} & 
+\left(\left[\sum_{x=0}^{k-1} \frac{\utilization^x}{x!}\right] + \frac{\utilization^k}{(1-\kappa)k!}\right)^{-1} &
+\left(\sum_{x=0}^{k-1} \frac{\utilization^x}{x!} + \sum_{x=k}^C \frac{\utilization^k}{k!}\kappa^{x-k} \right)^{-1} 
+& e^{-\utilization} \\
+P(X=x)=\pi_x & \utilization^x (1-\utilization) & \utilization^x \pi_0 & \left\{ \begin{array}{ll} \frac{\utilization^x}{x!}\pi_0 & x\le k \\ \frac{\utilization^x}{x!} \kappa^{x-k}\pi_0 & x>k \end{array} \right. 
+& \left\{ \begin{array}{ll} \frac{\utilization^x}{x!}\pi_0 & x\le k \\ \frac{\utilization^k}{k!} \kappa ^{x-k}\pi_0 & k<x\le C \end{array} \right.   & e^{-\utilization} \frac{\utilization^x}{x!} \\
 \hline
-\lambda_a & \lambda & (1-p_K)\lambda & \lambda & (1-p_K)\lambda & \lambda \\
+\lambda_A & \lambda & (1-\pi_C)\lambda & \lambda & (1-\pi_C)\lambda & \lambda \\
 \hline
-E[X]=L & \frac{\alpha}{1-\alpha} & \frac{\alpha}{1-\alpha} - \frac{(K+1)\alpha^{K+1}}{1-\alpha^{K+1}} & W\lambda & \sum_{x=0}^K x p_x & \alpha \\
-E[X_s]=L_s & \alpha & L-L_q & L-L_q & L-L_q & a \\
-E[X_w]=L_q & \frac{\alpha^2}{1-\alpha} & W_q \lambda_a & p_0 \frac{a^k}{k!} \frac{\rho}{(1-\rho)^2} & W_q \lambda_a& 0 \\
-E[T]=W & \frac{1}{\mu}\frac{1}{1-\alpha} & L/\lambda_a & W_s+W_q & L/\lambda_a& \frac{1}{\mu} \\
-E[T_s]=W_s & \frac{1}{\mu} & \frac{1}{\mu} & \frac{1}{\mu} & \frac{1}{\mu} & \frac{1}{\mu} \\
-E[T_w]=W_q & \frac{1}{\mu}\frac{\alpha}{1-\alpha} & W-W_s & L_q / \lambda  & W-W_s& 0 \\
+E[X] & \frac{\utilization}{1-\utilization} & \frac{\utilization}{1-\utilization} - \frac{(C+1)\utilization^{C+1}}{1-\utilization^{C+1}} & E[T]\lambda_A & \sum_{x=0}^C x \pi_x & \utilization \\
+E[X_s] & \utilization & E[X]-E[X_w] & E[X]-E[X_w] & E[X]-E[X_w] & a \\
+E[X_w] & \frac{\utilization^2}{1-\utilization} & E[T_w] \lambda_A & \pi_0 \frac{\utilization^k}{k!} \frac{\kappa}{(1-\kappa)^2} & E[T_w] \lambda_A& 0 \\
+E[T] & \frac{1}{\lambda_S}\frac{1}{1-\utilization} & E[X]/\lambda_A & E[T_s]+E[T_w] & E[X]/\lambda_A & \frac{1}{\lambda_S} \\
+E[T_s] & \frac{1}{\lambda_S} & \frac{1}{\lambda_S} & \frac{1}{\lambda_S} & \frac{1}{\lambda_S} & \frac{1}{\lambda_S} \\
+E[T_w] & \frac{1}{\lambda_S}\frac{\utilization}{1-\utilization} & E[T]-E[T_s] & E[X_w] / \lambda_A  & E[T]-E[T_s]& 0 \\
 \end{array} \]
-\end{table}
+\end{sidewaystable}
+}
 
 \end{document}
