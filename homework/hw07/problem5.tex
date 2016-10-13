@@ -17,8 +17,8 @@ line. Do you think the owner should? Why or why not?
 \item The state space is $\{0,1,2,3,4\}$. 
 \item Let's assume this queuing system has independent exponentially distributed 
 arrival and service times and therefore can be treated as an $M/M/2/4$ system 
-with arrival rate $\lambda_A = 1/2$ calls per minute and service rate $\lambda_S
- = 1/5$ calls per minute. Thus $r=\lambda_A/\lambda_S = (1/2)/(1/5) = 2.5$. First
+with attempted arrival rate $\lambda = 1/2$ calls per minute and service rate $\lambda_S
+ = 1/5$ calls per minute. Thus $r=\lambda/\lambda_S = (1/2)/(1/5) = 2.5$. First
 find 
 \[ \begin{array}{rl}
 \pi_0 &
@@ -45,7 +45,7 @@ Then
        = \frac{2.5^2}{2!}(2.5/2)^{(4-2)}\pi_0 = 0.317 \\
 \end{array} \]
 \item Yes since the system is at capacity 31.7\% of the time, the shop is 
-missing 31.7\% of the calls or $0.317\lambda_A=0.8$ calls per minute. Adding 
+missing 31.7\% of the calls or $0.317\lambda=0.8$ calls per minute. Adding 
 another phone line would reduce the number of missed calls dramatically.
 \end{enumerate}
 }
