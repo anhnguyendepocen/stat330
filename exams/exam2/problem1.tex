@@ -1,3 +1,61 @@
 %!TEX root = exam2.tex
 
-\item CLT
+% From http://www.pstcc.edu/facstaff/rtjackso/math1530/classnotes/6_5.pdf
+
+\item The weights of adult males are normally distributed with a mean of 172 
+pounds and a standard deviation of 29 pounds (based on data from the National
+Health Survey). 
+
+\begin{enumerate}
+\item What is the probability that one randomly selected adult male will weight 
+more than 190 pounds? (6 points)
+
+\ansfont{
+Let $X_i\sim N(\mu,\sigma^2)$ be the weight of male $i$ with $\mu=172$ pounds 
+and $\sigma=190$ pounds. 
+Then 
+\[ 
+P(X_i > 190) = P\left(\frac{X_i-\mu}{\sigma} > \frac{190-172}{29} \right) 
+\approx P(Z>0.62) = P(Z< -0.62) \approx 0.2676
+\]
+}
+\vfill
+\vfill
+
+\item What is the probability that 25 randomly selected adult males will have a 
+mean weight of more than 190 pounds? (7 points)
+
+\ansfont{
+Let $\overline{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$, 
+then $\overline{X}_n \sim N(\mu,\sigma^2/n)$
+
+\[
+P\left(\overline{X}_{25} > 190\right) = P\left(\frac{\overline{X}_{25}-\mu}{\sigma/\sqrt{n}} > \frac{190-172}{29/\sqrt{25}} \right) 
+\approx P(Z>3.1) = P(Z< -3.1) \approx 0.0010
+\]
+}
+
+\vfill
+\vfill
+\vfill
+
+\item An elevator at a men's fitness center has a sign that says the maximum 
+allowable weight is 4750 pounds. If 25 randomly selected men cram into the 
+elevator, what is the probability it will be over the maximum allowable weight? 
+(6 points)
+
+\ansfont{
+Let $S_n = \sum_{i=1}^n X_i = n\overline{X}_n$, 
+then $S_n \sim N(n\mu,n\sigma^2)$
+
+\[
+P(S_{25} > 4750) = P\left(\overline{X}_{25} > 4750/25\right) = P\left(\overline{X}_n > 190\right)
+\approx 0.0010
+\]
+from part b). 
+}
+
+\vfill
+\vfill
+
+\end{enumerate}
