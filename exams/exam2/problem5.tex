@@ -1,3 +1,48 @@
 %!TEX root = exam2.tex
 
-\item Queuing system
+\item Fast food drive-thrus, where you order at the window, can be modeled as 
+an $M/M/1$ queue. 
+Suppose it takes, on average, 5 minutes to complete the order for a car and 
+cars arrive at a rate of 10 per hour. 
+For the following questions, assume the system is in its steady state 
+distribution.
+
+\begin{enumerate}
+\item What proportion of the time is the drive-thru busy, i.e. there is at least
+one customer? (7 points)
+
+\ansfont{
+The arrival rate is $\lambda_A = 10$ car/hour and the service rate is 
+$\lambda_S = 60/5 = 12$ cars per hour. The utilization 
+$r = \lambda_A/\lambda_S = 5/6$ is the proportion of time the drive-thru is 
+busy, i.e. $P(X>0) = 5/6$ where $X$ is the number of people at the drive-thru
+at steady state.
+}
+\vfill
+
+
+\item On average, how many customers are waiting to place their order? (6 points)
+
+\ansfont{
+Let $X_w$ represent the length of the waiting line. 
+\[ 
+E[X_w] = \frac{r^2}{1-r} = \frac{(5/6)^2}{1-5/6} \approx 4.17
+\]
+So, on average, there are approximately 4.17 cars waiting to place their order.
+}
+\vfill
+
+\item How long should a customer expect to wait in line before getting their 
+food? (6 points)
+
+\ansfont{
+Let $R$ be the total time before getting their order, then 
+\[ 
+E[R] = \frac{1}{\lambda_S}\frac{1}{1-\rho} = \frac{1}{12} \frac{1}{1-5/6} =
+\frac{6}{12} = 0.5
+\]
+So half an hour.  
+}
+\vfill
+
+\end{enumerate}
