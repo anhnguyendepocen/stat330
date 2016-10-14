@@ -51,9 +51,9 @@ Transition probabilities:
 p_{x,x+1} &= \pause P(X_a=1,X_d=0) \pause \\
 &= p_A(1-p_S)^n \pause \\ \\
 p_{x,x} &= \pause P(X_a=1,X_d=1) + P(X_a=0,X_d=0) \pause \\
-&= p_A {n\choose 1} p_S(1-p_S^{n-1}) + (1-p_A)(1-p_S)^n \pause \\ \\
+&= p_A {n\choose 1} p_S(1-p_S)^{n-1} + (1-p_A)(1-p_S)^n \pause \\ \\
 p_{x,x-1} &= \pause P(X_a=1,X_d=2) + P(X_a=0,X_d=1) \pause \\
-&= p_A {n\choose 2} p_S^2(1-p_S^{n-2}) + (1-p_A){n\choose 1}p_S(1-p_S)^{n-1} \pause \\ \\
+&= p_A {n\choose 2} p_S^2(1-p_S)^{n-2} + (1-p_A){n\choose 1}p_S(1-p_S)^{n-1} \pause \\ \\
 & \qquad \vdots \\ \\
 p_{x,x-n} &= \pause P(X_a=0,X_d=n) \pause \\
 &= (1-p_A)p_S^n
