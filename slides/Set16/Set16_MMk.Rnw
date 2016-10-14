@@ -46,18 +46,16 @@ of the number of jobs in the system $x$ and the number of servers $k$. \pause
 \begin{frame}
 \frametitle{Bernoulli $k$-server queuing system (cont.)}
 
-Let A indicate arrival and D indicate departure. \pause
-
 Transition probabilities:
 \[ \begin{array}{rl}
-p_{x,x+1} &= P(\mbox{1 A, 0 D}) \\
-&= p_A(1-p_S)^n \\ \\
-p_{x,x} &= P(\mbox{1 A, 1 D}) + P(\mbox{0 A, 0 D}) \\
-&= p_A {n\choose 1} p_S(1-p_S^{n-1}) + (1-p_A)(1-p_S)^n \\ \\
-p_{x,x-1} &= P(\mbox{1 A, 2 D}) + P(\mbox{0 A, 1 D}) \\
-&= p_A {n\choose 2} p_S^2(1-p_S^{n-2}) + (1-p_A)p_S(1-p_S)^{n-1} \\
-& \qquad \vdots \\
-p_{x,x-n} &= P(\mbox{0 A, $n$ D}) \\
+p_{x,x+1} &= \pause P(X_a=1,X_d=0) \pause \\
+&= p_A(1-p_S)^n \pause \\ \\
+p_{x,x} &= \pause P(X_a=1,X_d=1) + P(X_a=0,X_d=0) \pause \\
+&= p_A {n\choose 1} p_S(1-p_S^{n-1}) + (1-p_A)(1-p_S)^n \pause \\ \\
+p_{x,x-1} &= \pause P(X_a=1,X_d=2) + P(X_a=0,X_d=1) \pause \\
+&= p_A {n\choose 2} p_S^2(1-p_S^{n-2}) + (1-p_A){n\choose 1}p_S(1-p_S)^{n-1} \pause \\ \\
+& \qquad \vdots \\ \\
+p_{x,x-n} &= \pause P(X_a=0,X_d=n) \pause \\
 &= (1-p_A)p_S^n
 \end{array} \]
 
@@ -91,10 +89,10 @@ with the following characteristics
 
 Transition probabilities:
 \[ \begin{array}{rl}
-p_{i,i+1} &= \lambda_A \Delta \\ 
-p_{i,i} &= 1-\lambda_A\Delta-n\lambda_S\Delta\\
-p_{i,i-1} &= n\lambda_S\Delta \\
-p_{i,j} & 0 \mbox{ for all other }j
+p_{x,x+1} &= \lambda_A \Delta \\ 
+p_{x,x} &= 1-\lambda_A\Delta-n\lambda_S\Delta\\
+p_{x,x-1} &= n\lambda_S\Delta \\
+p_{x,j} &= 0 \mbox{ for all other }j
 \end{array} \]
 
 
@@ -127,8 +125,8 @@ The second balance equation:
 \]
 Further balance equations:
 \[ \pi_x = \left\{ \begin{array}{ll}
-r^x\pi_0/x! & x\le k \\
-r^k\pi_0/k! (r/k)^{x-k}& x>k
+\pi_0r^x/x! & x\le k \\
+\pi_0r^k/k! (r/k)^{x-k}& x>k
 \end{array} \right. \]
 \end{frame}
 
@@ -139,7 +137,7 @@ r^k\pi_0/k! (r/k)^{x-k}& x>k
 
 Using $\sum_i \pi_i = 1$ and $r=\lambda_A/\lambda_S$, we have 
 \[ 
-1 = \pi_0 \left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \frac{r^k}{(1-r/k)k!} \right)
+1 = \pi_0 \left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \frac{r^k}{k!} \frac{1}{(1-r/k)} \right)
 \]
 \pause
 which implies 
