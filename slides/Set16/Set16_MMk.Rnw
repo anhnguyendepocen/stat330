@@ -126,10 +126,10 @@ The second balance equation:
 \implies \pi_2 = r\pi_1/2 = r^2\pi_0/2!
 \]
 Further balance equations:
-\[ \begin{array}{rl}
-\pi_k &= r^k\pi_0/k! \\
-\pi_{k+j} &= (r/k)^j r^k \pi_0/k!
-\end{array} \]
+\[ \pi_x = \left\{ \begin{array}{ll}
+r^x\pi_0/x! & x\le k \\
+r^k\pi_0/k! (r/k)^{x-k}& x>k
+\end{array} \right. \]
 \end{frame}
 
 
@@ -143,26 +143,22 @@ Using $\sum_i \pi_i = 1$ and $r=\lambda_A/\lambda_S$, we have
 \]
 \pause
 which implies 
-\[ 
+\[ \pi_x = 
 \left\{ 
-\begin{array}{cl}
-\pi_0 &= \left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \frac{r^k}{(1-r/k)k!} \right)^{-1} \\
-\pi_x &= \left\{ 
 \begin{array}{ll}
-\frac{r^x}{x!}\pi_0 & \mbox{for }x\le k \\
-\frac{r^k}{k!}\pi_0 \left( \frac{r}{k} \right)^{x-k} & \mbox{for }x>k
+\left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \frac{r^k}{(1-r/k)k!} \right)^{-1} & x=0 \\
+\frac{r^x}{x!}\pi_0 & 0<x\le k \\
+\frac{r^k}{k!}\pi_0 \left( \frac{r}{k} \right)^{x-k} & x>k
 \end{array}
 \right.
-\end{array}
-\right. 
 \]
 \pause
-and 
+and
 \[ 
-E[X_w] = \sum_{y=1}^\infty y P(X=k+y) = \pi_0 \frac{r^k}{k!}\frac{r/k}{(1-r/k)^2}
+E[X_w] = \sum_{y=1}^\infty y \pi_{k+y} = \pi_0 \frac{r^k}{k!}\frac{r/k}{(1-r/k)^2}.
 \]
 \pause
-which exists if $r/k = \lambda_A/k\lambda_S < 1$.
+This steady-state distribution exists if $r/k = \lambda_A/k\lambda_S < 1$.
 \end{frame}
 
 
@@ -176,13 +172,13 @@ At steady-state, what is the probability I will have to wait in the queue?
 
 \[ \begin{array}{rl}
 P(W>0) &= P(X\ge k) \\
-&= \sum_{c=k}^\infty p_c \\
-&= 1-\sum_{c=0}^{k-1} p_c \\
-&= \pi_0\left( \frac{1}{\pi_0} - \sum_{c=0}^{k-1} \frac{r^c}{c!} \right) \\
+&= \sum_{x=k}^\infty \pi_x \\
+&= 1-\sum_{x=0}^{k-1} \pi_x \\
+&= \pi_0\left( \frac{1}{\pi_0} - \sum_{x=0}^{k-1} \frac{r^x}{x!} \right) \\
 &= \pi_0 \frac{r^k}{k!(1-r/k)}.
 \end{array} \]
-This is refered to as Erlang's C formula where $C$ refers to the number of 
-servers. \pause
+This is refered to as Erlang's C formula where C refers to the number of 
+servers (so $k$ for us). \pause
 We'll denote this with $E_k(r)=P(X\ge k)$. 
 
 \vspace{0.1in} \pause
@@ -278,21 +274,20 @@ erlang_c = function(k,r) {
 <<echo=TRUE, size='tiny'>>=
 k = 55
 lambda_A = 0.2
-S = 240                                 # E[S]
+S = 240                           # E[S]
 lambda_S = 1/S
-r = lambda_A/lambda_S; r/k
-pi0 = pi_0(k,r)
+r = lambda_A/lambda_S; r/k        # Steady-state exists if r/k<1
 
-X_w = pi0*r^k/factorial(k)*r/k/(1-r/k)^2 # E[X_w]
-W   = X_w/lambda_A                       # E[W]
-R   = W + S                              # E[R]
-X_s = lambda_A*W                         # E[X_s]
-X   = W + R                              # E[X]
+X_w = erlang_c(k,r)*(r/k)/(1-r/k) # E[X_w]
+W   = X_w/lambda_A                # E[W]
+R   = W + S                       # E[R]
+X_s = lambda_A*S                  # E[X_s]
+X   = X_w + X_s                   # E[X]
 	
-expectations = data.frame(characteristic = c("jobs_total", "jobs_processing", "jobs_waiting",
-															"time_total", "time_processing", "time_waiting"),
-					 value = round(c(X, X_w, X_s, R, W, S),1),
-					 units = c(rep("number",3), rep("seconds", 3)))
+expectations = data.frame(characteristic = c("jobs_total", "jobs_waiting", "jobs_processing",
+															"time_total", "time_waiting", "time_processing"),
+					 units = c(rep("number",3), rep("seconds", 3)),
+					 inf_capacity = round(c(X, X_w, X_s, R, W, S),1))
 expectations
 @
 
@@ -318,16 +313,12 @@ $\lambda$ and service rate $\lambda_S$.
 \pause
 
 The steady-state probabilities are 
-\[ 
+\[ \pi_x = 
 \left\{ 
-\begin{array}{cl}
-\pi_0 &= \left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \sum_{i=k}^C \frac{r^k}{r!}(r/k)^{x-k} \right)^{-1} \\
-\pi_x &= \left\{ 
 \begin{array}{ll}
-\frac{r^x}{x!}\pi_0 & \mbox{for }x\le k \\
-\frac{r^k}{k!}\pi_0 \left( \frac{r}{k} \right)^{x-k} & \mbox{for }k<x\le C
-\end{array}
-\right.
+\left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \sum_{i=k}^C \frac{r^k}{r!}(r/k)^{i-k} \right)^{-1} & x=0\\
+\frac{r^x}{x!}\pi_0 & 0<x\le k \\
+\frac{r^k}{k!}\pi_0 \left( \frac{r}{k} \right)^{x-k} & k<x\le C
 \end{array}
 \right. 
 \]
@@ -350,7 +341,7 @@ since no jobs can arrive while the queue is at capacity.
 \frametitle{Remaining properties for $M/M/k/C$}
 \tiny
 
-This is exactly the same as in the $M/M/1/C$ queuing process. 
+This is exactly the same as in the $M/M/k/C$ queuing process. 
 
 \begin{itemize}
 \item Expected service time
@@ -434,8 +425,8 @@ pi[C]
 lambda_A
 
 # System characteristics
-expectations$new_value = round(c(X, X_w, X_s, R, W, S), 1)
-expectations[,c("characteristic","units","value","new_value")]
+expectations$C_capacity = round(c(X, X_w, X_s, R, W, S), 1)
+expectations[,c("characteristic","units","inf_capacity","C_capacity")]
 @
 
 \end{frame}
@@ -446,7 +437,7 @@ expectations[,c("characteristic","units","value","new_value")]
 \begin{frame}
 \frametitle{$M/M/\infty$}
 
-With an infinite number of servers, there is no queue and thus
+With an infinite number of servers, there is no queue and thus \pause
 \[
 X_w = 0, \, W=0, \, X = Xs, \mbox{ and }R = S.
 \]
@@ -481,11 +472,11 @@ and
 E[R] = E[S] = E[X]/\lambda_A = 1/\lambda_S = \Sexpr{1/lambda_S} \mbox{ seconds}.
 \]
 \pause
-This is fairly close to the results with $k=55$ because with $k=\Sexpr{k}$ 
-servers very few jobs have to wait, 
-$E[X_w]=\Sexpr{expectations$value[expectations$characteristic=="jobs_waiting"]}$
-jobs, and those that wait, don't have to wait very long, 
-$E[W] = \Sexpr{expectations$value[expectations$characteristic=="time_waiting"]}$
+The number of jobs in the system is fairly close to the results with $k=55$ 
+because with $k=\Sexpr{k}$ servers very few jobs have to wait, 
+$E[X_w]=\Sexpr{expectations$inf_capacity[expectations$characteristic=="jobs_waiting"]}$
+jobs, and the average wait time is short, 
+$E[W] = \Sexpr{expectations$inf_capacity[expectations$characteristic=="time_waiting"]}$
  seconds.
 
 
