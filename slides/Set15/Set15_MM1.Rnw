@@ -18,7 +18,7 @@
 
 \begin{definition}
 A \alert{Bernoulli single-server queuing process} is a discrete-time queuing 
-process with the following characteristics:
+process with the following properties:
 \begin{itemize}
 \item one server
 \item unlimited capacity
@@ -58,7 +58,7 @@ while fixing $\lambda_A$ and $\lambda_S$ \pause results in
 
 \begin{definition}
 A \alert{$M/M/1$ queueing process} is a continuous-time Markov queuing process
-with the following characteristics
+with the following properties
 \begin{itemize}
 \item one server,
 \item unlimited capacity,
@@ -206,7 +206,7 @@ equivalently, $r$ is the proportion of time the server is busy.
 
 
 \begin{frame}
-\frametitle{System characteristics}
+\frametitle{System properties}
 \tiny
 
 \begin{itemize}

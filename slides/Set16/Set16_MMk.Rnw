@@ -20,7 +20,7 @@
 
 \begin{definition}
 A \alert{Bernoulli $k$-server queuing process} is a discrete-time queuing 
-process with the following characteristics:
+process with the following properties:
 \begin{itemize}
 \item \alert{$k$} servers
 \item unlimited capacity
@@ -75,7 +75,7 @@ while fixing $\lambda_A$ and $\lambda_S$ \pause results in
 
 \begin{definition}
 A \alert{$M/M/k$ queueing process} is a continuous-time Markov queuing process
-with the following characteristics
+with the following properties
 \begin{itemize}
 \item \alert{$k$} server,
 \item unlimited capacity,
@@ -190,7 +190,7 @@ E[X_w] = E_k(r)\frac{r/k}{1-r/k}.
 
 
 \begin{frame}
-\frametitle{Other system characteristics}
+\frametitle{Other system properties}
 \footnotesize
 
 \begin{itemize}
@@ -228,7 +228,7 @@ E[X_s] \pause = E[X]-E[X_w] = r
 \frametitle{Call center}
 \scriptsize
 
-Suppose a call center has the following characteristics:
+Suppose a call center has the following properties:
 \begin{itemize}
 \item 55 agents
 \item 360 calls per half hour
@@ -238,7 +238,7 @@ Suppose a call center has the following characteristics:
 
 \vspace{0.1in} \pause
 
-Determine the system characteristics:
+Determine the system properties:
 \begin{itemize}
 \item $k = 55$
 \item $\lambda_A = 0.2$ calls per second
@@ -413,7 +413,7 @@ X_s = X-X_w       # E[X_s]
 
 
 \begin{frame}[fragile]
-\frametitle{Comparison of the characteristics}
+\frametitle{Comparison of the properties}
 
 <<size='tiny'>>=
 # Probability of being at the threshold
@@ -422,7 +422,7 @@ pi[C]
 # Observed arrival rate
 lambda_A
 
-# System characteristics
+# System properties
 expectations$C_capacity = round(c(X, X_w, X_s, R, W, S), 1)
 expectations[,c("characteristic","units","inf_capacity","C_capacity")]
 @
@@ -440,7 +440,7 @@ With an infinite number of servers, there is no queue and thus \pause
 X_w = 0, \, W=0, \, X = Xs, \mbox{ and }R = S.
 \]
 \pause
-The characteristics of this system can be obtained by taking the limit as 
+The properties of this system can be obtained by taking the limit as 
 $k\to\infty$. \pause
 The steady-state of the system is
 \[
