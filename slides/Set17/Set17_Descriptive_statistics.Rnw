@@ -14,7 +14,7 @@
 \end{frame}
 
 
-\section{Statistical inference}
+\section{Descriptive statistics}
 \begin{frame}
 \frametitle{Statistics}
 \begin{definition}
@@ -31,27 +31,28 @@ There are two different phases of statistics: \pause
 \item inferential statistics.
 \end{itemize}
 
-\vspace{0.1in} \pause
-
-Statistical inference involves: \pause
-\begin{itemize}
-\item paramter estimation, \pause
-\item hypothesis testing, \pause and
-\item predicting/forecasting.
-\end{itemize}
 \end{frame}
 
 
-% 
-% \foilhead[-.8in]{\textcolor{blue}{Statistical inference}}
-% \no {\textcolor{blue}{Question:} What is Statistics?\\[.1in]
-% \no  {\textcolor{magenta}{Statistics:} is the science and art of studying data. It involves collecting, classifying, summarizing, organizing, analyzing, and interpreting numerical information.  \\[.1in]
-% \no {\textcolor{magenta}{More:}} In general, there are two different processes in statistics: \\[.1in]
-% \h  {\textcolor{red}{(1)}{ describing sets of data } \\[.1in]
-% \h {\textcolor{red}{(2)}{ drawing conclusions about the sets of data based on sampling}\\[.1in]
-% \no The application of statistics can be divided into two broad areas: {\textcolor{magenta}{descriptive statistics}} and {\textcolor{magenta}{inferential statistics}}.\\[.1in]
-% \no {\textcolor{magenta}{Main areas in statistical inference are:}} estimation of parameters, evaluation of plausibility of values (hypothesis testing), and prediction of future values
-% 
+
+
+
+\begin{frame}
+\frametitle{Population and sample}
+\begin{definition}
+The \alert{population} consists of all units of interest. \pause 
+Any numerical characteristic of a population is a \alert{parameter}. \pause
+The \alert{sample} consists of observed units collected from the population. 
+\pause
+Any function of a sample is called a \alert{statistic}.
+\end{definition}
+
+\vspace{0.1in} \pause
+
+
+\end{frame}
+
+
 % 
 % \foilhead[-.8in]{\textcolor{blue}{An example}}
 % 
