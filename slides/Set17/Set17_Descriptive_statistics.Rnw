@@ -5,7 +5,7 @@
 
 \newtheorem{principle}[theorem]{Principle}
 
-\title{Set16 - M/M/k Queuing system}
+\title{Set17 - Descriptive statistics}
 
 \begin{document}
 
@@ -49,8 +49,122 @@ Any function of a sample is called a \alert{statistic}.
 
 \vspace{0.1in} \pause
 
+\begin{example}
+
+Consider the population of all in-use consumer routers by undergraduate students 
+at Iowa State University. \pause
+We are interested in what proportion have Gigabit speed. \pause
+We collect data from students in STAT 330 and record the proportion that have 
+Gigabit routers. 
+\end{example}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Simple random sampling}
+\begin{definition}
+A \alert{simple random sample} is a sample from the population where all subsets
+of the same size are equally likely to be sampled. \pause
+Simple random samples ensure that statistical conclusions will be valid.
+\end{definition}
+
+\vspace{0.1in} \pause 
+
+\begin{example}
+Consider the population of all in-use consumer routers by undergraduate students 
+at Iowa State University. \pause
+We are interested in what proportion have Gigabit speed. \pause
+A pseudo-random number generator gives each student a Unif(0,1) number and the
+lowest 100 are contacted and the proportion of these students who have Gigabit
+routers is recorded.
+\end{example}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Descriptive statistics}
+\begin{definition}
+A \alert{statistic} is any function of the data. 
+\end{definition}
+
+\pause
+
+\begin{example}
+Statistics:
+\begin{itemize}
+\item Sample mean
+\item Sample median
+\item Sample mode
+\item Sample quantile
+\item Sample variance
+\item Sample standard deviation
+\end{itemize}
+\end{example}
+
+\pause
+
+Most statistics are developed to estimate the corresponding population 
+parameter.
 
 \end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Sample mean}
+
+Let $X_1,\ldots,X_n$ be a sample from a distribution with 
+\[ E[X_i] = \mu \qquad \mbox{ and } \qquad Var[X_i] = \sigma^2 \] 
+where we assume independence between the $X_i$. 
+
+\vspace{0.1in} \pause
+
+The sample mean is 
+\[ 
+\overline{X} = \frac{1}{n} \sum_{i=1}^n X_i
+\]
+\pause
+and estimates the population mean $\mu$. 
+
+\vspace{0.1in} \pause
+
+The sample variance is 
+\[ 
+S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i-\overline{X})^2
+\]
+and estimates the population variance $\sigma^2$.
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Unbiased}
+
+\begin{definition}
+An estimator is \alert{unbiased} for a parameter if its expectation equals the
+parameter. 
+\end{definition}
+
+\pause
+
+\begin{example}
+The sample mean is unbiased since
+\[ 
+E\left[\overline{X}\right] = E\left[\frac{1}{n} \sum_{i=1}^n X_i \right]
+= \frac{1}{n} \sum_{i=1}^n E[X_i] = \mu.
+\]
+\end{example}
+\end{frame}
+
+
+
 
 
 % 
