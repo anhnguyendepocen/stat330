@@ -1,7 +1,27 @@
 \item (Baron's book): 7.21
 
 \ansfont{
-\newline
-\includegraphics[width=0.9\textwidth]{baron7-21}
+We have $\lambda_A = 1/5$ cars per second, $\lambda_S=1/12$ cars per second, and
+$k=3$. 
+Thus $r=\lambda_A/\lambda_S = (1/5)/(1/12) = 2.4$. 
+Then 
+\[ \begin{array}{rl}
+\pi_0 &= \left( 1+r + \frac{r^2}{2} + \frac{r^3}{3!(1-r/3)} \right)^{-1} =
+0.0562 \\
+\pi_1 &= r\pi_0 \\
+\pi_2 &= r^2\pi_0/2 \\
+\pi_x &= \frac{r^3}{3!}\pi_0 \left( \frac{r}{3} \right)^{x-3} \mbox{ for }x\ge 3
+\end{array} \]
+We need 
+\[ 
+P(X_w\ge 10) = P(X\ge 13) = \sum_{x=13}^\infty \pi_x = 
+\frac{r^3}{3!}\pi_0 \sum_{x=13}^\infty \left( \frac{r}{3} \right)^{x-3} 
+= \frac{r^3}{3!}\pi_0 \frac{(r/3)^{10}}{1-r/3} = 0.0695.
+\]
+Alternatively, you could find 
+\[ 
+P(X_w \ge 10) = P(X\ge 13) = 1-P(X<13) = 1-P(X\le 12) = 1-\sum_{x=0}^{12} \pi_x
+\]
+by finding $\pi_x$ for $x\in \{0,1,\ldots,12\}$.
 }
 
