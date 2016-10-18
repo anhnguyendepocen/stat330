@@ -18,16 +18,16 @@
       This is an $M/M/1$ queue with utilization $r=\lambda_A/\lambda_S=(16/60)/(1/3)=4/5$.
       Then the steady state probabilities are
       \begin{eqnarray*}
-        p_0 &=& 1-4/5=.2\\
-        p_1 &=&(.8)(.2)=.16\\
-        p_2 &=&(.8)^2(.2)=.128\\
+        \pi_0 &=& 1-4/5=.2\\
+        \pi_1 &=&(.8)(.2)=.16\\
+        \pi_2 &=&(.8)^2(.2)=.128\\
         \vdots &=& \vdots
       \end{eqnarray*}
       \begin{enumerate}
         \item $E[X]=\frac{r}{1-r}=\frac{4/5}{1/5}=4$
-        \item $P(X(t)=0)=p_0=0.2$ implies no one using the restroom 20\% of the time.
-        \item $P(X(t)<3)=P(X(t)\le 2)=p_0+p_1+p_2=.2+.16+.128=.488$
-        \item Expected response time in the system is $E[R]=E[X]/\lambda_A= 4/(4/15)=15$ min and expected service time is $E[S]=1/\mu=1/(1/3)=3$. Thus $E[W]=E[R]-E[S]=5-3=12$ min.
+        \item $P(X(t)=0)=\pi_0=0.2$ implies no one using the restroom 20\% of the time.
+        \item $P(X(t)<3)=P(X(t)\le 2)=\pi_0+\pi_1+\pi_2=.2+.16+.128=.488$
+        \item Expected response time in the system is $E[R]=E[X]/\lambda_A= 4/(4/15)=15$ min and expected service time is $E[S]=1/\mu=1/(1/3)=3$. Thus $E[W]=E[R]-E[S]=15-3=12$ min.
         \item $P(W>15)=(4/5)e^{-15/15}=0.294$.
       \end{enumerate}
     }
