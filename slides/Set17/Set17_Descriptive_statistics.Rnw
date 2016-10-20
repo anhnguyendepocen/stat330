@@ -166,7 +166,6 @@ E\left[\overline{X}\right] = E\left[\frac{1}{n} \sum_{i=1}^n X_i \right]
 
 
 
-
 % 
 % \foilhead[-.8in]{\textcolor{blue}{An example}}
 % 
