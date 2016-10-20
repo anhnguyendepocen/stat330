@@ -144,7 +144,7 @@ which implies
 \[ \pi_x = 
 \left\{ 
 \begin{array}{ll}
-\left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \frac{r^k}{(1-r/k)k!} \right)^{-1} & x=0 \\
+\left( \left[\sum_{i=0}^{k-1} \frac{r^i}{i!}\right] + \frac{r^k}{(1-r/k)k!} \right)^{-1} & x=0 \\
 \frac{r^x}{x!}\pi_0 & 0<x\le k \\
 \frac{r^k}{k!}\pi_0 \left( \frac{r}{k} \right)^{x-k} & x>k
 \end{array}
@@ -315,8 +315,8 @@ The steady-state probabilities are
 \left\{ 
 \begin{array}{ll}
 \left( \sum_{i=0}^{k-1} \frac{r^i}{i!} + \sum_{i=k}^C \frac{r^k}{k!}(r/k)^{i-k} \right)^{-1} & x=0\\
-\frac{r^x}{x!}\pi_0 & 0<x\le k \\
-\frac{r^k}{k!}\pi_0 \left( \frac{r}{k} \right)^{x-k} & k<x\le C
+\frac{r^x}{x!}\pi_0 & 0<x< k \\
+\frac{r^k}{k!}\pi_0 \left( \frac{r}{k} \right)^{x-k} & k\le x\le C
 \end{array}
 \right. 
 \]
