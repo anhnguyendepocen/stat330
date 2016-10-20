@@ -89,8 +89,8 @@ P(X=0)=\pi_0 & 1-\utilization & \frac{1-\utilization}{1-\utilization^{C+1}} &
 \left(\left[\sum_{x=0}^{k-1} \frac{\utilization^x}{x!}\right] + \frac{\utilization^k}{(1-\kappa)k!}\right)^{-1} &
 \left(\sum_{x=0}^{k-1} \frac{\utilization^x}{x!} + \sum_{x=k}^C \frac{\utilization^k}{k!}\kappa^{x-k} \right)^{-1} 
 & e^{-\utilization} \\
-P(X=x)=\pi_x & \utilization^x (1-\utilization) & \utilization^x \pi_0 & \left\{ \begin{array}{ll} \frac{\utilization^x}{x!}\pi_0 & x\le k \\ \frac{\utilization^k}{k!}\pi_0 \kappa^{x-k} & x>k \end{array} \right. 
-& \left\{ \begin{array}{ll} \frac{\utilization^x}{x!}\pi_0 & x\le k \\ \frac{\utilization^k}{k!} \pi_0\kappa ^{x-k} & k<x\le C \end{array} \right.   & e^{-\utilization} \frac{\utilization^x}{x!} \\
+P(X=x)=\pi_x & \utilization^x (1-\utilization) & \utilization^x \pi_0 & \left\{ \begin{array}{ll} \frac{\utilization^x}{x!}\pi_0 & 0<x< k \\ \frac{\utilization^k}{k!}\pi_0 \kappa^{x-k} & k\le x \end{array} \right. 
+& \left\{ \begin{array}{ll} \frac{\utilization^x}{x!}\pi_0 & 0<x< k \\ \frac{\utilization^k}{k!} \pi_0\kappa ^{x-k} & k\le x\le C \end{array} \right.   & e^{-\utilization} \frac{\utilization^x}{x!} \\
 \hline
 \lambda_A & \lambda & (1-\pi_C)\lambda & \lambda & (1-\pi_C)\lambda & \lambda \\
 \hline
