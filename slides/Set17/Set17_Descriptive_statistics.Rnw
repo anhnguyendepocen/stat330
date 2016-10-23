@@ -20,6 +20,7 @@
 \begin{definition}
 \alert{Statistics} is the study of the collection, analysis, interpretation, 
 presentation, and organization of data.
+
 {\tiny \url{https://en.wikipedia.org/wiki/Statistics}}
 \end{definition}
 
@@ -51,11 +52,11 @@ Any function of a sample is called a \alert{statistic}.
 
 \begin{example}
 
-Consider the population of all in-use consumer routers by undergraduate students 
+Consider the population of all in-use routers by undergraduate students 
 at Iowa State University. \pause
 We are interested in what proportion have Gigabit speed. \pause
-We collect data from students in STAT 330 and record the proportion that have 
-Gigabit routers. 
+We collect data from students in STAT 330 (our sample) and record the 
+proportion (a statistic) that have Gigabit routers. 
 \end{example}
 \end{frame}
 
@@ -73,12 +74,12 @@ Simple random samples ensure that statistical conclusions will be valid.
 \vspace{0.1in} \pause 
 
 \begin{example}
-Consider the population of all in-use consumer routers by undergraduate students 
+Consider the population of all in-use routers by undergraduate students 
 at Iowa State University. \pause
 We are interested in what proportion have Gigabit speed. \pause
 A pseudo-random number generator gives each student a Unif(0,1) number and the
-lowest 100 are contacted and the proportion of these students who have Gigabit
-routers is recorded.
+lowest 100 are contacted (our sample) and the proportion (a statistic) of these 
+students who have Gigabit routers is recorded.
 \end{example}
 \end{frame}
 
@@ -137,7 +138,8 @@ The sample variance is
 \[ 
 S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i-\overline{X})^2
 \]
-and estimates the population variance $\sigma^2$.
+and estimates the population variance $\sigma^2$. \pause 
+The sample standard deviation  is $S = \sqrt{S^2}$.
 
 \end{frame}
 
@@ -155,14 +157,42 @@ parameter.
 \pause
 
 \begin{example}
-The sample mean is unbiased since
+The sample mean is unbiased for $\mu$ since
 \[ 
-E\left[\overline{X}\right] = E\left[\frac{1}{n} \sum_{i=1}^n X_i \right]
+E\left[\,\overline{X}\,\right] = E\left[\frac{1}{n} \sum_{i=1}^n X_i \right]
 = \frac{1}{n} \sum_{i=1}^n E[X_i] = \mu.
 \]
+and the sample variance is unbiased for $\sigma^2$.
 \end{example}
 \end{frame}
 
+
+
+\begin{frame}
+\frametitle{Consistent}
+
+\begin{definition}
+An estimator $\hat{\theta}(x)$ is \alert{consistent} for a parameter $\theta$ if 
+the probability of its sampling error of any magnitude converges to 0 as the
+sample size increases to infinity, \pause i.e.
+\[ 
+P\left( |\hat{\theta}(x)-\theta|>\epsilon \right) \to 0 \mbox{ as } n\to\infty
+\]
+for any $\epsilon>0$.
+\end{definition}
+
+\pause 
+
+\begin{example}
+The sample mean is consistent for $\mu$ since $Var[\overline{X}] = \sigma^2/n$
+and 
+\[ 
+P\left(|\overline{X} - \mu| < \epsilon \right) \le 
+\frac{Var[\overline{X}]}{\epsilon^2} = \frac{\sigma^2/n}{\epsilon^2} \to 0
+\]
+where the inequality is from Chevyshev's inequality on pg 54 of Baron. 
+\end{example}
+\end{frame}
 
 
 
