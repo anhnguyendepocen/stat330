@@ -108,6 +108,32 @@ students who have Gigabit routers is recorded.
 \end{frame}
 
 
+\begin{frame}
+\frametitle{Sampling and non-sampling errors}
+
+\begin{definition}
+\alert{Sampling errors} are caused by the mere fact that only a sample, a 
+portion of a population, is observed.
+\pause 
+For most reasonable statistical procedures, sampling errors decrease (and 
+converge to zero) as the sample size increases.
+
+\vspace{0.1in} \pause
+
+\alert{Non-sampling errors} are caused by inappropriate sampling schemes and
+wrong statistical techniques. \pause 
+Often, no statistical technique can rescure a poorly collected sample of data. 
+\end{definition}
+
+\pause
+\begin{example}
+In our example, no statistical technique can help us estimate
+the proportion of students at ISU who have Gigabit routers based on our 
+convenience sample of STAT 330 students who have a Gigabit router.
+\end{example}
+
+\end{frame}
+
 
 \subsection{Statistics}
 \begin{frame}
