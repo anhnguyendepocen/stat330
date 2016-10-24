@@ -239,7 +239,7 @@ for any $\epsilon>0$.
 The sample mean is consistent for $\mu$ since $Var[\overline{X}] = \sigma^2/n$
 and 
 \[ 
-P\left(|\overline{X} - \mu| < \epsilon \right) \le 
+P\left(|\overline{X} - \mu| > \epsilon \right) \le 
 \frac{Var[\overline{X}]}{\epsilon^2} = \frac{\sigma^2/n}{\epsilon^2} \to 0
 \]
 where the inequality is from Chevyshev's inequality on pg 54 of Baron. 
