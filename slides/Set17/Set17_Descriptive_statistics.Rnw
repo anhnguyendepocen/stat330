@@ -313,11 +313,31 @@ SD[\overline{X}] = \sqrt{Var[\overline{X}]} = \sigma/\sqrt{n}.
 \subsection{Binomial example}
 \begin{frame}
 \frametitle{Server uptime}
+\small
 
-We are interested in the random variable $X\sim Ber(\theta)$ with 
-$\theta\in(0,1)$ that represents whether or not a server is up. \pause
-At random times and sufficiently far apart that we can reasonably assume 
+We are interested in the random variable $X\sim Ber(\theta)$ with
+$\theta\in(0,1)$ that represents whether or not a server is up. 
+\pause
+At random times and sufficiently far apart that we can reasonably assume
 independence, we ping the server to determine whether it is responding. 
+\pause
+\begin{itemize}
+\item The population here is the server status across all times and the relevant 
+population quantity is $\theta$, the proportion of time the server is up. 
+\pause
+\item The sample $X_i \stackrel{ind}{\sim} Ber(\theta)$ are the server status when
+you pinged the server. \pause From the description, it isn't entirely clear 
+whether or not this can be viewed as a simple random sample. 
+\item The sample mean is an estimator of the population mean, i.e. 
+\[
+\hat{\theta} = \frac{1}{n} \sum_{i=1}^n X_i
+\]
+and it is unbiased and consistent \pause since
+\[ 
+E[\hat{\theta}] = \theta \quad \mbox{and} \quad
+Var[\hat{\theta}] = \theta(1-\theta)/n. 
+\]
+\end{itemize}
 
 \end{frame}
 
