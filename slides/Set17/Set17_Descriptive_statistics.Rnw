@@ -122,7 +122,7 @@ converge to zero) as the sample size increases.
 
 \alert{Non-sampling errors} are caused by inappropriate sampling schemes and
 wrong statistical techniques. \pause 
-Often, no statistical technique can rescure a poorly collected sample of data. 
+Often, no statistical technique can rescue a poorly collected sample of data. 
 \end{definition}
 
 \pause
