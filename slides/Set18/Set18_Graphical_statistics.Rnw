@@ -12,23 +12,23 @@
 
 <<options, results='hide', echo=FALSE, purl=FALSE>>=
 opts_chunk$set(comment=NA, 
-               fig.width=6, fig.height=5, 
+               fig.width=6, fig.height=4, 
                size='tiny', 
                out.width='0.8\\textwidth', 
                fig.align='center', 
                message=FALSE,
-               echo=FALSE,
+               echo=TRUE,
                cache=TRUE)
 options(width=120)
 @
 
-<<libraries, message=FALSE, warning=FALSE, cache=FALSE>>=
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE, echo=FALSE>>=
 library(dplyr)
 library(ggplot2)
 library(gridExtra)
 @
 
-<<set_seed>>=
+<<set_seed, echo=FALSE>>=
 set.seed(2)
 @
 
@@ -50,7 +50,7 @@ set.seed(2)
 
 \begin{frame}[fragile]
 \frametitle{Grades in STAT 330}
-<<course_data, echo=TRUE>>=
+<<course_data>>=
 d = readr::read_csv("course_data.csv") %>% mutate(section = factor(section))
 summary(d)
 @
@@ -60,7 +60,7 @@ summary(d)
 
 \begin{frame}[fragile]
 \frametitle{Histogram}
-<<histogram, dependson="course_data", fig.height=4, echo=TRUE>>=
+<<histogram, dependson="course_data">>=
 ggplot(d, aes(x = exam2)) + geom_histogram(binwidth=1)
 @
 \end{frame}
@@ -69,7 +69,7 @@ ggplot(d, aes(x = exam2)) + geom_histogram(binwidth=1)
 
 \begin{frame}[fragile]
 \frametitle{Histogram}
-<<histogram_subset, dependson="course_data", fig.height=4, echo=TRUE>>=
+<<histogram_subset, dependson="course_data">>=
 ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(binwidth=1)
 @
 \end{frame}
@@ -77,7 +77,7 @@ ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(binwidth=1)
 
 \begin{frame}[fragile]
 \frametitle{Histogram}
-<<histogram_density, dependson="course_data", fig.height=4, echo=TRUE>>=
+<<histogram_density, dependson="course_data">>=
 ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(aes(y=..density..), binwidth=1)
 @
 \end{frame}
@@ -85,7 +85,7 @@ ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(aes(y=..density..
 
 \begin{frame}[fragile]
 \frametitle{Histogram}
-<<histogram_facet, dependson="course_data", fig.height=4, echo=TRUE>>=
+<<histogram_facet, dependson="course_data">>=
 ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(binwidth=1) + facet_grid(section~.)
 @
 \end{frame}
@@ -94,7 +94,7 @@ ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(binwidth=1) + fac
 \subsection{Boxplot}
 \begin{frame}[fragile]
 \frametitle{Boxplot}
-<<boxplot_facet, dependson="course_data", fig.height=4, echo=TRUE>>=
+<<boxplot_facet, dependson="course_data">>=
 ggplot(d %>% filter(exam2>0), aes(x = section, y = exam2)) + geom_boxplot()
 @
 \end{frame}
@@ -118,6 +118,101 @@ There is no standard for boxplots, so be careful in interpreting a boxplot
 unless you know how it is constructed. 
 
 \end{frame}
+
+
+
+
+\subsection{Scatter plots}
+\begin{frame}
+\frametitle{Scatter plots}
+When there are two continuous variables to plot at the same time, 
+use a scatter plot. 
+\pause
+The variable you believe would predict the other variable, should go on the 
+x-axis.
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Exam 2 vs homework subtotal}
+<<exam2_v_homework, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0, homework>0), aes(x = homework, y = exam2)) + 
+	geom_point()
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Exam 2 vs homework subtotal}
+<<exam2_v_homework_reg, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0, homework>0), aes(x = homework, y = exam2)) + 
+	geom_point() + geom_smooth(method='lm',formula=y~x)
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Exam 2 vs Exam 1 subtotal}
+<<exam2_v_exam1, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0, exam1>0), aes(x = exam1, y = exam2)) + 
+	geom_point()
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exam 2 vs Exam 1 subtotal}
+<<exam2_v_exam1_reg, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0, exam1>0), aes(x = exam1, y = exam2)) + 
+	geom_point() + geom_smooth(method='lm',formula=y~x)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exam 2 vs Exam 1 subtotal}
+<<exam2_v_exam1_scatter, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0, exam1>0), aes(x = exam1, y = exam2)) + 
+	geom_jitter()
+@
+\end{frame}
+
+
+\subsection{All-in-one plots}
+\begin{frame}
+\frametitle{All-in-one plots}
+<<>>=
+GGally::ggpairs(d)
+@
+\end{frame}
+
+
+
+\subsection{Two-dimensional histograms}
+\begin{frame}[fragile]
+\frametitle{Two-dimensional histograms}
+
+Sometimes there are so many points that you cannot see a relationship in a 
+scatterplot, \pause e.g. 
+<<bigdata>>=
+n = 1e4; r = runif(n, 0, 2*pi)
+normal = data.frame(x = rnorm(2*n), y = rnorm(2*n))
+circle = data.frame(x = sin(r)/2, y = cos(r)/2)
+big_data = bind_rows(normal,circle)
+ggplot(big_data, aes(x,y)) + geom_point()
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Hexbin plot}
+
+<<hexbin, dependson="bigdata">>=
+ggplot(big_data, aes(x,y)) + stat_binhex()
+@
+
+\end{frame}
+
 
 
 \end{document}
