@@ -9,6 +9,30 @@
 
 \begin{document}
 
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+
 \begin{frame}
 \maketitle
 \end{frame}
@@ -37,7 +61,7 @@ There are two different phases of statistics: \pause
 
 
 
-
+\subsection{Sample}
 \begin{frame}
 \frametitle{Population and sample}
 \begin{definition}
@@ -62,7 +86,7 @@ proportion (a statistic) that have Gigabit routers.
 
 
 
-
+\subsection{Random sample}
 \begin{frame}
 \frametitle{Simple random sampling}
 \begin{definition}
@@ -85,7 +109,7 @@ students who have Gigabit routers is recorded.
 
 
 
-
+\subsection{Statistics}
 \begin{frame}
 \frametitle{Descriptive statistics}
 \begin{definition}
@@ -115,7 +139,7 @@ parameter.
 
 
 
-
+\subsection{Mean and variance}
 \begin{frame}
 \frametitle{Sample mean}
 
@@ -136,7 +160,8 @@ and estimates the population mean $\mu$.
 
 The sample variance is 
 \[ 
-S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i-\overline{X})^2
+S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i-\overline{X})^2 
+= \frac{\sum_{i=1}^n X_i^2 - n\overline{X}^2}{n-1}
 \]
 and estimates the population variance $\sigma^2$. \pause 
 The sample standard deviation  is $S = \sqrt{S^2}$.
@@ -145,7 +170,7 @@ The sample standard deviation  is $S = \sqrt{S^2}$.
 
 
 
-
+\subsection{Unbiased}
 \begin{frame}
 \frametitle{Unbiased}
 
@@ -168,11 +193,12 @@ and the sample variance is unbiased for $\sigma^2$.
 
 
 
+\subsection{Consistent}
 \begin{frame}
 \frametitle{Consistent}
 
 \begin{definition}
-An estimator $\hat{\theta}(x)$ is \alert{consistent} for a parameter $\theta$ if 
+An estimator $\hat{\theta}$, or $\hat{\theta}(x)$, is \alert{consistent} for a parameter $\theta$ if 
 the probability of its sampling error of any magnitude converges to 0 as the
 sample size increases to infinity, \pause i.e.
 \[ 
@@ -194,6 +220,128 @@ where the inequality is from Chevyshev's inequality on pg 54 of Baron.
 \end{example}
 \end{frame}
 
+
+
+\subsection{Quantiles}
+\begin{frame}
+\frametitle{Quantiles}
+\begin{definition}
+A \alert{$p$-quantile} of a population is such a number $x$ that solves
+\[ 
+P(X<x) \le p \quad \mbox{and} \quad P(X>x) \le 1-p.
+\]
+\pause
+A \alert{sample $p$-quantile} is any number that exceeds at most $100p$\% of the
+smample, and is exceeded by at most $100(1-p)$\% of the sample.  \pause
+A \alert{$100p$-percentile} is a $p$-quantile. 
+\pause
+First, second, and third \alert{quartiles} are the 25th, 50th, and 75th 
+percentiles. 
+They split a population or a sample into four equal parts.
+\pause
+A \alert{median} is a 0.5-quantile, 50th percentile, and 2nd quartile.
+\pause
+The \alert{interquartile range} is the third quartile minus the first quartile,
+i.e.
+\[ 
+IQR = Q_3 - Q_1
+\]
+and the \alert{sample interquartile range} is the third sample quartile minus
+the first sample quartile, i.e.
+\[ 
+\hat{IQR} = \hat{Q}_3 - \hat{Q}_1
+\]
+\end{definition}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Standard normal quartiles}
+<<quantiles, fig.height=4, echo=TRUE>>=
+curve(expr = dnorm, from = -3, to = 3, ylab = "f(x)")
+quantiles = c(.25,.50,.75)
+abline(v = qnorm(p = c(.25,.50,.75))) # default is standard normal
+@
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Sample quartiles from a standard normal}
+<<sample_quantiles, dependson='quantiles', fig.height=4, echo=TRUE>>=
+n = 1000
+sample = rnorm(n)
+hist(x = sample, breaks = 101, probability = TRUE, border = "gray", col = "gray")
+curve(expr = dnorm, from = -3, to = 3, ylab = "f(x)", col = "black", add = TRUE)
+abline(v = qnorm(p = quantiles), col = "black")
+abline(v = quantile(sample, prob = quantiles), col = "gray")
+legend("topright", c("sample","population"), lty=1, col=c("gray","black"))
+@
+\end{frame}
+
+
+
+\subsection{Standard error}
+\begin{frame}
+\frametitle{Standard error}
+\begin{definition}
+The \alert{standard error} of a statistic $\hat{\theta}$ is the standard
+deviation of that statistic (when the data are considered random).
+\end{definition}
+\pause
+\begin{example}
+The standard error of the sample mean is $\sigma/\sqrt{n}$ since (if the $X_i$
+are independent) we have
+\[
+Var[\overline{X}] = Var\left[ \frac{1}{n} \sum_{i=1}^n X_i \right] =
+\frac{1}{n^2} \sum_{i=1}^n Var[X_i] = \frac{1}{n^2} \sum_{i=1}^n \sigma^2 =
+\sigma^2/n
+\]
+\pause
+and thus
+\[
+SD[\overline{X}] = \sqrt{Var[\overline{X}]} = \sigma/\sqrt{n}.
+\]
+\end{example}
+\end{frame}
+
+
+
+
+\subsection{Binomial example}
+\begin{frame}
+\frametitle{Server uptime}
+
+We are interested in the random variable $X\sim Ber(\theta)$ with 
+$\theta\in(0,1)$ that represents whether or not a server is up. \pause
+At random times and sufficiently far apart that we can reasonably assume 
+independence, we ping the server to determine whether it is responding. 
+
+\end{frame}
+
+
+\subsection{Summary}
+\begin{frame}
+\frametitle{Summary}
+\begin{itemize}
+\item Statistics are functions of data.
+\item Statistics have some properties:
+	\begin{itemize}
+	\item Standard error
+	\end{itemize}
+\item Statistics often try to estimate population parameters and are then called
+estimatos.
+\item Estimators may have these properties relative to the population parameter
+they are trying to estimate:
+\begin{itemize}
+\item Unbiased
+\item Consistent 
+\end{itemize}
+\end{itemize}
+
+\end{frame}
 
 
 % 
