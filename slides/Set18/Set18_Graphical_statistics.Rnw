@@ -39,5 +39,85 @@ set.seed(2)
 
 
 \section{Graphical statistics}
+\begin{frame}
+\frametitle{Look at it!}
+{\Huge
+\alert{Before you do anything with a data set, \pause LOOK AT IT!}
+}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Grades in STAT 330}
+<<course_data, echo=TRUE>>=
+d = readr::read_csv("course_data.csv") %>% mutate(section = factor(section))
+summary(d)
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Histogram}
+<<histogram, dependson="course_data", fig.height=4, echo=TRUE>>=
+ggplot(d, aes(x = exam2)) + geom_histogram(binwidth=1)
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Histogram}
+<<histogram_subset, dependson="course_data", fig.height=4, echo=TRUE>>=
+ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(binwidth=1)
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Histogram}
+<<histogram_density, dependson="course_data", fig.height=4, echo=TRUE>>=
+ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(aes(y=..density..), binwidth=1)
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Histogram}
+<<histogram_facet, dependson="course_data", fig.height=4, echo=TRUE>>=
+ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(binwidth=1) + facet_grid(section~.)
+@
+\end{frame}
+
+
+\subsection{Boxplot}
+\begin{frame}[fragile]
+\frametitle{Boxplot}
+<<boxplot_facet, dependson="course_data", fig.height=4, echo=TRUE>>=
+ggplot(d %>% filter(exam2>0), aes(x = section, y = exam2)) + geom_boxplot()
+@
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Boxplot lines}
+
+By default in {\tt ggplot}, a boxplot will produce
+\begin{itemize}
+\item A box for the 1st and 3rd quartiles \pause with
+\item a line in the ``middle'' for the median \pause and 
+\item whiskers extending to the largest/smallest values within 1.5IQR, \pause and
+\item dots for data points farther out than that, i.e. ``outliers''. 
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+There is no standard for boxplots, so be careful in interpreting a boxplot 
+unless you know how it is constructed. 
+
+\end{frame}
+
 
 \end{document}
