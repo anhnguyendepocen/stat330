@@ -5,7 +5,7 @@
 
 \newtheorem{principle}[theorem]{Principle}
 
-\title{Set16 - M/M/k Queuing system}
+\title{Set17 - Statistical inference}
 
 \begin{document}
 

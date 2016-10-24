@@ -9,6 +9,30 @@
 
 \begin{document}
 
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+
 \begin{frame}
 \maketitle
 \end{frame}
@@ -20,6 +44,7 @@
 \begin{definition}
 \alert{Statistics} is the study of the collection, analysis, interpretation, 
 presentation, and organization of data.
+
 {\tiny \url{https://en.wikipedia.org/wiki/Statistics}}
 \end{definition}
 
@@ -36,7 +61,7 @@ There are two different phases of statistics: \pause
 
 
 
-
+\subsection{Sample}
 \begin{frame}
 \frametitle{Population and sample}
 \begin{definition}
@@ -51,17 +76,17 @@ Any function of a sample is called a \alert{statistic}.
 
 \begin{example}
 
-Consider the population of all in-use consumer routers by undergraduate students 
+Consider the population of all in-use routers by undergraduate students 
 at Iowa State University. \pause
 We are interested in what proportion have Gigabit speed. \pause
-We collect data from students in STAT 330 and record the proportion that have 
-Gigabit routers. 
+We collect data from students in STAT 330 (our sample) and record the 
+proportion (a statistic) that have Gigabit routers. 
 \end{example}
 \end{frame}
 
 
 
-
+\subsection{Random sample}
 \begin{frame}
 \frametitle{Simple random sampling}
 \begin{definition}
@@ -73,18 +98,44 @@ Simple random samples ensure that statistical conclusions will be valid.
 \vspace{0.1in} \pause 
 
 \begin{example}
-Consider the population of all in-use consumer routers by undergraduate students 
+Consider the population of all in-use routers by undergraduate students 
 at Iowa State University. \pause
 We are interested in what proportion have Gigabit speed. \pause
 A pseudo-random number generator gives each student a Unif(0,1) number and the
-lowest 100 are contacted and the proportion of these students who have Gigabit
-routers is recorded.
+lowest 100 are contacted (our sample) and the proportion (a statistic) of these 
+students who have Gigabit routers is recorded.
 \end{example}
 \end{frame}
 
 
+\begin{frame}
+\frametitle{Sampling and non-sampling errors}
+
+\begin{definition}
+\alert{Sampling errors} are caused by the mere fact that only a sample, a 
+portion of a population, is observed.
+\pause 
+For most reasonable statistical procedures, sampling errors decrease (and 
+converge to zero) as the sample size increases.
+
+\vspace{0.1in} \pause
+
+\alert{Non-sampling errors} are caused by inappropriate sampling schemes and
+wrong statistical techniques. \pause 
+Often, no statistical technique can rescue a poorly collected sample of data. 
+\end{definition}
+
+\pause
+\begin{example}
+In our example, no statistical technique can help us estimate
+the proportion of students at ISU who have Gigabit routers based on our 
+convenience sample of STAT 330 students who have a Gigabit router.
+\end{example}
+
+\end{frame}
 
 
+\subsection{Statistics}
 \begin{frame}
 \frametitle{Descriptive statistics}
 \begin{definition}
@@ -114,7 +165,7 @@ parameter.
 
 
 
-
+\subsection{Mean and variance}
 \begin{frame}
 \frametitle{Sample mean}
 
@@ -135,15 +186,17 @@ and estimates the population mean $\mu$.
 
 The sample variance is 
 \[ 
-S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i-\overline{X})^2
+S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i-\overline{X})^2 
+= \frac{\sum_{i=1}^n X_i^2 - n\overline{X}^2}{n-1}
 \]
-and estimates the population variance $\sigma^2$.
+and estimates the population variance $\sigma^2$. \pause 
+The sample standard deviation  is $S = \sqrt{S^2}$.
 
 \end{frame}
 
 
 
-
+\subsection{Unbiased}
 \begin{frame}
 \frametitle{Unbiased}
 
@@ -155,15 +208,186 @@ parameter.
 \pause
 
 \begin{example}
-The sample mean is unbiased since
+The sample mean is unbiased for $\mu$ since
 \[ 
-E\left[\overline{X}\right] = E\left[\frac{1}{n} \sum_{i=1}^n X_i \right]
+E\left[\,\overline{X}\,\right] = E\left[\frac{1}{n} \sum_{i=1}^n X_i \right]
 = \frac{1}{n} \sum_{i=1}^n E[X_i] = \mu.
+\]
+and the sample variance is unbiased for $\sigma^2$.
+\end{example}
+\end{frame}
+
+
+
+\subsection{Consistent}
+\begin{frame}
+\frametitle{Consistent}
+
+\begin{definition}
+An estimator $\hat{\theta}$, or $\hat{\theta}(x)$, is \alert{consistent} for a parameter $\theta$ if 
+the probability of its sampling error of any magnitude converges to 0 as the
+sample size increases to infinity, \pause i.e.
+\[ 
+P\left( |\hat{\theta}(x)-\theta|>\epsilon \right) \to 0 \mbox{ as } n\to\infty
+\]
+for any $\epsilon>0$.
+\end{definition}
+
+\pause 
+
+\begin{example}
+The sample mean is consistent for $\mu$ since $Var[\overline{X}] = \sigma^2/n$
+and 
+\[ 
+P\left(|\overline{X} - \mu| < \epsilon \right) \le 
+\frac{Var[\overline{X}]}{\epsilon^2} = \frac{\sigma^2/n}{\epsilon^2} \to 0
+\]
+where the inequality is from Chevyshev's inequality on pg 54 of Baron. 
+\end{example}
+\end{frame}
+
+
+
+\subsection{Quantiles}
+\begin{frame}
+\frametitle{Quantiles}
+\begin{definition}
+A \alert{$p$-quantile} of a population is such a number $x$ that solves
+\[ 
+P(X<x) \le p \quad \mbox{and} \quad P(X>x) \le 1-p.
+\]
+\pause
+A \alert{sample $p$-quantile} is any number that exceeds at most $100p$\% of the
+smample, and is exceeded by at most $100(1-p)$\% of the sample.  \pause
+A \alert{$100p$-percentile} is a $p$-quantile. 
+\pause
+First, second, and third \alert{quartiles} are the 25th, 50th, and 75th 
+percentiles. 
+They split a population or a sample into four equal parts.
+\pause
+A \alert{median} is a 0.5-quantile, 50th percentile, and 2nd quartile.
+\pause
+The \alert{interquartile range} is the third quartile minus the first quartile,
+i.e.
+\[ 
+IQR = Q_3 - Q_1
+\]
+and the \alert{sample interquartile range} is the third sample quartile minus
+the first sample quartile, i.e.
+\[ 
+\hat{IQR} = \hat{Q}_3 - \hat{Q}_1
+\]
+\end{definition}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Standard normal quartiles}
+<<quantiles, fig.height=4, echo=TRUE>>=
+curve(expr = dnorm, from = -3, to = 3, ylab = "f(x)")
+quantiles = c(.25,.50,.75)
+abline(v = qnorm(p = c(.25,.50,.75))) # default is standard normal
+@
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Sample quartiles from a standard normal}
+<<sample_quantiles, dependson='quantiles', fig.height=4, echo=TRUE>>=
+n = 1000
+sample = rnorm(n)
+hist(x = sample, breaks = 101, probability = TRUE, border = "gray", col = "gray")
+curve(expr = dnorm, from = -3, to = 3, ylab = "f(x)", col = "black", add = TRUE)
+abline(v = qnorm(p = quantiles), col = "black")
+abline(v = quantile(sample, prob = quantiles), col = "gray")
+legend("topright", c("sample","population"), lty=1, col=c("gray","black"))
+@
+\end{frame}
+
+
+
+\subsection{Standard error}
+\begin{frame}
+\frametitle{Standard error}
+\begin{definition}
+The \alert{standard error} of a statistic $\hat{\theta}$ is the standard
+deviation of that statistic (when the data are considered random).
+\end{definition}
+\pause
+\begin{example}
+The standard error of the sample mean is $\sigma/\sqrt{n}$ since (if the $X_i$
+are independent) we have
+\[
+Var[\overline{X}] = Var\left[ \frac{1}{n} \sum_{i=1}^n X_i \right] =
+\frac{1}{n^2} \sum_{i=1}^n Var[X_i] = \frac{1}{n^2} \sum_{i=1}^n \sigma^2 =
+\sigma^2/n
+\]
+\pause
+and thus
+\[
+SD[\overline{X}] = \sqrt{Var[\overline{X}]} = \sigma/\sqrt{n}.
 \]
 \end{example}
 \end{frame}
 
 
+
+
+\subsection{Binomial example}
+\begin{frame}
+\frametitle{Server uptime}
+\small
+
+We are interested in the random variable $X\sim Ber(\theta)$ with
+$\theta\in(0,1)$ that represents whether or not a server is up. 
+\pause
+At random times and sufficiently far apart that we can reasonably assume
+independence, we ping the server to determine whether it is responding. 
+\pause
+\begin{itemize}
+\item The population here is the server status across all times and the relevant 
+population quantity is $\theta$, the proportion of time the server is up. 
+\pause
+\item The sample $X_i \stackrel{ind}{\sim} Ber(\theta)$ are the server status when
+you pinged the server. \pause From the description, it isn't entirely clear 
+whether or not this can be viewed as a simple random sample. 
+\item The sample mean is an estimator of the population mean, i.e. 
+\[
+\hat{\theta} = \frac{1}{n} \sum_{i=1}^n X_i
+\]
+and it is unbiased and consistent \pause since
+\[ 
+E[\hat{\theta}] = \theta \quad \mbox{and} \quad
+Var[\hat{\theta}] = \theta(1-\theta)/n. 
+\]
+\end{itemize}
+
+\end{frame}
+
+
+\subsection{Summary}
+\begin{frame}
+\frametitle{Summary}
+\begin{itemize}
+\item Statistics are functions of data.
+\item Statistics have some properties:
+	\begin{itemize}
+	\item Standard error
+	\end{itemize}
+\item Statistics often try to estimate population parameters and are then called
+estimatos.
+\item Estimators may have these properties relative to the population parameter
+they are trying to estimate:
+\begin{itemize}
+\item Unbiased
+\item Consistent 
+\end{itemize}
+\end{itemize}
+
+\end{frame}
 
 
 % 
