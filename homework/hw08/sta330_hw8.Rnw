@@ -22,7 +22,7 @@
 \newcommand{\ansfont}[1]{{\textcolor{blue}{\textbf{Answer:}}\ \ #1}}
 
 % Uncomment the following line to remove answers, and comment line out to show answers:
- \renewcommand{\ansfont}[1]{} % uncommenting shows partial answers
+\renewcommand{\ansfont}[1]{} % uncommenting shows partial answers
 
 
 \begin{document}
@@ -38,11 +38,11 @@ write.table(data.frame(x1=rnorm(n,10,2), x2=rlnorm(n), x3=runif(n,9,13)), file="
 @
 
 \item The {\tt data.txt} file has columns labeled x1, x2, and x3 where each column is separated by a space. For each column, do the following:
-  \begin{enumerate}
-  \item Calculate these statistics: mean, median, sample standard deviation, and the 1st and 3rd quartiles.
-  \item Construct histograms.
-  \item Construct boxplots.
-  \end{enumerate}
+\begin{enumerate}
+\item Calculate these statistics: mean, median, sample standard deviation, and the 1st and 3rd quartiles.
+\item Construct histograms.
+\item Construct boxplots.
+\end{enumerate}
 
 \ansfont{
 Here is an analysis using R. 
@@ -53,12 +53,12 @@ library(reshape2)
 d = read.csv("data.csv")
 m = melt(d)
 ddply(m, .(variable), summarize, 
-      n = length(value),
-      mean = mean(value),
-      median = median(value),
-      sd = sd(value),
-      q1 = quantile(value,.25),
-      q3 = quantile(value,.75))
+			n = length(value),
+			mean = mean(value),
+			median = median(value),
+			sd = sd(value),
+			q1 = quantile(value,.25),
+			q3 = quantile(value,.75))
 
 
 opar = par(mfrow=c(1,3))
@@ -78,8 +78,8 @@ Here is a plot using R. There appears to be a non-linear trend, perhaps exponent
 
 <<fig.wdith=4, out.width='0.5\\textwidth'>>=
 d = data.frame(year = seq(1790,2010, by=10),
-               population = c(3.9,5.3,7.2,9.6,12.9,17.1,23.2,31.4,38.6,50.2,63.0,76.2,
-                              92.2,106,123.2,132.2,151.3,179.3,203.3,226.5,248.7,281.4,308.7))
+							 population = c(3.9,5.3,7.2,9.6,12.9,17.1,23.2,31.4,38.6,50.2,63.0,76.2,
+							 							 92.2,106,123.2,132.2,151.3,179.3,203.3,226.5,248.7,281.4,308.7))
 plot(population~year, d)
 @
 }
@@ -111,11 +111,11 @@ plot(population~year, d)
 }
 
 \item Suppose $Y_i \stackrel{ind}{\sim} Po(\lambda)$ for $i=1,\ldots, n$.
-  \begin{enumerate}
-  \item Derive the method of moments estimator for $\lambda$, i.e. it should be a function of the $y_i$. 
-  \item Derive the maximum likelihood estimator for $\lambda$, i.e. it should be a function of the $y_i$. 
-  \item If we observe the data, 7, 6, 7, 2, and 4, what are the values of the method of moments and maximum likelihood estimator for $\lambda$?
-  \end{enumerate}
+\begin{enumerate}
+\item Derive the method of moments estimator for $\lambda$, i.e. it should be a function of the $y_i$. 
+\item Derive the maximum likelihood estimator for $\lambda$, i.e. it should be a function of the $y_i$. 
+\item If we observe the data, 7, 6, 7, 2, and 4, what are the values of the method of moments and maximum likelihood estimator for $\lambda$?
+\end{enumerate}
 
 \ansfont{
 \begin{enumerate}
@@ -136,8 +136,8 @@ Setting this equal to zero and solving for $\lambda$, we obtain $\hat{\lambda}_{
 \[ f(t)=\begin{cases}\ \theta t^{\theta-1}, \ & 0<t<1\\
 \ 0,\ & \text{otherwise}\end{cases} \]
 \begin{enumerate}
-\item Find an estimate of the parameter $\theta$ using the method of moments.
-\item Find the maximum likelihood estimate of $\theta$.
+\item Find the method of moments estimate for $\theta$.
+\item Find the maximum likelihood estimate for $\theta$.
 \end{enumerate}
 
 \ansfont{
@@ -155,43 +155,47 @@ L(\theta) &=\prod_{i=1}^3 \theta t_i^{\theta-1}=\theta^3 (\prod_{i=1}^3 t_i)^{\t
 \frac{\partial  \ell(\theta)}{\partial  \theta} &=\frac{3}{ \theta}+\sum_{i=1}^3 \log t_i \\
 \hat{\theta} &=-3/\sum_{i=1}^3 \log t_i=-3/-1.378326=2.17655 
 \end{align*}
- \end{enumerate}
+\end{enumerate}
 }
 
-  \item Let $X_1,\dots, X_n$ be a random sample from the gamma distribution with $\alpha=3$.
-    The pdf is shown as follows.
-    \[
-      f(x) = \frac{\lambda^3}{2} x^{2} e^{-\lambda x}
-    \]
-    for $x\ge 0$.
-    \begin{enumerate}
-      \item Find an estimate of the parameter $\lambda$ using the method of moments.
-      \item Find the maximum likelihood estimate of $\lambda$.
-    \end{enumerate}
 
-    \ansfont{
-      \begin{enumerate}
-        \item  Since it is a gamma distribution, we have
-          \[
-            E(X)= \frac{\alpha}{\lambda}=\frac{3}{\lambda}
-          \]
-          Using method of moments,
-          \[ \mu_1=E(X)=\frac{3}{\lambda} \]
-          and $m_1=\bar{x}$ so that
-          \[
-            \hat{\lambda} = \frac{3}{\bar{x}}.
-          \]
-        \item 
-          \begin{align*}
-            L(\lambda) &= \prod^n_{i=1} f(x_i) = \frac{\lambda^{3n}}{2^n}
-            \left(\prod^n_{i=1}x_i^2\right) e^{-\lambda \sum^n_{i=1}x_i}\\
-            \ell(\lambda) &= \log L(\lambda) = 3n \log \lambda  - n\log 2 + 2\sum^n_{i=1} \log x_i -\lambda \sum^n_{i=1}x_i\\
-            \frac{\partial \ell (\lambda)}{\partial\lambda} &=
-            \frac{3n}{\lambda} -\sum^n_{i=1}x_i\\
-            \hat{\lambda} &= \frac{\sum^n_{i=1}x_i}{3n} = \frac{3}{\bar{x}}
-          \end{align*}
-      \end{enumerate}
-    }
+
+
+\item Let $X_1,\dots, X_n$ be a random sample from the gamma distribution with $\alpha=3$.
+The pdf is shown as follows.
+\[
+f(x) = \frac{\lambda^3}{2} x^{2} e^{-\lambda x}
+\]
+for $x\ge 0$.
+\begin{enumerate}
+\item Find 
+\item Find the method of moments estimator for $\lambda$.
+\item Find the maximum likelihood estimator for $\lambda$.
+\end{enumerate}
+
+\ansfont{
+\begin{enumerate}
+\item  Since it is a gamma distribution, we have
+\[
+E(X)= \frac{\alpha}{\lambda}=\frac{3}{\lambda}
+\]
+Using method of moments,
+\[ \mu_1=E(X)=\frac{3}{\lambda} \]
+and $m_1=\bar{x}$ so that
+\[
+\hat{\lambda} = \frac{3}{\bar{x}}.
+\]
+\item 
+\begin{align*}
+L(\lambda) &= \prod^n_{i=1} f(x_i) = \frac{\lambda^{3n}}{2^n}
+\left(\prod^n_{i=1}x_i^2\right) e^{-\lambda \sum^n_{i=1}x_i}\\
+\ell(\lambda) &= \log L(\lambda) = 3n \log \lambda  - n\log 2 + 2\sum^n_{i=1} \log x_i -\lambda \sum^n_{i=1}x_i\\
+\frac{\partial \ell (\lambda)}{\partial\lambda} &=
+\frac{3n}{\lambda} -\sum^n_{i=1}x_i\\
+\hat{\lambda} &= \frac{\sum^n_{i=1}x_i}{3n} = \frac{3}{\bar{x}}
+\end{align*}
+\end{enumerate}
+}
 \end{enumerate}
 
 \end{document}
