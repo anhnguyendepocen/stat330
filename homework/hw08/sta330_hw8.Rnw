@@ -2,7 +2,6 @@
 \usepackage{graphicx, fancyhdr, enumerate}
 \usepackage{amsmath, amsfonts, color, multicol}
 \usepackage{verbatim}
-\usepackage{blkarray}
 \usepackage{tikz}
 
 \setlength{\topmargin}{-.55 in} 
