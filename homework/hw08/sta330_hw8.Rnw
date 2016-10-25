@@ -1,0 +1,197 @@
+\documentclass[10pt]{article}
+\usepackage{graphicx, fancyhdr, enumerate}
+\usepackage{amsmath, amsfonts, color, multicol}
+\usepackage{verbatim}
+\usepackage{blkarray}
+\usepackage{tikz}
+
+\setlength{\topmargin}{-.55 in} 
+\setlength{\textheight}{9 in}
+\setlength{\textwidth}{6.625 in} 
+\setlength{\evensidemargin}{-.0625 in}
+\setlength{\oddsidemargin}{-.0625 in} 
+\setlength{\parindent}{0 in}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\xbar}{\overline{X}}
+
+\lhead{\Large\sffamily Stat 330 (Fall 2016): Homework 8} 
+\rhead{\sffamily Due: November 2, 2016}
+\cfoot{\thepage} 
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0pt} 
+\newcommand{\ansfont}[1]{{\textcolor{blue}{\textbf{Answer:}}\ \ #1}}
+
+% Uncomment the following line to remove answers, and comment line out to show answers:
+ \renewcommand{\ansfont}[1]{} % uncommenting shows partial answers
+
+
+\begin{document}
+\pagestyle{fancy} 
+Show all of your work, and \emph{please} staple your assignment if you use more than one sheet. Write your name, the course number and the section on every sheet. 
+
+\begin{enumerate} 
+
+<<echo=FALSE>>=
+n = 1000
+set.seed(20141121)
+write.table(data.frame(x1=rnorm(n,10,2), x2=rlnorm(n), x3=runif(n,9,13)), file="data.txt", row.names=FALSE, eol="\r\n")
+@
+
+\item The {\tt data.txt} file has columns labeled x1, x2, and x3 where each column is separated by a space. For each column, do the following:
+  \begin{enumerate}
+  \item Calculate these statistics: mean, median, sample standard deviation, and the 1st and 3rd quartiles.
+  \item Construct histograms.
+  \item Construct boxplots.
+  \end{enumerate}
+
+\ansfont{
+Here is an analysis using R. 
+
+<<fig.height=5>>=
+library(plyr)
+library(reshape2)
+d = read.csv("data.csv")
+m = melt(d)
+ddply(m, .(variable), summarize, 
+      n = length(value),
+      mean = mean(value),
+      median = median(value),
+      sd = sd(value),
+      q1 = quantile(value,.25),
+      q3 = quantile(value,.75))
+
+
+opar = par(mfrow=c(1,3))
+hist(d$x1, 100)
+hist(d$x2, 100)
+hist(d$x3, 100)
+par(opar)
+
+boxplot(value~variable, m)
+@
+}
+
+\item (Baron's book) 8.5
+
+\ansfont{
+Here is a plot using R. There appears to be a non-linear trend, perhaps exponential. 
+
+<<fig.wdith=4, out.width='0.5\\textwidth'>>=
+d = data.frame(year = seq(1790,2010, by=10),
+               population = c(3.9,5.3,7.2,9.6,12.9,17.1,23.2,31.4,38.6,50.2,63.0,76.2,
+                              92.2,106,123.2,132.2,151.3,179.3,203.3,226.5,248.7,281.4,308.7))
+plot(population~year, d)
+@
+}
+\item A researcher studies the mean lifespan of light bulbs made by a certain company. It is believed that the lifespan of these light bulbs follows an exponential distribution with a mean of 500 hours. Suppose that the researcher collects twenty light bulbs produced by the company and records the number of hours until each burns out. The times (in hours) are
+
+
+\begin{tabular}{ l l l l l l l l l l l l l }
+28.6  & 89.1 & 122.1 & 134.5 & 146.1 & 148.8 & 152.8 & 172.5 & 258.4 & 297.8 \\
+353.5  & 383.9 &  427.5 & 443.3  & 451.4 & 462.5 & 798.5  & 866.5 & 1194.4 & 1494.5 \\
+\end{tabular}
+
+
+
+\begin{enumerate}
+\item Identify the population and the sample in this study. What is the population parameter of interest? 
+\item Calculate 0.25, 0.5, and 0.75 sample quantiles.
+\item If the lifespan does indeed follow the exponential distribution described, compute the 0.25, 0.5, and 0.75 quantiles from the population distribution.
+\item How do the sample quantiles compare to the population quantiles? Assuming the lifespan of light bulbs do indeed follow this exponential distribution, how do you think the sample quantiles would compare to the population quantiles if the researcher had studied 1,000 light bulbs instead of 20?
+
+\end{enumerate}
+
+\ansfont{
+\begin{enumerate}
+\item The population is all light bulbs produced by this company. The sample is the 20 light bulbs that were studied. The population parameter is the mean time until burnout for a light bulb produced by this company.
+\item A  0.25 quantile is any number between 146.1 and 148.8. (A common answer would be the average of these values, 147.45). A 0.5 quantile is any number between 297.8 and 353.5.( A common answer would be   325.65).  A 0.75 quantile is any number between 451.4 and 462.5, (common answer: 457.45). 
+\item The $p^{th}$ quantile of the population distribution can be found using the cdf for the exponential distribution with mean 500, hence rate 1/500. Let $p=1-e^{-\lambda x}$, where $\lambda=1/500$. Solving for $x$ gives $x=-log(1-p)/\lambda$. The 0.25 quantile is 143.8. The 0.5 quantile is 346.6. The 0.75 quantile is 693.1.
+\item The sample quantiles are reasonably close to the population quantiles. The 0.75 quantile is less than the 0.75 population quantile by a fairly sizable amount. If 1,000 light bulbs had been sampled, it is more likely that the sample quantiles will be close to the population quantiles than when 20 light bulbs are sampled.
+\end{enumerate}
+}
+
+\item Suppose $Y_i \stackrel{ind}{\sim} Po(\lambda)$ for $i=1,\ldots, n$.
+  \begin{enumerate}
+  \item Derive the method of moments estimator for $\lambda$, i.e. it should be a function of the $y_i$. 
+  \item Derive the maximum likelihood estimator for $\lambda$, i.e. it should be a function of the $y_i$. 
+  \item If we observe the data, 7, 6, 7, 2, and 4, what are the values of the method of moments and maximum likelihood estimator for $\lambda$?
+  \end{enumerate}
+
+\ansfont{
+\begin{enumerate}
+\item The first population moment is $E[Y_i] = \lambda$ and the first sample moment is $\bar{y}$. Thus the method of moments estimator is $\hat{\lambda}_{MOM} = \bar{y}$.
+\item 
+\begin{align*}
+L(\lambda) &= \prod_{i=1}^n \frac{e^{-\lambda}\lambda^{y_i}}{y_i!} \\
+&= \frac{e^{-n\lambda}\lambda^{n\overline{y}}}{\prod_{i=1}^n y_i!}
+\ell(\lambda) &= -n\lambda +n\overline{y} \log(\lambda) - \sum_{i=1}^n \log(y_i!) \\
+\frac{\partial}{\partial \lambda} \ell(\lambda) &= -n +n\overline{y}/\lambda 
+\end{align*}
+Setting this equal to zero and solving for $\lambda$, we obtain $\hat{\lambda}_{MLE} = \overline{y}$.
+\item The average of 7, 6, 7, 2, and 4 is 5.2. Thus $\hat{\lambda}_{MOM} = \hat{\lambda}_{MLE} = 5.2$. 
+\end{enumerate}
+}
+
+\item A sample of 3 observations of waiting time to access an internet server is $x_1=0.4, x_2=0.7, x_3=0.9$ seconds. It is believed that the waiting time has the continuous distribution
+\[ f(t)=\begin{cases}\ \theta t^{\theta-1}, \ & 0<t<1\\
+\ 0,\ & \text{otherwise}\end{cases} \]
+\begin{enumerate}
+\item Find an estimate of the parameter $\theta$ using the method of moments.
+\item Find the maximum likelihood estimate of $\theta$.
+\end{enumerate}
+
+\ansfont{
+\begin{enumerate}
+\item Using method of moments,
+\[ \mu_1=E(X)=\int_\mathbb{R}xf(x)dx=\int_0^1x\theta x^{\theta-1}dx=\frac{\theta}{\theta+1} \]
+and $m_1=\bar{x}$ so that
+\[ \frac{\hat{\theta}}{\hat{\theta}+1}=\bar{x}\iff \hat{\theta}=\frac{\bar{x}}{1-\bar{x}}.\] 
+For the given data, $\bar{x}=(0.4+0.7+0.9)/3=2/3$ so that
+\[ \hat{\theta}=\frac{2/3}{1-2/3}=2 \]
+\item Using MLE,
+\begin{align*} 
+L(\theta) &=\prod_{i=1}^3 \theta t_i^{\theta-1}=\theta^3 (\prod_{i=1}^3 t_i)^{\theta-1} \\
+\ell(\theta) &=3 \log \theta + (\theta-1)\sum_{i=1}^3 \log t_i \\
+\frac{\partial  \ell(\theta)}{\partial  \theta} &=\frac{3}{ \theta}+\sum_{i=1}^3 \log t_i \\
+\hat{\theta} &=-3/\sum_{i=1}^3 \log t_i=-3/-1.378326=2.17655 
+\end{align*}
+ \end{enumerate}
+}
+
+  \item Let $X_1,\dots, X_n$ be a random sample from the gamma distribution with $\alpha=3$.
+    The pdf is shown as follows.
+    \[
+      f(x) = \frac{\lambda^3}{2} x^{2} e^{-\lambda x}
+    \]
+    for $x\ge 0$.
+    \begin{enumerate}
+      \item Find an estimate of the parameter $\lambda$ using the method of moments.
+      \item Find the maximum likelihood estimate of $\lambda$.
+    \end{enumerate}
+
+    \ansfont{
+      \begin{enumerate}
+        \item  Since it is a gamma distribution, we have
+          \[
+            E(X)= \frac{\alpha}{\lambda}=\frac{3}{\lambda}
+          \]
+          Using method of moments,
+          \[ \mu_1=E(X)=\frac{3}{\lambda} \]
+          and $m_1=\bar{x}$ so that
+          \[
+            \hat{\lambda} = \frac{3}{\bar{x}}.
+          \]
+        \item 
+          \begin{align*}
+            L(\lambda) &= \prod^n_{i=1} f(x_i) = \frac{\lambda^{3n}}{2^n}
+            \left(\prod^n_{i=1}x_i^2\right) e^{-\lambda \sum^n_{i=1}x_i}\\
+            \ell(\lambda) &= \log L(\lambda) = 3n \log \lambda  - n\log 2 + 2\sum^n_{i=1} \log x_i -\lambda \sum^n_{i=1}x_i\\
+            \frac{\partial \ell (\lambda)}{\partial\lambda} &=
+            \frac{3n}{\lambda} -\sum^n_{i=1}x_i\\
+            \hat{\lambda} &= \frac{\sum^n_{i=1}x_i}{3n} = \frac{3}{\bar{x}}
+          \end{align*}
+      \end{enumerate}
+    }
+\end{enumerate}
+
+\end{document}
