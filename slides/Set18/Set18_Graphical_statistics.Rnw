@@ -48,6 +48,66 @@ set.seed(2)
 
 
 
+\begin{frame}
+\frametitle{Why should you look at your data?}
+
+\pause
+
+\begin{enumerate}
+\item Find errors \pause
+	\begin{itemize}
+	\item Do variables have the correct range, e.g. positive?
+	\item How are Not Available encoded?
+	\item Are there outliers? \pause
+	\end{itemize}
+\item Do known or suspected relationships exist? \pause
+	\begin{itemize}
+	\item Is X linearly associated with Y?
+	\item Is X quadratically associated with Y? \pause
+	\end{itemize}
+\item Are there new relationships? \pause
+	\begin{itemize}
+	\item What is associated with X and how? \pause
+	\end{itemize}
+\item Do variables adhere to distributional assumptions? \pause
+	\begin{itemize}
+	\item Does X have an approximately normal distribution?
+	\item Right/left skew
+	\item Heavy tails
+	\end{itemize}
+\end{enumerate}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Principles of statistical graphics}
+
+\begin{itemize}
+\item Show the data
+	\begin{itemize}
+	\item Avoid distorting the data, e.g. pie charts, 3d pie charts, exploding wedge 3d pie charts, bar charts that do not start at zero
+	\end{itemize}
+\item Plots should be self-explanatory
+	\begin{itemize}
+	\item Use informative caption, legend
+	\item Use normative colors, shapes, etc
+	\end{itemize}
+\item Have a high information to ink ratio
+	\begin{itemize}
+	\item Avoid bar charts
+	\end{itemize}
+\item Encourage eyes to compare
+	\begin{itemize}
+	\item Use size, shape, and color to highlight differences
+	\end{itemize}
+\end{itemize}
+
+{\tiny \url{https://moz.com/blog/data-visualization-principles-lessons-from-tufte}}
+
+\end{frame}
+
+
 \begin{frame}[fragile]
 \frametitle{Grades in STAT 330}
 <<course_data>>=
@@ -213,6 +273,15 @@ ggplot(big_data, aes(x,y)) + stat_binhex()
 
 \end{frame}
 
+
+
+\begin{frame}
+\frametitle{Stock market return}
+\begin{center}
+\includegraphics{triangle}
+\end{center}
+{\tiny \url{http://www.nytimes.com/interactive/2011/01/02/business/20110102-metrics-graphic.html?_r=0}}
+\end{frame}
 
 
 \end{document}
