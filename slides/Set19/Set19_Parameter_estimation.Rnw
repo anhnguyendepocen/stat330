@@ -5,7 +5,7 @@
 
 \newtheorem{principle}[theorem]{Principle}
 
-\title{Set19 - Statistical inference}
+\title{Set19 - Parameter estimation (MOM and MLE)}
 
 \begin{document}
 
@@ -65,9 +65,9 @@ The basic approach to parameter estimation involves:
 \vspace{0.1in} \pause
 
 \begin{enumerate}
-\item Assuming a probability model for data, 
-\item Collecting the data, and 
-\item Inferring the parameters in the model from the data obtained.
+\item assuming a probability model for data, 
+\item collecting the data, and 
+\item inferring the parameters of the model from the data
 \end{enumerate}
 
 \end{frame}
