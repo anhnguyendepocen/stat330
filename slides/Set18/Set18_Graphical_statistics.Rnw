@@ -80,32 +80,7 @@ set.seed(2)
 
 
 
-\begin{frame}
-\frametitle{Principles of statistical graphics}
 
-\begin{itemize}
-\item Show the data
-	\begin{itemize}
-	\item Avoid distorting the data, e.g. pie charts, 3d pie charts, exploding wedge 3d pie charts, bar charts that do not start at zero
-	\end{itemize}
-\item Plots should be self-explanatory
-	\begin{itemize}
-	\item Use informative caption, legend
-	\item Use normative colors, shapes, etc
-	\end{itemize}
-\item Have a high information to ink ratio
-	\begin{itemize}
-	\item Avoid bar charts
-	\end{itemize}
-\item Encourage eyes to compare
-	\begin{itemize}
-	\item Use size, shape, and color to highlight differences
-	\end{itemize}
-\end{itemize}
-
-{\tiny \url{https://moz.com/blog/data-visualization-principles-lessons-from-tufte}}
-
-\end{frame}
 
 
 \begin{frame}[fragile]
@@ -273,6 +248,33 @@ ggplot(big_data, aes(x,y)) + stat_binhex()
 
 \end{frame}
 
+
+\begin{frame}
+\frametitle{Principles of professional statistical graphics}
+
+\begin{itemize}
+\item Show the data
+	\begin{itemize}
+	\item Avoid distorting the data, e.g. pie charts, 3d pie charts, exploding wedge 3d pie charts, bar charts that do not start at zero
+	\end{itemize}
+\item Plots should be self-explanatory
+	\begin{itemize}
+	\item Use informative caption, legend
+	\item Use normative colors, shapes, etc
+	\end{itemize}
+\item Have a high information to ink ratio
+	\begin{itemize}
+	\item Avoid bar charts
+	\end{itemize}
+\item Encourage eyes to compare
+	\begin{itemize}
+	\item Use size, shape, and color to highlight differences
+	\end{itemize}
+\end{itemize}
+
+{\tiny \url{https://moz.com/blog/data-visualization-principles-lessons-from-tufte}}
+
+\end{frame}
 
 
 \begin{frame}
