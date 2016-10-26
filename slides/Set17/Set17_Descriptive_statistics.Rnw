@@ -52,7 +52,11 @@ presentation, and organization of data.
 
 There are two different phases of statistics: \pause
 \begin{itemize}
-\item descriptive statistics \pause and
+\item descriptive statistics \pause 
+	\begin{itemize}
+	\item statistics
+	\item graphical statistics
+	\end{itemize}
 \item inferential statistics.
 \end{itemize}
 
