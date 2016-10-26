@@ -42,7 +42,7 @@ set.seed(2)
 \begin{frame}
 \frametitle{Statistics}
 \begin{definition}
-\alert{Statistics} is the study of the collection, analysis, interpretation, 
+The \alert{field of statistics} is the study of the collection, analysis, interpretation, 
 presentation, and organization of data.
 
 {\tiny \url{https://en.wikipedia.org/wiki/Statistics}}
