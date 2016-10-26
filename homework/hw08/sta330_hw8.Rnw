@@ -167,7 +167,6 @@ f(x) = \frac{\lambda^3}{2} x^{2} e^{-\lambda x}
 \]
 for $x\ge 0$.
 \begin{enumerate}
-\item Find 
 \item Find the method of moments estimator for $\lambda$.
 \item Find the maximum likelihood estimator for $\lambda$.
 \end{enumerate}
