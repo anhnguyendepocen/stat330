@@ -5,9 +5,31 @@
 
 \newtheorem{principle}[theorem]{Principle}
 
-\title{Set17 - Statistical inference}
+\title{Set19 - Parameter estimation (MOM and MLE)}
 
 \begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=4, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=TRUE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE, echo=FALSE>>=
+library(dplyr)
+library(ggplot2)
+@
+
+<<set_seed, echo=FALSE>>=
+set.seed(2)
+@
+
 
 \begin{frame}
 \maketitle
@@ -43,9 +65,9 @@ The basic approach to parameter estimation involves:
 \vspace{0.1in} \pause
 
 \begin{enumerate}
-\item Assuming a probability model for data, 
-\item Collecting the data, and 
-\item Inferring the parameters in the model from the data obtained.
+\item assuming a probability model for data, 
+\item collecting the data, and 
+\item inferring the parameters of the model from the data
 \end{enumerate}
 
 \end{frame}
@@ -70,7 +92,7 @@ X_i = \left\{ \begin{array}{ll}
 \pause
 Then a reasonable probability model is 
 \[ 
-X_i \stackrel{ind}{\sim} Ber(\theta).
+X_i \ind Ber(\theta).
 \]
 \pause
 Based on a sample of $n$ rolls, a reasonable estimate for $\theta$ \pause is 
@@ -93,11 +115,11 @@ and are able to obtain a random sample of U.S. male's and record their heights.
 
 \vspace{0.1in} \pause
 
-Let $H_i$ be the height in (meters) for U.S. male $i$.
+Let $X_i$ be the height in (meters) for U.S. male $i$.
 \pause
 Then a reasonable probability model is 
 \[ 
-X_i \stackrel{ind}{\sim} N(\mu,\sigma^2)
+X_i \ind N(\mu,\sigma^2)
 \]
 \pause
 Based on a sample of $n$ rolls, a reasonable estimate for the parameters \pause is 
@@ -229,7 +251,7 @@ X_i = \left\{ \begin{array}{ll}
 \pause
 with 
 \[ 
-X_i \stackrel{ind}{\sim} Ber(\theta).
+X_i \ind Ber(\theta).
 \]
 
 \vspace{0.1in} 
@@ -251,20 +273,20 @@ i.e. the proportion of 1s and 2s.
 \begin{frame}
 \frametitle{U.S. Male Heights}
 
-Let $H_i$ be the height in (meters) for U.S. male $i$ \pause and
+Let $X_i$ be the height in (meters) for U.S. male $i$ \pause and
 \[ 
-X_i \stackrel{ind}{\sim} N(\mu,\sigma^2).
+X_i \ind N(\mu,\sigma^2).
 \]
 \pause
 Then equating the first two ``central'' moments gives us 
 \[ \begin{array}{rl}
 \mu_1 &= m_1 = \overline{x} \\
-\sigma^2 = \mu_2' &= m_2' = s^2.
+\sigma^2 = \mu_2' &= m_2' = \frac{n-1}{n} s^2.
 \end{array} \]
 \pause
 Thus the method of moments estimator is 
 \[ 
-\hat{\mu} = \overline{x} \quad \mbox{and} \quad \hat{\sigma}^2 = s^2
+\hat{\mu} = \overline{x} \quad \mbox{and} \quad \hat{\sigma}^2 = \frac{n-1}{n} s^2.
 \]
 \pause
 i.e. the sample mean and sample variance.
@@ -305,6 +327,182 @@ estimate for $\theta$ is 35 \pause but we know $\theta$ must be at least 50.
 \end{frame}
 
 
+
+\section{Maximum likelihood}
+\begin{frame}
+\frametitle{Maximum likelihood estimation}
+\small
+\begin{definition}
+The \alert{likelihood} is the probability mass or density function when viewed 
+as a function of the parameter(s) for a given set of data. 
+The \alert{maximum likelihood estimator (MLE)} is the parameter value that maximizes
+the likelihood. 
+\end{definition}
+
+\vspace{0.1in} \pause
+
+Typically, we assume $X_i\ind p(x_i|\theta)$ for some parameter $\theta$. \pause
+Then the likelihood is 
+\[ 
+L(\theta) = \prod_{i=1}^n p(x_i|\theta)
+\]
+\pause
+but it is typically easier to maximize the log-likelihood, i.e. 
+\[ 
+\ell(\theta) = \log L(\theta) \pause = \sum_{i=1}^n \log p(x_i|\theta)
+\]
+\pause 
+which will result in the same MLE because $\log$, the natural logarithm, is a 
+monotonic function.
+\end{frame}
+
+
+\subsection{Die rolling example}
+\begin{frame}
+\frametitle{Die rolling example}
+
+Let 
+\[ 
+X_i = \left\{ \begin{array}{ll}
+1 & \mbox{if roll is a 1 or 2} \\
+0 & \mbox{otherwise}
+\end{array} \right.
+\quad
+\mbox{and} \quad
+X_i \ind Ber(\theta).
+\]
+
+\pause
+
+The likelihood is 
+\[ 
+L(\theta) = \prod_{i=1}^n p(x_i|\theta) 
+\pause = \prod_{i=1}^n \theta^{x_i}(1-\theta)^{1-x_i} 
+\pause = \theta^{n\overline{x}}(1-\theta)^{n(1-\overline{x})} 
+\]
+and the log-likelihood is 
+\[ 
+\ell(\theta) = n\overline{x} \log(\theta) + n(1-\overline{x}) \log(1-\theta).
+\]
+To find the MLE, we take the derivative, set it equal to zero, and solve for 
+$\theta$, i.e. 
+\[ 
+\frac{d}{d\theta} \ell(\theta) 
+= \frac{n\overline{x}}{\theta} - \frac{n(1-\overline{x})}{1-\theta} \implies
+\hat{\theta}_{MLE} = \overline{x}.
+\]
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Visualing the Bernoulli likelihood}
+<<die_rolling_data>>=
+x = rbinom(10,1,.3); x
+@
+<<die_rolling_likelihood, dependson="die_rolling_data", echo=FALSE>>=
+like = Vectorize(function(theta) prod(dbinom(x,1,theta)))
+curve(like, ylab=expression(L(theta)), xlab=expression(theta))
+abline(v=mean(x), col="red")
+@
+\end{frame}
+
+
+
+
+\subsection{U.S. male heights example}
+\begin{frame}
+\frametitle{U.S. Male Heights}
+
+Let $X_i$ be the height in (meters) for U.S. male $i$ \pause and
+\[ 
+X_i \ind N(\mu,\sigma^2).
+\]
+The log-likelihood is 
+\[ 
+\ell(\mu,\sigma^2) = \sum_{i=1}^n \log p(x_i|\theta) 
+= -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^n (x_i-\mu)^2.
+\]
+Taking partial derivatives with respect to $\mu$ and $\sigma^2$ and setting 
+equal to zero, we have 
+\[ \begin{array}{rl}
+0 &= \sum_{i=1}^n (x_i-\mu)^2 \\
+0 &= -n + \frac{1}{\sigma^2} \sum_{i=1}^n (x_i-\mu)^2.
+\end{array} \]
+\pause
+Solving for $\mu$ in the first equation and plugging the result in to the 
+second equation results in 
+\[ 
+\hat{\mu}_{MLE} = \overline{x} 
+\quad \mbox{and} \quad
+\hat{\sigma}^2_{MLE} = \frac{1}{n}\sum_{i=1}^n (x_i-\overline{x})^2.
+\]
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Visualing the normal likelihood}
+<<height_data>>=
+x = rnorm(10); mle = c(mean(x), (length(x)-1)/length(x)*var(x)); mle
+@
+
+<<height_likelihood, dependson="height_data", echo=FALSE>>=
+n = 101
+mu = seq(-2,2,length=n)
+sigma = seq(0,3,length=n)
+log_like = Vectorize(function(mu,sigma2) sum(dnorm(x,mu,sqrt(sigma2),log=TRUE)))
+z = outer(mu, sigma, FUN=log_like)
+contour(mu,sigma,exp(z), xlab=expression(mu), ylab=expression(sigma^2), 
+				main = "Normal likelihood",
+				drawlabels = FALSE)
+points(mle[1], mle[2], pch='x', col="red")
+@
+\end{frame}
+
+
+
+\subsection{German tank problem example}
+\begin{frame}
+\frametitle{German tank problem}
+\small
+
+Let $X_i$ be the serial number for tank $i$, then we assume the serial numbers
+are independent and 
+\[
+P(X_i=x) = \frac{1}{\theta}
+\]
+were $\theta$ is the maximum serial number. \pause
+The likelihood is 
+\[ 
+L(\theta) = \prod_{i=1}^n \frac{1}{\theta} \mathrm{I}(x_i\le \theta) 
+= \frac{1}{\theta^n} \mathrm{I}(x_{max}\le \theta)
+\]
+\pause
+where $\mathrm{I}(\cdot)$ is an indicator function that is 1 if the logical 
+statement is true and 0 otherwise \pause and $x_{max}$ is the maximum of the 
+$x_i$. \pause
+This is maximized when $\theta$ is $x_{max}$ and thus 
+\[ 
+\hat{\theta}_{MLE} = x_{max}.
+\]
+\pause
+But this is also weird, because it seems more likely that the true value for 
+$\theta$ is somewhat larger than $x_{max}$, i.e. what is the probability that 
+the largest serial number is in the set of serial numbers observed?
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Visualizing discrete uniform likelihood}
+<<german_tank_data>>=
+x = sample(100, 10); maxx = max(x); maxx
+@
+
+<<german_tank_likelihood, echo=FALSE>>=
+like = function(theta) theta^-length(x) * (maxx <= theta)
+curve(like, 80, 120, n=121, ylab=expression(L(theta)), xlab=expression(theta))
+abline(v=maxx, col='red')
+@
+\end{frame}
 
 
 
