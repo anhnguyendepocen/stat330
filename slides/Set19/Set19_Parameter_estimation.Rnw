@@ -289,7 +289,6 @@ Thus the method of moments estimator is
 \hat{\mu} = \overline{x} \quad \mbox{and} \quad \hat{\sigma}^2 = \frac{n-1}{n} s^2.
 \]
 \pause
-i.e. the sample mean and sample variance.
 \end{frame}
 
 
