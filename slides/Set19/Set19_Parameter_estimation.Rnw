@@ -60,15 +60,19 @@ We will start with parameter estimation.
 \begin{frame}
 \frametitle{Probability models}
 
-The basic approach to parameter estimation involves:
+The basic approach to statistical modeling involves:
 
 \vspace{0.1in} \pause
 
 \begin{enumerate}
 \item assuming a probability model for data, 
 \item collecting the data, and 
-\item inferring the parameters of the model from the data
+\item inferring the parameters of the model from the data.
 \end{enumerate}
+
+\vspace{0.1in} \pause
+
+Later we'll talk about the additional tasks of model selection and prediction.
 
 \end{frame}
 
