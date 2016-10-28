@@ -5,7 +5,7 @@
 
 \newtheorem{principle}[theorem]{Principle}
 
-\title{Set19 - Parameter estimation (MOM and MLE)}
+\title[Set 19 - MOM and MLE]{Set19 - Parameter estimation (MOM and MLE)}
 
 \begin{document}
 
@@ -320,8 +320,8 @@ and thus the method of moments estimator is
 \hat{\theta} = 2\overline{X}-1.
 \]
 \pause
-But if we observe the serial numbers 1, 2, and 50, \pause the method of moments 
-estimate for $\theta$ is 35 \pause but we know $\theta$ must be at least 50. 
+But if we observe the serial numbers 1, 2, and 99, \pause the method of moments 
+estimate for $\theta$ is 33 \pause but we know $\theta$ must be at least 99. 
 
 \end{frame}
 
