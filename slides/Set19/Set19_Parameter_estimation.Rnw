@@ -320,8 +320,8 @@ and thus the method of moments estimator is
 \hat{\theta} = 2\overline{X}-1.
 \]
 \pause
-But if we observe the serial numbers 1, 2, and 99, \pause the method of moments 
-estimate for $\theta$ is 33 \pause but we know $\theta$ must be at least 99. 
+But if we observe the serial numbers 1, 2, and 11, \pause the method of moments 
+estimate for $\theta$ is 7 \pause but we know $\theta$ must be at least 11. 
 
 \end{frame}
 
