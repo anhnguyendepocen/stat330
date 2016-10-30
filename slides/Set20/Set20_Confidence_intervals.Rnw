@@ -1,0 +1,149 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set19 - Confidence interval}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=4, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=TRUE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE, echo=FALSE>>=
+library(dplyr)
+library(ggplot2)
+@
+
+<<set_seed, echo=FALSE>>=
+set.seed(2)
+@
+
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\section{Confidence intervals}
+\begin{frame}
+\frametitle{Uncertainty estimation}
+
+When we have an estimate $\hat{\theta}$ of a population parameter $\theta$, we
+know almost surely that 
+\[ 
+\hat{\theta} \ne \theta.
+\]
+\pause
+Thus, we'd like to provide an estimate of the uncertainty our knowledge of 
+$\theta$.
+\pause
+\begin{definition}
+An interval $[L,U]$ is a $100(1-a)$\% \alert{confidence level} for the parameter 
+$\theta$ if it contains the parameter with probability $(1-a)$ (when the data 
+are considered random), \pause
+\[ 
+P(L\le \theta \le U) = 1-a.
+\]
+\pause
+The \alert{coverage probability} $(1-a)$ is also called the 
+\alert{confidence level}.
+\end{definition}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Normal-based confidence intervals}
+
+Suppose we have an estimator $\hat{\theta}$ for a population parameter $\theta$
+with 
+\[ 
+\hat{\theta} \sim N\left(\theta,\sigma(\hat{\theta})\right)
+\]
+\pause
+i.e. when the data are considered random, the estimator is unbiased and has a
+normal distribution.
+\pause
+Then a $100(1-a)$ confidence interval can be constructed by using 
+\[ \begin{array}{rl}
+1-a &= P\left( -z_{a/2} \le \frac{\hat{\theta}-\theta}{\sigma(\hat{\theta})} \le z_{a/2} \right) \pause \\
+&= P\left(\hat{\theta}-z_{a/2} \sigma(\hat{\theta}) \le \theta \le \hat{\theta}+z_{a/2} \sigma(\hat{\theta}) \right)
+\end{array} \]
+\pause 
+where $a/2 = \mathrm{\Phi}(-z_{a/2})$. \pause
+Thus
+\[ 
+\hat{\theta} \pm z_{a/2}\sigma(\hat{\theta})
+\]
+is a $100(1-a)$\% confidence interval.
+\end{frame}
+
+
+\subsection{Normal examples}
+\begin{frame}
+\frametitle{Normal mean}
+
+Suppose $X_1,\ldots,X_n \ind N(\theta,s^2)$ and we use $\hat{\theta} = 
+\overline{X}$. \pause
+Then 
+\[ 
+\overline{X} \pause \sim N(\theta,s^2/n)
+\]
+\pause 
+and thus 
+\[ 
+\overline{x} \pm z_{a/2} s/\sqrt{n}.
+\]
+is a $100(1-a)$\% confidence interval for $\theta$. 
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Difference in means}
+
+Suppose independently
+\[ 
+X_1,\ldots,X_{n_X} \ind N(\theta_X,s_X^2) 
+\quad\mbox{and}\quad
+Y_1,\ldots,Y_{n_Y} \ind N(\theta_Y,s_Y^2)
+\]
+\pause 
+and we use $\widehat{\theta_X-\theta_Y} = \overline{X} - \overline{Y}$. 
+\pause 
+We can show that 
+\[ 
+\overline{X} - \overline{Y} \sim N\left(\theta_X-\theta_Y, \frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y} \right)
+\]
+\pause
+and thus 
+\[ 
+\overline{x} - \overline{y} \pm z_{a/2} \sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}}
+\]
+is a $100(1-a)$\% confidence interval for $\theta_X-\theta_Y$. 
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Sample size}
+\end{frame}
+
+\end{document}
+
+
+
+
+
