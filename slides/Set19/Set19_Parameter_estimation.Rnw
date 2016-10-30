@@ -330,6 +330,9 @@ estimate for $\theta$ is 7 \pause but we know $\theta$ must be at least 11.
 \section{Maximum likelihood}
 \begin{frame}
 \frametitle{Maximum likelihood estimation}
+
+\vspace{-0.05in}
+
 \small
 \begin{definition}
 The \alert{likelihood} is the probability mass or density function when viewed 
@@ -337,6 +340,8 @@ as a function of the parameter(s) for a given set of data.
 The \alert{maximum likelihood estimator (MLE)} is the parameter value that maximizes
 the likelihood. 
 \end{definition}
+Under mild conditions, MLEs are consistent and, for large samples, hae an 
+approximately normal distribution.
 
 \vspace{0.1in} \pause
 
