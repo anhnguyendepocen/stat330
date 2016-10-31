@@ -82,7 +82,8 @@ Then a $100(1-a)$ confidence interval can be constructed by using
 &= P\left(\hat{\theta}-z_{a/2} \sigma(\hat{\theta}) \le \theta \le \hat{\theta}+z_{a/2} \sigma(\hat{\theta}) \right)
 \end{array} \]
 \pause 
-where $a/2 = \mathrm{\Phi}(-z_{a/2})$. \pause
+where the \alert{critical value} $z_{a/2}$ is the $(a/2)$-quantile of the standard 
+normal distribution. \pause
 Thus
 \[ 
 \hat{\theta} \pm z_{a/2}\sigma(\hat{\theta})
@@ -91,55 +92,276 @@ is a $100(1-a)$\% confidence interval.
 \end{frame}
 
 
-\subsection{Normal examples}
-\begin{frame}
-\frametitle{Normal mean}
+%' \begin{frame}
+%' \frametitle{Critical values}
+%' <<>>=
+%' a = .05
+%' z_crit = qnorm(a/2)
+%' curve(dnorm, -3, 3)
+%' abline(v=z_crit)
+%' 
+%' @
+%' \end{frame}
 
-Suppose $X_1,\ldots,X_n \ind N(\theta,s^2)$ and we use $\hat{\theta} = 
+
+\subsection{Normal mean with known variance}
+\begin{frame}
+\frametitle{Normal mean with known variance}
+
+Suppose $X_1,\ldots,X_n \ind N(\mu,s^2)$ and we use $\hat{\mu} = 
 \overline{X}$. \pause
 Then 
 \[ 
-\overline{X} \pause \sim N(\theta,s^2/n)
+\overline{X} \pause \sim N(\mu,s^2/n)
 \]
 \pause 
 and thus 
+\[
+Z = \frac{\overline{X}-\mu}{\sigma/\sqrt{n}} \sim N(0,1).
+\]
+Using the 
 \[ 
 \overline{x} \pm z_{a/2} s/\sqrt{n}.
 \]
-is a $100(1-a)$\% confidence interval for $\theta$. 
+is a $100(1-a)$\% confidence interval for $\mu$. 
 \end{frame}
 
 
 
-\begin{frame}
-\frametitle{Difference in means}
 
-Suppose independently
+\begin{frame}
+\frametitle{Mean height of US women}
+
+Suppose we are interested in the mean height $(\mu)$ of women in the U.S. \pause
+Let $X_i$ represent the height (inches) for woman $i$. \pause
+Assume 
 \[ 
-X_1,\ldots,X_{n_X} \ind N(\theta_X,s_X^2) 
-\quad\mbox{and}\quad
-Y_1,\ldots,Y_{n_Y} \ind N(\theta_Y,s_Y^2)
-\]
-\pause 
-and we use $\widehat{\theta_X-\theta_Y} = \overline{X} - \overline{Y}$. 
-\pause 
-We can show that 
-\[ 
-\overline{X} - \overline{Y} \sim N\left(\theta_X-\theta_Y, \frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y} \right)
+X_i \ind N(\mu,s^2)
 \]
 \pause
-and thus 
+where $s^2 = 3.5^2$ inches$^2$. \pause
+In our random sample of 100 women, we find the sample average to be 
+$\overline{x}=64.66$ inches. \pause
+A 95\% confidence interval for $\mu$ is 
 \[ 
-\overline{x} - \overline{y} \pm z_{a/2} \sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}}
+\overline{x} \pm z_{a/2} s/\sqrt{n} \pause 
+= 64.66 \pm 1.96 \cdot 3.5/\sqrt{100} \pause
+= (63.97,65.35).
 \]
-is a $100(1-a)$\% confidence interval for $\theta_X-\theta_Y$. 
+\pause 
+An interpretation for this confidence interval is 
+\begin{quote}
+the mean height $(\mu)$ would be within the intervals constructed using this 
+procedure in 95\% of the samples that we could have taken.
+\end{quote}
 \end{frame}
+
+
+
+
+\begin{frame}[fragile]
+<<echo=FALSE, fig.height=5>>=
+n  = 100
+mu = 65
+s  = 3.5
+a  = 0.05
+z  = -qnorm(a/2)
+d = data.frame(sample = 1:n, 
+               xbar = rnorm(100, mu, s/sqrt(n))) %>%
+  mutate(L  = xbar - z*s/sqrt(n),
+         U  = xbar + z*s/sqrt(n),
+         success = (L<mu) & (mu<U))
+ggplot(d, aes(sample, ymin=L, ymax=U,color=success)) + 
+  geom_errorbar() + 
+  theme_bw() +
+  geom_hline(yintercept = mu) + 
+  coord_flip()
+@
+\end{frame}
+
+
+
+\subsection{Normal mean with unknown variance}
+\begin{frame}
+\frametitle{Normal mean with unknown variance}
+
+Typically, we will not know the variance and thus we assume
+\[ 
+X_i \ind N(\mu,\sigma^2)
+\]
+for some unknown $\mu$ and $\sigma^2$. 
+\pause
+We obtain a sample mean $(\overline{x})$ and sample variance $s^2$.
+
+\vspace{0.1in} \pause
+
+Standardizing using the sample standard deviation results in  
+\[ 
+\frac{\overline{x}-\mu}{s/\sqrt{n}} \sim t_{n-1}
+\]
+\pause
+i.e. a $t$-distribution with $n-1$ degrees of freedom
+\pause
+and construction of a $100(1-a)$\% confidence interval for $\mu$ using 
+\[
+\overline{x} \pm t_{n-1,a/2} s/\sqrt{n}
+\]
+where $t_{n-1,a/2}$ is the $(a/2)$-quantile of a $t$-distribution with $n-1$ 
+degrees of freedom.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{$t$-distribution}
+
+If $T$ is a random variable with a $t$-distribution, then $T$ is a continuous
+random variable with the parameter $\nu$, called the \alert{degrees of freedom}.
+\pause 
+It has the following probability density function with support over the real 
+line
+\[ 
+f(t) = \frac{\Gamma(\frac{\nu+1}{2})}{\sqrt{\nu\pi}\Gamma(\frac{\nu}{2})}\left( 1+\frac{t^2}{\nu}\right)^{-\frac{\nu+1}{2}}
+\]
+\pause
+and moments
+
+\[ \begin{array}{rcl}
+E[T] =& 0 & \mbox{for }\nu>1 \\
+Var[T] =& \frac{\nu}{\nu-2} & \mbox{for }\nu>2
+\end{array} \]
+
+\pause
+
+A $T$ distribution converges to a standard normal distribution as $n\to\infty$.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{$t$ probability density functions}
+
+<<echo=FALSE>>=
+d = data.frame(x = seq(-3,3,length=101)) %>%
+  mutate(normal = dnorm(x),
+         t_1 = dt(x,1),
+         t_5 = dt(x,5),
+         t_30 = dt(x,30)) %>%
+  tidyr::gather(distribution, density, -x) %>%
+  mutate(distribution = factor(distribution, levels=c("normal","t_1","t_5","t_30")))
+
+ggplot(d, aes(x, density, color=distribution, group=distribution)) +
+  geom_line() +
+  theme_bw()
+@
+
+\end{frame}
+
 
 
 
 \begin{frame}
-\frametitle{Sample size}
+\frametitle{Mean height of US women}
+
+Suppose we are interested in the mean height $(\mu)$ of women in the U.S. \pause
+Let $X_i$ represent the height (inches) for woman $i$. \pause
+Assume 
+\[ 
+X_i \ind N(\mu,\sigma^2)
+\]
+\pause
+In a random sample of 10 women, We find the sample average to be 
+$\overline{x}=64.66$ inches and sample variance to be $s^2=16.46$. \pause
+A 95\% confidence interval for $\mu$ is 
+\[ 
+\overline{x} \pm t_{n-1,a/2} s/\sqrt{n} \pause 
+= 64.66 \pm 2.26 \cdot \sqrt{16.46/100} \pause
+= (63.74,65.58).
+\]
+\pause 
+An interpretation for this confidence interval is 
+\begin{quote}
+the mean height $(\mu)$ would be within the intervals constructed using this 
+procedure in 95\% of the samples that we could have taken.
+\end{quote}
 \end{frame}
+
+
+
+
+
+\begin{frame}[fragile]
+<<echo=FALSE, fig.height=5>>=
+n  = 10
+mu = 65
+sigma  = 3.5
+a  = 0.05
+t  = -qt(a/2,n-1)
+d = plyr::rdply(100, {
+  data.frame(x = rnorm(10, mu, sigma))
+}, .id = "sample") %>%
+  group_by(sample) %>%
+  summarize(xbar = mean(x),
+            s    = sd(x),
+            L  = xbar - t*s/sqrt(n),
+            U  = xbar + t*s/sqrt(n),
+            success = (L<mu) & (mu<U))
+  
+ggplot(d, aes(sample, ymin=L, ymax=U,color=success)) + 
+  geom_errorbar() + 
+  theme_bw() +
+  geom_hline(yintercept = mu) + 
+  coord_flip()
+@
+\end{frame}
+
+
+
+
+% \begin{frame}
+% \frametitle{Difference in means}
+% 
+% Suppose independently
+% \[ 
+% X_1,\ldots,X_{n_X} \ind N(\theta_X,s_X^2) 
+% \quad\mbox{and}\quad
+% Y_1,\ldots,Y_{n_Y} \ind N(\theta_Y,s_Y^2)
+% \]
+% \pause 
+% and we use $\widehat{\theta_X-\theta_Y} = \overline{X} - \overline{Y}$. 
+% \pause 
+% We can show that 
+% \[ 
+% \overline{X} - \overline{Y} \sim N\left(\theta_X-\theta_Y, \frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y} \right)
+% \]
+% \pause
+% and thus 
+% \[ 
+% \overline{x} - \overline{y} \pm z_{a/2} \sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}}
+% \]
+% is a $100(1-a)$\% confidence interval for $\theta_X-\theta_Y$. 
+% \end{frame}
+% 
+% 
+% 
+% \begin{frame}
+% \frametitle{Large sample confidence intervals}
+% 
+% The previous two situations both require the observation variance to be known
+% which is unrealistic. \pause
+% 
+% 
+% \end{frame}
+
+
+
+% \begin{frame}
+% \frametitle{Sample size}
+% 
+% Suppose we believe $\Delta = \theta_X-\theta_Y$ and we are interested in how 
+% many observations we need so that a $100(1-a)$\% confidence interval 
+% 
+% \end{frame}
 
 \end{document}
 
