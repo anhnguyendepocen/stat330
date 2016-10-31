@@ -77,7 +77,7 @@ The basic approach to statistical modeling involves:
 \begin{frame}
 \frametitle{Rolling a die}
 
-Suppose we roll a 6-sided die with values $\{1,2,3,4,5,6\}$ and will record
+Suppose we roll a (possibly biased) 6-sided die with values $\{1,2,3,4,5,6\}$ and will record
 the number of rolls of 1 or 2. 
 
 \vspace{0.1in} \pause
