@@ -5,7 +5,7 @@
 
 \newtheorem{principle}[theorem]{Principle}
 
-\title{Set19 - Confidence interval}
+\title{Set20 - Confidence interval}
 
 \begin{document}
 
