@@ -70,7 +70,7 @@ The \alert{coverage probability} $(1-a)$ is also called the
 Suppose we have an estimator $\hat{\theta}$ for a population parameter $\theta$
 with 
 \[ 
-\hat{\theta} \sim N\left(\theta,\sigma(\hat{\theta})\right)
+\hat{\theta} \sim N\left(\theta,\sigma(\hat{\theta})^2\right)
 \]
 \pause
 i.e. when the data are considered random, the estimator is unbiased and has a
@@ -343,13 +343,13 @@ As the sample size gets larger, many estimators have an asymptotically normal
 distribution (when the data are considered random) centered on the true\pause,
 i.e.
 \[ 
-\hat{\theta} \stackrel{\cdot}{\sim} N(\theta,\sigma(\hat{\theta}))
+\hat{\theta} \stackrel{\cdot}{\sim} N\left(\theta,\sigma(\hat{\theta})^2\right)
 \]
 \pause
 If we have a consistent estimator of the standard error, say $s(\hat{\theta})$ 
 then we can replace the unknown standard error with the consistent estimator\pause, i.e.
 \[ 
-\hat{\theta} \stackrel{\cdot}{\sim} N(\theta,s(\hat{\theta})).
+\hat{\theta} \stackrel{\cdot}{\sim} N\left(\theta,s(\hat{\theta}^2)\right).
 \]
 \pause
 Thus, we can obtain an \alert{approximate} $100(1-a)$\% confidence interval by 
