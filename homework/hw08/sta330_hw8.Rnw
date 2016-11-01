@@ -113,7 +113,7 @@ plot(population~year, d)
 \begin{enumerate}
 \item Derive the method of moments estimator for $\lambda$, i.e. it should be a function of the $y_i$. 
 \item Derive the maximum likelihood estimator for $\lambda$, i.e. it should be a function of the $y_i$. 
-\item If we observe the data, 7, 6, 7, 2, and 4, what are the values of the method of moments and maximum likelihood estimator for $\lambda$?
+\item If we observe the data, 7, 6, 7, 2, and 4, what are the method of moments and maximum likelihood estimates for $\lambda$?
 \end{enumerate}
 
 \ansfont{
