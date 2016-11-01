@@ -132,7 +132,7 @@ Setting this equal to zero and solving for $\lambda$, we obtain $\hat{\lambda}_{
 }
 
 \item A sample of 3 independent observations of waiting time to access an internet server is $x_1=0.4, x_2=0.7, x_3=0.9$ seconds. It is believed that the waiting time has the continuous distribution
-\[ f(t)=\begin{cases}\ \theta t^{\theta-1}, \ & 0<t<1\\
+\[ f(x)=\begin{cases}\ \theta x^{\theta-1}, \ & 0<x<1\\
 \ 0,\ & \text{otherwise}\end{cases} \]
 \begin{enumerate}
 \item Find the method of moments estimate for $\theta$.
