@@ -221,33 +221,33 @@ degrees of freedom.
 \small
 
 If $T$ is a random variable with a $t$-distribution, then $T$ is a continuous
-random variable with the parameter $\nu$, called the \alert{degrees of freedom},
+random variable with the parameter $v$, called the \alert{degrees of freedom},
 \pause 
 and we use the notation
 \[ 
-T \sim t_\nu \mbox{ as }\nu\to\infty.
+T \sim t_v.
 \]
 \pause 
 A $t$-distributed random variable has the following probability density function 
 with support over the real line
 \[ 
-f(t) = \frac{\Gamma(\frac{\nu+1}{2})}{\sqrt{\nu\pi}\Gamma(\frac{\nu}{2})}\left( 1+\frac{t^2}{\nu}\right)^{-\frac{\nu+1}{2}}
+f(t) = \frac{\Gamma(\frac{v+1}{2})}{\sqrt{v\pi}\Gamma(\frac{v}{2})}\left( 1+\frac{t^2}{v}\right)^{-\frac{v+1}{2}}
 \]
 \pause
 and moments
 
 \[ \begin{array}{rcl}
-E[T] =& 0 & \mbox{for }\nu>1 \mbox{ and} \\
-Var[T] =& \frac{\nu}{\nu-2} & \mbox{for }\nu>2.
+E[T] =& 0 & \mbox{for }v>1 \mbox{ and} \\
+Var[T] =& \frac{v}{v-2} & \mbox{for }v>2.
 \end{array} \]
 
 \pause
 
-If we use $T_\nu$ to denote a $t$-distributed random variable with degrees
-of freedom $\nu$. 
+If we use $T_v$ to denote a $t$-distributed random variable with degrees
+of freedom $v$. 
 Then 
 \[
-T_\nu \to Z 
+T_v \to Z  \mbox{ as }v\to\infty
 \]
 \pause 
 i.e. $t$-distribution converges to a standard normal distribution the degrees of 
@@ -633,7 +633,7 @@ s_p = \sqrt{\frac{(n_X-1)s_X^2+(n_Y-1)s_Y^2}{n_X+n_Y-2}}.
 \pause
 Thus a $100(1-a)$\% confidence interval for $\mu_X-\mu_Y$ is
 \[ 
-\overline{x} - \overline{y} \pm t_{a/2,n_X+n_Y-2} \, s_p \sqrt{\frac{1}{n_X} + \frac{1}{n_Y}}.
+\overline{x} - \overline{y} \pm t_{n_X+n_Y-2,a/2} \, s_p \sqrt{\frac{1}{n_X} + \frac{1}{n_Y}}.
 \]
 
 \end{frame}
@@ -716,7 +716,7 @@ v = \left(\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}\right)^2 \left/
 \pause
 Thus a $100(1-a)$\% confidence interval for $\mu_X-\mu_Y$ is
 \[ 
-\overline{x} - \overline{y} \pm t_{a/2,v} \, \sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}}.
+\overline{x} - \overline{y} \pm t_{v,a/2} \, \sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}}.
 \]
 
 \end{frame}
@@ -795,9 +795,9 @@ Small sample: derive actual distribution (or an approximation)
 \[ \begin{array}{llrll}
 \textrm{Assumed model} & \textrm{Parameter} & \multicolumn{3}{c}{\textrm{Confidence interval}} \\
 \hline
-X_i \ind N(\mu,\sigma^2) & \mu & \overline{X} &\pm t_{a/2,n-1} & s/\sqrt{n} \\
-X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm t_{a/2,n_X+n_Y-2} & s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}} \\
-X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm t_{a/2,v}  & \sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}} \\
+X_i \ind N(\mu,\sigma^2) & \mu & \overline{X} &\pm t_{n-1,a/2} & s/\sqrt{n} \\
+X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm t_{n_X+n_Y-2,a/2} & s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}} \\
+X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm t_{v,a/2}  & \sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}} \\
 \hline
 \end{array} \]
 where $s_p$ is the pooled standard deviation and $v$ is the Satterthwaite approximation:
