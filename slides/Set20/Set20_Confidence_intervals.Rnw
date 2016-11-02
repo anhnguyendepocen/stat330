@@ -777,7 +777,7 @@ where the Satterthwaite approximation to the degrees of freedom was \Sexpr{my_ro
 
 Large sample: derived using CLT and consistent estimator of the variance:
 \[ \begin{array}{llrll}
-\textrm{Model} & \textrm{Parameter} & \multicolumn{3}{c}{\textrm{Confidence interval}} \\
+\textrm{Assumed model} & \textrm{Parameter} & \multicolumn{3}{c}{\textrm{Confidence interval}} \\
 \hline
 X_i \ind Ber(\theta) & \theta & \overline{X} &\pm z_{a/2} &\sqrt{\frac{\overline{X}(1-\overline{X})}{n}} \\
 X_i \ind Ber(\theta_X), \,  Y_j \ind Ber(\theta_Y) & \theta_X-\theta_Y & \overline{X}-\overline{Y} &\pm z_{a/2} &\sqrt{\frac{\overline{X}(1-\overline{X})}{n_X} + \frac{\overline{Y}(1-\overline{Y})}{n_Y}} \\
@@ -793,7 +793,7 @@ X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y & 
 Small sample: derive actually distribution (or an approximation)
 
 \[ \begin{array}{llrll}
-\textrm{Model} & \textrm{Parameter} & \multicolumn{3}{c}{\textrm{Confidence interval}} \\
+\textrm{Assumed model} & \textrm{Parameter} & \multicolumn{3}{c}{\textrm{Confidence interval}} \\
 \hline
 X_i \ind N(\mu,\sigma^2) & \mu & \overline{X} &\pm t_{a/2,n-1} & s/\sqrt{n} \\
 X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm t_{a/2,n_X+n_Y-2} & s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}} \\
