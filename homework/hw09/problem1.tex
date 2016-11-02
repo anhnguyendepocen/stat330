@@ -1,0 +1,41 @@
+  \item
+    To assess whether a laboratory scale is accurate we can take a standard
+    weight known to weigh exactly 100 grams and weigh it repeatedly.  Suppose
+    that the scale reading has standard deviation
+    $\sigma$= 0.3 grams. If the scale is accurate then the population mean
+    $\mu$ (the mean obtained in many repeated weighings) would be 100 grams but
+    if the scale is inaccurate the population mean could be higher or lower.  
+    The weight is weighed 35 times and the sample mean is $\bar{x}$ =
+        99.90.
+    \begin{enumerate}	 
+      \item Construct a 99\% confidence interval for $\mu$.
+      \item Construct a 90\% confidence interval for $\mu$.
+      \item Using part (b), comment on the hypothesis
+        $H_0: \mu=100$.
+      \item Test the hypothesis $H_0: \mu=100$ at level $a=0.1$.
+    \end{enumerate}  
+    
+    
+    \ansfont{
+      \begin{enumerate}
+        \item Using the large sample C.I. for population mean, the interval
+          endpoints are
+          \[\bar{x} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}}.\]
+        Since $z_{0.0025}=2.58$, the C.I. is $(99.7692, 100.0308)$.
+        \item Using the large sample C.I. for population mean, the interval
+          endpoints are
+          \[\bar{x} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}}.\]
+          Since $z_{0.05}=1.65$, the C.I. is $(99.8163, 99.987)$.
+        \item Since the C.I. in part (b) does not cover 100. Thus,
+          there is a significant evidence that $H_0$ is not correct.
+        \item This is a large sample scenario. The test statistic is
+          \[
+            Z = \frac{\bar{x}-100}{\sigma/\sqrt{n}} = -1.97
+          \]
+          Since it is a two-sided test, the $p$-value is
+          \[
+            P(|Z| \ge 1.97) = P(Z\le -1.97) + P(Z\ge1.97) = 2(0.0244) = 0.0488 < 0.1
+          \]
+          Thus, we reject the null hypothesis $H_0$ at level 0.1.
+      \end{enumerate}
+    }

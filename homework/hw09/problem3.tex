@@ -1,0 +1,37 @@
+  \item Given two samples with $n_1=30$,
+    $n_2=39$, $\bar{x}_1=4.2$, $\bar{x}_2=3.4$, $s_1^2=49$,
+    and $s_2^2=32$, where $\bar{x}_1$ is the mean of a sample of size
+    $n_1$ from the first population (mean $\mu_1$) and has sample variance $s_1^2$,
+    and $\bar{x}_2$ is the mean of a sample of size
+    $n_2$ from the second population (mean $\mu_2$) with sample variance $s_2^2$.
+    %(Hint: see example 9.16, from class, in Baron on p.~255.)
+    \begin{enumerate}
+      \item Find a 95\% confidence interval for $\mu_1$.
+      \item Find a 90\% confidence interval for $\mu_1-\mu_2$.
+      \item Suppose $n_1$ is 10 instead of 30. Re-establish the confidence interval in part (a)
+        by assuming the first population follows a normal distribution.
+    \end{enumerate}
+
+    \ansfont{ 
+      \begin{enumerate}
+        \item Using the large sample C.I. for population mean, the interval endpoints
+          are
+          \[\bar{x}_1 \pm z_{\alpha/2} \frac{s_1}{\sqrt{n_1}}.\]
+        Since $z_{0.025}=1.96$, the C.I. is $(1.70, 6.70)$.
+        \item We utilize the large sample C.I. for $\mu_1-\mu_2$.
+          The standard error of our estimator $\bar{X}_1-\bar{X}_2$ is 
+          \[\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}=
+            \sqrt{\frac{49}{30}+\frac{32}{39}}= 1.566.\]
+          For a 90\% confidence interval,
+          we will need the .95 quantile for $Z$: $z_{0.05}=1.645$.
+
+          Putting all this together gets the interval endpoints $\bar{x}_1-\bar{x}_2
+          \pm 1.645 \cdot 1.566$ or $(0.8 - 2.58, 0.8 + 2.58)$ which
+          yields the 90\% C.I. for $\mu_1 - \mu_2$ of \[ (-1.78 , 3.38).\]
+        \item Using the samll sample (with unknown $\sigma$) C.I. for
+          population mean, teh interval endpoints
+          are
+          \[\bar{x}_1 \pm t_{n_1-1,\alpha/2} \frac{s_1}{\sqrt{n_1}}.\]
+        Since $t_{9,0.025}=2.262$, the C.I. is $(-0.81, 9.21)$.
+      \end{enumerate}
+    }
