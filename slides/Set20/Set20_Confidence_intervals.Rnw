@@ -24,6 +24,7 @@ options(width=120)
 <<libraries, message=FALSE, warning=FALSE, cache=FALSE, echo=FALSE>>=
 library(dplyr)
 library(ggplot2)
+library(xtable)
 @
 
 <<set_seed, echo=FALSE>>=
@@ -49,7 +50,7 @@ Thus, we'd like to provide an estimate of the uncertainty our knowledge of
 $\theta$.
 \pause
 \begin{definition}
-An interval $[L,U]$ is a $100(1-a)$\% \alert{confidence level} for the parameter 
+An interval $[L,U]$ is a $100(1-a)$\% \alert{confidence interval} for the parameter 
 $\theta$ if it contains the parameter with probability $(1-a)$ (when the data 
 are considered random), \pause
 \[ 
@@ -362,7 +363,7 @@ Thus, we can obtain an \alert{approximate} $100(1-a)$\% confidence interval by
 
 
 \begin{frame}
-\frametitle{Die rolling example}
+\frametitle{Bernoulli proportion confidence interval}
 
 Let $X_i \ind Ber(\theta)$ and estimate $\theta$ using 
 \[ 
@@ -390,6 +391,130 @@ and construct an approximate $100(1-a)$\% confidence interval using
 
 
 
+
+\begin{frame}
+\frametitle{Die rolling example}
+
+<<die_rolling_data, echo=FALSE>>=
+x = 297
+n = 1000
+theta_hat = x/n
+se = sqrt(theta_hat*(1-theta_hat)/n)
+@
+
+Suppose we roll a 6-sided die \Sexpr{n} times and obtained \Sexpr{x} ones and twos. 
+\pause
+Then we have $\hat{\theta} = \Sexpr{x}/\Sexpr{n}=\Sexpr{x/n}$. 
+\pause
+A $100(1-a)$\% confidence interval is 
+\[ 
+\hat{\theta} \pm z_{a/2} \sqrt{\frac{\hat\theta(1-\hat\theta)}{n}} =
+\Sexpr{theta_hat} \pm z_{a/2} \Sexpr{se}.
+\]
+\pause
+Here are various confidence intervals based on different confidence levels
+
+<<die_rolling_cis, dependson="die_rolling_data", echo=FALSE, results='asis'>>=
+my_round = function(x, digits=3) {
+  formatC( round(x, digits), format='f', digits=digits)
+}
+
+d = data.frame(a = c(.1,.05,.01)) %>%
+  mutate(conf_level = 1-a,
+         z_crit = -qnorm((1-conf_level)/2),
+         L = theta_hat - z_crit*se,
+         U = theta_hat + z_crit*se,
+         ci = paste0("(",my_round(L), ",", my_round(U), ")"),
+         z_crit = my_round(z_crit)) %>%
+  select(conf_level, z_crit, ci) %>%
+  rename(`Confidence Level` = conf_level,
+         `Z Critical Value` = z_crit,
+         `Confidence interval` = ci)
+tab <- xtable(d, align="cccc")
+print(tab, type="latex", include.rownames = FALSE)
+@
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Difference in proportions}
+
+Let $X_i \ind Ber(\theta_X)$ for $i=1,\ldots,n_X$ and $Y_j \ind Ber(\theta_Y)$ 
+for $j=1,\ldots,n_Y$ 
+\pause 
+and suppose we are interested in $\delta = \theta_X - \theta_Y$. 
+\pause
+A natural estimator is 
+\[ 
+\hat{\delta} = \hat{\theta}_X - \hat{\theta}_Y = \overline{X} - \overline{Y}.
+\]
+\pause
+By the CLT, this has an asymptotically normal distribution as $n_X\to\infty$ and 
+$n_Y\to\infty$ 
+\pause
+with
+\[ 
+E\left[\hat{\theta}\right] = \theta_X - \theta_Y 
+\quad\mbox{and}\quad
+Var\left[\hat{\theta}\right] = \frac{\theta_X(1-\theta_X)}{n_X} + \frac{\theta_Y(1-\theta_Y)}{n_Y}.
+\]
+Thus, a $100(1-a)$\% confidence interval is 
+\[ 
+\overline{X} - \overline{Y} \pm z_{a/2} \sqrt{\frac{\overline{X}(1-\overline{X})}{n_X} + \frac{\overline{Y}(1-\overline{Y})}{n_Y}}.
+\]
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Website hosting}
+
+Suppose you have been running an experiment with web hosting site A and B. 
+\pause
+Periodically, you ping an identical site you have created at each of these
+hosts to see if the site at that host is operational. 
+\pause
+The data you have collected are 
+
+<<web_hosting_data, echo=FALSE, results='asis'>>=
+d = data.frame(host = c("A","B"),
+               n = c(1486,1444)) %>%
+  mutate(y = c(1352,1347))
+
+d_format = d %>%
+  rename(Host = host,
+         `Number of attempts` = n,
+         `Number successful` = y)
+
+tab <- xtable(d_format, align="cccc", digits=0)
+print(tab, type="latex", include.rownames = FALSE)
+@
+
+<<web_hosting_ci, dependson="web_hosting_data", echo=FALSE>>=
+a = 0.05
+d = d %>%
+  mutate(theta_hat = y/n,
+         var = theta_hat*(1-theta_hat)/n)
+
+xbar = round(d$theta_hat[1],2)
+ybar = round(d$theta_hat[2],2)
+
+diff = diff(d$theta_hat)
+se   = sqrt(sum(d$var))
+z_crit = -qnorm(a/2)
+L = diff-z_crit*se
+U = diff+z_crit*se
+@
+
+A $\Sexpr{100*(1-a)}$\% confidence interval for the difference (A-B) is 
+\[ 
+\Sexpr{xbar} - \Sexpr{ybar} \pm \Sexpr{round(z_crit,2)}\sqrt{\frac{\Sexpr{xbar}(1-\Sexpr{xbar})}{n_X} + \frac{\Sexpr{ybar}(1-\Sexpr{ybar})}{n_Y}}
+= (\Sexpr{round(L,2)}, \Sexpr{round(U,2)}).
+\]
+
+\end{frame}
 
 
 
