@@ -790,7 +790,7 @@ X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y & 
 
 \pause
 
-Small sample: derive actually distribution (or an approximation)
+Small sample: derive actual distribution (or an approximation)
 
 \[ \begin{array}{llrll}
 \textrm{Assumed model} & \textrm{Parameter} & \multicolumn{3}{c}{\textrm{Confidence interval}} \\
