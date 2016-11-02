@@ -363,7 +363,7 @@ Thus, we can obtain an \alert{approximate} $100(1-a)$\% confidence interval by
 
 
 \begin{frame}
-\frametitle{Bernoulli proportion confidence interval}
+\frametitle{Bernoulli probability confidence interval}
 
 Let $X_i \ind Ber(\theta)$ and estimate $\theta$ using 
 \[ 
@@ -414,11 +414,13 @@ A $100(1-a)$\% confidence interval is
 \pause
 Here are various confidence intervals based on different confidence levels
 
-<<die_rolling_cis, dependson="die_rolling_data", echo=FALSE, results='asis'>>=
+<<myround, echo=FALSE>>=
 my_round = function(x, digits=3) {
   formatC( round(x, digits), format='f', digits=digits)
 }
+@
 
+<<die_rolling_cis, dependson=c("die_rolling_data","my_round"), echo=FALSE, results='asis'>>=
 d = data.frame(a = c(.1,.05,.01)) %>%
   mutate(conf_level = 1-a,
          z_crit = -qnorm((1-conf_level)/2),
@@ -481,66 +483,115 @@ The data you have collected are
 <<web_hosting_data, echo=FALSE, results='asis'>>=
 d = data.frame(host = c("A","B"),
                n = c(1486,1444)) %>%
-  mutate(y = c(1352,1347))
+  mutate(y = c(1340,1363))
 
 d_format = d %>%
+  mutate(`Proportion` = round(y/n,2)) %>%
   rename(Host = host,
-         `Number of attempts` = n,
-         `Number successful` = y)
+         `Attempts` = n,
+         `Successful` = y) 
 
-tab <- xtable(d_format, align="cccc", digits=0)
+tab <- xtable(d_format, align="ccccc", digits=c(NA,NA,0,0,3))
 print(tab, type="latex", include.rownames = FALSE)
 @
 
-<<web_hosting_ci, dependson="web_hosting_data", echo=FALSE>>=
+<<web_hosting_ci, dependson=c("web_hosting_data","my_round"), echo=FALSE>>=
 a = 0.05
 d = d %>%
   mutate(theta_hat = y/n,
          var = theta_hat*(1-theta_hat)/n)
 
-xbar = round(d$theta_hat[1],2)
-ybar = round(d$theta_hat[2],2)
+xbar = my_round(d$theta_hat[1],2)
+ybar = my_round(d$theta_hat[2],2)
 
-diff = diff(d$theta_hat)
+diff = -diff(d$theta_hat)
 se   = sqrt(sum(d$var))
 z_crit = -qnorm(a/2)
 L = diff-z_crit*se
 U = diff+z_crit*se
 @
 
-A $\Sexpr{100*(1-a)}$\% confidence interval for the difference (A-B) is 
+A $\Sexpr{100*(1-a)}$\% confidence interval for the difference in the probability 
+of uptime (A-B) is 
 \[ 
-\Sexpr{xbar} - \Sexpr{ybar} \pm \Sexpr{round(z_crit,2)}\sqrt{\frac{\Sexpr{xbar}(1-\Sexpr{xbar})}{n_X} + \frac{\Sexpr{ybar}(1-\Sexpr{ybar})}{n_Y}}
-= (\Sexpr{round(L,2)}, \Sexpr{round(U,2)}).
+\Sexpr{xbar} - \Sexpr{ybar} \pm \Sexpr{my_round(z_crit,2)}\sqrt{\frac{\Sexpr{xbar}(1-\Sexpr{xbar})}{n_X} + \frac{\Sexpr{ybar}(1-\Sexpr{ybar})}{n_Y}}
+= (\Sexpr{my_round(L,2)}, \Sexpr{my_round(U,2)}).
 \]
 
 \end{frame}
 
 
 
-% \begin{frame}
-% \frametitle{Difference in means}
-% 
-% Suppose independently
-% \[ 
-% X_1,\ldots,X_{n_X} \ind N(\theta_X,s_X^2) 
-% \quad\mbox{and}\quad
-% Y_1,\ldots,Y_{n_Y} \ind N(\theta_Y,s_Y^2)
-% \]
-% \pause 
-% and we use $\widehat{\theta_X-\theta_Y} = \overline{X} - \overline{Y}$. 
-% \pause 
-% We can show that 
-% \[ 
-% \overline{X} - \overline{Y} \sim N\left(\theta_X-\theta_Y, \frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y} \right)
-% \]
-% \pause
-% and thus 
-% \[ 
-% \overline{x} - \overline{y} \pm z_{a/2} \sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}}
-% \]
-% is a $100(1-a)$\% confidence interval for $\theta_X-\theta_Y$. 
-% \end{frame}
+\begin{frame}
+\frametitle{Difference in normal means}
+
+Suppose independently
+\[ 
+X_1,\ldots,X_{n_X} \ind N(\theta_X,s_X^2) 
+\quad\mbox{and}\quad
+Y_1,\ldots,Y_{n_Y} \ind N(\theta_Y,s_Y^2)
+\]
+\pause 
+and we use $\widehat{\theta_X-\theta_Y} = \overline{X} - \overline{Y}$. 
+\pause 
+By the CLT, we have 
+\[ 
+\overline{X} - \overline{Y} \sim N\left(\theta_X-\theta_Y, \frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y} \right)
+\]
+\pause
+and thus 
+\[ 
+\overline{x} - \overline{y} \pm z_{a/2} \sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}}
+\]
+is a $100(1-a)$\% confidence interval for $\theta_X-\theta_Y$. 
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Difference in heights}
+
+Suppose we have a random sample of individuals in the U.S. and we are interested in
+comparing mean heights between men and women. 
+\pause 
+We assume the data arise from normal distributions for each group.
+\pause
+
+<<heights_data, echo = FALSE, results="asis">>=
+d = data.frame(Group = c("Men","Women"),
+               n = c(100,100),
+               mean = c(69.1,63.7),
+               sd   = c(2.9,2.7))
+
+d_format = d %>%
+  rename(`Number` = n,
+         `Mean height` = mean,
+         `Standard deviation` = sd)
+
+tab <- xtable(d_format, align="ccccc", digits=c(NA,NA,0,1,1))
+print(tab, type="latex", include.rownames = FALSE)
+@
+
+<<heights_ci, dependson=c("heights_data","my_round"), echo=FALSE>>=
+a = 0.1
+
+diff = -diff(d$mean)
+se   = sqrt(sum(d$sd^2/d$n))
+z_crit = -qnorm(a/2)
+L = diff-z_crit*se
+U = diff+z_crit*se
+@
+
+A $\Sexpr{100*(1-a)}$\% confidence interval for the difference in mean heights
+(men-women) in inches is 
+\[ 
+\Sexpr{d$mean[1]} - \Sexpr{d$mean[2]} \pm \Sexpr{my_round(z_crit,3)}\sqrt{\frac{\Sexpr{d$sd[1]}^2}{\Sexpr{d$n[1]}} + \frac{\Sexpr{d$sd[2]}^2}{\Sexpr{d$n[2]}}}
+= (\Sexpr{my_round(L,2)}, \Sexpr{my_round(U,2)}).
+\]
+
+
+\end{frame}
 
 
 
