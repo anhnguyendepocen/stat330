@@ -1,0 +1,400 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set 21 - Hypothesis testing}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=4, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=TRUE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE, echo=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(xtable)
+@
+
+<<set_seed, echo=FALSE>>=
+set.seed(1)
+@
+
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\section{Hypothesis testing}
+\begin{frame}
+\frametitle{Hypotheses}
+
+\small
+
+\begin{definition}
+A \alert{scientific hypothesis} is a statement about how the world works.
+\pause
+A \alert{statistical hypothesis} is a scientific hypothesis translated into
+a statistical model and the parameters of that model.
+\end{definition}
+
+\pause
+
+\begin{example}
+Scientific hypothesis: the coin is fair.
+\pause
+
+Statistical hypothesis:
+	\begin{itemize}
+	\item $X$ is the number of heads out of $n$ coin flips \pause
+	\item $X \sim Bin(n,\theta)$, \pause and
+	\item $\theta=0.5$.
+	\end{itemize}
+\end{example}
+
+\vspace{0.1in} \pause
+
+Our goal is to evaluate whether the data support or reject a hypothesis and to 
+what extent.
+\pause
+One idea is to look at the \emph{probability of the observed data if the hypothesis
+is true}.
+\pause
+Low probabilities indicate support against the hypothesis.
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Flipping a coin}
+
+\small
+
+<<flipping_coin, echo=FALSE>>=
+theta0 = 0.5
+n = 10
+d = data.frame(x = 0:n) %>%
+	mutate(pmf = dbinom(x,n,theta0))
+@
+
+If we flip a coin \Sexpr{n} times, the probabilities for values around 
+\Sexpr{n*theta0} are reasonably high while probabilities for values around 0
+and \Sexpr{n} are low. 
+
+<<flipping_coin_plot, dependson="flipping_coin", echo=FALSE, fig.width=12>>=
+ggplot(d, aes(x=x,y=pmf)) + 
+	geom_bar(stat='identity') + 
+	labs(title=paste("PMF for",n,"flips of a fair coin")) +
+	scale_x_continuous(breaks = pretty_breaks()) + 
+	theme_bw()
+@
+
+\pause
+
+<<flipping_coin2, echo=FALSE>>=
+theta0 = 0.5
+n = 1000
+d = data.frame(x = 0:n) %>%
+	mutate(pmf = dbinom(x,n,theta0))
+@
+
+But, if we flip the coin \Sexpr{n} times, then all probabilities are low. 
+
+<<flipping_coin2_plot, dependson="flipping_coin2", echo=FALSE, fig.width=12>>=
+ggplot(d, aes(x=x,y=pmf)) + 
+	geom_bar(stat='identity') + 
+	labs(title=paste("PMF for",n,"flips of a fair coin")) +
+	scale_x_continuous(breaks = pretty_breaks()) + 
+	theme_bw() + 
+	ylim(0,.25)
+@
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Extremes}
+
+\scriptsize
+
+Rather than just looking at the probability of the observed data, we will look 
+at all values \alert{as or more extreme} than the data observed.
+\pause
+
+<<flipping_coin3, echo=FALSE>>=
+theta0 = 0.5
+n = 10
+y = 1
+d = data.frame(x = 0:n) %>%
+	mutate(pmf = dbinom(x,n,theta0),
+				 `More extreme` = abs(x-n*theta0)>= abs(y-n*theta0))
+@
+
+If we flip a coin \Sexpr{n} times and observe \Sexpr{y} head, then the values 
+0, 1, 9, and 10 comprise the values that are more extreme. 
+
+<<flipping_coin3_plot, dependson="flipping_coin3", echo=FALSE, fig.width=14>>=
+ggplot(d, aes(x=x,y=pmf,fill=`More extreme`)) + 
+	geom_bar(stat='identity') + 
+	labs(title=paste("PMF for",n,"flips of a fair coin")) +
+	scale_x_continuous(breaks = pretty_breaks()) + 
+	theme_bw()
+@
+
+\pause
+
+<<flipping_coin4, echo=FALSE>>=
+theta0 = 0.5
+n = 1000
+y = 470
+d = data.frame(x = 0:n) %>%
+	mutate(pmf = dbinom(x,n,theta0),
+				 `More extreme` = abs(x-n*theta0)>= abs(y-n*theta0))
+@
+
+If we flip a coin \Sexpr{n} times and observe \Sexpr{y} head, then all $x$ such
+that $|x-n/2|\ge |\Sexpr{y}-n/2|$ are the extreme values.
+
+<<flipping_coin4_plot, dependson="flipping_coin4", echo=FALSE, fig.width=14>>=
+ggplot(d, aes(x=x,y=pmf,fill=`More extreme`)) + 
+	geom_bar(stat='identity') + 
+	labs(title=paste("PMF for",n,"flips of a fair coin")) +
+	scale_x_continuous(breaks = pretty_breaks()) + 
+	theme_bw()
+@
+\end{frame}
+
+
+
+\subsection{p-values}
+\begin{frame}
+\frametitle{Null and alternative hypotheses}
+
+\small
+
+\begin{definition}
+In classical hypothesis testing, two mutually exclusive statistical hypotheses 
+are proposed: the \alert{null ($H_0$) hypothesis}, which defines some ``normal`` 
+statement and an \alert{alternative ($H_A$) hypothesis}.
+\end{definition}
+
+\begin{example}
+In testing a fair coin with data $Y\sim Bin(n,\theta)$, we have the hypotheses:
+\begin{itemize}
+\item $H_0: Y\sim Bin(n,\theta), \theta = 0.5$
+\item $H_A: Y\sim Bin(n,\theta), \theta \ne 0.5$
+\end{itemize}
+\end{example}
+
+
+\begin{definition}
+A \alert{\pvalue} is the probability (when the data are considered random) of
+observing a test statistic as or more extreme than that observed if the null
+hypothesis is true. 
+\pause
+If the pvalue is smaller than some \alert{significance level} $a$ (often 0.05), 
+then we say ``we reject the
+null hypothesis'' otherwise we say ``we fail to reject the null hypothesis''.
+\end{definition}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Fair coin hypothesis test}
+
+\begin{enumerate}
+\item Let $X$ be the number of heads out of $n$ flips of a coin.
+\pause
+\item Assume $X\sim Bin(n,\theta)$, \pause i.e. each coin flip is independent, \pause and 
+\item test the null hypothesis $H_0: \theta=0.5$ at the $a$ level. \pause
+\item If we observe the test statistic $x$ heads, then the \emph{as or more extreme} region is any $X$
+such that $|X-n/2|\ge |x-n/2|$. 
+\end{enumerate}
+
+\pause
+
+Thus, the \pvalue{} is the sum of the tail probabilities in this figure
+
+\vspace{0.1in} 
+
+<<echo=FALSE, fig.width=10>>=
+<<flipping_coin4_plot>>
+@
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Fair coin hypothesis test (cont.)}
+
+<<coin_flip_test,echo=FALSE>>=
+theta0 = 0.5
+n = 10
+y = 1
+p = sum(dbinom(c(0,1,9,10), n, theta0))
+@
+
+If we flip the coin \Sexpr{n} times and obtain \Sexpr{y} head, the pvalue is 
+\[ 
+p = \sum_{x=0}^1 P(X=x) + \sum_{x=9}^{10} P(X=x) 
+= \Sexpr{p} \approx \Sexpr{round(p,2)}
+\]
+where $P(X=x)$ is the probability mass function for a binomial distribution with
+\Sexpr{n} attempts and probabability of success $\theta=0.5$. 
+
+\vspace{0.1in} \pause
+
+<<coin_flip_test2,echo=FALSE>>=
+theta0 = 0.5
+n = 1000
+y = 530
+p = prop.test(y,n)
+@
+
+If we flip the coin 1000 times and obtain 530 heads, the pvalue is 
+\[ 
+p = \sum_{x=0}^{470} P(X=x) + \sum_{x=530}^{100} P(X=x) 
+= \Sexpr{p$p.value} \approx \Sexpr{round(p$p.value,2)}
+\]
+where $P(X=x)$ is the probability mass function for a binomial distribution with
+1000 attmpts and probabability of success $\theta=0.5$. 
+\end{frame}
+
+
+
+\subsection{Normal mean hypothesis test}
+\begin{frame}
+\frametitle{Normal mean hypothesis test}
+
+Assume 
+\[ 
+Y_i \ind N(\mu,\sigma^2) 
+\]
+and we want to test 
+\[ 
+H_0: \mu = \mu_0
+\]
+for some value $\mu_0$ (usually 0). 
+
+\vspace{0.1in} \pause
+
+The test statistic is 
+\[ t = \frac{\overline{y} - \mu_0}{s/\sqrt{n}} \]
+which has a $t_{n-1}$ distribution if the null hypothesis is true. 
+
+\vspace{0.1in} \pause
+
+The \emph{as or more extreme} region is $|T_{n-1}| \ge |t|$ where $T_{n-1}$ has a 
+$t_{n-1}$ distribution
+\pause
+and thus the pvalue is 
+\[ \begin{array}{rl}
+P(|T_{n-1}| \ge |t|) & = 
+\phantom{2}P(T_{n-1} \ge |t|) + P(T_{n-1} \le -|t|) \pause \\
+&= 2P(T_{n-1} \le -|t|)
+\end{array} \]
+because $t$ distributions are symmetric around 0. 
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{CPU Fabrication facility}
+
+<<clock_speed_data, echo=FALSE>>=
+n = 15
+ybar = 1.78
+mu0 = 1.8
+sd = 0.05
+t = (ybar-mu0)/(sd/sqrt(n))
+p = pt(-abs(t), n-1)
+@
+
+
+In a CPU fabrication facility, the target clock rate is \Sexpr{mu0} GHz. 
+\pause
+A random sample of \Sexpr{n} chips had an average clock rate of \Sexpr{ybar} 
+GHz with a sample standard deviation of \Sexpr{sd} GHz. 
+\pause
+Is there any evidence that the average clock rate is not \Sexpr{mu0} GHz?
+
+\vspace{0.1in} \pause
+
+Let $Y_i$ be the clock speed for chip $i$ and assume $Y_i\ind N(\mu,\sigma^2)$. 
+\pause
+Test the hypothesis $H_0: \mu = \Sexpr{1.8}$ GHz. 
+
+\vspace{0.1in} \pause
+
+We have 
+\[ 
+t = \frac{\overline{y} - \mu_0}{s/\sqrt{n}} = 
+\frac{\Sexpr{ybar}-\Sexpr{mu0}}{\Sexpr{sd}/\sqrt{\Sexpr{n}}} = \Sexpr{t}
+\]
+and 
+\[ 
+p = 2P(T_{14} \le \Sexpr{t}) \approx \Sexpr{round(p,3)}.
+\]
+Thus we fail to reject the null hypothesis at the $0.05$ significance level.
+
+\end{frame}
+
+
+
+\subsection{Large sample hypothesis tests}
+\begin{frame}
+\frametitle{Large sample hypothesis tests}
+
+If we have a test statistic $z$ which has an approximate standard normal distribution when 
+the null hypothesis is true, \pause then we can calculate an approximate pvalue using 
+\[ 
+p = 2P(Z\le z).
+\]
+\pause
+In large samples, here are some possibilities
+{\tiny
+\[ \begin{array}{lcc}
+\textrm{Assumed model} & \textrm{Null hypothesis} & \textrm{Test statistic ($Z$)}  \\
+\hline
+X_i \ind Ber(\theta) & \theta = q & \frac{\overline{X}-q}{\sqrt{\frac{\overline{X}(1-\overline{X})}{n}}} \\ \\
+X_i \ind Ber(\theta_X), \,  Y_j \ind Ber(\theta_Y) & \theta_X-\theta_Y = d & 
+\frac{\overline{X}-\overline{Y}-d}{\sqrt{\frac{\overline{X}(1-\overline{X})}{n_X}+\frac{\overline{Y}(1-\overline{Y})}{n_Y}}} \\ \\
+\hline
+X_i \ind N(\mu,\sigma^2) & \mu=m & \frac{\overline{X}-m}{s/\sqrt{n}} \\ \\
+X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y = d & \frac{\overline{X}-\overline{Y}-d}{s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}} \\ \\
+X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y = d & \frac{\overline{X}-\overline{Y}-d}{\sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}}} \\
+\hline
+\end{array} \]
+}
+\end{frame}
+
+
+
+
+\end{document}
+
+
+
+
+
+
