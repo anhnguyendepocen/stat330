@@ -503,7 +503,10 @@ x = sample(100, 10); maxx = max(x); maxx
 
 <<german_tank_likelihood, echo=FALSE>>=
 like = function(theta) theta^-length(x) * (maxx <= theta)
-curve(like, 80, 120, n=121, ylab=expression(L(theta)), xlab=expression(theta))
+xx = 80:120
+plot(xx, like(xx), type="p", pch=19,
+		 ylab=expression(L(theta)), xlab=expression(theta))
+#curve(like, 80, 120, n=121)
 abline(v=maxx, col='red')
 @
 \end{frame}
