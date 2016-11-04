@@ -434,7 +434,28 @@ which is equal to one minus the probability of a type II error.
 
 
 
+\begin{frame}
+\frametitle{Power curves for CPU fabrication example}
 
+<<clock_power, echo=FALSE>>=
+my_power = Vectorize(function(n,diff,sigma) {
+	power.t.test(n,diff,sigma, type="one.sample")$power
+})
+
+power = expand.grid(sigma=c(.025,.05,.075),
+										mu = seq(1.75,1.80,by=.001)) %>%
+	mutate(diff = mu-1.80,
+				 power = my_power(15,diff,sigma))
+
+
+ggplot(power, aes(mu, power, color=sigma, group=sigma)) +
+	geom_line() +
+	labs(x = "True value for mean CPU speed", y = "Power") + 
+	scale_color_continuous(name = "Data SD") +
+	theme_bw()
+@
+
+\end{frame}
 
 
 
