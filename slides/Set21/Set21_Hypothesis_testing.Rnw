@@ -310,7 +310,7 @@ and thus the pvalue is
 \[ \begin{array}{rl}
 P(|T_{n-1}| \ge |t|) & = 
 \phantom{2}P(T_{n-1} \ge |t|) + P(T_{n-1} \le -|t|) \pause \\
-&= 2P(T_{n-1} \le -|t|)
+&= 2P(T_{n-1} > |t|)
 \end{array} \]
 because $t$ distributions are symmetric around 0. 
 \end{frame}
@@ -342,7 +342,7 @@ Is there any evidence that the average clock rate is not \Sexpr{mu0} GHz?
 
 Let $Y_i$ be the clock speed for chip $i$ and assume $Y_i\ind N(\mu,\sigma^2)$. 
 \pause
-Test the hypothesis $H_0: \mu = \Sexpr{1.8}$ GHz. 
+Test the hypothesis $H_0: \mu = \Sexpr{mu0}$ GHz. 
 
 \vspace{0.1in} \pause
 
@@ -353,7 +353,7 @@ t = \frac{\overline{y} - \mu_0}{s/\sqrt{n}} =
 \]
 and 
 \[ 
-p = 2P(T_{14} \le \Sexpr{t}) \approx \Sexpr{round(p,3)}.
+p = 2P(T_{14} > |\Sexpr{t})| \approx \Sexpr{round(p,3)}.
 \]
 Thus we fail to reject the null hypothesis at the $0.05$ significance level.
 
@@ -368,27 +368,173 @@ Thus we fail to reject the null hypothesis at the $0.05$ significance level.
 If we have a test statistic $z$ which has an approximate standard normal distribution when 
 the null hypothesis is true, \pause then we can calculate an approximate pvalue using 
 \[ 
-p = 2P(Z\le z).
+p = 2P(Z>z) = 2P(Z\le z).
 \]
 \pause
 In large samples, here are some possibilities
 {\tiny
 \[ \begin{array}{lcc}
-\textrm{Assumed model} & \textrm{Null hypothesis} & \textrm{Test statistic ($Z$)}  \\
+\textrm{Assumed model} & \textrm{Null hypothesis} & \textrm{Test statistic ($\stackrel{\cdot}{\sim} Z$)}  \\
 \hline
-X_i \ind Ber(\theta) & \theta = q & \frac{\overline{X}-q}{\sqrt{\frac{\overline{X}(1-\overline{X})}{n}}} \\ \\
-X_i \ind Ber(\theta_X), \,  Y_j \ind Ber(\theta_Y) & \theta_X-\theta_Y = d & 
-\frac{\overline{X}-\overline{Y}-d}{\sqrt{\frac{\overline{X}(1-\overline{X})}{n_X}+\frac{\overline{Y}(1-\overline{Y})}{n_Y}}} \\ \\
+X_i \ind Ber(\theta) & \theta = p_0 & \frac{\overline{X}-p_0}{\sqrt{\frac{\overline{X}(1-\overline{X})}{n}}} \\ \\
+X_i \ind Ber(\theta_X), \,  Y_j \ind Ber(\theta_Y) & \theta_X-\theta_Y = d_0 & 
+\frac{\overline{X}-\overline{Y}-d_0}{\sqrt{\frac{\overline{X}(1-\overline{X})}{n_X}+\frac{\overline{Y}(1-\overline{Y})}{n_Y}}} \\ \\
 \hline
-X_i \ind N(\mu,\sigma^2) & \mu=m & \frac{\overline{X}-m}{s/\sqrt{n}} \\ \\
-X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y = d & \frac{\overline{X}-\overline{Y}-d}{s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}} \\ \\
-X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y = d & \frac{\overline{X}-\overline{Y}-d}{\sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}}} \\
+X_i \ind N(\mu,\sigma^2) & \mu=m_0 & \frac{\overline{X}-m_0}{s/\sqrt{n}} \\ \\
+X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y = d_0 & \frac{\overline{X}-\overline{Y}-d_0}{s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}} \\ \\
+X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y = d_0 & \frac{\overline{X}-\overline{Y}-d_0}{\sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}}} \\
 \hline
 \end{array} \]
 }
 \end{frame}
 
 
+\subsection{Errors}
+\begin{frame}
+\frametitle{Type I and Type II Errors}
+
+When performing statistical hypothesis testing, four situations arise:
+
+\begin{center}
+\begin{tabular}{l|ll|}
+& \multicolumn{2}{c|}{Result of test} \\
+Truth & Reject $H_0$ & Fail to reject $H_0$ \\
+\hline
+$H_0$ true  & Type I error & correct \\
+$H_0$ false & correct & Type II error \\
+\hline
+\end{tabular}
+\end{center}
+
+\pause
+
+\begin{definition}
+The \alert{significance level} is the probability of a type I error, i.e. 
+\[ 
+a = P(\mbox{reject } H_0|H_0 \mbox{ is true}).
+\]
+\pause
+The \alert{power of the test} is the probability of reject a false null 
+hypothesis, i.e.
+\[ 
+\mbox{power} = P(\mbox{reject } H_0|H_0 \mbox{ is not true})
+\]
+\pause 
+which is equal to one minus the probability of a type II error.
+\end{definition}
+\end{frame}
+
+
+
+
+% \begin{frame}
+% \frametitle{Power example}
+% 
+% \small
+% 
+% In our CPU fabrication facility example, suppose the actual average speed is 
+% 1.78 GHz (which is below our specification of 1.8 GHz). 
+% \pause
+% If we set the significance level to $a=0.05$, what is the power of the test when
+% 14 observations are taken?
+% 
+% \vspace{0.1in} \pause
+% 
+% In order to reject the test, we need the absolute value of our test statistic
+% to be greater than 2.145 since 
+% \[ 
+% 0.05 = 2P(T_{14} > 2.145).
+% \]
+% \pause 
+% Assuming $\mu=1.78$ GHz and $\sigma=0.05$ GHz, we have
+% \[ 
+% T'_{n-1} = \frac{\overline{Y}-\mu}{\sigma/\sqrt{n}} \sim t_{n-1}.
+% \]
+% \pause
+% Thus we have 
+% \[ \begin{array}{rl}
+% \mbox{power} 
+% &= P(\mbox{reject } H_0|H_0 \mbox{ is not true}) \\
+% &= 
+% \end{array} \]
+% 
+% \end{frame}
+
+
+\subsection{One-sided tests}
+\begin{frame}
+\frametitle{One-sided tests}
+
+\small
+
+Most commonly null hypotheses specify a specific value, but sometimes it makes
+sense to specify a direction\pause, e.g. $H_0: \mu \le m_0$, \pause and this is
+called a one-sided hypothesis. 
+\pause
+In this scenario, the \emph{as or more extreme} region only extends in one 
+direction (away from the null hypothesis) \pause and the \pvalue{} must be 
+adjusted accordingly. 
+
+\vspace{0.1in} \pause
+
+If we have a test statistic z and a null hypothesis $H_0: \mu \le m_0$, then
+\[
+p = P(Z>z).
+\]
+\pause
+As a practical matter, you can calculate the pvalue for the test 
+$H_0: \mu = m_0$ then
+\begin{itemize}
+\item if $\hat\mu \le m_0$, divide the pvalue in half \pause or
+\item if $\hat\mu > m_0$, divide the pvalue in half and then subtract from 1 
+(the resulting pvalue will always be $>0.5$ and thus you will fail to reject
+for any reasonable significance level).
+\end{itemize}
+If the null hypothesis inequality is reversed, i.e. $H_0: \mu \ge m_0$, then 
+reverse all the inequalities in the procedure.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{CPU Fabrication facility}
+
+<<clock_speed_data_repeat, echo=FALSE>>=
+<<clock_speed_data>>
+@
+
+
+In a CPU fabrication facility, the target clock rate is \Sexpr{mu0} GHz. 
+\pause
+A random sample of \Sexpr{n} chips had an average clock rate of \Sexpr{ybar} 
+GHz with a sample standard deviation of \Sexpr{sd} GHz. 
+\pause
+Is there any evidence that the average clock rate is \alert{less than} 
+\Sexpr{mu0} GHz?
+
+\vspace{0.1in} \pause
+
+Let $Y_i$ be the clock speed for chip $i$ and assume $Y_i\ind N(\mu,\sigma^2)$. 
+\pause
+Test the hypothesis $H_0: \mu \ge \Sexpr{mu0}$ GHz. 
+
+\vspace{0.1in} \pause
+
+We previously found the estimator $\hat\mu = \Sexpr{ybar}$ and the pvalue for 
+the test $H_0 = \Sexpr{mu0}$ GHz as
+\[ 
+p = 2P(T_{14} > |\Sexpr{t})| \approx \Sexpr{round(p,3)}
+\]
+Since $\Sexpr{ybar} < \Sexpr{mu0}$, we divide this pvalue in half and thus our
+one-sided pvalue is 
+\[
+p = P(T_{14} < -|\Sexpr{t})| \approx \Sexpr{round(p/2,3)}
+\]
+\pause
+and we reject the null hypothesis at the 0.05 level.
+
+
+\end{frame}
 
 
 \end{document}
