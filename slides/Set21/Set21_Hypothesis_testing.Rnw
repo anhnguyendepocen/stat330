@@ -432,8 +432,8 @@ which is equal to one minus the probability of a type II error.
 % 
 % \small
 % 
-% In our CPU fabrication facility example, suppose the actual average speed is 
-% 1.78 GHz (which is below our specification of 1.8 GHz). 
+% In our CPU fabrication facility example, suppose the actual average speed is
+% 1.78 GHz (which is below our specification of 1.8 GHz).
 % \pause
 % If we set the significance level to $a=0.05$, what is the power of the test when
 % 14 observations are taken?
@@ -441,21 +441,21 @@ which is equal to one minus the probability of a type II error.
 % \vspace{0.1in} \pause
 % 
 % In order to reject the test, we need the absolute value of our test statistic
-% to be greater than 2.145 since 
-% \[ 
+% to be greater than 2.145 since
+% \[
 % 0.05 = 2P(T_{14} > 2.145).
 % \]
-% \pause 
+% \pause
 % Assuming $\mu=1.78$ GHz and $\sigma=0.05$ GHz, we have
-% \[ 
+% \[
 % T'_{n-1} = \frac{\overline{Y}-\mu}{\sigma/\sqrt{n}} \sim t_{n-1}.
 % \]
 % \pause
-% Thus we have 
+% Thus we have
 % \[ \begin{array}{rl}
-% \mbox{power} 
+% \mbox{power}
 % &= P(\mbox{reject } H_0|H_0 \mbox{ is not true}) \\
-% &= 
+% &=
 % \end{array} \]
 % 
 % \end{frame}
@@ -523,7 +523,7 @@ Test the hypothesis $H_0: \mu \ge \Sexpr{mu0}$ GHz.
 We previously found the estimator $\hat\mu = \Sexpr{ybar}$ and the pvalue for 
 the test $H_0 = \Sexpr{mu0}$ GHz as
 \[ 
-p = 2P(T_{14} > |\Sexpr{t})| \approx \Sexpr{round(p,3)}
+p = 2P(T_{14} > |\Sexpr{t}| \approx \Sexpr{round(p,3)}
 \]
 Since $\Sexpr{ybar} < \Sexpr{mu0}$, we divide this pvalue in half and thus our
 one-sided pvalue is 
@@ -532,9 +532,42 @@ p = P(T_{14} < -|\Sexpr{t})| \approx \Sexpr{round(p/2,3)}
 \]
 \pause
 and we reject the null hypothesis at the 0.05 level.
+\end{frame}
 
+
+
+\subsection{Relation to confidence intervals}
+\begin{frame}
+\frametitle{Relation to confidence intervals}
+
+\begin{theorem}
+A level $a$ hypothesis test of $H_0: \theta = d$ rejects the null hypothesis
+\alert{if and only if} a symmetric $100(1-a)$\% confidence interval does not
+contain $d$. 
+\end{theorem}
+
+<<t_crit, dependson="clock_speed_data_repeat", echo=FALSE>>=
+t_crit = qt(.975,n-1)
+L = ybar-t_crit*sd/sqrt(n)
+U = ybar+t_crit*sd/sqrt(n)
+@
+
+\begin{example}
+In the CPU fabrication example, a 95\% conficence interval, i.e. $a=0.05$, is 
+\[
+\overline{y} \pm t_{n-1,0.025} s/\sqrt{n} \approx 
+\Sexpr{ybar} \pm \Sexpr{round(t_crit,3)}\cdot \Sexpr{sd}/\sqrt{\Sexpr{n}} \approx 
+(\Sexpr{round(L,3)},\Sexpr{round(U,3)})
+\]
+\pause
+Thus a 0.05 level hypothesis test of $H_0: \theta = d$ fails to reject the null
+hypothesis.
+\end{example}
 
 \end{frame}
+
+
+
 
 
 \end{document}
