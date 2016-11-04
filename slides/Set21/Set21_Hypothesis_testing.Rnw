@@ -374,7 +374,7 @@ Thus we fail to reject the null hypothesis at the $0.05$ significance level.
 If we have a test statistic $z$ which has an approximate standard normal distribution when 
 the null hypothesis is true, \pause then we can calculate an approximate pvalue using 
 \[ 
-p = 2P(Z>z) = 2P(Z\le z).
+p = 2P(Z>|z|) = 2P(Z\le -|z|).
 \]
 \pause
 In large samples, here are some possibilities
