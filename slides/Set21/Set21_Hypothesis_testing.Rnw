@@ -47,7 +47,8 @@ set.seed(1)
 A \alert{scientific hypothesis} is a statement about how the world works.
 \pause
 A \alert{statistical hypothesis} is a scientific hypothesis translated into
-a statistical model and the parameters of that model.
+a statement containing a probability model and the values of parameters in that 
+model.
 \end{definition}
 
 \pause
@@ -64,7 +65,7 @@ Statistical hypothesis:
 	\end{itemize}
 \end{example}
 
-\vspace{0.1in} \pause
+\pause
 
 Our goal is to evaluate whether the data support or reject a hypothesis and to 
 what extent.
@@ -168,7 +169,7 @@ d = data.frame(x = 0:n) %>%
 @
 
 If we flip a coin \Sexpr{n} times and observe \Sexpr{y} head, then all $x$ such
-that $|x-n/2|\ge |\Sexpr{y}-n/2|$ are the extreme values.
+that $|x-n/2|\ge |\Sexpr{y}-n/2|$ are the extreme values. 
 
 <<flipping_coin4_plot, dependson="flipping_coin4", echo=FALSE, fig.width=14>>=
 ggplot(d, aes(x=x,y=pmf,fill=`More extreme`)) + 
@@ -185,7 +186,9 @@ ggplot(d, aes(x=x,y=pmf,fill=`More extreme`)) +
 \begin{frame}
 \frametitle{Null and alternative hypotheses}
 
-\small
+\footnotesize
+
+\vspace{-0.05in}
 
 \begin{definition}
 In classical hypothesis testing, two mutually exclusive statistical hypotheses 
@@ -206,12 +209,11 @@ In testing a fair coin with data $Y\sim Bin(n,\theta)$, we have the hypotheses:
 A \alert{\pvalue} is the probability (when the data are considered random) of
 observing a test statistic as or more extreme than that observed if the null
 hypothesis is true. 
+\end{definition}
 \pause
 If the pvalue is smaller than some \alert{significance level} $a$ (often 0.05), 
 then we say ``we reject the
 null hypothesis'' otherwise we say ``we fail to reject the null hypothesis''.
-\end{definition}
-
 \end{frame}
 
 
@@ -224,7 +226,7 @@ null hypothesis'' otherwise we say ``we fail to reject the null hypothesis''.
 \pause
 \item Assume $X\sim Bin(n,\theta)$, \pause i.e. each coin flip is independent, \pause and 
 \item test the null hypothesis $H_0: \theta=0.5$ at the $a$ level. \pause
-\item If we observe the test statistic $x$ heads, then the \emph{as or more extreme} region is any $X$
+\item If we observe the test statistic $x$, then the \emph{as or more extreme} region is any $X$
 such that $|X-n/2|\ge |x-n/2|$. 
 \end{enumerate}
 
@@ -255,13 +257,15 @@ p = sum(dbinom(c(0,1,9,10), n, theta0))
 
 If we flip the coin \Sexpr{n} times and obtain \Sexpr{y} head, the pvalue is 
 \[ 
-p = \sum_{x=0}^1 P(X=x) + \sum_{x=9}^{10} P(X=x) 
+p = P(X\le 1) + P(X \ge 9)
 = \Sexpr{p} \approx \Sexpr{round(p,2)}
 \]
-where $P(X=x)$ is the probability mass function for a binomial distribution with
-\Sexpr{n} attempts and probabability of success $\theta=0.5$. 
+where $X \sim Bin(\Sexpr{n}, \Sexpr{theta0})$. 
+\pause
+We reject the null hypothesis of a binomial distribution with \Sexpr{n} attempts
+and probability of success 0.5.
 
-\vspace{0.1in} \pause
+\vspace{0.2in} \pause
 
 <<coin_flip_test2,echo=FALSE>>=
 theta0 = 0.5
@@ -272,11 +276,13 @@ p = prop.test(y,n)
 
 If we flip the coin 1000 times and obtain 530 heads, the pvalue is 
 \[ 
-p = \sum_{x=0}^{470} P(X=x) + \sum_{x=530}^{100} P(X=x) 
+p = P(X\le 470) + P(X \ge 530) 
 = \Sexpr{p$p.value} \approx \Sexpr{round(p$p.value,2)}
 \]
-where $P(X=x)$ is the probability mass function for a binomial distribution with
-1000 attmpts and probabability of success $\theta=0.5$. 
+where $X \sim Bin(\Sexpr{n}, \Sexpr{theta0})$. 
+\pause 
+We fail to reject the null hypothesis of a binomial distribution with \Sexpr{n} 
+attempts and probability of success 0.5.
 \end{frame}
 
 
@@ -291,14 +297,14 @@ Y_i \ind N(\mu,\sigma^2)
 \]
 and we want to test 
 \[ 
-H_0: \mu = \mu_0
+H_0: \mu = m_0
 \]
-for some value $\mu_0$ (usually 0). 
+for some value $m_0$ (usually 0). 
 
 \vspace{0.1in} \pause
 
 The test statistic is 
-\[ t = \frac{\overline{y} - \mu_0}{s/\sqrt{n}} \]
+\[ t = \frac{\overline{y} - m_0}{s/\sqrt{n}} \]
 which has a $t_{n-1}$ distribution if the null hypothesis is true. 
 
 \vspace{0.1in} \pause
@@ -324,36 +330,36 @@ because $t$ distributions are symmetric around 0.
 <<clock_speed_data, echo=FALSE>>=
 n = 15
 ybar = 1.78
-mu0 = 1.8
+m_0 = 1.8
 sd = 0.05
-t = (ybar-mu0)/(sd/sqrt(n))
+t = (ybar-m_0)/(sd/sqrt(n))
 p = pt(-abs(t), n-1)
 @
 
 
-In a CPU fabrication facility, the target clock rate is \Sexpr{mu0} GHz. 
+In a CPU fabrication facility, the target clock rate is \Sexpr{m_0} GHz. 
 \pause
 A random sample of \Sexpr{n} chips had an average clock rate of \Sexpr{ybar} 
 GHz with a sample standard deviation of \Sexpr{sd} GHz. 
 \pause
-Is there any evidence that the average clock rate is not \Sexpr{mu0} GHz?
+Is there any evidence that the average clock rate is not \Sexpr{m_0} GHz?
 
 \vspace{0.1in} \pause
 
 Let $Y_i$ be the clock speed for chip $i$ and assume $Y_i\ind N(\mu,\sigma^2)$. 
 \pause
-Test the hypothesis $H_0: \mu = \Sexpr{mu0}$ GHz. 
+Test the hypothesis $H_0: \mu = \Sexpr{m_0}$ GHz. 
 
 \vspace{0.1in} \pause
 
 We have 
 \[ 
-t = \frac{\overline{y} - \mu_0}{s/\sqrt{n}} = 
-\frac{\Sexpr{ybar}-\Sexpr{mu0}}{\Sexpr{sd}/\sqrt{\Sexpr{n}}} = \Sexpr{t}
+t = \frac{\overline{y} - m_0}{s/\sqrt{n}} = 
+\frac{\Sexpr{ybar}-\Sexpr{m_0}}{\Sexpr{sd}/\sqrt{\Sexpr{n}}} = \Sexpr{t}
 \]
 and 
 \[ 
-p = 2P(T_{14} > |\Sexpr{t})| \approx \Sexpr{round(p,3)}.
+p = 2P(T_{14} > |\Sexpr{t}|) \approx \Sexpr{round(p,3)}.
 \]
 Thus we fail to reject the null hypothesis at the $0.05$ significance level.
 
@@ -427,38 +433,11 @@ which is equal to one minus the probability of a type II error.
 
 
 
-% \begin{frame}
-% \frametitle{Power example}
-% 
-% \small
-% 
-% In our CPU fabrication facility example, suppose the actual average speed is
-% 1.78 GHz (which is below our specification of 1.8 GHz).
-% \pause
-% If we set the significance level to $a=0.05$, what is the power of the test when
-% 14 observations are taken?
-% 
-% \vspace{0.1in} \pause
-% 
-% In order to reject the test, we need the absolute value of our test statistic
-% to be greater than 2.145 since
-% \[
-% 0.05 = 2P(T_{14} > 2.145).
-% \]
-% \pause
-% Assuming $\mu=1.78$ GHz and $\sigma=0.05$ GHz, we have
-% \[
-% T'_{n-1} = \frac{\overline{Y}-\mu}{\sigma/\sqrt{n}} \sim t_{n-1}.
-% \]
-% \pause
-% Thus we have
-% \[ \begin{array}{rl}
-% \mbox{power}
-% &= P(\mbox{reject } H_0|H_0 \mbox{ is not true}) \\
-% &=
-% \end{array} \]
-% 
-% \end{frame}
+
+
+
+
+
 
 
 \subsection{One-sided tests}
@@ -504,29 +483,29 @@ reverse all the inequalities in the procedure.
 @
 
 
-In a CPU fabrication facility, the target clock rate is \Sexpr{mu0} GHz. 
+In a CPU fabrication facility, the target clock rate is \Sexpr{m_0} GHz.
 \pause
-A random sample of \Sexpr{n} chips had an average clock rate of \Sexpr{ybar} 
-GHz with a sample standard deviation of \Sexpr{sd} GHz. 
+A random sample of \Sexpr{n} chips had an average clock rate of \Sexpr{ybar}
+GHz with a sample standard deviation of \Sexpr{sd} GHz.
 \pause
-Is there any evidence that the average clock rate is \alert{less than} 
-\Sexpr{mu0} GHz?
+Is there any evidence that the average clock rate is \alert{less than}
+\Sexpr{m_0} GHz?
 
 \vspace{0.1in} \pause
 
-Let $Y_i$ be the clock speed for chip $i$ and assume $Y_i\ind N(\mu,\sigma^2)$. 
+Let $Y_i$ be the clock speed for chip $i$ and assume $Y_i\ind N(\mu,\sigma^2)$.
 \pause
-Test the hypothesis $H_0: \mu \ge \Sexpr{mu0}$ GHz. 
+Test the hypothesis $H_0: \mu \ge \Sexpr{m_0}$ GHz.
 
 \vspace{0.1in} \pause
 
-We previously found the estimator $\hat\mu = \Sexpr{ybar}$ and the pvalue for 
-the test $H_0 = \Sexpr{mu0}$ GHz as
-\[ 
+We previously found the estimator $\hat\mu = \Sexpr{ybar}$ and the pvalue for
+the test $H_0 = \Sexpr{m_0}$ GHz as
+\[
 p = 2P(T_{14} > |\Sexpr{t}| \approx \Sexpr{round(p,3)}
 \]
-Since $\Sexpr{ybar} < \Sexpr{mu0}$, we divide this pvalue in half and thus our
-one-sided pvalue is 
+Since $\Sexpr{ybar} < \Sexpr{m_0}$, we divide this pvalue in half and thus our
+one-sided pvalue is
 \[
 p = P(T_{14} < -|\Sexpr{t})| \approx \Sexpr{round(p/2,3)}
 \]
@@ -568,6 +547,41 @@ hypothesis.
 
 
 
+\subsection{Summary}
+\begin{frame}
+\frametitle{}
+
+\tiny
+
+In large samples ($p=2P(Z\le -|z|)$), here are some possibilities
+
+\[ \begin{array}{lcc}
+\textrm{Assumed model} & \textrm{Null hypothesis} & \textrm{Test statistic ($z$)}  \\
+\hline
+X_i \ind Ber(\theta) & \theta = p_0 & \frac{\overline{X}-p_0}{\sqrt{\frac{\overline{X}(1-\overline{X})}{n}}} \\ \\
+X_i \ind Ber(\theta_X), \,  Y_j \ind Ber(\theta_Y) & \theta_X-\theta_Y = d_0 & 
+\frac{\overline{X}-\overline{Y}-d_0}{\sqrt{\frac{\overline{X}(1-\overline{X})}{n_X}+\frac{\overline{Y}(1-\overline{Y})}{n_Y}}} \\ \\
+\hline
+X_i \ind N(\mu,\sigma^2) & \mu=m_0 & \frac{\overline{X}-m_0}{s/\sqrt{n}} \\ \\
+X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y = d_0 & \frac{\overline{X}-\overline{Y}-d_0}{s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}} \\ \\
+X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y = d_0 & \frac{\overline{X}-\overline{Y}-d_0}{\sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}}} \\
+\hline
+\end{array} \]
+
+\pause 
+In small samples ($p=2P(T\ge t)$), here are some possibilities
+
+\[ \begin{array}{lcc}
+\textrm{Assumed model} & \textrm{Null hypothesis} & \textrm{Test statistic $t$}  \\
+\hline
+X_i \ind N(\mu,\sigma^2) & \mu=m_0 & \frac{\overline{X}-m_0}{s/\sqrt{n}} \sim t_{n-1} \\ \\
+X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y = d_0 & \frac{\overline{X}-\overline{Y}-d_0}{s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}} \sim t_{n_X+n_Y-2} \\ \\
+X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y = d_0 & \frac{\overline{X}-\overline{Y}-d_0}{\sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}}} \stackrel{\cdot}{\sim} t_{v}\\
+\hline
+\end{array} \]
+
+
+\end{frame}
 
 
 \end{document}
