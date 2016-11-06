@@ -1,0 +1,68 @@
+\documentclass{article}
+
+\begin{document}
+
+\subsection{Beta model}
+\begin{frame}
+
+Introduce the beta distribution
+
+\end{frame}
+
+
+\frame{\frametitle{Derive the posterior - the easy way}
+	Suppose $Y\sim Bin(n,\theta)$ and $\theta\sim Be(a,b)$, \pause then 
+	\[ \begin{array}{ll}
+	p(\theta|y) &\propto p(y|\theta)p(\theta) \pause \\
+	&\propto \theta^y(1-\theta)^{n-y} \theta^{a-1} (1-\theta)^{b-1} \pause \\
+	&= \theta^{a+y-1} (1-\theta)^{b+n-y-1} \pause \\
+	\end{array} \]
+\pause
+Thus $\theta|y \sim Be(\theta|a+y, b+n-y)$.
+}
+
+
+\begin{frame}
+\frametitle{Example data}
+
+Assume $Y\sim Bin(n,\theta)$ and $\theta\sim Be(1,1)$ (which is equivalent to Unif(0,1)). \pause If we observe three successes ($y=3$) out of ten attempts ($n=10$). \pause Then our posterior is $\theta|y\sim Be(1+3,1+10-3) \stackrel{d}{=} Be(4,8)$.
+
+\vspace{0.5in} \pause
+
+
+Note that a $Be(1,1)$ is equivalent to $p(\theta)=I(0<\theta<1)$\pause, i.e. 
+
+\[ p(\theta|y) \propto p(y|\theta)p(\theta) = p(y|\theta)I(0<\theta<1) \]
+\pause
+so it may seem that a reasonable approach to a default prior is to replace $p(\theta)$ by a 1 (times the parameter constraint). \pause We will see later that this depends on the parameterization.
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Posterior distribution}
+
+<<data>>=
+n = 10
+y = 3
+a = b = 1
+d = data.frame(x = seq(0,1,by=0.01)) %>% 
+  mutate(prior = dbeta(x,a,b),
+         "normalized likelihood" = dbeta(x, y, n-y),
+         posterior = dbeta(x, a+y, b+n-y))
+
+m = d %>%
+  gather(Distribution, density, -x)
+
+ggplot(m, aes(x, density, group = Distribution, linetype = Distribution, color= Distribution)) +
+  geom_line() +
+  theme(legend.position="bottom") +
+  theme_bw()
+@
+{\tiny Try it yourself at \url{https://jaradniemi.shinyapps.io/one_parameter_conjugate/}.}
+\end{frame}
+
+
+
+
+\end{document}
