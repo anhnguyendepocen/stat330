@@ -339,7 +339,9 @@ We decide to use the default prior
 p(\lambda) \propto 1/\lambda
 \]
 \pause
-then the posterior is 
+which looks like a $Ga(0,0)$ if that were a valid distribution. 
+\pause
+The posterior is 
 \[ 
 p(\lambda|y) \propto p(y|\lambda) p(\lambda) = 
 \lambda^n e^{-\lambda n\overline{y}} \lambda^{-1} =
@@ -416,9 +418,20 @@ was obtained by computing the inverse cdf.
 	\vspace{0.2in} \pause
 	
 	To create a normalized density from a proper unnormalized density, use 
-	\[ p(\theta|y) = \frac{f(\theta)}{c} \pause \]
-	to see that $p(\theta|y)$ is a proper normalized density \pause note that $c=\int f(\theta) d\theta$ is not a function of $\theta$\pause , then 
-	\[ \int p(\theta|y) d\theta \pause = \int \frac{f(\theta)}{\int f(\theta) d\theta} d\theta \pause = \int \frac{f(\theta)}{c} d\theta \pause = \frac{1}{c} \int f(\theta) d\theta \pause = \frac{c}{c} \pause = 1 \]
+\[ p(\theta|y) = \frac{f(\theta)}{c} 
+\quad \mbox{with} \quad
+c = \int f(\theta) d\theta.
+\]
+\pause
+To see that $p(\theta|y)$ is a proper normalized density \pause note that $c=\int f(\theta) d\theta$ is not a function of $\theta$\pause , then 
+\[ 
+\int p(\theta|y) d\theta \pause 
+= \int \frac{f(\theta)}{\int f(\theta) d\theta} d\theta \pause 
+= \int \frac{f(\theta)}{c} d\theta \pause 
+= \frac{1}{c} \int f(\theta) d\theta \pause 
+= \frac{c}{c} \pause 
+= 1 
+\]
 }
 
 
@@ -433,7 +446,7 @@ was obtained by computing the inverse cdf.
   
   \vspace{0.2in} \pause
   
-  The posterior, $\lambda|y \sim Ga(a+n, b+n\overline{y})$ (with $a=b=0$), is proper if $n>1$ and $\overline{y}>0$.
+  The posterior, $\lambda|y \sim Ga(a+n, b+n\overline{y})$ (with $a=b=0$), is proper if $n>0$ and $\overline{y}>0$.
 }
 
 
