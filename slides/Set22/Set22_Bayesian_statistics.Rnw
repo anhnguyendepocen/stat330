@@ -127,7 +127,7 @@ Terminology & Notation \\
 \hline 
 Posterior & $p(\theta|y)$ \\
 Prior & $p(\theta)$ \\
-Model & $p(y|\theta)$ \\
+Model (likelihood) & $p(y|\theta)$ \\
 Prior predictive distribution & $p(y)$ \\
 (marginal likelihood) & \\
 \hline
