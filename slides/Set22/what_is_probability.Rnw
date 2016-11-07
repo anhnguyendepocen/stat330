@@ -1,0 +1,184 @@
+\documentclass{article}
+
+\begin{document}
+
+
+
+\section{What is probability?}
+\begin{frame}
+\frametitle{What is probability?}
+
+\pause 
+
+Consider the following three typical uses of the word ``probability'':
+\begin{itemize}[<+->]
+\item What is the probability I will win on the come-out roll in craps?
+\item What is the probability my unborn child has Down's syndrome given that they tested positive in an initial screening?
+\item What is the probability the Green Bay Packers will win this year's superbowl?
+\end{itemize}
+\end{frame}
+
+
+\subsection{Frequency interpretation}
+\begin{frame}
+\frametitle{Win on the come-out roll in craps}
+
+To win on the come-out roll in craps requires that the sum of two fair six-sided die is either a 7 or an 11. \pause We calculated this probability earlier (based on equal probabilities of all simple outcomes) to be 2/9. \pause We likely meant that if we were to repeatedly roll the die, the long term proportion of wins (7s and 11s) would be 2/9\pause, i.e. 
+\[ \mbox{if }X_i = \left\{ 
+\begin{array}{ll} 1 & \mbox{if win on roll $i$} \\ 0 & \mbox{otherwise} \end{array} 
+\right.
+\pause\quad\mbox{then}\quad \lim_{n\to\infty} \frac{\sum_{i=1}^n X_i}{n} \to \frac{2}{9}.
+\]
+
+\begin{definition}
+The \alert{frequency} interpretation of probability is based on the relative frequency of an event (assumed to be performed in an identical manner).
+\end{definition}
+\end{frame}
+
+\begin{frame}
+\frametitle{Win on the come-out roll in craps}
+
+\begin{definition}
+The \alert{frequency} interpretation of probability is based on the relative frequency of an event (assumed to be performed in an identical manner).
+\end{definition}
+
+\vspace{0.2in} \pause
+
+Two problems with this frequency interpretation: \pause
+\begin{itemize}
+\item You cannot possibly throw the dice in an identical manner. \pause
+\item If I knew enough physics, I could model each throw \pause and tell you exactly what the result would be\pause, i.e. the only randomness is because the throws are not identical.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Down's syndrome}
+
+What is the probability my unborn child has Down's syndrome given that they tested positive in an initial screening?
+
+\vspace{0.2in} \pause
+
+Here the frequency interpretation makes no sense for two reasons:\pause
+\begin{itemize}
+\item There is only one child and thus no repeat of the experiment.
+\item There is no randomness: either the child has Down's syndrome or does not.
+\end{itemize}
+
+\vspace{0.2in} \pause
+
+Instead, we only have our own uncertainty about whether the child has Down's syndrome.
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Down's syndrome}
+
+Also, why are we only conditioning on the positive test result, shouldn't we condition on everything else that is important, e.g. age. \pause Then the probability we care about is 
+
+\[ P(D|+,\mbox{mother is 33}) = \frac{P(+|D,\mbox{mother is 33})P(D|\mbox{mother is 33})}{P(+|\mbox{mother is 33})}\]
+Now the specificity, sensitivity, and prevalence are all the relative frequency of the event for this subpopulation.
+
+\vspace{0.2in} \pause
+
+But what about other measured variables, e.g. Caucasian, lives in MN, of Scandanavian descent, etc. \pause Taken to its logical extreme, each probability becomes a statement about one single event\pause, e.g. for this individual. 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Superbowl Champions}
+
+What is the probability the Green Bay Packers win the Superbowl?
+
+\vspace{0.2in} \pause
+
+By similar arguments:
+\begin{itemize}
+\item There is only one Superbowl this year and only one Green Bay Packers. \pause
+\item Is the world random? \pause i.e. do we have free will? \pause If not, then (with enough time, computing power, money, etc) we could model the world and know what the result will be. \pause If yes, is there an objective probability that we could be estimating?
+\end{itemize}
+
+\end{frame}
+
+
+
+\subsection{Personal belief}
+\begin{frame}
+\frametitle{Personal belief}
+
+\begin{definition}
+A \alert{subjective probability} describes an individual's personal judgement about how likely a particular event is to occur.
+\end{definition}
+{\tiny \url{http://www.stats.gla.ac.uk/glossary/?q=node/488}}
+
+\vspace{0.2in} \pause
+
+
+Coherence of bets. The probability $p$ you assign to an event $E$ is the fraction at which you would exchange $p$ for a return of 1 if $E$ occurs.
+
+
+\vspace{0.2in} \pause
+
+Rational individuals can differ about the probability of an event by having different knowledge, i.e. $P(E|K_1) \ne P(E|K_2)$. \pause But given enough data, we might have $P(E|K_1,y) \approx P(E|K_2,y)$. 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Personal belief}
+
+Using a personal belief definition of probability, it is easy to reconcile the use of probability in common language:
+
+{\tiny
+\begin{itemize}[<+->]
+\item What is the probability I will win on the come-out roll in craps?
+\item What is the probability my unborn child has Down's syndrome given that they tested positive in an initial screening?
+\item What is the probability the Green Bay Packers will win this year's superbowl?
+\item What is the probability that global climate change is primarily driven by human activity?
+\item What is the probability the Higgs Boson exists?
+\end{itemize}
+}
+
+\vspace{0.2in} \pause
+
+and in the mathematical notation:
+\begin{itemize}[<+->]
+\item $p(\theta) \to p(\theta|y)$
+\item $p(H_1) \to p(H_1|y)$
+\item $p(\tilde{y}|y)$
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+\section{Why or why not Bayesian?}
+\begin{frame}
+\frametitle{Why or why not Bayesian?}
+
+Why do a Bayesian analysis?
+\begin{itemize}[<+->]
+\item Incorporate prior knowledge via $p(\theta)$
+\item Coherent, i.e. everything follows from specifying $p(\theta|y)$
+\item Interpretability of results, e.g. the probability the parameter is in $(L,U)$ is 95\%
+\end{itemize}
+
+\vspace{0.2in} \pause
+
+Why not do a Bayesian analysis?
+\begin{itemize}[<+->]
+\item Need to specify $p(\theta)$ 
+\item Computational cost
+\item Does not guarantee coverage, i.e. how well do the procedures work over all their uses
+\end{itemize}
+\end{frame}
+
+
+\end{document}
