@@ -233,7 +233,7 @@ we can interpret
 \begin{frame}
 \frametitle{Prediction for a Poisson model}
 
-If $Y\sim Po(\lambda)$ and $Ga(a,b)$, then the marginal distribution for $Y$ is
+If $Y|\lambda \sim Po(\lambda)$ and $\lambda \sim Ga(a,b)$, then the marginal distribution for $Y$ is
 \[ \begin{array}{rl}
 p(y) 
 &= \int p(y|\lambda)p(\lambda) d\lambda \\
@@ -244,7 +244,7 @@ p(y)
 \end{array} \]
 \pause
 which is a negative binomial distribution with parameters $a$ and $b$, i.e. 
-$NB(a,b)$. 
+$Y \sim NB(a,b)$. 
 
 \vspace{0.1in} \pause
 
@@ -260,17 +260,18 @@ $y_1,\ldots,y_n$ is $\tilde{y}\sim NB(a+n\overline{y}, b+n)$.
 
 <<pixel_defect>>=
 n = 10
-ybar = 1
+ybar = 1.1
 ytilde = 0:5
 prob = sum(dnbinom(ytilde, n*ybar, n/(n+1)))
 @
 
 The \href{https://en.wikipedia.org/wiki/ISO_13406-2}{ISO\_13406-2} standard calls for Class II
 LCD monitors to not have more than 5 Type 3 (stuck pixel: one or more sub-pixels 
-are always on or always off). 
+are always on or always off) per million pixels.
 \pause
-What is the probability that a new Class II monitor will have more than 5 Type 3 errors
-based on a sample of 10 monitors that had an average of 1 Type 3 errors? 
+What is the probability that a new Class II monitor will have more than 5 Type 
+3 errors based on a sample of 10 monitors that had an average of \Sexpr{ybar} Type 3 error 
+per million pixels? 
 
 \vspace{0.1in} \pause
 
@@ -310,19 +311,117 @@ The posterior under this reference prior is
 \qquad 
 \frac{1}{\sigma^2} \sim Ga\left(\frac{n-1}{2},\frac{(n-1)s^2}{2}\right). 
 \]
-  The marginal posterior for $\mu$ is 
-  \[ \mu|y \sim t_{n-1}(\overline{y}, s^2/n). \]
+The marginal posterior for $\mu$ can be derived from
+\[ 
+\frac{\mu - \overline{y}}{s/\sqrt{n}} \sim t_{n-1}.
+%\mu|y \sim t_{n-1}(\overline{y}, s^2/n) 
+\]
+
+\vspace{0.1in} \pause
   
-  \vspace{0.2in} \pause
-  
-  An equal-tailed $100(1-a)$\% credible inteval can be obtained via 
-  \[ \overline{y} \pm t_{n-1,a/2} s/\sqrt{n} \]
-  \pause 
-  This is exactly the same as the $100(1-a)$\% confidence inteval.
+An equal-tailed $100(1-a)$\% credible inteval can be obtained via 
+\[ \overline{y} \pm t_{n-1,a/2} s/\sqrt{n} \]
+\pause 
+which is exactly the same as the $100(1-a)$\% confidence inteval.
 
 \end{frame}
 
 
+
+\begin{frame}
+\frametitle{CPU Fabrication facility}
+
+<<clock_speed_data, echo=FALSE>>=
+n = 15
+ybar = 1.78
+m_0 = 1.8
+sd = 0.05
+t = (m_0-ybar)/(sd/sqrt(n))
+@
+
+
+In a CPU fabrication facility, the target clock rate is \Sexpr{m_0} GHz. 
+\pause
+A random sample of \Sexpr{n} chips had an average clock rate of \Sexpr{ybar} 
+GHz with a sample standard deviation of \Sexpr{sd} GHz. 
+\pause
+Is there any evidence that the average clock rate is less than \Sexpr{m_0} GHz?
+
+\vspace{0.1in} \pause
+
+Let $Y_i$ be the clock speed for chip $i$ and assume $Y_i\ind N(\mu,\sigma^2)$. 
+\pause
+Then
+\[ \begin{array}{rl}
+P(\mu<1.8|y) &= 
+P\left(\left. \frac{\mu-\overline{y}}{s/\sqrt{n}} < \frac{1.8-\Sexpr{ybar}}{\Sexpr{sd}/\sqrt{\Sexpr{n}}} \right|y\right) \\
+&= P(T_{\Sexpr{n-1}}<\Sexpr{round(t,2)}|y) \\
+&= \Sexpr{round(pt(t,n-1),2)}
+\end{array} \]
+\pause
+So it appears the evidence is reasonably strong that the average clock speed is
+less than \Sexpr{m_0} GHz.
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Prediction for a normal model}
+
+If $Y_1,\ldots,Y_n,\tilde{Y}|\mu,\sigma^2 \sim N(\mu,\sigma^2)$ and 
+\[ 
+\mu|\sigma^2,y \sim N(\overline{y}, \sigma^2/n) 
+\qquad 
+\frac{1}{\sigma^2} \sim Ga\left(\frac{n-1}{2},\frac{(n-1)s^2}{2}\right),
+\]
+where $\overline{y} = \frac{1}{n}\sum_{i=1}^n y_i$. 
+
+\vspace{0.1in} 
+
+Then the marginal distribution for $Y$ can be derived from 
+\[
+\frac{\tilde{Y}-\overline{y}}{s\sqrt{1+\frac{1}{n}}} \sim t_{n-1}.
+\]
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{CPU Fabrication facility}
+
+<<clock_speed_prediction, dependson="clock_speed_data", echo=FALSE>>=
+t = (m_0-ybar)/(sd*sqrt(1+1/n))
+@
+
+
+In a CPU fabrication facility, the target clock rate is \Sexpr{m_0} GHz. 
+\pause
+A random sample of \Sexpr{n} chips had an average clock rate of \Sexpr{ybar} 
+GHz with a sample standard deviation of \Sexpr{sd} GHz. 
+\pause
+What is the probability the next chip coming off the line will have a measured
+clock rate below \Sexpr{m_0} GHz?
+
+\vspace{0.1in} \pause
+
+Let $Y_i$ be the clock speed for chip $i$ and assume $Y_i\ind N(\mu,\sigma^2)$
+and, independently, $\tilde{Y}\sim N(\mu,\sigma^2)$. 
+\pause
+Then
+\[ \begin{array}{rl}
+P(\tilde{y}<1.8|y) &= 
+P\left(\left. \frac{\mu-\overline{y}}{s\sqrt{1+\frac{1}{n}}} < \frac{1.8-\Sexpr{ybar}}{\Sexpr{sd}\sqrt{1+\frac{1}{\Sexpr{n}}}} \right|y\right) \\
+&= P(T_{\Sexpr{n-1}}<\Sexpr{round(t,2)}|y) \\
+&= \Sexpr{round(pt(t,n-1),2)}
+\end{array} \]
+\pause
+This is lower than the previous, because there is a lot of variability in the 
+process. 
+
+\end{frame}
 
 
 % \begin{frame}
