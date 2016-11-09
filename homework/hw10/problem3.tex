@@ -4,7 +4,7 @@
     184	187	180	174	182	189	161	200	168	168
     
     \begin{enumerate}
-      \item Give the posterior distribution for $ \lambda | y$. Identify both the distribution form and the values of the parameters. 
+      \item Give the posterior distribution for $p( \lambda | y)$. Identify both the distribution form and the values of the parameters. 
       \item Find the point estimate $\hat{\lambda}_{Bayes}$. 
       \item Construct a 90\% credible interval for $\lambda$. 
       \item Find the value of $\tilde{\lambda}$ such that $P(\lambda>\tilde{\lambda})=0.3$.
@@ -12,7 +12,7 @@
 
     \ansfont{
       \begin{enumerate}
-        \item $\theta | y \sim Ga(n\bar{y}, n)$=Ga(1793, 10)
+        \item $p(\theta | y) \sim Ga(n\bar{y}, n)$=Ga(1793, 10)
         \item $\hat{\theta}_{Bayes}=\frac{n\bar{y}}{n}=\frac{1793}{10}\approx 179.3$
         \item A 90\% credible interval for $\theta$ is (171.10, 187.69). These are the 0.05 and 0.95 quantiles of a $Ga(1793,10)$ distribution. 
         \item
