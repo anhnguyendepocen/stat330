@@ -1,5 +1,11 @@
-  \item Suppose that the number hits to a website at time $t$ corresponds to a Poisson process with $X(t)\sim Po(\lambda t)$. Use the default prior  $p(\lambda) \propto 1/ \lambda$. Derive the posterior distribution $p(\lambda | y)$.
+\item Suppose that the number hits to a website at time $t$ corresponds to a Poisson process with $Y(t)\sim Po(\lambda t)$. Use the default prior  $p(\lambda) \propto 1/ \lambda$. Derive the posterior distribution $p(\lambda | y)$ when you observed $y$ hits up to time $t$. 
 
 
-    \ansfont{
-    }
+\ansfont{
+\[ \begin{array}{rl}
+p(\lambda|y) &\propto p(y|\lambda)p(\lambda) \\
+&\propto (\lambda t)^{y} e^{-\lambda t} \frac{1}{\lambda} \\
+&\propto \lambda^{y-1} e^{-\lambda t}
+\end{array} \]
+Thus the posterior is a $Ga(y,t)$. 
+}
