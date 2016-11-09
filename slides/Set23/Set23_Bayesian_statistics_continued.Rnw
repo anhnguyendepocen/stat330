@@ -305,11 +305,11 @@ prior $p(\mu,\sigma^2) \propto 1/\sigma^2$.
 
 \vspace{0.2in} \pause
 
-The posterior under this reference prior is 
+The posterior under this default prior is 
 \[ 
 \mu|\sigma^2,y \sim N(\overline{y}, \sigma^2/n) 
 \qquad 
-\frac{1}{\sigma^2} \sim Ga\left(\frac{n-1}{2},\frac{(n-1)s^2}{2}\right). 
+\frac{1}{\sigma^2}|y \sim Ga\left(\frac{n-1}{2},\frac{(n-1)s^2}{2}\right). 
 \]
 The marginal posterior for $\mu$ can be derived from
 \[ 
@@ -461,6 +461,24 @@ process.
 %   which is exactly 
 % \end{frame}
 
+
+\begin{frame}
+\frametitle{Summary}
+
+{\small
+\[ \begin{array}{llll}
+\mbox{Model} & \mbox{Conjugate Prior} & \mbox{Default values} & \mbox{Posterior} \\
+\hline
+Y\sim Bin(n,\theta) & \theta \sim Be(a,b) & a=b=1 & \theta|y \sim Be(a+y,a+n-y) \\
+Y_i \ind Po(\lambda) & \lambda \sim Ga(a,b) & a=b=0 & \lambda|y \sim Ga(n\overline{y}, n) \\
+Y_i \ind Exp(\lambda) & \lambda \sim Ga(a,b) & a=b=0 & \lambda|y \sim Ga(n, n\overline{y}) \\ \\
+Y_i \ind N(\mu,\sigma^2) & \multicolumn{2}{c}{p(\mu,\sigma^2) \propto 1/\sigma^2} & \mu|\sigma^2,y \sim N(\overline{y}, \sigma^2/n) \\
+&&&
+\frac{1}{\sigma^2}|y \sim Ga\left(\frac{n-1}{2},\frac{(n-1)s^2}{2}\right) \\
+\hline
+\end{array} \]
+}
+\end{frame}
 
 
 \end{document}
