@@ -1,0 +1,19 @@
+  \item 
+    In assessing the desirability of windowless schools, officials asked 144
+    elementary school children whether or not they like windows in their
+    classrooms. 43 children preferred windows. The officials decide to use the Bayesian model $y_i\stackrel{iid}{\sim}Ber(\theta)$, with the default prior $\theta \sim Be(1,1)$.
+    \begin{enumerate}
+      \item Give the posterior distribution for $ \theta | y$. Identify both the distribution form and the values of the parameters. 
+      \item Find the point estimate $\hat{\theta}_{Bayes}$. 
+      \item Construct a 95\% credible interval for $\theta$. 
+      \item Find $P(0.2<\theta<0.25)$.
+\end{enumerate}
+
+    \ansfont{
+      \begin{enumerate}
+        \item $\theta | y \sim Be(1+n\bar{y}, 1+n-n\bar{y})$=Be(44, 102)
+        \item $\hat{\theta}_{Bayes}=\frac{1+n\bar{y}}{2+n}=\frac{44}{44+102}\approx 0.30$
+        \item A 95\% credible interval for $\theta$ is (0.1745, 0.2940). These are the 0.025 and 0.975 quantiles of a $Be(44,146)$ distribution. 
+        \item
+      \end{enumerate}
+    }

@@ -1,0 +1,19 @@
+  \item The time between calls to a customer helpline follows an exponential distribution, with parameter $\lambda$. The default prior is used, i.e. $p(\lambda) \propto 1/ \lambda$.  Suppose that the following sample of independent times (in minutes) between calls is observed:
+    
+3.4, 2.2, 0.3, 5.4, 6.6. 
+    
+    \begin{enumerate}	 
+      \item Give the posterior distribution for $\lambda | y$. Identify both the distribution form and the values of the parameters. 
+      \item Find the point estimate $\hat{\lambda}_{Bayes}$. 
+      \item Construct a 95\% credible interval for $\lambda$. 
+      \item Find $P(\lambda<0.15)$.
+\end{enumerate}
+     
+    \ansfont{
+      \begin{enumerate}
+        \item $\lambda | y \sim Ga(n, n\bar{y})=Ga(5, 17.9)$
+        \item $\hat{\lambda}_{Bayes}=\frac{n}{n\bar{y}}=\frac{5}{17.9}\approx 0.28$
+        \item A 95\% credible interval for $\lambda$ is (0.0907, 0.5721). These are the 0.025 and 0.975 quantiles of a $Ga(5,17.9)$ distribution. 
+        \item
+      \end{enumerate}
+  }
