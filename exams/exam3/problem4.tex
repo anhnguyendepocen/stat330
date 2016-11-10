@@ -1,2 +1,39 @@
 %!TEX root = exam3.tex
-\item Problem 4
+\item You are working on a new photo compression algorithm. In a test set of 16 
+photos, you find an average compressed size of 1.8 Mb and a standard deviation
+of 0.31 Mb. The standard compressed size for this test set is 2.0 Mb.
+
+\begin{enumerate}
+\item Assume your compressed sizes are normally distributed and find a pvalue
+for the null hypothesis that the mean compressed size is actually 2.0 Mb. (7 pts)
+
+\ansfont{
+\[ 
+t = \frac{1.8-2.0}{0.31/\sqrt{16}} = -2.58
+\]
+and thus 
+\[ 
+p = 2P(T_{17} > 2.67) = 0.021
+\]
+From the table, we know that $p> 2\cdot 0.01 = 0.02$.
+}
+\vfill\vfill\vfill
+
+\item Draw a conclusion about the null hypothesis at significance level 0.01. (6 pts)
+
+\ansfont{
+At the 0.01 significance level we fail to reject the null hypothesis since the 
+pvalue is larger than 0.01. 
+}
+\vfill\vfill
+
+\item Construct a 95\% confidence interval for the true mean compressed size. (7 pts)
+
+\ansfont{
+\[
+1.8 \pm t_{15,0.025} 0.31/\sqrt{16} = (1.63,1.97)
+\]
+}
+\vfill\vfill\vfill
+
+\end{enumerate}
