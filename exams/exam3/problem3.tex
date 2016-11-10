@@ -1,2 +1,66 @@
 %!TEX root = exam3.tex
-\item Problem 3
+
+
+\item In the most recent Bloomberg poll before the election, of the 800 
+respondents 44\% of the respondents identified Clinton as their top choice 
+while 41\% identified Trump as their choice. 
+
+\begin{enumerate}
+\item Provide an approximate 95\% confidence interval for the true percentage of 
+Clinton supporters. (7 points)
+
+\ansfont{
+Let $Y_C$ be the number of Clinton supporters of the $n=800$ respondents and 
+assume $Y_C\sim Bin(n,\theta_C)$. Let $\hat{\theta}_C = Y_C/n$ and 
+$\hat{\theta}_C = 0.44$. Then an approximate 95\% confidence interval is 
+\[ 
+\frac{Y_C}{n} \pm z_{a/2} \sqrt{\frac{\hat{\theta}_C(1-\hat{\theta}_C}{n}} = 
+0.44 \pm 1.96 \cdot \sqrt{\frac{0.44\cdot 0.56}{800}} =
+(0.41,0.47)
+\]
+}
+\vfill
+\vfill
+
+\item Explain why we cannot calculate an approximate $100(1-a)$\% confidence 
+interval for the difference in proportions using the following formula. (3 pts)
+\[
+0.44 - 0.41 \pm z_{a/2} \sqrt{\frac{0.44(1-0.44)}{800}+\frac{0.41(1-0.41)}{800}}
+\]
+
+\ansfont{
+This formula is based on independence between the two samples but these responses
+are from the same poll and are therefore not independent. In particular,
+a respondent who indicating Clinton as their top choice could not indicate Trump
+as their top choice.
+}
+\vfill
+
+\item Let $Y_C$ and $Y_T$ be the number of respondents who indicated Clinton 
+and Trump as their top choices, respectively. Then $Y_C \sim Bin(n,\theta_C)$ 
+and $Y_T \sim Bin(n,\theta_T)$. Using the fact that 
+$Cov(Y_C,Y_T) = -n\theta_C \theta_T$, show that 
+\[
+Var\left( \frac{Y_C}{n} - \frac{Y_T}{n}\right) = 
+\frac{1}{n}\left[ \theta_C - \theta_C^2 + \theta_T-\theta_T^2 - \theta_C\theta_T \right]. \quad \mbox{(7 pts)}
+\]
+
+\ansfont{
+Need to derive
+}
+
+\vfill
+\vfill
+
+\item Based on the result in part (c), construct a 95\% confidence interval for the true difference in Clinton
+versus Trump $(\theta_C-\theta_T$). (3 pts)
+
+\ansfont{
+\[ 
+\hat{\theta}_C - \hat{\theta}_T \pm z_{a/2} \sqrt{\frac{1}{n}\left[ \hat\theta_C - \hat\theta_C^2 + \hat\theta_T-\hat\theta_T^2 - \hat\theta_C\theta_T \right]} =
+0.44 - 0.41 \pm 1.96 \sqrt{\frac{1}{800}\left[ 0.44 - 0.44^2 + 0.41-0.41^2 - 0.44\cdot0.41 \right]} = (-0.008, 0.068)
+\]
+}
+\vfill
+
+\end{enumerate}
