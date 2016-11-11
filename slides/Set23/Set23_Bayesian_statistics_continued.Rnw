@@ -137,7 +137,7 @@ we can interpret
 <<dropped_packets>>=
 n = 1000
 y = 15
-a = b = 0.5
+a = b = 1
 ap = a+y
 bp = b+n-y
 @
@@ -300,7 +300,7 @@ Thus, the probability of a defective monitor is small.
 \section{Normal model}
 \begin{frame}
 \frametitle{Normal model}
-Suppose we have data $Y_i \ind \sim N(\mu,\sigma^2)$ and we assume the default 
+Suppose we have data $Y_i \ind N(\mu,\sigma^2)$ and we assume the default 
 prior $p(\mu,\sigma^2) \propto 1/\sigma^2$.
 
 \vspace{0.2in} \pause
