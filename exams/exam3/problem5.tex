@@ -1,2 +1,28 @@
 %!TEX root = exam3.tex
-\item Problem 5
+  \item 
+Suppose that daily temperatures (in degrees Fahrenheit) in November in a town follow a normal distribution. Letting $y_i$ represent the temperature on day $i$, we have $y_i\stackrel{iid}{\sim}N(\mu, \sigma^2)$. Assume the default prior, $p(\mu, \sigma^2)\propto 1/\sigma^2$. A random sample of 8 days is taken, resulting in sample statistics $\bar{x}=41$ degrees, and $s=9$ degrees. 
+ 
+     
+    \begin{enumerate}
+      \item Construct a 95\% credible interval for $\mu$.  (7 points)
+      
+          \ansfont{
+ A 95\% credible interval for $\mu$ is $\bar{y}\pm t_{n-1, a/2}s/\sqrt{n}=41\pm2.36(9/\sqrt{8})=(33.48, 48.52)$
+    }
+    
+    \vfill
+      \item Find the $P(\mu>40|y)$. (6 points)
+      
+    \ansfont{
+ $P(\mu>40|y)=P\left(T_{7}>\frac{40-41}{9/\sqrt{8}}\right)=P(T_{7}>-0.31)\approx0.62$
+    }
+         \vfill  
+         
+     \item Find the probability that a randomly selected day has a temperature greather than 40 degrees. (6 points) \\
+    \ansfont{
+ $P(\tilde{y}>40|y)=P\left(T_{7}>\frac{40-41}{9/\sqrt{1+\frac{1}{8}}}\right)=P(T_{7}>-0.12)\approx0.545$
+    }
+   
+     
+\end{enumerate}
+\vfill
