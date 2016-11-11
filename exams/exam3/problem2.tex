@@ -1,2 +1,31 @@
 %!TEX root = exam3.tex
-\item Problem 2
+\item Suppose that $x_1, x_2, \ldots, x_n$ are independent and identically distributed, following a geometric($\theta$) distribution with probability mass function $f(x|\theta)=(1-\theta)^{x-1}\theta$, for some unknown $\theta$, $0\leq\theta\leq1$. 
+
+\begin{enumerate}
+\item Find the method of moments estimator for $\theta$. (6 points) \\
+\ansfont{ 
+$E(X)=\frac{1}{\theta},$ so $\hat{\theta}=\frac{1}{\bar{x}}$
+}
+\vfill
+
+
+\item Find the maximum likelihood estimator for $\theta$. (14 points) \\
+\ansfont{ 
+\begin{align*}
+L(\theta)&=\prod_{i=1}^{n}(1-\theta)^{x_-1}\theta \\
+l(\theta)&= log(1-\theta)^{\displaystyle\sum_{i=1}^n(x_i-1)}log\theta^n\\
+&=\displaystyle\sum_{i=1}^n(x_i-1)log(1-\theta)+n\log\theta \\
+&=\displaystyle\sum_{i=1}^nx_i log(1-\theta)-nlog(1-\theta)+n\log\theta
+\end{align*}
+Then
+$ \frac{dl(\theta)}{d\theta}=\frac{-n\bar{x}}{1-\theta}+\frac{n}{1-\theta}+\frac{n}{\theta}$. \\
+Setting $ \frac{dl(\theta)}{d\theta}=0$ and solving gives
+\begin{align*}
+ 0=-n\bar{x}\theta+n\theta+n(1-\theta).\\
+ \implies -n\bar{x}\theta+n=0 \\
+ \implies \hat{\theta}=\frac{1}{\bar{x}}
+ \end{align*}
+}
+\vfill
+
+\end{enumerate}

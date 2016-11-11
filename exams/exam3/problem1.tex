@@ -1,2 +1,27 @@
 %!TEX root = exam3.tex
-\item Problem 1
+\item An observer records the number of runs scored by a baseball team over 7 games, given below.
+
+1, 2, 2, 4, 5, 5, 9
+
+\begin{enumerate}
+\item Calculate the sample mean and sample variance. (7 points)
+
+\ansfont{ 
+$\bar{X}=\frac{1}{n}\displaystyle\sum_{i=1}^7X_i=4$ \\
+$\bar{S^2}=\frac{1}{n-1}\displaystyle\sum_{i=1}^7(X_i-\bar{x})^2=\frac{44}{6}=7.33$
+}
+\vfill
+\item Calculate the interquartile range. (6 points)
+
+\ansfont{ 
+Q1=2 and Q3=5, so IQR=3
+}
+\vfill
+\item If we assume that the number of runs the team scores in a game follows a $N(\mu, \sigma^2)$, distribution, what are the maximum likelihood estimates $\hat{\mu}$ and $\hat{\sigma}^2$, based on this sample? You do not need to derive the MLE's just give their values. (6 points)
+
+\ansfont{ 
+$\hat{\mu}=\bar{X}=4$ \\
+$\hat{\sigma}^2=\frac{1}{n}\displaystyle\sum_{i=1}^7(X_i-\bar{x})^2=\frac{44}{7}=6.285$
+}
+\vfill
+\end{enumerate}
