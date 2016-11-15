@@ -4,9 +4,9 @@
 For the prior  $\theta \sim Be(a,b)$,
 \[ \begin{array}{rl}
 p(\theta|y) &\propto \prod_{i=1}^n p(y_i|\theta)p(\theta) \\
-&\propto  \left(\prod_{i=1}^n(1-\theta)^{y_i}\theta \right) \theta^{a-1} (1-\theta)^{b-1}\\
-&\propto  (1-\theta)^{n\bar{y}}\theta^n\theta^{a-1} (1-\theta)^{b-1}\\
+&\propto  \left(\prod_{i=1}^n(1-\theta)^{y_i-1}\theta \right) \theta^{a-1} (1-\theta)^{b-1}\\
+&\propto  (1-\theta)^{n\bar{y}-n}\theta^n\theta^{a-1} (1-\theta)^{b-1}\\
 &\propto  \theta^{a+n-1}(1-\theta)^{b+n\bar{y}-1}\\
 \end{array} \]
-Thus the posterior is a $Be(a+n, b+n\bar{y})$. Letting $a=b=1$ gives a $Be(1+n, 1+n\bar{y})$ posterior distribution.
+Thus the posterior is a $Be(a+n, b+n\bar{y}-n)$. Letting $a=b=1$ gives a $Be(1+n, 1+n\bar{y}-n)$ posterior distribution.
 }
