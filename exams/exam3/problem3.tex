@@ -42,16 +42,16 @@ and $Y_T \sim Bin(n,\theta_T)$. Using the fact that
 $Cov(Y_C,Y_T) = -n\theta_C \theta_T$, show that 
 \[
 Var\left( \frac{Y_C}{n} - \frac{Y_T}{n}\right) = 
-\frac{1}{n}\left[ \theta_C(1 - \theta_C) + \theta_T(1-\theta_T) + \theta_C\theta_T \right]. \quad \mbox{(7 pts)}
+\frac{1}{n}\left[ \theta_C(1 - \theta_C) + \theta_T(1-\theta_T) + 2\theta_C\theta_T \right]. \quad \mbox{(7 pts)}
 \]
 
 \ansfont{
 \[ \begin{array}{rl}
 Var\left( \frac{Y_C}{n} - \frac{Y_T}{n}\right) 
 &= \frac{1}{n^2}Var(Y_C-Y_T) \\
-&= \frac{1}{n^2}\left[ Var(Y_C)+Var(Y_T)-Cov(Y_C,Y_T) \right] \\
-&= \frac{1}{n^2}\left[ n\theta_C(1-\theta_C)+n\theta_T(1-\theta_T)+n\theta_C \theta_T \right] \\
-&= \frac{1}{n}\left[ \theta_C(1 - \theta_C) + \theta_T(1-\theta_T) + \theta_C\theta_T \right]
+&= \frac{1}{n^2}\left[ Var(Y_C)+Var(Y_T)-2Cov(Y_C,Y_T) \right] \\
+&= \frac{1}{n^2}\left[ n\theta_C(1-\theta_C)+n\theta_T(1-\theta_T)+2n\theta_C \theta_T \right] \\
+&= \frac{1}{n}\left[ \theta_C(1 - \theta_C) + \theta_T(1-\theta_T) + 2\theta_C\theta_T \right]
 \end{array} \]
 }
 
@@ -68,16 +68,16 @@ Note that $\hat\theta_C = Y_C/n$ and $\hat\theta_T = Y_T/n$ and thus
 \quad
 \mbox{with estimated standard error}
 \quad
-\frac{1}{n}\left[ \hat\theta_C(1 - \hat\theta_C) + \hat\theta_T(1-\hat\theta_T) + \hat\theta_C\hat\theta_T \right]
+\sqrt{\frac{1}{n}\left[ \hat\theta_C(1 - \hat\theta_C) + \hat\theta_T(1-\hat\theta_T) + 2\hat\theta_C\hat\theta_T \right]}
 \]
 \[ \begin{array}{l}
-\hat{\theta}_C - \hat{\theta}_T \pm z_{a/2} \sqrt{\frac{1}{n}\left[ \hat\theta_C(1 - \hat\theta_C) + \hat\theta_T(1-\hat\theta_T) + \hat\theta_C\hat\theta_T \right]} \\
+\hat{\theta}_C - \hat{\theta}_T \pm z_{a/2} \sqrt{\frac{1}{n}\left[ \hat\theta_C(1 - \hat\theta_C) + \hat\theta_T(1-\hat\theta_T) + 2\hat\theta_C\hat\theta_T \right]} \\
 =
-0.44 - 0.41 \pm 1.96 \sqrt{\frac{1}{800}\left[ 0.44(1-0.44)+0.41(1-0.41)+0.44\cdot 0.41 \right]} \\
+0.44 - 0.41 \pm 1.96 \sqrt{\frac{1}{800}\left[ 0.44(1-0.44)+0.41(1-0.41)+2\cdot 0.44\cdot 0.41 \right]} \\
 = 
-% se = sqrt((0.44*(1-0.44)+0.41*(1-0.41)+0.44*0.41)/800)
+% se = sqrt((0.44*(1-0.44)+0.41*(1-0.41)+2*0.44*0.41)/800)
 % 0.44-0.41 + c(-1,1)*1.96*se
-(-0.027, 0.087)
+(-0.034, 0.094)
 \end{array} \]
 }
 \vfill
