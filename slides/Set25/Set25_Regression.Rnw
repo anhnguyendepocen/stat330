@@ -161,7 +161,7 @@ S_{XY} &= \sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y}) \\
 
 \vspace{0.1in} \pause
 
-The MLE and Bayes estimator (with prior $p(\beta_0,\beta_1,\sigma^2) \propto 1/\sigma^2)$) \pause is
+The MLE and Bayes estimator, with prior $p(\beta_0,\beta_1,\sigma^2) \propto 1/\sigma^2)$, \pause is
 \[ \begin{array}{rl}
 \hat\beta_1 &= \frac{S_{XY}}{S_{XX}} \\
 \hat\beta_0 &= \overline{y} - \hat\beta_1 \overline{x} \\
@@ -218,7 +218,8 @@ $\beta_1$, and $\sigma^2$ that maximize
 = -\frac{n}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (y_i - \beta_0 -\beta_1 x_i)^2 \\
  &= -\frac{n}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n e_i^2 \\
 \end{array} \]
-The values for $\hat\beta_0$ and $\hat\beta_1$ are the values that minimize $\sum_{i=1}^n r_i^2$
+The values for $\hat\beta_0$ and $\hat\beta_1$ are the values that minimize the
+sum of squared ``errors'' (SSE), $\sum_{i=1}^n r_i^2$, 
 and are sometimes referred to as the \alert{least squares estimator}.
 
 \end{frame}
@@ -246,6 +247,8 @@ ggplot(speed, aes(clock_MHz, fps)) +
 \begin{frame}
 \frametitle{Assumptions}
 
+\small
+
 The simple linear regression model can be written as 
 \[ 
 Y_i = \beta_0 + \beta_1 x_i + e_i, \qquad e_i \ind N(0,\sigma^2)
@@ -263,18 +266,24 @@ which indicates the following assumptions
 
 \pause
 
-These assumptions are typically checked by plotting residuals.
+These assumptions are typically checked by plotting residuals or a 
+standardized/studentized residual
+\[ 
+\frac{r_i}{\sqrt{Var[r_i]}} = \frac{r_i}{\hat\sigma\sqrt{1-h_{ii}}}
+\]
+where $h_{ii}$ is the $i$th diagonal element of 
+\[ 
+H = X(X^\top X)^{-1} X^\top.
+\]
 
 \end{frame}
 
 
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Default residual plots in R}
-<<diagnostic_plots, dependson="regression">>=
-opar = par(mfrow=c(2,3))
-plot(m, 1:6)
-par(opar)
+<<diagnostic_plots, dependson="regression", echo=TRUE>>=
+opar = par(mfrow=c(2,3)); plot(m, 1:6); par(opar)
 @
 \end{frame}
 
@@ -310,7 +319,7 @@ ggplot(sim, aes(.fitted, .resid)) +
 
 
 \begin{frame}
-\frametitle{Residuals vs index}
+\frametitle{Standardized residuals vs index}
 
 <<residuals_v_index, dependson="sim_data">>=
 add_index <- function(d) {
@@ -321,10 +330,10 @@ tmp <- sim %>%
          group_by(violation) %>%
          do(add_index(.))
 
-ggplot(tmp, aes(index, .resid)) + 
+ggplot(tmp, aes(index, .std.resid)) + 
   geom_point() +
   facet_wrap(~violation, scales="free") +
-  labs(x="Index", y="Residuals") +
+  labs(x="Index", y="Standardized Residual") +
   theme_bw()
   
 @
@@ -335,7 +344,7 @@ ggplot(tmp, aes(index, .resid)) +
 
 
 \begin{frame}
-\frametitle{qqplots}
+\frametitle{qqplot of standardized residuals}
 
 <<qqplots, depenndson="sim_data">>=
 qqline_extract <- function(d) {
@@ -351,9 +360,10 @@ qqline_data <- sim %>%
   do(qqline_extract(.)) %>%
   ungroup()
 
-ggplot(sim, aes(sample=y)) +
+ggplot(sim, aes(sample=.std.resid)) +
   stat_qq() +
-  # geom_abline(data=qqline_data, aes(intercept = int, slope = slope)) %>%
+  # geom_abline(data=qqline_data, aes(intercept = int, slope = slope)) +
+  geom_abline(intercept = 0, slope = 1) +
   facet_wrap(~violation, scales="free") +
   theme_bw()
 @
