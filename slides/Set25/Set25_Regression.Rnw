@@ -164,9 +164,14 @@ S_{XY} &= \sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y}) \\
 The MLE and Bayes estimator, with prior $p(\beta_0,\beta_1,\sigma^2) \propto 1/\sigma^2)$, \pause is
 \[ \begin{array}{rl}
 \hat\beta_1 &= \frac{S_{XY}}{S_{XX}} \\
-\hat\beta_0 &= \overline{y} - \hat\beta_1 \overline{x} \\
-\hat\sigma^2 &= \frac{S_{YY}}{n-2}
+\hat\beta_0 &= \overline{y} - \hat\beta_1 \overline{x} \pause \\
+\hat\sigma^2 &= \frac{RSS}{n-2}
 \end{array} \]
+\pause
+where 
+\[ 
+RSS = \sum_{i=1}^n (y_i-\hat{y}_i)^2 = \sum_{i=1}^n (y_i-\hat\beta_0-\hat\beta_1 x_i)^2. 
+\]
 
 \end{frame}
 
@@ -219,7 +224,7 @@ $\beta_1$, and $\sigma^2$ that maximize
  &= -\frac{n}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n e_i^2 \\
 \end{array} \]
 The values for $\hat\beta_0$ and $\hat\beta_1$ are the values that minimize the
-sum of squared ``errors'' (SSE), $\sum_{i=1}^n r_i^2$, 
+residual sum of squares (RSS), $\sum_{i=1}^n r_i^2$, 
 and are sometimes referred to as the \alert{least squares estimator}.
 
 \end{frame}
@@ -299,8 +304,8 @@ that violate simple linear regression assumptions:
 
 \vspace{0.1in} \pause
 
-\[ \begin{array}{rl}
-\mbox{assumption} & \mbox{true model} \pause \\
+\[ \begin{array}{ll}
+\mbox{assumption violation} & \mbox{true model} \pause \\
 \hline
 \mbox{constant variance} & e_i \ind N(0,x_i^2) \pause \\
 \mbox{independent} & e_i \stackrel{\phantom{ind}}{\sim} N(0.99 e_{i-1}, 1) \pause \\
@@ -309,6 +314,9 @@ that violate simple linear regression assumptions:
 \hline
 \end{array} \]
 
+\pause
+
+Two simulated data sets that have no violations are also included. 
 
 \end{frame}
 
@@ -320,12 +328,15 @@ sim <- data.frame(x = runif(100, 0, 3)) %>%
     constant_variance = rnorm(length(x), x, x),
     linear = rnorm(length(x), x^2),
     independent = x+arima.sim(list(ar=.99), length(x)),
-    normal = x+rt(length(x), 5)) %>%
+    normal = x+rt(length(x), 5),
+    no_violation1 = rnorm(length(x), x),
+    no_violation2 = rnorm(length(x), x)) %>%
   tidyr::gather(violation, y, -x) %>%
   group_by(violation) %>%
   do(broom::augment(lm(y~x,.))) %>%
   ungroup() %>%
-  mutate(violation = paste("Violation:", violation))
+  mutate(violation = paste(ifelse(grepl("no_",violation), "", "Violation:"), 
+  												 violation))
 @
 
 \begin{frame}
@@ -336,7 +347,7 @@ Fitted values: $\hat{Y}_i = \hat\beta_0 + \hat\beta_1 x_i$. \pause
 <<residuals_v_fitted, dependson="sim_data">>=
 ggplot(sim, aes(.fitted, .resid)) + 
   geom_point() +
-  facet_wrap(~violation, scales="free") +
+  facet_wrap(~violation, scales="free", ncol = 3, dir = "v") +
   labs(x="Fitted values", y="Residuals") +
   theme_bw()
 @
@@ -359,7 +370,7 @@ tmp <- sim %>%
 
 ggplot(tmp, aes(index, .std.resid)) + 
   geom_point() +
-  facet_wrap(~violation, scales="free") +
+  facet_wrap(~violation, scales="free", ncol = 3, dir = "v") +
   labs(x="Index", y="Standardized Residual") +
   theme_bw()
   
@@ -376,7 +387,7 @@ ggplot(tmp, aes(index, .std.resid)) +
 ggplot(sim, aes(x=.std.resid)) +
 	geom_histogram(aes(y=..density..)) + 
 	stat_function(fun = dnorm, color="gray") + 
-	facet_wrap(~violation) + 
+	facet_wrap(~violation, scales="free", ncol = 3, dir = "v") + 
 	theme_bw() +
 	labs(x="Standardized residual")
 @
@@ -405,7 +416,7 @@ ggplot(sim, aes(sample=.std.resid)) +
   stat_qq() +
   # geom_abline(data=qqline_data, aes(intercept = int, slope = slope)) +
   geom_abline(intercept = 0, slope = 1) +
-  facet_wrap(~violation, scales="free") +
+  facet_wrap(~violation, scales="free", ncol = 3, dir = "v") +
   theme_bw()
 @
 
