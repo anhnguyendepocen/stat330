@@ -249,6 +249,8 @@ ggplot(speed, aes(clock_MHz, fps)) +
 
 \small
 
+\vspace{-0.05in}
+
 The simple linear regression model can be written as 
 \[ 
 Y_i = \beta_0 + \beta_1 x_i + e_i, \qquad e_i \ind N(0,\sigma^2)
@@ -273,19 +275,44 @@ standardized/studentized residual
 \]
 where $h_{ii}$ is the $i$th diagonal element of 
 \[ 
-H = X(X^\top X)^{-1} X^\top.
+H = X(X^\top X)^{-1} X^\top
 \]
+where $X$ has a column of ones and a column of the $x_i$s.
 
 \end{frame}
 
 
-
+\subsection{Diagnostic plots}
 \begin{frame}[fragile]
 \frametitle{Default residual plots in R}
 <<diagnostic_plots, dependson="regression", echo=TRUE>>=
 opar = par(mfrow=c(2,3)); plot(m, 1:6); par(opar)
 @
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Diagnostic plots on simulated data}
+
+On the next few slides, common diagnostic plots are shown with simulated data 
+that violate simple linear regression assumptions:
+
+\vspace{0.1in} \pause
+
+\[ \begin{array}{rl}
+\mbox{assumption} & \mbox{true model} \pause \\
+\hline
+\mbox{constant variance} & e_i \ind N(0,x_i^2) \pause \\
+\mbox{independent} & e_i \stackrel{\phantom{ind}}{\sim} N(0.99 e_{i-1}, 1) \pause \\
+\mbox{linear} & Y_i \ind N(x_i^2,1) \pause \\
+\mbox{normal} & e_i \ind t_5 \pause \\
+\hline
+\end{array} \]
+
+
+\end{frame}
+
+
 
 <<sim_data, warning=FALSE>>=
 sim <- data.frame(x = runif(100, 0, 3)) %>%
@@ -342,6 +369,20 @@ ggplot(tmp, aes(index, .std.resid)) +
 
 
 
+\begin{frame}
+\frametitle{Histogram of standardized residuals}
+
+<<histogram, dependson="sim_data">>=
+ggplot(sim, aes(x=.std.resid)) +
+	geom_histogram(aes(y=..density..)) + 
+	stat_function(fun = dnorm, color="gray") + 
+	facet_wrap(~violation) + 
+	theme_bw() +
+	labs(x="Standardized residual")
+@
+
+\end{frame}
+
 
 \begin{frame}
 \frametitle{qqplot of standardized residuals}
@@ -371,6 +412,21 @@ ggplot(sim, aes(sample=.std.resid)) +
 \end{frame}
 
 
+\begin{frame}
+\frametitle{Regression statistics}
+
+We have or will discuss the following regression statistics
+\begin{itemize}
+\item $\hat\beta_0$, $\hat\beta_1$, and $\hat\sigma^2$
+\item confidence/credible intervals for $\hat\beta_0$ and $\hat\beta_1$
+\item t-statistics and pvalues for testing $\beta_0=0$ and $\beta_1=0$
+\item correlation and $R^2$
+\item case statistics: (standardized) residuals and fitted value $\hat{Y}_i$
+\end{itemize}
+
+\end{frame}
+
+
 
 \subsection{Interpretation}
 \begin{frame}
@@ -394,9 +450,9 @@ variable is 0.
 Also
 \[ \begin{array}{rl}
 E[Y_i|X_i=x+1] &= \beta_0 + \beta_1 x + \beta_1 \\
-E[Y_i|X_i=x\phantom{ + 1}] &= \beta_0 + \beta_1 x \\
+E[Y_i|X_i=x\phantom{ + 1}\,\,] &= \beta_0 + \beta_1 x \\
 \hline
-E[Y_i|X_i=x+1] - E[Y_i|X_i=x]&= \beta_1
+E[Y_i|X_i=x+1] - E[Y_i|X_i=x]&= \phantom{\beta_0 + \beta_1 x +}\,\,\beta_1
 \end{array} \]
 so the slope ($\beta_1$) is the expected increase in the response for each unit
 increase in the explanatory variable.
@@ -413,10 +469,10 @@ increase in the explanatory variable.
 
 \pause
 
-Thus, 
+Thus, the estimated
 \begin{itemize}
-\item The expected FPS is 5.6 when the clock speed is 0 MHz. \pause
-\item The expected increase in FPS is 0.07 for each 1 MHz increase in clock speed. 
+\item expected FPS is 5.6 when the clock speed is 0 MHz \pause and
+\item expected increase in FPS is 0.07 for each 1 MHz increase in clock speed. 
 \end{itemize}
 
 \vspace{0.1in} \pause
@@ -428,8 +484,86 @@ beyond the range of clock speeds where we have data.
 
 
 
+\begin{frame}
+<<regression_plot_expanded, dependson="gtx_fps">>=
+ggplot(speed, aes(clock_MHz, fps, label=card)) +
+  geom_label() +
+  geom_smooth(method='lm',formula=y~x, se=FALSE, fullrange=TRUE) +
+	xlim(0,1200) + 
+	ylim(0,130) + 
+  theme_bw()
+@
+\end{frame}
 
 
+\begin{frame}
+\frametitle{Uncertainty in the line}
+
+Using techniques discussed earlier this semester, we can derive confidence 
+and credible intervals, with the default prior $1/\sigma^2$, for $\beta_0$ and 
+$\beta_1$. \pause For linear regression the confidence/credible intervals are 
+\[ 
+\hat\beta_0 \pm t_{n-2,a/2} \hat\sigma \sqrt{\frac{1}{n} + \frac{\overline{x}^2}{S_{XX}}}
+\]
+\pause
+and 
+\[ 
+\hat\beta_1 \pm t_{n-2,a/2} \hat\sigma \sqrt{\frac{1}{S_{XX}}}.
+\]
+\pause
+We can also calculate a confidence/credible interval for $E[Y|X=x]$ which is 
+\[
+\hat\beta_0+\hat\beta_1 x \pm t_{n-2,a/2} \hat\sigma \sqrt{\frac{1}{n} + \frac{(x-\overline{x})^2}{S_{XX}}}.
+\]
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Pvalues}
+
+Since 
+\[ 
+\frac{\hat\beta_0 - \beta_0}{\hat\sigma \sqrt{\frac{1}{n} + \frac{\overline{x}^2}{S_{XX}}}} \sim t_{n-2} \pause
+\qquad\mbox{and}\qquad
+\frac{\hat\beta_1 - \beta_1}{\hat\sigma \sqrt{\frac{1}{S_{XX}}}} \sim t_{n-2},
+\]
+\pause 
+we can use these to construct hypothesis tests. 
+
+\vspace{0.1in} \pause
+
+For example, to test $H_0: \beta_1 = 0$ we can compute 
+\[
+\mbox{pvalue} = 2P\left(T_{n-2}>\left| \frac{\hat\beta_1}{\hat\sigma \sqrt{\frac{1}{S_{XX}}}} \right|\right).
+\]
+\pause
+Most statistical software will automatically calculate pvalues for the tests 
+$\beta_0=0$ and $\beta_1=0$.
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Regression inference in R}
+
+<<confidence_intervals, dependson="regression", echo=TRUE>>=
+confint(m, level=0.95)
+summary(m)
+@
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Regression line with uncertainty}
+<<regression_uncertainty, dependson="gtx_fps">>=
+ggplot(speed, aes(clock_MHz, fps, label=card)) +
+  geom_label() +
+  geom_smooth(method='lm',formula=y~x) +
+  theme_bw()
+@
+\end{frame}
 
 
 
