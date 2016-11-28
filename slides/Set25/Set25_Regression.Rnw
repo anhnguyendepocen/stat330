@@ -177,7 +177,7 @@ The MLE and Bayes estimator (with prior $p(\beta_0,\beta_1,\sigma^2) \propto 1/\
 \begin{frame}[fragile]
 \frametitle{Regression in R}
 <<regression, dependson="gtx_fps", echo=TRUE>>=
-m <- lm(fps ~ clock_MHz, speed); m
+m <- lm(fps ~ clock_MHz, data=speed); m
 summary(m)
 @
 \end{frame}
@@ -190,6 +190,56 @@ ggplot(speed, aes(clock_MHz, fps, label=card)) +
   geom_smooth(method='lm',formula=y~x, se=FALSE) +
   theme_bw()
 @
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Regression minimizes the sum of squared residuals}
+
+\begin{definition}
+Rewrite the simple linear regression model as 
+\[ 
+Y_i = \beta_0 + \beta_1 x_i + e_i, \qquad e_i \ind N(0,\sigma^2).
+\]\pause
+where $e_i$ is the ``\alert{error}'' of the observation $y_i$ relative to the 
+``true'' line $\beta_0 + \beta_1 x_i$. \pause 
+\pause
+The \alert{residual} is $r_i=y_i - \hat\beta_0 -\hat\beta_1 x_i$. 
+\end{definition}
+
+\vspace{0.1in} \pause 
+
+In deriving the {\bf maximum} likelihood estimator (MLE), we find the $\beta_0$, 
+$\beta_1$, and $\sigma^2$ that maximize
+\[ \begin{array}{rl}
+\ell(\beta_0,\beta_1,\sigma^2) &
+= -\frac{n}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (y_i - \beta_0 -\beta_1 x_i)^2 \\
+ &= -\frac{n}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n e_i^2 \\
+\end{array} \]
+The values for $\hat\beta_0$ and $\hat\beta_1$ are the values that minimize $\sum_{i=1}^n r_i^2$
+and are sometimes referred to as the \alert{least squares estimator}.
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Visualizing the residuals}
+
+<<visualize_residuals, dependson="gtx_fps">>=
+m <- lm(fps~clock_MHz, speed)
+d <- broom::augment(m)
+ggplot(speed, aes(clock_MHz, fps)) +
+  geom_label(aes(label=card)) +
+  geom_smooth(method='lm',formula=y~x, se=FALSE) +
+  geom_segment(data = d, 
+               aes(x = clock_MHz, xend = clock_MHz, 
+                   y = .fitted, yend = .fitted+.resid),
+               color = "red") + 
+  theme_bw()
+@
+
 \end{frame}
 
 
@@ -250,53 +300,6 @@ beyond the range of clock speeds where we have data.
 
 
 
-\begin{frame}
-\frametitle{Regression minimizes the sum of squared residuals}
-
-\begin{definition}
-Rewrite the simple linear regression model as 
-\[ 
-Y_i = \beta_0 + \beta_1 x_i + e_i, \qquad e_i \ind N(0,\sigma^2).
-\]\pause
-where $e_i$ is the ``\alert{error}'' of the observation $y_i$ relative to the 
-``true'' line $\beta_0 + \beta_1 x_i$. \pause 
-\pause
-The \alert{residual} is $r_i=y_i - \hat\beta_0 -\hat\beta_1 x_i$. 
-\end{definition}
-
-\vspace{0.1in} \pause 
-
-In deriving the {\bf maximum} likelihood estimator (MLE), we find the $\beta_0$, 
-$\beta_1$, and $\sigma^2$ that maximize
-\[ \begin{array}{rl}
-\ell(\beta_0,\beta_1,\sigma^2) &
-= -\frac{n}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (y_i - \beta_0 -\beta_1 x_i)^2 \\
- &= -\frac{n}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n e_i^2 \\
-\end{array} \]
-The values for $\hat\beta_0$ and $\hat\beta_1$ are the values that minimize $\sum_{i=1}^n r_i^2$
-and are sometimes referred to as the \alert{least squares estimator}.
-
-\end{frame}
-
-
-
-\begin{frame}
-\frametitle{Visualizing the residuals}
-
-<<visualize_residuals, dependson="gtx_fps">>=
-m <- lm(fps~clock_MHz, speed)
-d <- broom::augment(m)
-ggplot(speed, aes(clock_MHz, fps)) +
-  geom_label(aes(label=card)) +
-  geom_smooth(method='lm',formula=y~x, se=FALSE) +
-  geom_segment(data = d, 
-               aes(x = clock_MHz, xend = clock_MHz, 
-                   y = .fitted, yend = .fitted+.resid),
-               color = "red") + 
-  theme_bw()
-@
-
-\end{frame}
 
 
 
