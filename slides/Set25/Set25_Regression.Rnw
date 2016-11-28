@@ -23,11 +23,8 @@ options(width=120)
 @
 
 <<libraries, message=FALSE, warning=FALSE>>=
-library(reshape2)
-library(plyr)
+library(dplyr)
 library(ggplot2)
-library(xtable)
-library(rstan)
 @
 
 <<set_seed>>=
@@ -178,8 +175,12 @@ The MLE and Bayes estimator (with prior $p(\beta_0,\beta_1,\sigma^2) \propto 1/\
 \frametitle{Regression in R}
 <<regression, dependson="gtx_fps", echo=TRUE>>=
 m <- lm(fps ~ clock_MHz, data=speed); m
+@
+
+<<regression_summary, dependson="regression", echo=TRUE>>=
 summary(m)
 @
+
 \end{frame}
 
 
@@ -227,16 +228,133 @@ and are sometimes referred to as the \alert{least squares estimator}.
 \begin{frame}
 \frametitle{Visualizing the residuals}
 
-<<visualize_residuals, dependson="gtx_fps">>=
-m <- lm(fps~clock_MHz, speed)
-d <- broom::augment(m)
+<<visualize_residuals, dependson="regression">>=
 ggplot(speed, aes(clock_MHz, fps)) +
   geom_label(aes(label=card)) +
   geom_smooth(method='lm',formula=y~x, se=FALSE) +
-  geom_segment(data = d, 
+  geom_segment(data = broom::augment(m), 
                aes(x = clock_MHz, xend = clock_MHz, 
                    y = .fitted, yend = .fitted+.resid),
                color = "red") + 
+  theme_bw()
+@
+
+\end{frame}
+
+
+\subsection{Assumptions}
+\begin{frame}
+\frametitle{Assumptions}
+
+The simple linear regression model can be written as 
+\[ 
+Y_i = \beta_0 + \beta_1 x_i + e_i, \qquad e_i \ind N(0,\sigma^2)
+\]
+which indicates the following assumptions
+\begin{itemize}[<+->]
+\item the expected response is a linear function of the explanatory variable and
+\item the errors are 
+  \begin{itemize}
+  \item independent, 
+  \item normally distributed, and
+  \item have a constant variance (homoscedasticity).
+  \end{itemize}
+\end{itemize}
+
+\pause
+
+These assumptions are typically checked by plotting residuals.
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Default residual plots in R}
+<<diagnostic_plots, dependson="regression">>=
+opar = par(mfrow=c(2,3))
+plot(m, 1:6)
+par(opar)
+@
+\end{frame}
+
+<<sim_data, warning=FALSE>>=
+sim <- data.frame(x = runif(100, 0, 3)) %>%
+  dplyr::mutate(
+    constant_variance = rnorm(length(x), x, x),
+    linear = rnorm(length(x), x^2),
+    independent = x+arima.sim(list(ar=.99), length(x)),
+    normal = x+rt(length(x), 5)) %>%
+  tidyr::gather(violation, y, -x) %>%
+  group_by(violation) %>%
+  do(broom::augment(lm(y~x,.))) %>%
+  ungroup() %>%
+  mutate(violation = paste("Violation:", violation))
+@
+
+\begin{frame}
+\frametitle{Residuals vs fitted values}
+
+Fitted values: $\hat{Y}_i = \hat\beta_0 + \hat\beta_1 x_i$. \pause
+
+<<residuals_v_fitted, dependson="sim_data">>=
+ggplot(sim, aes(.fitted, .resid)) + 
+  geom_point() +
+  facet_wrap(~violation, scales="free") +
+  labs(x="Fitted values", y="Residuals") +
+  theme_bw()
+@
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Residuals vs index}
+
+<<residuals_v_index, dependson="sim_data">>=
+add_index <- function(d) {
+  d %>% mutate(index = 1:nrow(d))
+}
+
+tmp <- sim %>%
+         group_by(violation) %>%
+         do(add_index(.))
+
+ggplot(tmp, aes(index, .resid)) + 
+  geom_point() +
+  facet_wrap(~violation, scales="free") +
+  labs(x="Index", y="Residuals") +
+  theme_bw()
+  
+@
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{qqplots}
+
+<<qqplots, depenndson="sim_data">>=
+qqline_extract <- function(d) {
+  vec <- d$.resid
+  y <- quantile(vec, c(.25,.75))
+  x <- qnorm(c(.025,.75))
+  data_frame(slope = diff(y)/diff(x)) %>%
+    mutate(int = y[1L] - slope*x[1L])
+}
+
+qqline_data <- sim %>%
+  group_by(violation) %>%
+  do(qqline_extract(.)) %>%
+  ungroup()
+
+ggplot(sim, aes(sample=y)) +
+  stat_qq() +
+  # geom_abline(data=qqline_data, aes(intercept = int, slope = slope)) %>%
+  facet_wrap(~violation, scales="free") +
   theme_bw()
 @
 
@@ -279,8 +397,8 @@ increase in the explanatory variable.
 
 \begin{frame}[fragile]
 \frametitle{FPS example interpretation}
-<<regression2, dependson="gtx_fps", echo=TRUE>>=
-m <- lm(fps ~ clock_MHz, speed); m
+<<regression2, dependson="regression", echo=TRUE>>=
+<<regression>>
 @
 
 \pause
