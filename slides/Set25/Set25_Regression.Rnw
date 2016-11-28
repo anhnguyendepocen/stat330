@@ -1,0 +1,306 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set 25 - Simple linear regression}
+
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=7, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE>>=
+library(reshape2)
+library(plyr)
+library(ggplot2)
+library(xtable)
+library(rstan)
+@
+
+<<set_seed>>=
+set.seed(1)
+@
+
+
+
+\frame{\maketitle}
+
+\begin{frame}
+\frametitle{Bivariate response}
+
+The situations we have contemplated thus far have a single variable, \pause
+e.g. 
+\begin{itemize}
+\item a binary indicator of a website begin operational, \pause 
+\item the waiting time until the next arrival, \pause or
+\item the number of dead pixels in a monitor.
+\end{itemize}
+
+\pause
+
+Or a single variable through time, e.g. 
+\begin{itemize}
+\item the number of people standing in a line, \pause
+\item the number of jobs in a print queue, \pause or
+\item the number of CPU wafers in a fabrication facility. 
+\end{itemize}
+
+\pause
+
+But what if you have pairs of variables, e.g. 
+\begin{itemize}
+\item CPU speed and the time necessary to complete a specific task, \pause
+\item time of day and number of visitors currently on a website, \pause or
+\item number of bugs per line of code and the person who wrote the code.
+\end{itemize}
+
+\pause
+And your interest is the relationship between the two variables?
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{}
+\setkeys{Gin}{width=\textwidth}
+\includegraphics{gtx-960-benchmark-2}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Average FPS vs clock speed}
+
+<<gtx_fps>>=
+speed = readr::read_csv("clock.csv")
+@
+
+<<dependson="gtx_fps", fig.width=7>>=
+ggplot(speed, aes(clock_MHz, fps, label=card)) + 
+#  geom_point() + 
+  geom_label() +
+  theme_bw() + 
+  labs(x="Clock speed (MHz)", y="Average frames per second")
+@
+
+\end{frame}
+
+
+
+\section{Simple linear regression}
+\begin{frame}
+\frametitle{Simple linear regression}
+
+Let 
+\begin{itemize}
+\item $Y_i$ be the response for unit $i$ \pause and 
+\item $x_i$ be the explanatory variable for unit $i$. 
+\end{itemize}
+
+\vspace{0.in} \pause
+
+The simple linear regression model assumes 
+\[ 
+Y_i|X_i=x_i \ind N(\beta_0 + \beta_1 x_i, \sigma^2)
+\]
+\pause
+and thus conditional on the model parameters ($\beta_0,\beta_1,\sigma^2$) \pause
+\[ \begin{array}{rl}
+E[Y_i|X_i = x_i] &=\pause \mu_i = \beta_0 + \beta_1 x_i \pause \\
+Var[Y_i|X_i=x_i] &= \sigma^2.
+\end{array} \]
+\pause
+The expectation is a line with y-intercept $\beta_0$ and slope $\beta_1$ \pause
+and the variability around the line is given by $\sigma^2$. 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{FPS example}
+
+Let 
+\begin{itemize}
+\item $Y_i$ be the (average) FPS for card $i$ \pause and 
+\item $x_i$ be the clock speed in MHz for card $i$.  
+\end{itemize}
+
+\vspace{0.in} \pause
+
+A simple linear regression of \alert{FPS on clock speed} assumes 
+\[ 
+Y_i|X_i=x_i \ind N(\beta_0 + \beta_1 x_i, \sigma^2).
+\]
+\pause
+Thus the expected FPS at a clock speed of $x$ MHz is 
+\[ 
+E[Y|X=x] = \beta_0+\beta_1 x.
+\]
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Parameter estimation}
+
+Define these sums of squares 
+\[ \begin{array}{rl}
+S_{XX} &= \sum_{i=1}^n (x_i-\overline{x})(x_i-\overline{x}) = \sum_{i=1}^n (x_i-\overline{x})^2 \\
+S_{YY} &= \sum_{i=1}^n (y_i-\overline{y})(y_i-\overline{y}) = \sum_{i=1}^n (y_i-\overline{y})^2 \\
+S_{XY} &= \sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y}) \\
+\end{array} \]
+
+\vspace{0.1in} \pause
+
+The MLE and Bayes estimator (with prior $p(\beta_0,\beta_1,\sigma^2) \propto 1/\sigma^2)$) \pause is
+\[ \begin{array}{rl}
+\hat\beta_1 &= \frac{S_{XY}}{S_{XX}} \\
+\hat\beta_0 &= \overline{y} - \hat\beta_1 \overline{x} \\
+\hat\sigma^2 &= \frac{S_{YY}}{n-2}
+\end{array} \]
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Regression in R}
+<<regression, dependson="gtx_fps", echo=TRUE>>=
+m <- lm(fps ~ clock_MHz, speed); m
+summary(m)
+@
+\end{frame}
+
+
+\begin{frame}
+<<regression_plot, dependson="gtx_fps">>=
+ggplot(speed, aes(clock_MHz, fps, label=card)) +
+  geom_label() +
+  geom_smooth(method='lm',formula=y~x, se=FALSE) +
+  theme_bw()
+@
+\end{frame}
+
+
+
+\subsection{Interpretation}
+\begin{frame}
+\frametitle{Interpretation}
+
+Recall 
+\[ 
+E[Y_i|X_i=x_i] = \beta_0 + \beta_1 x_i
+\]
+\pause
+thus 
+\[ 
+E[Y_i|X_i=0] = \beta_0
+\]
+\pause
+so the intercept ($\beta_0$) is the expected response when the explanatory 
+variable is 0. 
+
+\vspace{0.1in} \pause
+
+Also
+\[ \begin{array}{rl}
+E[Y_i|X_i=x+1] &= \beta_0 + \beta_1 x + \beta_1 \\
+E[Y_i|X_i=x\phantom{ + 1}] &= \beta_0 + \beta_1 x \\
+\hline
+E[Y_i|X_i=x+1] - E[Y_i|X_i=x]&= \beta_1
+\end{array} \]
+so the slope ($\beta_1$) is the expected increase in the response for each unit
+increase in the explanatory variable.
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{FPS example interpretation}
+<<regression2, dependson="gtx_fps", echo=TRUE>>=
+m <- lm(fps ~ clock_MHz, speed); m
+@
+
+\pause
+
+Thus, 
+\begin{itemize}
+\item The expected FPS is 5.6 when the clock speed is 0 MHz. \pause
+\item The expected increase in FPS is 0.07 for each 1 MHz increase in clock speed. 
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+The first statement is clearly ridiculous because we are \alert{extrapolating} 
+beyond the range of clock speeds where we have data. 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Regression minimizes the sum of squared residuals}
+
+\begin{definition}
+Rewrite the simple linear regression model as 
+\[ 
+Y_i = \beta_0 + \beta_1 x_i + e_i, \qquad e_i \ind N(0,\sigma^2).
+\]\pause
+where $e_i$ is the ``\alert{error}'' of the observation $y_i$ relative to the 
+``true'' line $\beta_0 + \beta_1 x_i$. \pause 
+\pause
+The \alert{residual} is $r_i=y_i - \hat\beta_0 -\hat\beta_1 x_i$. 
+\end{definition}
+
+\vspace{0.1in} \pause 
+
+In deriving the {\bf maximum} likelihood estimator (MLE), we find the $\beta_0$, 
+$\beta_1$, and $\sigma^2$ that maximize
+\[ \begin{array}{rl}
+\ell(\beta_0,\beta_1,\sigma^2) &
+= -\frac{n}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (y_i - \beta_0 -\beta_1 x_i)^2 \\
+ &= -\frac{n}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n e_i^2 \\
+\end{array} \]
+The values for $\hat\beta_0$ and $\hat\beta_1$ are the values that minimize $\sum_{i=1}^n r_i^2$
+and are sometimes referred to as the \alert{least squares estimator}.
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Visualizing the residuals}
+
+<<visualize_residuals, dependson="gtx_fps">>=
+m <- lm(fps~clock_MHz, speed)
+d <- broom::augment(m)
+ggplot(speed, aes(clock_MHz, fps)) +
+  geom_label(aes(label=card)) +
+  geom_smooth(method='lm',formula=y~x, se=FALSE) +
+  geom_segment(data = d, 
+               aes(x = clock_MHz, xend = clock_MHz, 
+                   y = .fitted, yend = .fitted+.resid),
+               color = "red") + 
+  theme_bw()
+@
+
+\end{frame}
+
+
+
+
+
+
+\end{document}
