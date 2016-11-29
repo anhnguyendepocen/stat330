@@ -1,1 +1,36 @@
-\item Enter problem 4 here
+\item For the data set in the file 'problem4.csv' use any software to fit the 
+regression of y on x and report the results.
+
+
+
+\begin{verbatim}
+> d = read.csv("problem4.csv")
+> (m = lm(y~x, d))
+
+Call:
+lm(formula = y ~ x, data = d)
+
+Coefficients:
+(Intercept)            x  
+     0.1589       0.8492  
+
+> summary(m)
+
+Call:
+lm(formula = y ~ x, data = d)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.06907 -0.30985  0.05305  0.36944  1.63078 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)   
+(Intercept)   0.1589     0.1889   0.841  0.41141   
+x             0.8492     0.2346   3.619  0.00196 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.8441 on 18 degrees of freedom
+Multiple R-squared:  0.4212,	Adjusted R-squared:  0.389 
+F-statistic:  13.1 on 1 and 18 DF,  p-value: 0.001962
+\end{verbatim}

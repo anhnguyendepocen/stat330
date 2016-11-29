@@ -1,1 +1,122 @@
-\item Enter problem 1 here
+\item Fit a simple linear regression model to the following data:
+  \begin{eqnarray*}
+    (x_1, y_1) &=& (1.0, 1.2)\\
+    (x_2, y_2) &=& (2.0, 1.6)\\
+    (x_3, y_3) &=& (4.0, 4.0)\\
+    (x_4, y_4) &=& (5.5, 6.0)\\
+    (x_5, y_5) &=& (7.5, 7.0)\\
+    (x_6, y_6) &=& (10.0, 10.7)\\
+  \end{eqnarray*}
+
+
+  \begin{enumerate}
+    \item Find the least squares estimates of $\beta_0$ and $\beta_1$.
+    \item What is the corresponding estimate of $\sigma^2$?
+    \item Test $H_0: \beta_0 = 0$ vs. $H_1: \beta_0 \neq 0$ at the $\alpha = 0.05$ level.
+    \item Test $H_0: \beta_1 = 0$ vs. $H_1: \beta_1 \neq 0$ at the $\alpha = 0.05$ level.
+    \item Suppose we want to predict the $y$-value at some point $x_{new} = 5$.\\
+      Find a 95\% confidence interval for $\beta_0 + \beta_1 (5)$.
+    \item Find a 95\% prediction interval for the associated $y$-value $Y_{new}$.
+    \item What proportion of the total variation in the $y$-values (suitably defined) is explained by the regression with the $x$-values?
+  \end{enumerate}
+
+\ansfont{
+  The first four parts use formulas that can be found in the ``Regression Day 1'' notes, though I don't start calling $\sum_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)^2$ the SSE until later. The formulas required for parts (e), (f), and (g) were discussed two lectures later, the notes on which are called ``Regression Day 2'' on Blackboard.
+  \begin{enumerate}
+    % PART A
+    \item First, calculate:
+      \begin{eqnarray*}
+        \bar{x} &=& 5\\
+        \bar{y} &=& 5.0833\\
+        \sum_i (x_i - \bar{x})^2 &=& 57.5\\
+        \sum_i (x_i - \bar{x})(y_i - \bar{y}) &=& 60.4
+      \end{eqnarray*}
+      Based on these, we get:
+      \begin{eqnarray*}
+        \hat{\beta}_1 &=& \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{\sum_i (x_i - \bar{x})^2}\\
+        &=& 1.0504\\
+        \hat{\beta}_0 &=& \bar{y} - \hat{\beta}_1 \bar{x}\\
+        &=& 5.0833 - (1.0504)(5)\\
+        &=& -0.169
+      \end{eqnarray*}
+    % PART B
+    \item When estimating $\sigma^2$, first calculate the SSE:
+      \begin{eqnarray*}
+        \text{SSE} &=& \sum_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)^2\\
+        &=& \sum_i (y_i + 0.169 - 1.0504 x_i)^2\\
+        &=& 1.002
+      \end{eqnarray*}
+      Divide by $n - 2 = 6 - 2 = 4$ to get $\hat{\sigma}^2 = \frac{1}{4} \text{SSE} = 0.251$.
+    % PART C
+    \item When imagining the $y$-values as random variables under the model $Y_i \stackrel{ind.}{\sim} \text{N}(\beta_0 + \beta_1 x_i, \sigma^2)$, we have:
+      \[ \frac{\hat{\beta}_0 - \beta_0}{\sqrt{\hat{Var}(\hat{\beta}_0)}} \sim t_4 \]
+      Where $\hat{Var}(\hat{\beta}_0)$ is the estimate of the variance of $\hat{\beta}_0$. Note that this is itself a random variable and is a function of the $Y_i$. Earlier on in the notes, I said that:
+      \[ Var(\hat{\beta}_0) = \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{\sum_i (x_i - \bar{x})^2} \right] \]
+      Since we don't know $\sigma^2$, but only its estimate $\hat{\sigma}^2$, the best we can do is estimate this quantity. We can do that by plugging in $\hat{\sigma}^2$ for $\sigma^2$:
+      \[ \hat{Var}(\hat{\beta}_0) = \hat{\sigma}^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{\sum_i (x_i - \bar{x})^2} \right] \]
+      In this problem, using the data we've been given, we can evaluate this to get:
+      \[ \hat{Var}(\hat{\beta}_0) = (0.251) \left[ \frac{1}{6} + \frac{5^2}{57.5} \right] = 0.151 \]
+      Now under $H_0: \hat{\beta}_0 = 0$, we have:
+      \[ \frac{\hat{\beta}_0 - \beta_0}{\sqrt{\hat{Var}(\hat{\beta}_0)}} = \frac{\hat{\beta}_0}{\sqrt{\hat{Var}(\hat{\beta}_0)}} \sim t_4 \]
+      Using our data, we can calculate the value of the test statistic:
+      \[ T = \frac{-0.169}{\sqrt{0.151}} = -0.435 \]
+      Now we need the critical value that we will compare with $T$. Since the problem specified that $\alpha = 0.05$, we need the $1 - \frac{\alpha}{2} = 0.975$ quantile of the $t_4$ distribution, that is, $t_{4, 0.975}$. You can find this on the $t$-table at the intersection of the $t_{0.975}$ column and the 4 df row. The value is $2.776$. Since:
+      \[ |T| < 2.776 \]
+      we can conclude that the $p$-value associated to this test statistic is greater than $\alpha = 0.05$, or alternatively that we do not have enough evidence to reject the null hypothesis that $\beta_0 = 0$ in favor of the alternative.
+    % PART D
+    \item The setup here is very similar, except now we need to use $\hat{Var}(\hat{\beta}_1)$ instead of the $\beta_0$ version. The $t_4$ quantile we need will actually be the same as before, since the distribution of the test statistic under $H_0$ is the same and we're using the same $\alpha$ level.
+      \begin{eqnarray*}
+        \hat{Var}(\hat{\beta}_1) &=& \frac{\hat{\sigma}^2}{\sum_i (x_i - \bar{x})^2}\\
+        &=& \frac{0.251}{57.5}\\
+        &=& 0.004\\
+        T &=& \frac{1.0504}{\sqrt{0.004}}\\
+        &=& 16.608
+      \end{eqnarray*}
+      Clearly $|T| > 2.776$, so we can conclude that the $p$-value is less than $\alpha = 0.05$, and therefore that we should reject $H_0$ and conclude $H_1: \beta_1 \neq 0$.
+    % PART E
+    \item In this problem, we want a confidence interval for $E[\hat{Y}_{new}] = \beta_0 + \beta_1 x_{new}$. Here we should first calculate:
+      \[ (x_{new} - \bar{x})^2 = (5 - 5)^2 = 0 \]
+      Since $\hat{Y}_{new}$ is a function of $\hat{\beta}_0$ and $\hat{\beta}_1$, it should be no surprise that we need to estimate its variance as well. The estimated variance of $\hat{Y}_{new}$ is:
+      \begin{eqnarray*}
+        s_{\hat{Y}}^2 &=& \frac{1}{n - 2} \text{SSE} \left[ \frac{1}{n} + \frac{(x_{new} - \bar{x})^2}{\sum_i (x_i - \bar{x})^2} \right]\\
+        &=& \frac{1}{n - 2} \text{SSE} \left( \frac{1}{n} \right)\\
+        &=& \frac{\hat{\sigma}^2}{6}\\
+        &=& 0.042
+      \end{eqnarray*}
+      Now we make a confidence interval using:
+      \begin{eqnarray*}
+        \hat{Y}_{new} \pm t_{4, 0.975} \sqrt{s^2_{\hat{Y}}} &=& \hat{\beta}_0 + \hat{\beta}_1(5) \pm (2.776) \sqrt{0.042}\\
+        &=& -0.169 + 5(1.0504) \pm 2.776(0.205)\\
+        &=& (4.514, 5.652)
+      \end{eqnarray*}
+    % PART F
+    \item The prediction interval for $Y_{new}$ will be different than the confidence interval above because our guess about where $Y_{new}$ will land has to incorporte both our uncertainty about where the line $\beta_0 + \beta_1 x$ is (taken into account in the confidence interval) and our natural uncertaintly about where $Y_{new}$ would be even if we knew $\beta_0$ and $\beta_1$ exactly (because $Y_{new} \sim \text{N}(\beta_0 + \beta_1 x_{new}, \sigma^2)$).\\
+
+      Note specifically that $\beta_0 + \beta_1 (5)$ is just a fixed (albeit unknown) number. Estimating it is akin to firing at a stationary target. \emph{Predicting} the \emph{random variable} $Y_{new}$ is like firing at a moving target; creating an interval that represents where it is likely to be (the prediction interval) needs to take this ``movement'' into account.\\
+
+      With this in mind, we get the (estimated) variance value needed for the prediction interval by taking $s_{\hat{Y}}^2$ and adding our estimate of $\sigma^2$ to it:
+      \begin{eqnarray*}
+        s_{pred}^2 &=& \hat{\sigma}^2 + s_{\hat{Y}}^2\\
+        &=& \frac{1}{n - 2} \text{SSE} + 0.042\\
+        &=& 0.251 + 0.042\\
+        &=& 0.293\\
+      \end{eqnarray*}
+      Now we can make the prediction interval similarly to how we made the confidence interval in (e):
+      \begin{eqnarray*}
+        \hat{Y}_{new} \pm t_{4, 0.975} \sqrt{s^2_{pred}} &=& \hat{\beta}_0 + \hat{\beta}_1(5) \pm (2.776) \sqrt{0.293}\\
+        &=& -0.169 + 5(1.0504) \pm 2.776(0.541)\\
+        &=& (3.581, 6.585)
+      \end{eqnarray*}
+    % PART G
+    \item Here we need to simply calculate $R^2$.
+      \begin{eqnarray*}
+        \text{SSCT} &=& \sum_i (y_i - \bar{y})^2\\
+        &=& \sum_i (y_i - 5.0833)^2\\
+        &=& 64.448\\
+        \text{SSM} &=& \text{SSCT} - \text{SSE}\\
+        &=& 64.448 - 1.002\\
+        &=& 63.446
+      \end{eqnarray*}
+      This gives us an $R^2$ of $\frac{63.446}{64.448} = 0.984$. That is, $98.4\%$ of the total variation in the $y$-values can be explained by the regression model with the $x$-values.
+  \end{enumerate}
+}

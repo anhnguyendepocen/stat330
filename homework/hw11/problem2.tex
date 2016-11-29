@@ -1,1 +1,37 @@
-\item Entry problem 2 here
+\item In a study of the relationship between the temperature change of certain type of chip and the duration it is in  operation, the following statistics were calculated from data obtained $n=75$ trials that the chips were tested. The operating durations of the trials had sample mean $32.2$ minutes and sample variance $6.4$ minutes; the temperature increases from the room temperature in each of the trials had sample mean $8.4$ degrees Fahrenheit and sample variance $2.8$. The sample covariance between temperature change and operation duration is $3.6$. \vspace{.2cm}
+\begin{enumerate}
+\item Estimate the linear regression equation predicting temperature change, $Y$, based on operation duration, $X$.
+%\item Use $R^2$ to evaluate the goodness of fit. Interpret $R^2$. 
+\item Predict the temperature change of the chip if it continues working for one hour. 
+\end{enumerate}  
+
+\ansfont{
+The quantities provided are 
+\begin{align*}
+\overline{x} &= \frac{1}{n} \sum_{i=1}^n x_i &=& 32.3 \mbox{ minutes} \\
+s_x^2 &= \frac{1}{n-1} \sum_{i=1}^n (x_i-\overline{x})^2 &=& 6.4 \mbox{ minutes}^2 \\
+\overline{y} &= \frac{1}{n} \sum_{i=1}^n y_i &=& 8.4 ^oF\\
+s_y^2&= \frac{1}{n-1} \sum_{i=1}^n (x_i-\overline{y})^2 &=& 2.8 (^oF)^2 \\
+s_{xy} &= \frac{1}{n-1} \sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y}) &=& 3.6
+\end{align*} 
+From these statistics, we can calculate the relevant quantities below: 
+\begin{enumerate}
+\item The regression equation is $E[Y_i] = \beta_0+\beta_1 X_i$ where $Y_i$ is the temperature change for chip $i$ and $X_i$ is the duration of operation for that chip. We can estimate $\beta_0$ and $\beta_1$ using the following formulas:
+\begin{align*} 
+\hat{\beta}_1 &= \frac{ \sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y})}{ \sum_{i=1}^n (x_i-\overline{x})^2} \\
+&= \frac{s_{xy}}{s_x^2} \\
+&= \frac{3.6}{6.4} = 0.5625 \\
+\hat{\beta}_0 &= \overline{y} - \hat{\beta}_1 \overline{x} = 8.4 - 0.5625\times 32.3 = -9.76875
+\end{align*}
+So the estimated equation is $E[Y_i] = -9.8 + 0.56 X_i$.
+
+% \item We can estimate the correlation $\rho$ and $R^2$ using the following formulas:
+% \begin{align*}
+% \rho &= \frac{s_xy}{s_x s_y} = \frac{3.6}{\sqrt{6.4} \sqrt{2.8}} = 0.85 \\
+% R^2 = &\rho^2 =  	0.72
+% \end{align*}
+% The linear model describes 72\% of the variability in temperature change. 
+
+\item To predict the temperature change for a chip under operation for one hour use the regression equation plugging in the time $x_i$, i.e. 60 minutes. So $E[Y_i] = -9.8 + 0.56 \times 60 = 23.8^o$F. 
+\end{enumerate}
+}
