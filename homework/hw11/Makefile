@@ -5,5 +5,9 @@ prereqs=problems.tex homework.tex ../topmatter.tex \
 all: STAT330_hw11.pdf STAT330_hw11_sol.pdf
 
 %.pdf: %.tex $(prereqs)
+	Rscript problem3.R
+	Rscript problem4.R
+	Rscript problem5.R
 	pdflatex $<
 	pdflatex $<
+	
