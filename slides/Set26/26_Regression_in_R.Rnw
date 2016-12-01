@@ -22,12 +22,15 @@ opts_chunk$set(comment=NA,
 options(width=120)
 @
 
-<<libraries, message=FALSE, warning=FALSE>>=
+<<libraries, message=FALSE, warning=FALSE, echo=FALSE>>=
 library(dplyr)
 library(ggplot2)
+library(GGally)
+library(gridExtra)
+library(broom)
 @
 
-<<set_seed>>=
+<<set_seed, echo=FALSE>>=
 set.seed(1)
 @
 
@@ -35,6 +38,39 @@ set.seed(1)
 
 \frame{\maketitle}
 
+
+\section{Regression example in R}
+
+\subsection{Introduction to R}
+\begin{frame}
+\frametitle{Introduction to R}
+
+Here is what you will need to do:
+
+\vspace{0.1in}
+
+\begin{enumerate}
+\item Install R from \url{https://www.r-project.org/}
+  \begin{itemize}
+  \item Select mirror \url{https://mirror.las.iastate.edu/CRAN/}
+  \item Use defaults \pause
+  \end{itemize}
+\item (Optional) Install RStudio from \url{https://www.rstudio.com/products/rstudio/download/}
+  \begin{itemize}
+  \item Use defaults \pause
+  \end{itemize}
+\item Start R or RStudio and do 
+<<install, eval=FALSE, size="scriptsize">>=
+install.packages(c("dplyr","ggplot2","GGally",
+                   "broom","gridExtra"))
+@
+which will install these packages and their dependencies.
+\end{enumerate}
+
+\end{frame}
+
+
+\subsection{Nuclear power plant task time}
 \begin{frame}[fragile]
 \frametitle{Task Completion Time}
 
@@ -64,6 +100,318 @@ TACOM complexity score   26-32
 \end{verbatim}
 
 \end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Data and descriptive statistics}
+
+<<data>>=
+# d = read.table("http://www.stat.ufl.edu/~winner/data/nuclear_time.dat",
+#                col.names = c("task","US","time","complexity"))
+# d %>% readr::write_csv(path="nuclear_time.csv")
+
+nuclear_time <- read.csv("nuclear_time.csv")
+nrow(nuclear_time)
+summary(nuclear_time)
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Exploratory analysis}
+<<eda, dependson="data">>=
+GGally::ggpairs(nuclear_time)
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Fix data types and replot}
+<<fix_data_types, dependson="data", message=FALSE, echo=FALSE>>=
+library(dplyr)
+nuclear_time_fixed <- nuclear_time %>%
+  mutate(task = factor(task),
+         US   = factor(ifelse(US, "US", "non-US")))
+GGally::ggpairs(nuclear_time_fixed, cardinality_threshold = 35)
+@
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Time vs complexity}
+
+<<time_v_complexity, fig.width=8>>=
+ggplot(nuclear_time, aes(x = complexity, y = time)) +
+  geom_point() +
+  theme_bw()
+@
+
+\end{frame}
+
+
+\subsection{Simple linear regression model}
+\begin{frame}[fragile]
+\frametitle{Simple linear regression model}
+For observation $i$, let 
+\begin{itemize}
+\item $y_i$ be the task time and
+\item $x_i$ be the task complexity. 
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+A simple linear regression (SLR) model of task time on task complexity assumes 
+\[ 
+Y_i \ind N(\beta_0+\beta_1 x_i, \sigma^2).
+\]
+
+\pause
+
+<<>>=
+slr_model <- lm(time ~ complexity, nuclear_time)
+slr_model
+@
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Meaningful intercept}
+For observation $i$, let 
+\begin{itemize}
+\item $y_i$ be the task time and
+\item $x_i$ be the task complexity \alert{minus 6}
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+A simple linear regression (SLR) model of task time on task complexity assumes 
+\[ 
+Y_i \ind N(\beta_0+\beta_1 x_i, \sigma^2).
+\]
+
+\pause
+
+<<slr_model, dependson="data">>=
+slr_model <- lm(time ~ I(complexity-6), nuclear_time)
+slr_model
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Check model assumptions}
+
+Let's check the simple linear regression model assumptions by plotting
+\begin{itemize}
+\item Residuals vs fitted values
+\item Residuals vs index
+\item Histogram of standardized residuals
+\item qqplot of standadized residuals
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+To get access to these values use 
+<<residual_df, dependson="slr_model">>=
+residual_df <- broom::augment(slr_model) %>%
+  mutate(index = 1:nrow(.))
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Residuals vs fitted values}
+<<residuals_v_fitted, dependson="residual_df">>=
+ggplot(residual_df, aes(x = .fitted, y = .resid)) + geom_point() + theme_bw()
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Residuals vs index}
+<<residuals_v_index, dependson="residual_df">>=
+ggplot(residual_df, aes(x = index, y = .resid)) + geom_point() + theme_bw()
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Histogram of standardized residuals}
+<<residual_histogram, dependson="residual_df">>=
+ggplot(residual_df, aes(x = .std.resid)) + geom_histogram(aes(y=..density..), bins = 30) + 
+  stat_function(fun=dnorm, args=list(mean=mean(residual_df$.std.resid), sd=sd(residual_df$.std.resid)), color="gray") + theme_bw()
+@
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{qqplot with line code}
+
+There is no good `ggplot2` version of qqplots with the line. 
+We will use the code provided on 
+\url{http://stackoverflow.com/questions/4357031/qqnorm-and-qqline-in-ggplot2/}:
+
+\vspace{0.1in} \pause
+
+<<qqplot_function>>=
+qqplot.data <- function (vec) # argument: vector of numbers
+{
+  # following four lines from base R's qqline()
+  y <- quantile(vec[!is.na(vec)], c(0.25, 0.75))
+  x <- qnorm(c(0.25, 0.75))
+  slope <- diff(y)/diff(x)
+  int <- y[1L] - slope * x[1L]
+
+  d <- data.frame(resids = vec)
+
+  ggplot(d, aes(sample = resids)) + stat_qq() + geom_abline(slope = slope, intercept = int)
+
+}
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{qqplot with line}
+<<qqplot, dependson=c("residual_df","qqplot_function")>>=
+qqplot.data(residual_df$.std.resid) + theme_bw()
+@
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Model assumption evaluation}
+From these diagnostic plots it seems clear that 
+
+\vspace{0.1in}
+
+\begin{itemize}
+\item the relationship is not linear
+\item variance increases with expected time
+\item non-independence in index
+\item non-normal errors
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Regression output in R}
+<<regression_output>>=
+summary(slr_model)
+confint(slr_model, level=0.95)
+@
+
+\end{frame}
+
+
+<<setup_conclusion, dependson="slr_model", echo=FALSE, purl=FALSE>>=
+m <- slr_model
+s <- summary(m)
+ci <- confint(slr_model, level=0.95)
+@
+
+\begin{frame}
+\frametitle{Scientific conclusion}
+
+For the following, I'm assuming task time was given in seconds and task 
+complexity has no units. 
+
+\vspace{0.1in} \pause
+
+We performed a simple linear regression model of task time on task complexity.
+At a task complexity of 6, the model estimated an expected task time of 
+\Sexpr{round(m$coefficients[1],0)} seconds with a 95\% confidence interval of
+(\Sexpr{round(ci[1,1])},\Sexpr{round(ci[1,2])}) seconds. \pause
+For each unit increase in task complexity, the model estimated an expected 
+increase in task time of 
+\Sexpr{round(m$coefficients[2])} 
+(\Sexpr{round(ci[2,1])}, \Sexpr{round(ci[2,2],0)}) seconds. \pause
+The error standard deviation was estimated to be \Sexpr{round(s$sigma)} seconds. 
+\pause
+Overall, task complexity accounted for \Sexpr{round(100*s$r.squared)}\% of the 
+variability in task time.
+\pause
+We caution against reading too much into these results as all simple linear 
+regression model assumptions appear violated. 
+We suggest future analyses consider transformations of the response and 
+explanatory variable as well as including additional explanatory variables into
+the model.
+\end{frame}
+
+
+%' \begin{frame}[fragile]
+%' \frametitle{Take logarithm of the response}
+%' 
+%' For observation $i$, let 
+%' \begin{itemize}
+%' \item $y_i$ be the \alert{natural logarithm of} task time and
+%' \item $x_i$ be the task complexity \alert{minus 6}
+%' \end{itemize}
+%' 
+%' \vspace{0.1in} \pause
+%' 
+%' A simple linear regression (SLR) model of task time on task complexity assumes 
+%' \[ 
+%' Y_i \ind N(\beta_0+\beta_1 x_i, \sigma^2).
+%' \]
+%' 
+%' \pause
+%' 
+%' <<log_slr_model, dependson="data">>=
+%' log_slr_model <- lm(log(time) ~ I(complexity-6), nuclear_time)
+%' @
+%' <<log_res_df, dependson="log_slr_model">>=
+%' log_res_df <- broom::augment(log_slr_model) %>%
+%'   mutate(index = 1:nrow(.))
+%' @
+%' 
+%' \end{frame}
+%' 
+%' 
+%' 
+%' \begin{frame}[fragile]
+%' \frametitle{All diagnostic plots}
+%' <<all_diagnostic_plots_setup, dependson=c("log_res_df", "qqplot_function")>>=
+%' g1 <- ggplot(log_res_df, aes(x = .fitted, y = .resid)) + 
+%'   geom_point() + 
+%'   theme_bw()
+%' 
+%' g2 <- ggplot(log_res_df, aes(x =   index, y = .resid)) + 
+%'   geom_point() + 
+%'   theme_bw()
+%' 
+%' g3 <- ggplot(log_res_df, aes(x = .std.resid)) + 
+%'   geom_histogram(aes(y=..density..), bins = 30) + 
+%'   stat_function(fun = dnorm, args = list(mean = mean(log_res_df$.std.resid), 
+%'                                          sd   = sd(log_res_df$.std.resid)), 
+%'                 color="gray") + 
+%'   theme_bw()
+%' 
+%' g4 <- qqplot.data(log_res_df$.std.resid) + 
+%'   theme_bw()
+%' @
+%' \end{frame}
+%' 
+%' 
+%' \begin{frame}[fragile]
+%' \frametitle{qqplot with line}
+%' <<log_diag_all, dependson=c("residual_df","qqplot_function")>>=
+%' gridExtra::grid.arrange(g1, g2, g3, g4, ncol=2)
+%' @
+%' \end{frame}
+
+
 
 
 \end{document}
