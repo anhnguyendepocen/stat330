@@ -1,0 +1,69 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set 26 - Regression in R}
+
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=7, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=TRUE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE>>=
+library(dplyr)
+library(ggplot2)
+@
+
+<<set_seed>>=
+set.seed(1)
+@
+
+
+
+\frame{\maketitle}
+
+\begin{frame}[fragile]
+\frametitle{Task Completion Time}
+
+\scriptsize
+
+From \url{http://www.stat.ufl.edu/~winner/data/nuclear_time.txt}:
+
+\vspace{0.1in}
+
+\begin{verbatim}
+Dataset: nuclear_time.dat
+
+Source: J. Park and S. Cho (2010). "Investigating the Effect of Task 
+Complexities on the Response Time of Human Operators to Perform
+Emergency Tasks of Nuclear Power Plants," Annals of Nuclear Energy,
+Vol. 37, pp. 1160-1171.
+
+Description: Times for NPP workers to complete 35 emergency tacks
+of varying complexity (measered by TACOM score). Tasks were completed by
+US and non-US workers.
+
+Variables/Columns
+Task     7-8
+Nationality   16  /* 1=US, 0=non-US   */
+Time to complete task    18-24
+TACOM complexity score   26-32
+\end{verbatim}
+
+\end{frame}
+
+
+\end{document}
