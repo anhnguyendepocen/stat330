@@ -402,10 +402,10 @@ Y_i \ind N(\beta_0+\beta_1 x_i, \sigma^2).
 \pause
 
 <<location_model, dependson="data">>=
-nuclear_time <- nuclear_time %>%
+nuclear_time2 <- nuclear_time %>%
 	mutate(location = factor(ifelse(US, "US", "non-US"), levels = c("non-US","US")))
 				 
-location_model <- lm(time ~ location, nuclear_time)
+location_model <- lm(time ~ location, nuclear_time2)
 @
 \end{frame}
 
@@ -539,6 +539,21 @@ the US group, and there is a lack of independence in the residuals.
 We suggest future analyses consider transformations of the response and 
 explanatory variable as well as including additional explanatory variables into
 the model.
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Results are exactly the same as a t-test}
+
+<<t_test, dependson="location_model">>=
+US    <- nuclear_time2 %>% filter(location == "US")
+nonUS <- nuclear_time2 %>% filter(location == "non-US")
+
+t <- t.test(US$time, nonUS$time, var.equal = TRUE, conf.level = 0.95)
+t
+@
+
 \end{frame}
 
 
