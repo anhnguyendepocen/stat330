@@ -579,6 +579,57 @@ ggplot(speed, aes(clock_MHz, fps, label=card)) +
 
 
 \begin{frame}
+\frametitle{Prediction}
+
+Using techniques discussed earlier this semester, we can derive prediction 
+intervals. \pause 
+To predict a value $\tilde{y}$ at a value $X=\tilde{x}$, we have the following
+equation
+\[ 
+\tilde{y} = \beta_0 + \beta_1 \tilde{x} + \tilde{e}, 
+\quad \tilde{e} \sim N(0,\sigma^2)
+\]
+The ``uncertainty in the line'' takes care of the uncertainty in 
+$\beta_0 + \beta_1 \tilde{x}$, but not in the additional variability of 
+$\tilde{e}$.
+\pause
+A prediction interval that takes into account both sources of variability 
+(and also uncertainty in $\sigma^2$) is 
+\[
+\hat\beta_0+\hat\beta_1 x 
+\pm t_{n-2,a/2} 
+\hat\sigma \sqrt{1+\frac{1}{n} + \frac{(x-\overline{x})^2}{S_{XX}}}.
+\]
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Regression prediction in R}
+
+<<prediction_intervals, dependson="regression", echo=TRUE>>=
+prediction_intervals <- predict(m, interval="prediction")
+prediction_intervals
+@
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Regression line with uncertainty}
+<<prediction_uncertainty, dependson=c("data","prediction_intervals")>>=
+prediction_df <- cbind(speed, prediction_intervals)
+ggplot(prediction_df, aes(clock_MHz, fps, label=card)) +
+  geom_label() +
+	geom_line(aes(y=lwr), color = "red", linetype = "dashed") +
+	geom_line(aes(y=upr), color = "red", linetype = "dashed") +
+  geom_smooth(method='lm',formula=y~x) +
+  theme_bw()
+@
+\end{frame}
+
+
+
+\begin{frame}
 \frametitle{Correlation and $R^2$}
 
 The sample correlation coefficient is 
