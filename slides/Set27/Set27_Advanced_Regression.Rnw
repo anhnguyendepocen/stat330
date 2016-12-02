@@ -38,32 +38,263 @@ set.seed(1)
 
 \frame{\maketitle}
 
-\begin{frame}[fragile]
+\section{Advanced regresssion}
+\subsection{Multiple linear regression}
+\begin{frame}
 \frametitle{Multiple linear regression model}
 
-For observation $i$, let 
+\small
+
+For observation $i$ for $i=1,\ldots,n$, let 
 \begin{itemize}
 \item $y_i$ be the response, \pause
-\item $x_{i,1}$ be the first explanatory variable 
-(usually an intercept, i.e. $x_{i,1}=1$ for all $i$), 
-\item \vdots
-\item $x_{i,p}$ be the $p$th explanatory variable.
+\item $x_{i,1}$ be the first explanatory variable, 
+\item $\vdots$
+\item $x_{i,q}$ be the $q$th explanatory variable.
 \end{itemize}
 
 \vspace{0.1in} \pause
 
-A multiple linear regression model of assumes 
+A multiple linear regression model assumes 
 \[ 
-Y_i \ind N(\beta_1+\beta_1 x_i, \sigma^2).
+Y_i \ind N(\beta_1+\beta_1 x_{i,1} + \cdots + \beta_q x_{i,q}, \sigma^2).
 \]
+\pause
+Letting $x_i = (1,x_{i,1},\ldots,x_{i,q})^\top$ and 
+$\beta = (\beta_0,\beta_1,\ldots,\beta_q)$, we can write this as 
+\[ 
+Y_i \ind N(x_i^\top \beta, \sigma^2) 
+\quad \mbox{or} \quad
+Y_i = x_i^\top + e_i, \quad e_i \ind N(0,\sigma^2).
+\]
+Letting $X$ be the $n\times p$ (where $p=q+1$) matrix with $i$th row $x_i$, we 
+can write 
+\[ 
+Y \sim N(X\beta, \sigma^2 \mathrm{I})
+\quad \mbox{or} \quad
+Y_i = X\beta + e, \quad e \sim N(0,\sigma^2\mathrm{I})
+\]
+where $N$ now represents a \alert{multivariate normal}.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Parameter estimation}
+
+The MLE and Bayesian estimates 
+(assuming the default prior $p(\beta,\sigma^2) \propto 1/\sigma^2$) for the 
+coefficients are
+\[ 
+\hat\beta = (X^\top X)^{-1}X^\top y.
+\]
+\pause
+Let $r_i = y_i - x_i^\top \beta$ and $r=(r_1,\ldots,r_n)$, then the point 
+estimate for $\sigma^2$ is 
+\[ 
+\sigma^2 = \frac{RSS}{n-p} 
+= \frac{r^\top r}{n-p}.
+ \]
+\pause
+You can get similar to confidence intervals and prediction intervals to what
+we had before. 
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Nuclear task time}
+
+For observation $i=1,\ldots,n$, let 
+\begin{itemize}
+\item $y_i$ be the task time,
+\item $x_{i,1}$ be the task complexity minus 6, and
+\item $x_{i,2}$ be an indicator of US location.
+\end{itemize}
 
 \pause
 
-<<>>=
-slr_model <- lm(time ~ complexity, nuclear_time)
-slr_model
+<<multiple_regression_model>>=
+nuclear_time <- read.csv("nuclear_time.csv") %>%
+	mutate(location = ifelse(US, "US", "non-US"))
+
+m <- lm(time ~ I(complexity-6) + location, data = nuclear_time)
+m
+@
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Nuclear task time regression in R}
+
+<<summary, dependson="multiple_regression_model">>=
+summary(m)
+confint(m)
+@
+
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Diagnostics}
+<<dependson="multiple_regression_model">>=
+opar = par(mfrow=c(1,2))
+plot(m, 1:2)
+par(opar)
 @
 \end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Nuclear task time}
+
+Let's run a regression of the square root of task time on location and 
+task ID. 
+
+\pause
+
+<<multiple_regression_model2, dependson="multiple_regression_model">>=
+nuclear_time <- nuclear_time %>%
+	mutate(task_f = factor(task)) # convert from numeric into factor
+m2 <- lm(sqrt(time) ~ location+task_f, data = nuclear_time)
+m2
+@
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Nuclear task time regression in R}
+
+<<summary2, dependson="multiple_regression_model2">>=
+summary(m2)
+@
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Diagnostics}
+
+<<dependson="multiple_regression_model2">>=
+opar = par(mfrow=c(1,2))
+plot(m2, 1:2)
+par(opar)
+@
+
+\end{frame}
+
+
+
+\subsection{Logistic regression}
+\begin{frame}
+\frametitle{Logistic regression}
+
+For observation $i$ for $i=1,\ldots,n$, let 
+\begin{itemize}
+\item $y_i$ be the number of successes, \pause
+\item $n_i$ be the number of attempts, \pause and
+\item $x_i$ be a vector of explanatory variables.
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+A logistic regression model assumes 
+\[ 
+Y_i \ind Bin(n_i,\theta_i),
+\quad
+\log\left( \frac{\theta_i}{1-\theta_i} \right) = x_i^\top \beta,
+\]
+\pause
+i.e. the success probability depends on the explanatory variables.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Poisson regression}
+
+For observation $i$ for $i=1,\ldots,n$, let 
+\begin{itemize}
+\item $y_i$ be the count (with unlimited theoretical max), \pause and
+\item $x_i$ be a vector of explanatory variables.
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+A Poisson regression model assumes 
+\[ 
+Y_i \ind Po(\lambda_i),
+\quad
+\log(\lambda_i) = x_i^\top \beta,
+\]
+\pause
+i.e. the rate depends on the explanatory variables.
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Regression trees}
+
+\small
+
+For observation $i$ for $i=1,\ldots,n$, let 
+\begin{itemize}
+\item $y_i$ be the response, \pause
+\item $x_i$ be a vector of explanatory variables.
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+A regression tree splits the $x_i$ at cutpoints, e.g. 
+an example regression tree might be 
+\[ 
+Y_i \ind N(\mu_i, \sigma^2)
+\]
+where 
+\[ \begin{array}{rl}
+\mu_i =& \beta_0 + \beta_1 \I(x_{i,1}<0) + \beta_2 \I(x_{i,2}>3) + \beta_3 \I(x_{i,3} <2) \\
+&+ \beta_4 \I(x_{i,1}<0, x_{i,2}< -2) + \beta_5 \I(x_{i,3} <2, x_{i,4} <0)
+\end{array} \]
+\pause
+This approach allows for arbitrary non-linear relationships between the response
+and explanatory variables.
+
+\vspace{0.1in} \pause
+
+This can be combined with a binary or categorical response and the tree
+is then called a classification tree. 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Classification tree example}
+\begin{center}
+\includegraphics{CART_tree_titanic_survivors}
+\end{center}
+
+{\tiny \url{https://en.wikipedia.org/wiki/Decision_tree_learning}}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Random forests}
+
+Random forests resample the data with replacement and construct a tree from 
+each resampled data set. 
+\pause
 
 
 \end{frame}
