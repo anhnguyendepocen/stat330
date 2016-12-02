@@ -1,0 +1,71 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set 27 - Adavnced Regression}
+
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=7, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=TRUE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, echo=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(GGally)
+library(gridExtra)
+library(broom)
+@
+
+<<set_seed, echo=FALSE>>=
+set.seed(1)
+@
+
+
+
+\frame{\maketitle}
+
+\begin{frame}[fragile]
+\frametitle{Multiple linear regression model}
+
+For observation $i$, let 
+\begin{itemize}
+\item $y_i$ be the response, \pause
+\item $x_{i,1}$ be the first explanatory variable 
+(usually an intercept, i.e. $x_{i,1}=1$ for all $i$), 
+\item \vdots
+\item $x_{i,p}$ be the $p$th explanatory variable.
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+A multiple linear regression model of assumes 
+\[ 
+Y_i \ind N(\beta_1+\beta_1 x_i, \sigma^2).
+\]
+
+\pause
+
+<<>>=
+slr_model <- lm(time ~ complexity, nuclear_time)
+slr_model
+@
+\end{frame}
+
+
+\end{frame}
+
+\end{document}
