@@ -30,7 +30,7 @@ library(gridExtra)
 library(broom)
 @
 
-<<set_seed, echo=FALSE>>=
+<<set_seed, echo=FALSE, purl=FALSE>>=
 set.seed(1)
 @
 
@@ -65,6 +65,12 @@ install.packages(c("dplyr","ggplot2","GGally",
                    "broom","gridExtra"))
 @
 which will install these packages and their dependencies.
+\item To follow along, from Blackboard download 
+\begin{itemize}
+\item {\tt Set26\_Regression\_in\_R.R}
+\item {\tt nuclear\_time.csv}
+and set your working directory (Session $>$ Set Working Directory) to whereever you downloaded those files.
+\end{itemize}
 \end{enumerate}
 
 \end{frame}
@@ -329,6 +335,7 @@ complexity has no units.
 \vspace{0.1in} \pause
 
 We performed a simple linear regression model of task time on task complexity.
+\pause
 At a task complexity of 6, the model estimated an expected task time of 
 \Sexpr{round(m$coefficients[1],0)} seconds with a 95\% confidence interval of
 (\Sexpr{round(ci[1,1])},\Sexpr{round(ci[1,2])}) seconds. \pause
@@ -343,11 +350,33 @@ variability in task time.
 \pause
 We caution against reading too much into these results as all simple linear 
 regression model assumptions appear violated. 
+\pause
 We suggest future analyses consider transformations of the response and 
 explanatory variable as well as including additional explanatory variables into
 the model.
 \end{frame}
 
+
+
+\begin{frame}[fragile]
+\frametitle{One plot summary code}
+<<summary_plot_code, eval=FALSE>>=
+prediction_intervals <- predict(m, interval="prediction")
+prediction_df <- cbind(nuclear_time, prediction_intervals)
+ggplot(prediction_df, aes(complexity, time)) +
+  geom_point() +
+	geom_line(aes(y=lwr), color = "red", linetype = "dashed") +
+	geom_line(aes(y=upr), color = "red", linetype = "dashed") +
+  geom_smooth(method='lm',formula=y~x) +
+  theme_bw()
+@
+\end{frame}
+
+\begin{frame}
+<<summary_plot, dependson="summary_plot_code", echo=FALSE, purl=FALSE, warning=FALSE>>=
+<<summary_plot_code>>
+@
+\end{frame}
 
 %' \begin{frame}[fragile]
 %' \frametitle{Take logarithm of the response}

@@ -342,7 +342,7 @@ sim <- data.frame(x = runif(100, 0, 3)) %>%
 \begin{frame}
 \frametitle{Residuals vs fitted values}
 
-Fitted values: $\hat{Y}_i = \hat\beta_0 + \hat\beta_1 x_i$. \pause
+Fitted values: $\hat{y}_i = \hat\beta_0 + \hat\beta_1 x_i$. \pause
 
 <<residuals_v_fitted, dependson="sim_data">>=
 ggplot(sim, aes(.fitted, .resid)) + 
@@ -646,7 +646,8 @@ s_{y}^2 &= \frac{SXY}{n-1} &= \frac{\sum_{i=1}^n (y_i-\overline{y})^2}{n-1} \\
 The coefficient of determination (or R-squared) is the proportion of the total
 variation explained by the model
 \[ 
-R^2 = r^2 = 1-\frac{SSE}{SST} = 1-\frac{SSE}{SYY} = 1-\frac{\sum_{i=1}^n e_i^2}{\sum_{i=1}^n (y_i-\overline{y})^2}.
+R^2 = r^2 = 1-\frac{RSS}{SSY} %= 1-\frac{SSE}{SST} 
+= 1-\frac{\sum_{i=1}^n r_i^2}{\sum_{i=1}^n (y_i-\overline{y})^2}.
 \]
 
 \end{frame}
