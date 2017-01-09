@@ -1,0 +1,289 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set18 - Graphical statistics}
+
+\begin{document}
+
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=4, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=TRUE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE, echo=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+@
+
+<<set_seed, echo=FALSE>>=
+set.seed(2)
+@
+
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+
+\section{Graphical statistics}
+\begin{frame}
+\frametitle{Look at it!}
+{\Huge
+\alert{Before you do anything with a data set, \pause LOOK AT IT!}
+}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Why should you look at your data?}
+
+\pause
+
+\begin{enumerate}
+\item Find errors \pause
+	\begin{itemize}
+	\item Do variables have the correct range, e.g. positive?
+	\item How are Not Available encoded?
+	\item Are there outliers? \pause
+	\end{itemize}
+\item Do known or suspected relationships exist? \pause
+	\begin{itemize}
+	\item Is X linearly associated with Y?
+	\item Is X quadratically associated with Y? \pause
+	\end{itemize}
+\item Are there new relationships? \pause
+	\begin{itemize}
+	\item What is associated with X and how? \pause
+	\end{itemize}
+\item Do variables adhere to distributional assumptions? \pause
+	\begin{itemize}
+	\item Does X have an approximately normal distribution?
+	\item Right/left skew
+	\item Heavy tails
+	\end{itemize}
+\end{enumerate}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Grades in STAT 330}
+<<course_data>>=
+d = readr::read_csv("course_data.csv") %>% mutate(section = factor(section))
+summary(d)
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Histogram}
+<<histogram, dependson="course_data">>=
+ggplot(d, aes(x = exam2)) + geom_histogram(binwidth=1)
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Histogram}
+<<histogram_subset, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(binwidth=1)
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Histogram}
+<<histogram_density, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(aes(y=..density..), binwidth=1)
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Histogram}
+<<histogram_facet, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0), aes(x = exam2)) + geom_histogram(binwidth=1) + facet_grid(section~.)
+@
+\end{frame}
+
+
+\subsection{Boxplot}
+\begin{frame}[fragile]
+\frametitle{Boxplot}
+<<boxplot_facet, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0), aes(x = section, y = exam2)) + geom_boxplot()
+@
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Boxplot lines}
+
+By default in {\tt ggplot}, a boxplot will produce
+\begin{itemize}
+\item A box for the 1st and 3rd quartiles \pause with
+\item a line in the ``middle'' for the median \pause and 
+\item whiskers extending to the largest/smallest values within 1.5IQR, \pause and
+\item dots for data points farther out than that, i.e. ``outliers''. 
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+There is no standard for boxplots, so be careful in interpreting a boxplot 
+unless you know how it is constructed. 
+
+\end{frame}
+
+
+
+
+\subsection{Scatter plots}
+\begin{frame}
+\frametitle{Scatter plots}
+When there are two continuous variables to plot at the same time, 
+use a scatter plot. 
+\pause
+The variable you believe would predict the other variable, should go on the 
+x-axis.
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Exam 2 vs homework subtotal}
+<<exam2_v_homework, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0, homework>0), aes(x = homework, y = exam2)) + 
+	geom_point()
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Exam 2 vs homework subtotal}
+<<exam2_v_homework_reg, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0, homework>0), aes(x = homework, y = exam2)) + 
+	geom_point() + geom_smooth(method='lm',formula=y~x)
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Exam 2 vs Exam 1 subtotal}
+<<exam2_v_exam1, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0, exam1>0), aes(x = exam1, y = exam2)) + 
+	geom_point()
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exam 2 vs Exam 1 subtotal}
+<<exam2_v_exam1_reg, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0, exam1>0), aes(x = exam1, y = exam2)) + 
+	geom_point() + geom_smooth(method='lm',formula=y~x)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exam 2 vs Exam 1 subtotal}
+<<exam2_v_exam1_scatter, dependson="course_data">>=
+ggplot(d %>% filter(exam2>0, exam1>0), aes(x = exam1, y = exam2)) + 
+	geom_jitter()
+@
+\end{frame}
+
+
+\subsection{All-in-one plots}
+\begin{frame}
+\frametitle{All-in-one plots}
+<<>>=
+GGally::ggpairs(d)
+@
+\end{frame}
+
+
+
+\subsection{Two-dimensional histograms}
+\begin{frame}[fragile]
+\frametitle{Two-dimensional histograms}
+
+Sometimes there are so many points that you cannot see a relationship in a 
+scatterplot, \pause e.g. 
+<<bigdata>>=
+n = 1e4; r = runif(n, 0, 2*pi)
+normal = data.frame(x = rnorm(2*n), y = rnorm(2*n))
+circle = data.frame(x = sin(r)/2, y = cos(r)/2)
+big_data = bind_rows(normal,circle)
+ggplot(big_data, aes(x,y)) + geom_point()
+@
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Hexbin plot}
+
+<<hexbin, dependson="bigdata">>=
+ggplot(big_data, aes(x,y)) + stat_binhex()
+@
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Principles of professional statistical graphics}
+
+\begin{itemize}
+\item Show the data
+	\begin{itemize}
+	\item Avoid distorting the data, e.g. pie charts, 3d pie charts, exploding wedge 3d pie charts, bar charts that do not start at zero
+	\end{itemize}
+\item Plots should be self-explanatory
+	\begin{itemize}
+	\item Use informative caption, legend
+	\item Use normative colors, shapes, etc
+	\end{itemize}
+\item Have a high information to ink ratio
+	\begin{itemize}
+	\item Avoid bar charts
+	\end{itemize}
+\item Encourage eyes to compare
+	\begin{itemize}
+	\item Use size, shape, and color to highlight differences
+	\end{itemize}
+\end{itemize}
+
+{\tiny \url{https://moz.com/blog/data-visualization-principles-lessons-from-tufte}}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Stock market return}
+\begin{center}
+\includegraphics{triangle}
+\end{center}
+{\tiny \url{http://www.nytimes.com/interactive/2011/01/02/business/20110102-metrics-graphic.html?_r=0}}
+\end{frame}
+
+
+\end{document}

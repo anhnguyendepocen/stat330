@@ -1,0 +1,428 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set15 - M/M/1 Queuing system}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\section{Bernoulli single-server queuing system}
+\begin{frame}
+\frametitle{Bernoulli single-server queuing system}
+\footnotesize
+
+\begin{definition}
+A \alert{Bernoulli single-server queuing process} is a discrete-time queuing 
+process with the following properties:
+\begin{itemize}
+\item one server
+\item unlimited capacity
+\item arrivals occur according to a binomial process with probability $p_A$ for
+each frame
+\item probability of a service completion is $p_S$ for each frame
+\item service times and interarrival times are independent
+\end{itemize}
+\end{definition}
+
+\vspace{0.1in} \pause
+
+This is a \emph{homogeneous Markov chain} with transition probability matrix
+{\tiny
+\[ 
+P = \left( \begin{array}{cccc}
+1-p_A & p_A & 0 & 0  \\
+(1-p_A)p_S & (1-p_A)(1-p_S)+p_Ap_S & p_A(1-p_S) & 0 \\
+0 & (1-p_A)p_S & (1-p_A)(1-p_S)+p_Ap_S & p_A(1-p_S)  \\
+0 & 0 & (1-p_A)p_S & (1-p_A)(1-p_S)+p_Ap_S \\
+\vdots & \vdots & \vdots & \ddots 
+\end{array} \right)
+\]
+}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{$M/M/1$ queue}
+\footnotesize
+
+Letting $\lambda_A = p_A/\Delta$, $\lambda_S = p_S/\Delta$, and $\Delta \to 0$ 
+while fixing $\lambda_A$ and $\lambda_S$ \pause results in
+
+\pause
+
+\begin{definition}
+A \alert{$M/M/1$ queueing process} is a continuous-time Markov queuing process
+with the following properties
+\begin{itemize}
+\item one server,
+\item unlimited capacity,
+\item exponential interarrival times with arrival rate $\lambda_A$,
+\item exponential service times with service rate $\lambda_S$, and 
+\item independent service and arrival times. 
+\end{itemize}
+\end{definition}
+
+\vspace{0.1in} \pause
+
+This is a continuous-time, homogeneous stochastic process with transition rate
+{\tiny
+\[ 
+P \approx \left( \begin{array}{cccc}
+1-\lambda_A \Delta & \lambda_A \Delta & 0 & 0  \\
+\lambda_S \Delta & 1-\lambda_A \Delta - \lambda_S \Delta & \lambda_A \Delta & 0 \\
+0 & \lambda_S \Delta & 1-\lambda_A \Delta - \lambda_S \Delta  & \lambda_A \Delta  \\
+0 & 0 & \lambda_S \Delta & 1-\lambda_A \Delta - \lambda_S \Delta  \\
+\vdots & \vdots & \vdots & \ddots 
+\end{array} \right)
+\]
+All $\Delta^2$ terms are approximately 0.
+}
+
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Initial balance equations}
+
+For a steady state, we need 
+\[ \pi P = \pi 
+\quad \mbox{ and } \quad 
+\sum \pi_i = 1.
+\]
+\pause
+Multiplying $\pi$ by the first column of $P$ gives us 
+\[ 
+\pi_0(1-\lambda_A\Delta) + \pi_1 \lambda_S \Delta = \pi_0 \implies 
+\lambda_A\pi_0 = \lambda_S \pi_1
+\]
+\pause
+which is known as the \alert{first balance equation}. 
+
+\vspace{0.1in} \pause
+
+Multiplying $\pi$ by the second column of $P$ gives us 
+\[ 
+\pi_0\lambda_A\Delta 
++ \pi_1(1-\lambda_A\Delta-\lambda_S\Delta) 
++ \pi_2\lambda_S \Delta = \pi_1
+\implies 
+(\lambda_A+\lambda_S)\pi_1 = \lambda_A\pi_0 + \lambda_S \pi_2
+\]
+\pause
+and combining with the first balance, we have 
+\[ 
+\lambda_A \pi_1 = \lambda_S \pi_2
+\]
+\pause
+which is known as the \alert{second balance equation}.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Steady-state distribution}
+
+For any $i$, we have 
+\[ 
+\lambda_A \pi_{i-1} = \lambda_S \pi_i 
+\quad\mbox{ and }\quad
+\pi_i = r \pi_{i-1}
+\]
+where $r=\lambda_A/\lambda_S$ is the \alert{utilization} 
+
+\vspace{0.1in} \pause
+
+Thus
+\[ \pi_i = r \pi_{i-1} = r^2 \pi_{i-2} = r^3\pi_{i-3} = \cdots = r^i \pi_0 \]
+and 
+\[ 
+1 = \sum_{i=0}^\infty \pi_i = \sum_{i=0}^\infty r^i \pi_0 = \frac{\pi_0}{1-r}
+\implies \left\{ 
+\begin{array}{cl}
+\pi_0 &= 1-r \\
+\pi_1 &= r\pi_0 = r(1-r) \\
+\pi_2 &= r\pi_1 = r^2(1-r) \\
+& \vdots \\
+\end{array}
+\right.
+\]
+\pause
+If $X$ has this distribution, it is a \alert{shifted Geometric} because $Y=X+1$ 
+has a standard Geometric distribution with parameter $p=1-r$. 
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Steady-state distribution}
+
+The steady-state distribution of an $M/M/1$ queue has probability mass function
+\[ 
+\pi_x = P(X=x) = r^x(1-r), \quad \mbox{for }x=0,1,2,\ldots
+\]
+\pause 
+which has expected value 
+\[ 
+E[X] = E[Y-1] = E[Y]-1 = \frac{1}{1-r} - 1 = \frac{r}{1-r}
+\]
+\pause
+and variance
+\[ 
+Var[X] = Var[Y-1] = Var[Y] = \frac{r}{(1-r)^2}
+\]
+where $r = \lambda_A/\lambda_S$. \pause
+This steady-state only exists for $r<1$. 
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Utilization}
+
+\begin{definition}
+The \alert{utilization} is the probability there are jobs in the system at 
+steady state\pause, i.e. 
+\[ 
+P(X>0) = 1-P(X=0) = 1-\pi_0 = r
+\]
+\pause
+equivalently, $r$ is the proportion of time the server is busy. 
+\end{definition}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{System properties}
+\tiny
+
+\begin{itemize}
+\item Expected total jobs in the system:
+\[ 
+E[X] = \frac{r}{1-r}.
+\]
+\item Expected service time:
+\[ 
+E[S] = \mu_S = 1/\lambda_S.
+\]
+\item Expected waiting time: job arrives with $X$ jobs in the system\pause, thus
+\[ 
+E[W] \pause= E[S_1+\cdots + S_X] \stackrel{iid}{=} E[SX] \stackrel{ind}{=} E[S]E[X] = 
+\frac{\mu_s r}{1-r} = \frac{r}{\lambda_S(1-r)}.
+\]
+\pause
+\item Expected response time:
+\[ 
+E[R] = E[W+S] = E[W]+E[S] = \frac{\mu_Sr}{1-r} + \mu_S = \frac{\mu_S}{1-r} 
+= \frac{1}{\lambda_S(1-r)}.
+\]
+\pause
+\item Expected length of service line:
+\[ 
+E[X_s] \pause= \lambda_A E[S] = \lambda_A/\lambda_S = r
+\]
+\pause
+\item Expected queue length:
+\[ 
+E[X_w] \pause= E[X-X_s] = E[X]-E[X_s] = \frac{r}{1-r}-r = \frac{r^2}{1-r}
+\]
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Printer queue}
+\tiny
+
+\begin{example}
+Jobs arrive to a printer at a rate of 3 jobs per hour. \pause
+On average, the printer finishes the job in 15 minutes. 
+\end{example}
+
+\pause
+
+We know $\lambda_A = 3$ jobs/hour and $\mu_S = 0.25$ hours. 
+Thus, $\lambda_S = 4$ jobs/hour, $r=3/4$ and the process has a steady-state.
+
+\vspace{0.1in} \pause
+
+At steady-state, what are 
+\begin{itemize}
+\item Expected number of jobs in the system 
+\[
+E[X] \pause = \frac{r}{1-r} = \frac{\frac{3}{4}}{1-\frac{3}{4}} = 3 \mbox{ jobs}
+\]
+\pause
+\item Expect number of jobs being processed 
+\[ 
+E[X_s] \pause = r = \frac{3}{4} \mbox{ jobs}
+\]
+\pause
+\item Expected number of jobs in the queue 
+\[ 
+E[X_w] \pause = E[X]-E[X_s] = 3-\frac{3}{4} = 2\frac{1}{4} \mbox{ jobs}
+\]
+\pause
+\item Expected total time the job is in the system 
+\[ 
+E[R] \pause= E[X]/\lambda_A = 3/3 = 1\mbox{ hour}
+\]
+\pause
+\item Expected time the job is in the queue 
+\[ 
+E[W] \pause= E[X_w]/\lambda_A = \frac{2\frac{1}{4}}{3} = 0.75 \mbox{ hours}
+\]
+\end{itemize}
+
+\end{frame}
+
+
+
+% \begin{frame}
+% \frametitle{Printer queue (cont.)}
+% 
+% What is the probability a job spends less than 20 min in the queue?
+% 
+% The cdf for the time in the queue $Y$ is 
+% \[ 
+% 1-re^{y(\lambda_A-\lambda_S)}
+% \]
+% Thus, 
+% \[ 
+% P(X_w < 2/6) = 1-\frac{3}{4} e^{\frac{2}{6}(3-4)} = 0.4626
+% \]
+% 
+% \end{frame}
+
+
+\subsection{Limited capacity}
+\begin{frame}
+\frametitle{$M/M/1/C$}
+\small
+
+\begin{definition}
+An \alert{$M/M/1/C$} queuing process is an $M/M/1$ queuing process with a 
+maximum capacity of $C$ for the system with \emph{attempted} arrival rate 
+$\lambda$ and service rate $\lambda_S$.
+\end{definition}
+
+\vspace{0.1in} \pause
+
+The steady-state probabilities are 
+\[ 
+\pi_k = r^k\pi_0, \quad \pi_0 = \frac{1-r}{1-r^{C+1}}.
+\]
+where $r=\lambda/\lambda_S$. 
+\pause 
+The average line length is 
+\[
+E[X] = \sum_{x=0}^C x \pi_x = \cdots 
+= \frac{r}{1-r}-\frac{(C+1)r^{C+1}}{1-r^{C+1}}.
+\]
+\pause
+The probability the queue is full is $\pi_C$, \pause thus the actually arrival rate is 
+\[ 
+\lambda_A = (1-\pi_C)\lambda
+\]
+since no jobs can arrive while the queue is at capacity.
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Remaining properties for $M/M/1/C$}
+\tiny
+
+\begin{itemize}
+\item Expected number of jobs in the system
+\[ 
+E[X] = \frac{r}{1-r}-\frac{(C+1)r^{C+1}}{1-r^{C+1}}
+\]
+\item Expected service time
+\[ 
+E[S] \pause= \frac{1}{\lambda_S} = \mu_S
+\]
+\pause
+\item Expected time a job is in the system
+\[ 
+E[R] \pause= E[X]/\lambda_A
+\]
+\pause
+\item Expected number of jobs being processed
+\[ 
+E[X_s] \pause= \lambda_A E[S] = \frac{\lambda_A}{\lambda_S} 
+= \frac{(1-\pi_C)\lambda}{\lambda_S}
+\]
+\item Expected number of jobs in queue
+\[ 
+E[X_w] \pause= E[X]-E[X_s]
+\]
+\item Expected waiting time in queue
+\[
+E[W] \pause= E[R]-E[S] = \frac{E[X]}{\lambda_A}- \frac{1}{\lambda_S}
+\]
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Printer queue}
+\tiny
+
+\begin{example}
+Jobs arrive to a printer at a rate of 3 jobs per hour. \pause
+On average, the printer finishes the job in 15 minutes. 
+But the printer can only accommodate 5 jobs at a time. 
+\end{example}
+
+\pause
+
+We know $\lambda = 3$, $\lambda_S = 4$ jobs/hour, and the process has a 
+steady-state because it is regular continuous-time Markov chain. 
+
+\pause
+
+At steady-state, we have 
+<<mm1C, echo=TRUE>>=
+C = 5
+lambda = 3
+lambda_S = 4; S = 1/lambda_S # E[S]
+r = lambda/lambda_S
+pi0 = (1-r)/(1-r^(C+1))
+pi = numeric(C); for (k in 1:C) pi[k] = r^k*pi0
+lambda_A = (1-pi[C])*lambda
+round(c(pi[C],lambda_A),2)
+X = sum(1:5*pi)  # E[X]
+R = X/lambda_A   # E[R]
+W = R-S          # E[W]
+X_w = W*lambda_A # E[X_w]
+X_s = X-X_w      # E[X_s]
+round(c(X, X_w, X_s, R, W, S),2) # expectations
+ @
+
+\end{frame}
+
+
+
+\end{document}
+
+

@@ -1,0 +1,638 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set12 - Stochastic processes}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=7, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+@
+
+<<set_seed>>=
+set.seed(1)
+@
+
+\frame{\maketitle}
+
+
+\section{Stochastic Processes}
+\begin{frame}
+\small
+
+\begin{definition}
+A \alert{stochastic process} is a collection of random variables index by ``time'' $t$, i.e.
+\[ \{ X(t,\omega)\mid t\in\mathcal{T} \} \]
+where
+\begin{itemize}[<+->]
+\item $\mathcal{T}$ is a set of possible times, e.g. $[0,\infty),\{0, 1, 2, ...\}$.
+\item $\omega\in\mOmega$ is an outcome from the whole sample space $\mOmega$.
+\item Values of $X(t,\omega)$ are called \alert{states} and the set of possible values $\mathcal{X}$ is the \alert{state space}.
+\item For any fixed time $t$, we see a random variable $X_t(\omega)$, a function of an outcome.
+\item For any fixed $\omega$, we have a function of time $X_\omega(t)$. This function is called a \alert{realization, sample path, or trajectory} of a process $X(t,\omega)$.
+\item $X(t,\omega)$ is \alert{discrete-state} (\alert{continuous-state}) if $X_t(\omega)$ is discrete (continuous).
+\item $X(t,\omega)$ is \alert{discrete-time} (\alert{continuous-time)} if $\mathcal{T}$ is discrete (continuous).
+\end{itemize}
+\end{definition}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Examples}
+\begin{itemize}
+\item CPU usage, in percents, is a continuous-state and continuous-time process.
+\item Let $X(t,\omega)$ be the amount of time required to serve
+the $t$-th customer at a Subway. This is a discrete-time, continuous-state stochastic
+process, as $t\in\mathcal{T}=\{1,\,2,\,...\}$ and the state space
+is $(0,\infty)$.
+\item Let $X(t,\omega)$ be the result of tossing a fair coin in the $t$-th
+trial (1 for head, 0 for tail), this is then a discrete-time, discrete-state
+stochastic process.
+\item Let $X(t,\omega)$ be the reported temperature (rounded to the nearest integer) by radio at time $t$,
+it is then a continuous-time, discrete-state stochastic process.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Markov processes}
+
+\begin{definition}
+A stochastic process $X(t)$ is \alert{Markov} if for any $t_1<t_{2}<...<t_n<t$ and any sets $A, A_1,\ldots,A_n$
+\[ 
+P(X(t)\in A|\, X(t_1)\in A_1,\,...\,,\, X(t_n)\in A_n)=P(X(t)\in A|\, X(t_n)\in A_n).
+\]
+\end{definition}
+
+\vspace{0.1in} \pause
+
+In other words, it means that the conditional distribution of $X(t)$
+is the same under two different conditions:
+
+\begin{itemize}
+\item conditional on  the observations of the process $X$ at several moments in the past;
+\item conditional only on the \emph{latest} observations of $X$.
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+Implies that the distribution of $X(t)$ at time $t$ depends only on the distribution of $X(t)$ at time $t_n$.
+
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Examples}
+\begin{itemize}
+\item ({\textcolor{magenta}{Internet Connections}}). Let $X(t)$ be the total number
+of internet connections registered by some internet service provider
+by the time $t$. Typically, people connect to the internet at random
+times, regardless of how many connections have already been made.
+Therefore, the number of connections in a minute will only depend
+on the current number.
+\item ({\textcolor{magenta}{Stock Prices}}). The following is the Dow Jones Industrial
+Average recorded on Oct 6, 2010 from 9:30am ET to 12:22pm
+ET. Let $Y(t)$ be the value of DJI at time $t$. The fact that the market has been falling several periods before 11:00 p.m. may help you to predict the dip of $Y(t)$. Thus this process is not Markov.
+\end{itemize}
+\end{frame}
+
+
+\subsection{Markov chains}
+\begin{frame}
+\frametitle{Markov chains}
+\small
+
+\begin{definition}
+A \alert{Markov chain} is a discrete-time, discrete-state Markov process.
+
+\pause
+
+% \end{definition}
+%
+% Thus,
+% {\small
+% \[ 
+% P(X(t+1)=x_{t+1}|X(t)=x_t,\ldots,X(1)=x_1) = P(X(t+1)=x_{t+1}|X(t)=x_t)
+% \]
+% }
+% \begin{definition}
+\begin{itemize}
+\item The \alert{transition (probability) matrix}  is 
+\[ 
+p_{ij}(t) = P(X_{t+1}=j|X_t=i).
+\]
+
+\item The \alert{$h$-step transition probability} is 
+\[ 
+p_{ij}^{(h)}(t) = P(X_{t+h}=j|X_t=i).
+\]
+
+\item A Markov chain is \alert{homogenous} if all its transitions probabilities are independent of $t$, i.e. 
+\[ 
+p_{ij}(t) = p_{ij}. 
+\]
+\end{itemize}
+\end{definition}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Example Markov chain}
+
+In the summer, each day in Ames is either sunny or rainy. 
+A sunny day is followed by another sunny day with probability 0.7, whereas a rainy day is followed by a sunny day with probability 0.4.
+It rains on Monday. 
+Make weather forecasts for Tuesday, Wednesday, and Thursday, using a homogeneous Markov chain model.
+
+\vspace{0.1in} \pause
+
+Let 
+\[ 
+X(t) = \left\{ \begin{array}{ll}
+1 & \mbox{if it is sunny on day $t$} \\
+2 & \mbox{if it rains on day $t$} 
+\end{array} \right.
+\]
+Then a homogeneous Markov chain model has transition matrix 
+\[ % I'd like to do this with bordermatrix
+  P = \left( \begin{array}{cc} 0.7 & 0.3 \\ 0.4 & 0.6 \end{array} \right)
+\]
+\pause
+which means 
+{\tiny
+\[ \begin{array}{rl}
+P(X(t)=1|X(t-1)=1) &= 0.7 \\
+P(X(t)=2|X(t-1)=1) &= 0.3 \\
+P(X(t)=2|X(t-1)=2) &= 0.6 \\
+P(X(t)=1|X(t-1)=2) &= 0.4 
+\end{array} \]
+}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Tuesday forecast}
+
+Let 
+\begin{itemize}
+\item $t=0$ be Monday
+\item $t=1$ be Tuesday
+\end{itemize}
+\pause
+Then we know 
+\[ 
+P(\mbox{M rain}) = P(X(0)=2) = 1
+\]
+because (we know) it rained on Monday. 
+
+\vspace{0.1in} \pause
+
+Thus, our Tuesday forecast is 
+\[
+P(\mbox{T rain}|\mbox{M rain}) = P(X(1)=2|X(0)=2) = 0.6
+\]
+\pause
+i.e. a 60\% chance of rain \pause and a 40\% chance of sun since
+\[ \begin{array}{rl}
+P(\mbox{T sun}|\mbox{M rain}) &= 1-P(\mbox{T rain}|\mbox{M rain}) \\
+&= 1-P(X(1)=2|X(0)=2) \\
+&= 1-0.6=0.4.
+\end{array} \]
+
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Wednesday forecast}
+\small
+
+Let 
+\begin{itemize}
+\item $t=2$ be Wednesday
+\end{itemize}
+and we know
+\[ 
+P(X(1)=2|X(0)=2) = 0.6
+\]
+then 
+{\tiny
+\[ \begin{array}{rll}
+P(X(2)=2|X(0)=2) =& 
+P(X(2)=2|X(1)=2,X(0)=2)P(X(1)=2|X(0)=2) \\ 
+&+ 
+P(X(2)=2|X(1)=1,X(0)=2)P(X(1)=1|X(0)=2) & \mbox{by Law of Total Probability} \\ \\
+=& P(X(2)=2|X(1)=2)P(X(1)=2|X(0)=2) \\
+&+ 
+P(X(2)=2|X(1)=1)P(X(1)=1|X(0)=2) & \mbox{by Markov property} \\ \\
+=& 0.6\times 0.6 + 0.3\times 0.4 \\
+=& 0.48
+\end{array}\]
+}
+i.e. a 48\% chance of rain on Wednesday 
+\pause
+and thus
+\[
+P(X(2)=1|X(0)=2) = 1-P(X(2)=2|X(0)=2) = 1-0.48 = 0.52
+\]
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Thursday forecast}
+\small
+
+Let 
+\begin{itemize}
+\item $t=3$ be Thursday
+\end{itemize}
+and we know
+\[ 
+P(X(2)=2|X(0)=2) = 0.48
+\]
+then 
+{\tiny
+\[ \begin{array}{rll}
+P(X(3)=2|X(0)=2) =& 
+P(X(3)=2|X(2)=2)P(X(2)=2|X(0)=2) \\
+& + P(X(3)=2|X(2)=1)P(X(2)=1|X(0)=2)  \\ \\ 
+=& 0.6\times 0.48 + 0.3\times 0.52 \\
+=& 0.444
+\end{array}\]
+}
+i.e. 44.4\% chance of rain on Thursday 
+\pause
+and thus
+\[
+P(X(2)=1|X(0)=2) = 1-P(X(2)=2|X(0)=2) = 1-0.444 = 0.556
+\]
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Simulate an answer}
+
+<<simulation, echo=TRUE, dependson='set_seed'>>=
+library(dplyr)
+library(tidyr)
+
+transition_matrix = matrix(c(.7,.3,.4,.6), nrow=2, byrow=TRUE)
+
+one_step = function(x,p=transition_matrix) {
+	sample(x = 1:2, size = 1, prob=p[x,])
+}
+
+n_sims = 1e4
+plyr::rdply(n_sims, {
+	data.frame(monday=2) %>%
+		dplyr::mutate(tuesday   = one_step(monday   ),
+                              wednesday = one_step(tuesday  ),
+                              thursday  = one_step(wednesday))
+}) %>%
+	gather(day,state, -.n) %>%
+	group_by(day) %>%
+	summarize(rainy_percent = mean(state==2)) %>%
+	spread(day, rainy_percent) %>%
+	select(monday,tuesday,wednesday,thursday) %>% 
+	as.data.frame %>% round(3)
+@
+
+{\tiny above are Monte Carlo estimates of the probabilities we derived earlier 
+based on \Sexpr{n_sims} simulations}
+
+\end{frame}
+
+
+\subsection{Transition probability matrix}
+\begin{frame}
+\frametitle{Transition probability matrix}
+
+
+Let $\{1,2,\ldots,n\}$ be the state space. \pause
+The \alert{1-step transition probability matrix} is 
+\[ P = \left( \begin{array}{cccc} 
+p_{11} & p_{12} & \cdots & p_{1n} \\
+p_{21} & p_{22} & \cdots & p_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+p_{n1} & p_{n2} & \cdots & p_{nn} \\
+\end{array} \right) \]
+\pause
+
+\vspace{0.1in} \pause
+
+Similary we can define an $h$-step transition probability matrix as 
+\[ P^{(h)} = \left( \begin{array}{cccc} 
+p_{11}^{(h)} & p_{12}^{(h)} & \cdots & p_{1n}^{(h)} \\
+p_{21}^{(h)} & p_{22}^{(h)} & \cdots & p_{2n}^{(h)} \\
+\vdots & \vdots & \ddots & \vdots \\
+p_{n1}^{(h)} & p_{n2}^{(h)} & \cdots & p_{nn}^{(h)} \\
+\end{array} \right) \]
+\pause 
+where element $p_{ij}^{(h)}$ is the probability of being in state $j$ if you started in state $i$ after $h$ steps. 
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Calculating transition probability matrices}
+\small
+
+The following results hold:
+\begin{itemize}
+\item $P^{(2)} = P \times P = P^{(2)}$ and
+\item $P^{(h)} = P^{(h-1)} \times P$.
+\end{itemize}
+\pause
+Thus if $P_0$ is our initial state, then the probability distribution for the state at time $h$ is 
+\[ P_h = P_0 P^{(h)}.\]
+
+\pause
+
+<<dependson="simulation", echo=TRUE>>=
+P = transition_matrix
+P2 = P  %*% P
+P3 = P2 %*% P; P3
+
+P_M = c(0,1)            # Monday
+P_R = P_M %*% P3; P_R   # Thursday
+@
+
+{\tiny so the probability of rain on Thursday is \Sexpr{P_R[2]}}
+
+\end{frame}
+
+
+\subsection{Shared device example}
+\begin{frame}
+\frametitle{Shared device example}
+\small
+
+A computer is shared by 2 users who send
+tasks to a computer remotely and work independently. At any minute,
+any connected user may disconnect with probability 0.5, and any disconnected
+user may connect with a new task with probability 0.2. Let $X(t)$
+be the number of concurrent users at time $t$ (minutes). 
+\pause
+
+\begin{enumerate}
+\item What are the states of this process? \pause \{0,1,2\} \pause
+\item What are the transition probabilities? \pause
+
+\[ \begin{array}{l|ccc}
+& p_{x0} & p_{x1}& p_{x2} \\
+\hline
+x=0 & 0.8^2 & 2\times 0.2 \times 0.8 & 0.2^2 \\
+x=1 & 0.5\times 0.8 & 0.5\times 0.2 + 0.5\times 0.8 & 0.5\times 0.2 \\
+x=2 & 0.5^2 & 2\times 0.5^2 & 0.5^2 \\
+\hline
+\end{array} \]
+
+\pause
+Thus
+\[ 
+P = \left( \begin{array}{ccc}
+0.64 & 0.32 & 0.04 \\
+0.4 & 0.5 & 0.1 \\
+0.25 & 0.5 & 0.25 
+\end{array}\right)
+ \]
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Shared device example (cont.)}
+\begin{enumerate}\setcounter{enumi}{2}
+\item Suppose no users are connected at 10:00. 
+What is the distribution at 10:02? 
+
+\vspace{0.1in} \pause
+
+We have a two-step transition probability and an initial distribution, i.e. 
+\[ P^{(2)} = P\times P, \quad P_0 = (1,0,0) \]
+and thus
+\[ 
+P_2 = P_0 \times P^{(2)}.
+\]
+<<transition_matrix, echo=TRUE>>=
+P = matrix(data = c(.64,.4,.25,.32,.5,.5,.04,.1,.25), nrow=3)
+P2 = P %*% P
+P_0 = c(1,0,0)
+P_0 %*% P2
+@
+\end{enumerate}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Shared device example (cont.)}
+\begin{enumerate}\setcounter{enumi}{2}
+\item Suppose there are two users are connected at 10:00. 
+What is the distribution at 10:02? 
+
+\vspace{0.1in} \pause
+
+We have a two-step transition probability and an initial distribution, i.e. 
+\[ P^{(2)} = P\times P, \quad P_0 = (0,0,1) \]
+and thus
+\[ 
+P_2 = P_0 \times P^{(2)}.
+\]
+<<transition_matrix2, dependson="transition_matrix", echo=TRUE>>=
+P_0 = c(0,0,1)
+P_0 %*% P2
+@
+\end{enumerate}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Shared device example (cont.)}
+\begin{enumerate}\setcounter{enumi}{2}
+\item Suppose there are two users are connected at 10:00. 
+What is the distribution at \alert{11:00}? 
+
+\vspace{0.1in} \pause
+
+We have a 60-step transition probability and an initial distribution, i.e. 
+\[ P^{(h)} = P^{(h-1)}\times P, \quad P_0 = (0,0,1) \]
+and thus
+\[ 
+P_{60} = P_{0} \times P^{(60)}.
+\]
+<<transition_matrix3, dependson="transition_matrix", echo=TRUE>>=
+P60 = P
+for (i in 1:59) P60 = P60 %*% P
+P_0 = c(0,0,1)
+P_0 %*% P60
+@
+\end{enumerate}
+\pause
+How about at 12:00 or 13:00 or 14:00 or $\ldots$?
+\end{frame}
+
+
+\subsection{Steady-state distribution}
+\begin{frame}
+\frametitle{Steady-state distribution}
+
+\begin{definition}
+For a Markov chain $X(t)$, if the \alert{limiting distribution} of $P_h$ exists, i.e. 
+\[ 
+\pi_x = \lim_{h\to\infty} P_h(x), \quad x\in \mathcal{X}
+\]
+then $\pi$ is called the \alert{steady-state distribution} of the Markov chain.
+\pause
+We can calculate $\pi$ using the following set of linear equations
+\[ 
+\pi P = \pi, \quad \sum_x \pi_x = 1.
+\]
+\pause
+Thus, if the system currently has distribution $\pi$, performing another transition results in the system still being in $\pi$, i.e. the system is in a \alert{steady-state}. 
+\end{definition}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Ames weather example}
+\small
+
+Recall the two-state Markov chain for sunny/rainy weather in Ames with transition matrix
+\[ 
+  P = \left( \begin{array}{cc} 0.7 & 0.3 \\ 0.4 & 0.6 \end{array} \right).
+\]
+\pause
+We have 
+\[ 
+\pi = (\pi_1,\pi_2)  \left( \begin{array}{cc} 0.7 & 0.3 \\ 0.4 & 0.6 \end{array} \right) = \pi 
+\]
+which leads to the system of equations 
+\[ 
+0.7\pi_1 + 0.4\pi_2 = \pi_1, \quad
+\pi_2 = 1-\pi_1 
+\]
+and thus 
+\[ 
+\pi_1 = 0.7\pi_1 + 0.4(1-\pi_1) = 0.3\pi_1 + 0.4 \implies \pi_1 =4/7.
+\]
+\pause
+Therefore
+\[ 
+\pi = (4/7,3/7)
+\]
+is the steady-state distribution for this Markov chain.
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Limiting distribution of the transition matrix}
+
+Recall that 
+\[ 
+P^{(h)} = P^{(h-1)}P.
+\]
+\pause
+If it exists, the limit of this $h$-step transition matrix is 
+\[ 
+\lim_{h\to\infty} P^{(h)} = \Pi = 
+\left( \begin{array}{c}
+\pi' \\ \pi' \\ \vdots \\ \pi'
+\end{array}\right)
+\]
+
+\pause
+
+<<transition_matrix4, dependson="transition_matrix", echo=TRUE>>=
+P60
+@
+\end{frame}
+
+
+
+\subsection{Regular Markov chain}
+\begin{frame}
+\frametitle{Regular Markov chain}
+
+\begin{definition}
+A Markov chain is said to be \alert{regular} if 
+\[ 
+p_{ij}^{(h)} > 0
+\] 
+for some $h$ for all $i,j$. \pause That is, for some $h$, matrix $P^{(h)}$ has only non-zero entries, and $h$-step transitions from any state to any state are possible. \pause
+\end{definition}
+\pause
+\begin{theorem}[Ergodic theorem]
+Any regular Markov chain has a steady-state distribution. 
+\end{theorem}
+
+To see what can go wrong, consider these two transition probability matrices:
+\[ 
+P = \left( \begin{array}{cc} 1 & 0 \\ 0 & 1 \end{array} \right), \quad
+P = \left( \begin{array}{cc} 0 & 1 \\ 1 & 0 \end{array} \right).
+\]
+The former is called \alert{reducible} and the latter is called \alert{periodic}. 
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Example}
+
+Consider the Markov chain defined by the transition probability matrix
+\[ 
+P = \left( \begin{array}{ccc} 
+0 & 0 & 1 \\
+2/3 & 0 & 1/3 \\
+1/2 & 1/4 & 1/4
+\end{array} \right).
+\]
+\pause
+Is this Markov chain regular? 
+
+\vspace{0.1in} \pause 
+
+Yes because $P^{(3)}$ has elements that are all positive.
+
+<<echo=TRUE>>=
+P = matrix(data = c(0,0,1,2/3,0,1/3,1/2,1/4,1/4), nrow=3, byrow=TRUE)
+P3 = P %*% P %*% P; P3
+@
+
+\end{frame}
+
+
+
+\end{document}
+
+
+
+

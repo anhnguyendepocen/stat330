@@ -1,0 +1,491 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set 23 - Bayesian statistics (continued)}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=4, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE, echo=FALSE>>=
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(scales)
+library(xtable)
+@
+
+<<set_seed, echo=FALSE>>=
+set.seed(1)
+@
+
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\section{Bayesian analysis}
+\subsection{Beta distribution}
+\begin{frame}
+\frametitle{Beta distribution}
+
+The beta distribution is the conjugate distribution for a probability. 
+\pause
+We use $\theta\sim Be(a,b)$ to represent a random variable $X$ with a Beta distribution
+with shape parameters $a$ and $b$. 
+\pause
+The probability density function is 
+\[ 
+p(\theta) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)} \theta^{a-1}(1-\theta)^{b-1}\mathrm{I}(0<\theta<1)
+\]
+for $a>0,b>0$ 
+\pause
+and the expectation and variance are
+\[ \begin{array}{rl}
+E[\theta] &= \frac{a}{a+b} \\
+Var[\theta] &= \frac{ab}{(a+b)^2(a+b+1)}.
+\end{array} \]
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Beta probability density function}
+<<>>=
+d = data.frame(x = seq(0,1, length=101)) %>%
+	mutate(`a=b=0.5` = dbeta(x, .5,.5),
+				 `a=b=1` = dbeta(x, 1,1),
+				 `a=b=2` = dbeta(x, 2,2)) %>%
+	gather(Distribution, density, -x)
+
+ggplot(d, aes(x,density,color=Distribution, group=Distribution)) + 
+	geom_line() + 
+	theme_bw()
+@
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Beta probability density function}
+<<>>=
+d = data.frame(x = seq(0,1, length=101)) %>%
+	mutate(`a=4, b=2` = dbeta(x, 4,2),
+				 `a=3, b=3` = dbeta(x, 3,3),
+				 `a=2, b=4` = dbeta(x, 2,4)) %>%
+	gather(Distribution, density, -x)
+
+ggplot(d, aes(x,density,color=Distribution, group=Distribution)) + 
+	geom_line() + 
+	theme_bw()
+@
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Binomial model}
+
+Suppose we have data $Y\sim Bin(n,\theta)$ and we assume the conjugate prior
+$\theta\sim Beta(a,b)$. 
+\pause
+The posterior is 
+\[ \begin{array}{rl}
+p(\theta|y) 
+&\propto p(y|\theta)p(\theta) \\
+&\propto \theta^y(1-\theta)^{n-y} \theta^{a-1}(1-\theta)^{b-1} \\
+&= \theta^{a+y-1}(1-\theta)^{b+n-y-1}
+\end{array} \]
+\pause
+i.e. $\theta|y \sim Be(a+y,b+n-y)$. 
+
+\vspace{0.1in} \pause
+
+
+Since 
+\begin{itemize}
+\item $y$ is the number of successes and
+\item $n-y$ is the number of failures,
+\end{itemize}
+\pause
+we can interpret
+\begin{itemize}
+\item $a$ as the prior successes and
+\item $b$ as the prior failures.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Dropped packets}
+
+<<dropped_packets>>=
+n = 1000
+y = 15
+a = b = 1
+ap = a+y
+bp = b+n-y
+@
+
+Suppose you are monitoring a network and are recording the number of dropped
+packets. 
+\pause
+You find that out of \Sexpr{n} attempts, there were \Sexpr{y} dropped packets. 
+\pause
+Let $Y$ be the number of dropped packets.
+\pause 
+Assume $Y\sim Bin(n,\theta)$ with $y=\Sexpr{y}$ and $n=\Sexpr{n}$ and 
+assume the default prior $\theta\sim Be(\Sexpr{a},\Sexpr{b})$. 
+\pause
+The posterior is $\theta|y \sim Be(\Sexpr{ap},\Sexpr{bp})$. 
+
+\vspace{0.1in} \pause
+
+<<dropped_packages_posterior, dependson="dropped_packets", fig.height=3>>=
+d = data.frame(x = seq(0,.1,length=101)) %>% 
+	mutate(prior = dbeta(x, a, b),
+				 posterior = dbeta(x, ap, bp)) %>%
+	gather(Distribution, density, -x)
+
+ggplot(d, aes(x,density,color=Distribution, group=Distribution)) +
+	geom_line() +
+	theme_bw()
+@
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Calculating probabilities}
+
+<<dropped_packages_probability, dependson="dropped_packets">>=
+@
+
+Suppose your network design requires at most a 2\% packet loss. 
+\pause
+Thus, it seems natural to calculate the probability the parameter is greater than
+2\%. 
+\pause
+Using a computer, it is trivial to calculate probability statements based on 
+this posterior\pause, e.g. 
+\[ 
+P(\theta> 0.02|y) = \Sexpr{round(1-pbeta(.02,ap,bp),2)}.
+\]
+using the cdf of a beta distribution.
+
+\vspace{0.1in} \pause
+
+Thus the data suggest there is a non-negligible probability the true probability 
+of a packet loss is greater than 2\%. 
+\end{frame}
+
+
+\section{Poisson model}
+\begin{frame}
+\frametitle{Poisson model}
+
+Suppose we have data $Y_i \ind \sim Po(\lambda)$ and we assume the conjugate prior
+$\lambda\sim Ga(a,b)$. 
+\pause
+The posterior is 
+\[ \begin{array}{rl}
+p(\lambda|y) 
+&\propto p(y|\lambda)p(\lambda) \\
+&\propto \left[\prod_{i=1}^n \lambda^{y_i} e^{-\lambda} \right] \lambda^{a-1} e^{-b\lambda} \\
+&= \lambda^{a+n\overline{y}-1} e^{-\lambda[b+n]}
+\end{array} \]
+\pause
+i.e. $\lambda|y \sim Ga(a+n\overline{y},b+n)$. 
+
+\vspace{0.1in} \pause
+
+
+Since 
+\begin{itemize}
+\item $n\overline{y}$ is the sample sum and
+\item $n$ is the number of observations,
+\end{itemize}
+\pause
+we can interpret 
+\begin{itemize}
+\item $a$ as the prior sum and
+\item $b$ as the prior number of observations.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Prediction for a Poisson model}
+
+If $Y|\lambda \sim Po(\lambda)$ and $\lambda \sim Ga(a,b)$, then the marginal distribution for $Y$ is
+\[ \begin{array}{rl}
+p(y) 
+&= \int p(y|\lambda)p(\lambda) d\lambda \\
+&= \int \frac{\lambda^y e^{-\lambda}}{y!} \frac{b^a}{\Gamma(a)}\lambda^{a-1} e^{-b\lambda} d\lambda \\
+&= \frac{b^a}{\Gamma(a)y!} \int \lambda^{a+y-1} e^{-\lambda(b+1)} \\
+&= \frac{b^a}{\Gamma(a)y!} \frac{\Gamma(a+y)}{(b+1)^{a+y}} \\
+&= \frac{\Gamma(a+y)}{y!\Gamma(a)} \left(\frac{b}{b+1}\right)^a \left(\frac{1}{b+1}\right)^y
+\end{array} \]
+\pause
+which is a negative binomial distribution with parameters $a$ and $b$, i.e. 
+$Y \sim NB(a,b)$. 
+
+\vspace{0.1in} \pause
+
+Thus, the prior predictive distribution is $y\sim NB(a,b)$ \pause and the posterior
+predictive distribution for a new observation $\tilde{y}$ based on data 
+$y_1,\ldots,y_n$ is $\tilde{y}\sim NB(a+n\overline{y}, b+n)$.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Number of pixel defects}
+
+<<pixel_defect>>=
+n = 10
+ybar = 1.1
+ytilde = 0:5
+prob = sum(dnbinom(ytilde, n*ybar, n/(n+1)))
+@
+
+The \href{https://en.wikipedia.org/wiki/ISO_13406-2}{ISO\_13406-2} standard calls for Class II
+LCD monitors to not have more than 5 Type 3 (stuck pixel: one or more sub-pixels 
+are always on or always off) per million pixels.
+\pause
+What is the probability that a new Class II monitor will have more than 5 Type 
+3 errors based on a sample of 10 monitors that had an average of \Sexpr{ybar} Type 3 error 
+per million pixels? 
+
+\vspace{0.1in} \pause
+
+Let $Y_i$ be the number of stuck pixels on monitor $i$ and assume 
+$Y_i\ind Po(\lambda)$ and the default prior $\lambda \sim Ga(0,0)$.
+\pause
+Then $\lambda|y \sim Ga(n\overline{y},\overline{y})$
+\pause
+and $\tilde{y} \sim NB(n\overline{y}, n)$ and 
+\[ \begin{array}{rl}
+P(\tilde{y}>5|y) 
+&= 1-P(\tilde{y}\le 5|y) \\
+&= 
+1-\sum_{\tilde{y}=0}^5 
+\frac{\Gamma(n\overline{y}+\tilde{y})}{\tilde{y}!\Gamma(n\overline{y})} 
+\left(\frac{n}{n+1}\right)^{n\overline{y}} 
+\left(\frac{1}{n+1}\right)^{\tilde{y}} \\
+&= \Sexpr{round(1-prob,4)}
+\end{array} \]
+Thus, the probability of a defective monitor is small.
+\end{frame}
+
+
+
+
+\section{Normal model}
+\begin{frame}
+\frametitle{Normal model}
+Suppose we have data $Y_i \ind N(\mu,\sigma^2)$ and we assume the default 
+prior $p(\mu,\sigma^2) \propto 1/\sigma^2$.
+
+\vspace{0.2in} \pause
+
+The posterior under this default prior is 
+\[ 
+\mu|\sigma^2,y \sim N(\overline{y}, \sigma^2/n) 
+\qquad 
+\frac{1}{\sigma^2}|y \sim Ga\left(\frac{n-1}{2},\frac{(n-1)s^2}{2}\right). 
+\]
+The marginal posterior for $\mu$ can be derived from
+\[ 
+\frac{\mu - \overline{y}}{s/\sqrt{n}} \sim t_{n-1}.
+%\mu|y \sim t_{n-1}(\overline{y}, s^2/n) 
+\]
+
+\vspace{0.1in} \pause
+  
+An equal-tailed $100(1-a)$\% credible inteval can be obtained via 
+\[ \overline{y} \pm t_{n-1,a/2} s/\sqrt{n} \]
+\pause 
+which is exactly the same as the $100(1-a)$\% confidence inteval.
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{CPU Fabrication facility}
+
+<<clock_speed_data, echo=FALSE>>=
+n = 15
+ybar = 1.78
+m_0 = 1.8
+sd = 0.05
+t = (m_0-ybar)/(sd/sqrt(n))
+@
+
+
+In a CPU fabrication facility, the target clock rate is \Sexpr{m_0} GHz. 
+\pause
+A random sample of \Sexpr{n} chips had an average clock rate of \Sexpr{ybar} 
+GHz with a sample standard deviation of \Sexpr{sd} GHz. 
+\pause
+Is there any evidence that the average clock rate is less than \Sexpr{m_0} GHz?
+
+\vspace{0.1in} \pause
+
+Let $Y_i$ be the clock speed for chip $i$ and assume $Y_i\ind N(\mu,\sigma^2)$. 
+\pause
+Then
+\[ \begin{array}{rl}
+P(\mu<1.8|y) &= 
+P\left(\left. \frac{\mu-\overline{y}}{s/\sqrt{n}} < \frac{1.8-\Sexpr{ybar}}{\Sexpr{sd}/\sqrt{\Sexpr{n}}} \right|y\right) \\
+&= P(T_{\Sexpr{n-1}}<\Sexpr{round(t,2)}|y) \\
+&= \Sexpr{round(pt(t,n-1),2)}
+\end{array} \]
+\pause
+So it appears the evidence is reasonably strong that the average clock speed is
+less than \Sexpr{m_0} GHz.
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Prediction for a normal model}
+
+If $Y_1,\ldots,Y_n,\tilde{Y}|\mu,\sigma^2 \sim N(\mu,\sigma^2)$ and 
+\[ 
+\mu|\sigma^2,y \sim N(\overline{y}, \sigma^2/n) 
+\qquad 
+\frac{1}{\sigma^2} \sim Ga\left(\frac{n-1}{2},\frac{(n-1)s^2}{2}\right),
+\]
+where $\overline{y} = \frac{1}{n}\sum_{i=1}^n y_i$. 
+
+\vspace{0.1in} 
+
+Then the marginal distribution for $Y$ can be derived from 
+\[
+\frac{\tilde{Y}-\overline{y}}{s\sqrt{1+\frac{1}{n}}} \sim t_{n-1}.
+\]
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{CPU Fabrication facility}
+
+<<clock_speed_prediction, dependson="clock_speed_data", echo=FALSE>>=
+t = (m_0-ybar)/(sd*sqrt(1+1/n))
+@
+
+
+In a CPU fabrication facility, the target clock rate is \Sexpr{m_0} GHz. 
+\pause
+A random sample of \Sexpr{n} chips had an average clock rate of \Sexpr{ybar} 
+GHz with a sample standard deviation of \Sexpr{sd} GHz. 
+\pause
+What is the probability the next chip coming off the line will have a measured
+clock rate below \Sexpr{m_0} GHz?
+
+\vspace{0.1in} \pause
+
+Let $Y_i$ be the clock speed for chip $i$ and assume $Y_i\ind N(\mu,\sigma^2)$
+and, independently, $\tilde{Y}\sim N(\mu,\sigma^2)$. 
+\pause
+Then
+\[ \begin{array}{rl}
+P(\tilde{y}<1.8|y) &= 
+P\left(\left. \frac{\mu-\overline{y}}{s\sqrt{1+\frac{1}{n}}} < \frac{1.8-\Sexpr{ybar}}{\Sexpr{sd}\sqrt{1+\frac{1}{\Sexpr{n}}}} \right|y\right) \\
+&= P(T_{\Sexpr{n-1}}<\Sexpr{round(t,2)}|y) \\
+&= \Sexpr{round(pt(t,n-1),2)}
+\end{array} \]
+\pause
+This is lower than the previous, because there is a lot of variability in the 
+process. 
+
+\end{frame}
+
+
+% \begin{frame}
+% \frametitle{Normal model}
+% 
+% Suppose we have data $Y_i \ind \sim N(\mu,\sigma^2)$ and we assume the conjugate prior
+% \[ 
+% \mu|\sigma^2\phantom{,y} \sim N(m,\sigma^2/k) 
+% \qquad 
+% \frac{1}{\sigma^2}\phantom{,y} \sim Ga\left(\frac{v}{2},\frac{vw^2}{2}\right) 
+% \]
+%   \pause where $w^2$ serves as a prior guess about $\sigma^2$ and $v$ controls how certain we are about that guess. 
+%   
+%   \vspace{0.2in} \pause 
+% 
+%   The posterior under this prior is 
+%   \[ \mu|\sigma^2,y \sim N(m',\sigma^2/k') \qquad \frac{1}{\sigma^2}|y \sim Ga\left(\frac{v'}{2},\frac{v'(w')^2}{2}\right) \]
+%   \pause where 
+%   \[ \begin{array}{rl}
+%   k' &= k+n \\
+%   m' &= [km + n\overline{y}]/k' \\
+%   v' &= v+n \\
+%   v'(w')^2 &= vw^2 + (n-1)s^2 + \frac{kn}{k'}(\overline{y}-m)^2
+%   \end{array} \]
+% 
+% \end{frame}
+%
+% \begin{frame}
+% \frametitle{Marginal posterior for $\mu$}
+%   The marginal posterior for $\mu$ is 
+%   \[ \mu|y \sim t_{v'}(m', (w')^2/k'). \]
+%   
+%   \vspace{0.2in} \pause
+%   
+%   An equal-tailed $100(1-\alpha)$\% credible inteval can be obtained via 
+%   \[ m' \pm t_{v'}(1-\alpha/2) w'/\sqrt{k'} \]
+%   which is exactly 
+% \end{frame}
+
+
+\begin{frame}
+\frametitle{Summary}
+
+{\small
+\[ \begin{array}{llll}
+\mbox{Model} & \mbox{Conjugate Prior} & \mbox{Default values} & \mbox{Posterior} \\
+\hline
+Y\sim Bin(n,\theta) & \theta \sim Be(a,b) & a=b=1 & \theta|y \sim Be(a+y,b+n-y) \\
+Y_i \ind Po(\lambda) & \lambda \sim Ga(a,b) & a=b=0 & \lambda|y \sim Ga(a+n\overline{y}, b+n) \\
+Y_i \ind Exp(\lambda) & \lambda \sim Ga(a,b) & a=b=0 & \lambda|y \sim Ga(a+n, b+n\overline{y}) \\ \\
+Y_i \ind N(\mu,\sigma^2) & \multicolumn{2}{c}{p(\mu,\sigma^2) \propto 1/\sigma^2} & \mu|\sigma^2,y \sim N(\overline{y}, \sigma^2/n) \\
+&&&
+\frac{1}{\sigma^2}|y \sim Ga\left(\frac{n-1}{2},\frac{(n-1)s^2}{2}\right) \\
+\hline
+\end{array} \]
+}
+\end{frame}
+
+
+\end{document}
+
+
+
+
+
+
+

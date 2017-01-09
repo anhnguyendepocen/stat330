@@ -1,0 +1,260 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\usepackage{tikz}
+\usetikzlibrary{chains,shapes.multipart}
+\usetikzlibrary{shapes,calc}
+\usetikzlibrary{automata,positioning}
+
+\title{Set14 - Queuing systems}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\section{Queuing systems}
+\begin{frame}
+\frametitle{Queuing systems}
+
+\begin{definition}
+A \alert{queuing (or queueing) system} is a model with one or more servers 
+designed to process jobs and a queue of jobs waiting to be processed.
+\end{definition}
+\pause
+
+\input{mm2}
+       
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Examples of queuing systems}
+\begin{itemize}
+\item Airplane boarding
+\item Amusement park ride lines
+\item Cluster jobs
+\item Cars at an intersection
+\item Customer call centers
+\item Email inbox
+\item Emergency room
+\item Bus transit system
+\item $\vdots$
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Components of a queuing system}
+\begin{itemize}[<+->]
+\item Arrival: random job arrival times, recorded by a counting process $A(t)$
+  \begin{itemize}
+	\item Arrival rate: $\lambda_A = E[A(t)]/t$
+  \item Expected time between arrivals: $\mu_A=1/\lambda_A$
+  \end{itemize}
+  
+  \vspace{0.1in}
+  
+\item Routing to servers: ``first come-first-serve''
+	\begin{itemize}
+	\item If one or more servers are available, job is allocated to a server.
+	\item If all servers are busy, job is put in the queue.
+	\end{itemize}
+  
+  \vspace{0.1in}
+  
+\item Service: random job completion times
+	\begin{itemize}
+	\item Expected completion time: $\mu_S$
+	\item Service rate: $\lambda_S=1/\mu_S$
+	\end{itemize}
+  
+  \vspace{0.1in}
+  
+\item Departure: job leaves the system when completed
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Queuing system notation}
+
+Parameters:
+\begin{tabular}{ll}
+$\lambda_A$ & arrival rate \\
+$\lambda_S$ & service rate \\
+$\mu_A=1/\lambda_A$     & expected interarrival time \\
+$\mu_S=1/\lambda_S$     & expected service time \pause \\
+$r = \lambda_A/\lambda_S = \mu_S/\mu_A$ & utilization, or arrival-to-service ratio
+\end{tabular}
+
+\vspace{0.1in} \pause
+
+Stochastic processes
+\begin{tabular}{ll}
+$X_s(t)$ & number of jobs receiving service at time $t$ \pause \\
+$X_w(t)$ & number of jobs waiting in a queue at time $t$ \pause \\
+$X(t)=X_s(t)+X_w(t)$ & number of jobs in the system at time $t$
+\end{tabular}
+
+\vspace{0.1in} \pause
+
+Random variables:
+\begin{tabular}{ll}
+$S_k$ & service time of the $k$th job \pause \\
+$W_k$ & waiting time of the $k$th job \pause \\
+$R_k=S_k+W_k$ & response time (total time in system) for the $k$th job
+\end{tabular}
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Little's Law}
+
+\begin{theorem}[Little's Law]
+For any homogeneous queuing system, the expected number of jobs in the system 
+equals the arrival rate times the expected response time, i.e.
+\[ 
+E[X] = \lambda_A E[R].
+\]
+\end{theorem}
+
+\pause
+
+\begin{corollary}
+Little's Law also applies to the system's components, i.e. 
+\begin{itemize}
+\item Waiting time: $E[X_w] = \lambda_A E[W]$
+\item Service time: $E[X_s] = \lambda_A E[S]=\lambda_A\mu_S = r$
+\end{itemize}
+\end{corollary}
+
+\pause
+
+Note that the $k$ subscript is eliminated for the random variables and $(t)$ is
+eliminated from the stochastic processes because the system is homogeneous and 
+(if it exists) in its steady-state distribution. 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Semiconductor fabrication}
+
+A semiconductor fabrication facility starts 1\,000 wafers per day. \pause We track
+the amount of work-in-process (WIP) inventory and find an average WIP of 45\,000 
+wafers. 
+
+\vspace{0.1in} \pause
+
+What is the expected time to finish a wafer? 
+
+\vspace{0.1in} \pause
+
+Let 
+\begin{itemize}
+\item $\lambda_A=1\,000$ wafers/day,
+\item $X$ be the number of WIP wafers, and
+\item $R$ be the time to finish a wafer. \pause
+\end{itemize}
+Then
+\[ 
+E[R] = E[X]/\lambda_A \pause
+= 45\,000 \mbox{ wafers}/ 1\, 000 \mbox{ wafers/day} 
+= 45 \mbox{ days}
+\]
+{\tiny \url{http://web.mit.edu/sgraves/www/papers/Little's\%20Law-Published.pdf}}
+\end{frame}
+
+\pause
+
+\begin{frame}
+\frametitle{Semiconductor warehouse}
+Suppose the warehouse that stores the wafers before they head to the fabrication
+facility wants a wafer to have an expected wait time of 1 week before being sent 
+to the fabrication facility. 
+
+\vspace{0.1in} \pause
+
+What is the average number of wafers that will be stored in the warehouse?
+
+\vspace{0.1in} \pause
+
+Let 
+	\begin{itemize}
+	\item $W$ be the time a wafer is stored at the warehouse 
+	\item $X_w$ be the number of wafers in the warehouse \pause
+	\end{itemize}
+Then
+	\[ 
+	E[X_w] = \lambda_A E[W] \pause 
+	= 1\,000\mbox{ wafers}/\mbox{days} \times 7\mbox{ days} 
+	= 7\,000 \mbox{ wafers}
+	\]
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Queuing process}
+
+\begin{definition}
+A \alert{queuing process} is a stochastic process that records the number of
+current jobs in a queuing system.
+\end{definition}
+
+\vspace{0.1in} \pause
+
+We will be interested in answer questions such as 
+\begin{itemize}
+\item How many jobs are expected to be in the system?
+\item What is the probability the number of jobs exceeds a threshold?
+\item What is the expected amount of time a job will wait?
+\item What is the probability the amount of time a job will wait exceeds a threshold?
+\item What is the probability there will be no jobs waiting?
+\end{itemize}
+
+\end{frame}
+
+
+\subsection{$A/S/k/C$ }
+\begin{frame}
+\frametitle{$A/S/k/C$ notation}
+
+To quickly denote a queuing system, we use the notation $A/S/k/C$ to represent
+\begin{itemize}[<+->]
+\item $A$ the distribution of interarrival times
+\item $S$ the distribution of service times
+\item $n$ the number of servers
+\item $C$ the maximum capacity of the system, if $C=\infty$ it is omitted
+\end{itemize}
+
+\pause
+
+In this course we will only consider the \underline{M}emoryless exponential 
+distribution for $A$ and $S$. \pause 
+Specifically, we will cover
+\begin{itemize}
+\item $M/M/1$
+\item $M/M/k$
+\item $M/M/\infty$
+\item $M/M/1/C$
+\item $M/M/k/C$
+\end{itemize}
+
+\end{frame}
+
+
+\end{document}
+
+
+
+
+

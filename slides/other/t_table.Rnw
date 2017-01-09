@@ -1,0 +1,38 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+<<echo=FALSE, results='asis', message=FALSE>>=
+library(dplyr)
+library(xtable)
+
+my_round = function(x, digits=3) {
+  formatC( round(x, digits), format='f', digits=digits)
+}
+
+d = expand.grid(v = c(1:30, 
+										 seq(32, 40, by = 2), 
+										 seq(45, 60, by = 5),
+										 seq(70, 100, by = 10),
+										 200, 1e9),
+							 a = c(0.1, 0.05, .025, .02, .01, 
+							 			.005, .0025, .001, .0005, .0001)) %>%
+	mutate(t_crit = my_round(-qt(a,v),3),
+				 v = factor(v),
+				 v = plyr::revalue(v, c("1e+09" = "Infinity")),
+				 a = factor(a)) %>%
+	tidyr::spread(a, t_crit) %>%
+	select(c(1,11:2))
+
+tab = xtable(d, align = "ll|lllll|lllll|")
+print(tab, type="latex", include.rownames=FALSE,
+			add.to.row = list(pos = list(-1), 
+			                  command = "\\multicolumn{11}{l}{$t_a$; critical values, such that $P(T_v>t_a) = a$ where $T_v$ is a $t$ distribution with $v$ degrees of freedom} \\\\ \\multicolumn{11}{l}{} \\\\ & \\multicolumn{10}{c|}{$a$, the right-tail probability} \\\\"))
+@
+
+
+\end{document}

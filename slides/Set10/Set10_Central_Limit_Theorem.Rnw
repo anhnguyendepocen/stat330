@@ -1,0 +1,303 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set10 - Central Limit Theorem}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=7, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+
+\section{Central Limit Theorem}
+\begin{frame}
+\frametitle{Central Limit Theorem (CLT)}
+
+\alert{Main Idea}: Sums and averages of random variables from arbitrary distributions have approximate normal distributions for sufficiently large sample sizes.
+
+\pause
+
+\begin{theorem}[Central Limit Theorem]
+Suppose $X_1,X_2,\ldots$ are iid random variables with 
+\[ E[X_i]=\mu \quad Var[X_i]=\sigma^2. \]
+\pause 
+Define 
+\[ \begin{array}{rl}
+\text{Sample Sum: } S_n &=X_1+X_2+\dots+X_n \\
+\text{Sample Average: } \overline{X}_n&=S_n/n.
+\end{array} \] 
+Then 
+\[ \begin{array}{rl}
+\overline{X}_n &\stackrel{d}{\to} N(\mu,\sigma^2/n) \\
+S_n &\stackrel{d}{\to} N(n\mu,n\sigma^2) 
+\end{array} \]
+as $n\to \infty$.
+\end{theorem}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Customer prize example}
+
+Recall the company who will give out a prize to the 1,000th customer where customers arrive at a rate of 150/day. \pause
+Let $X_i$ between customer $i-1$ and $i$ (where customer $0$ has time 0) and assume $X_i\ind Exp(\lambda)$ with $\lambda=150$. \pause
+Then 
+\[
+Y =X_1+\cdots+X_{n} = \sum_{i=1}^{n} X_i
+\]
+is the time for the $n$th customer. \pause 
+If $n$ is large, we can use the CLT to say 
+\[ 
+Y \dot{\sim} N(n/\lambda, n/\lambda^2).
+\]
+\pause
+A 95\% interval for the arrival of the 1,000 customer is approximately
+<<gamma_example_data, echo=TRUE>>=
+n = 1000
+lambda = 150
+# normal distribution in R is parameterized by the standard deviation
+qnorm(c(.025,.975), mean=n/lambda, sd=sqrt(n/lambda^2)) %>% round(1) 
+@
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Normal approximation to a gamma}
+
+Normal approximation to the gamma works when there is little probability of negative values in the normal approximation, e.g. 
+<<dependson="gamma_example_data", echo=TRUE>>=
+pnorm(0,mean = n/lambda, sd = sqrt(n/lambda^2))
+@
+
+<<fig.width=9>>=
+curve(dnorm(x, mean=n/lambda, sd=sqrt(n/lambda^2)), 5, 8,
+			xlab="days",ylab="density")
+curve(dgamma(x, shape=n, rate=lambda), add=TRUE, col = "red", lty=2)
+legend("topright", c("normal","gamma"), lty=1:2, col=c("black","red"))
+@
+
+\end{frame}
+
+
+\subsection{Normal approximation to a binomial}
+\begin{frame}[fragile]
+\frametitle{Normal approximation to a binomial}
+
+Recall that a binomial distribution can be considered as a sum of iid Bernouli random variables, i.e. if $Y=\sum_{i=1}^n X_i$ where $X_i\ind Ber(p)$, then \pause
+\[ 
+Y \sim Bin(n,p).
+\]
+\pause 
+For a binomial random variable, we have 
+\[ 
+E[Y] = \pause np \qquad \mbox{and} \qquad V[Y] = \pause np(1-p).
+\]
+\pause
+Now, if $n$ is large, 
+\[ 
+Y \dot{\sim} \pause N(np, np[1-p]).
+\]
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Continuity correction}
+
+When approximating a probability mass function with a normal probability density function, we can improve the approximation using the \alert{continuity correction}. \pause
+Let $X$ be a discrete random variable and $Y\sim N(E[X], Var[X])$. \pause
+The \alert{continuity correction} requires the \emph{addition or subtraction of 0.5} to the value used in the approximating probability calculation. 
+
+\vspace{0.2in} \pause
+
+Specifically
+\[ \begin{array}{rl}
+P(X\le c) &\approx P(Y\le c+0.5) \\
+P(X< c) &\approx P(Y< c-0.5) \\
+P(X\ge c) &\approx P(Y\ge c-0.5) \\
+P(X> c) &\approx P(Y > c+0.5) 
+\end{array} \]
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Continuity correction intuition}
+{\small
+Let $X\sim Bin(10,0.5)$, $Y\sim N(5, 2.5)$, and we are trying to calculate $P(X\le 4)$. 
+}
+
+\vspace{0.1in} \pause
+
+<<continuity_correction_binomial>>=
+n = 10; p = 0.5
+x = 0:n
+
+d = data.frame(x=0:n) %>%
+	mutate(pmf = dbinom(x,n,p))
+
+normal_lessthan4 = data.frame(x = seq(min(x)-1, 4, length=101)) %>%
+	mutate(pdf = dnorm(x, n*p, sqrt(n*p*(1-p)))) %>%
+	bind_rows(data.frame(x=4,pdf=0))
+
+g = ggplot(d %>% mutate(color = x<=4), aes(x=x,y=pmf,fill=color)) + 
+	geom_bar(stat="identity", width=1, alpha=0.5, color='black') +
+	scale_x_continuous(breaks=x) + 
+	scale_fill_manual(values=c("gray","red")) +
+	guides(fill=FALSE) +
+	theme_bw() + 
+	ylim(0,0.3) + 
+	xlim(-1,11)
+
+g
+@
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Continuity correction intuition}
+{\small
+Let $X\sim Bin(10,0.5)$, $Y\sim N(5, 2.5)$, and we are trying to calculate $P(X\le 4)$. 
+}
+
+\vspace{0.1in} \pause
+
+<<contintuity_correction_normal, dependson="continuity_correction_binomial">>=
+g + geom_polygon(data=normal_lessthan4, aes(x,pdf), color=NA, fill="blue", alpha=0.5) + 
+	stat_function(fun=dnorm, args=list(mean=n*p, sd=sqrt(n*p*(1-p))))
+@
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Roulette example}
+
+A European roulette wheel has 39 slots: one green, 19 black, and 19 red. \pause
+If I play black everytime, what is the probability that I will have won more than I lost after 99 spins of the wheel? 
+
+\vspace{0.1in} \pause
+
+Let $Y$ indicate the total number of wins \pause and assume $Y\sim Bin(n,p)$ with $n=99$ and $p=19/39$. \pause
+The desired probability is $P(X\ge 50)$. \pause
+Then 
+\[ \begin{array}{rll}
+P(Y\ge 50) &= \sum_{Y=50}^{99} {n\choose y} p^y (1-p)^{n-y} \\
+&= 0.399048 \\
+&& X\sim N(np,np[1-p]) \\
+&\approx P(X\ge 50-0.5) & \mbox{continuity correction} \pause\\ 
+&\approx P\left(Z\ge \frac{49.5-np}{\sqrt{np(1-p)}}\right) \\
+&= P(Z\ge 0.2552089) \\
+&= P(Z\le -0.2552089) & \mbox{symmetric} \\
+&= 0.3974 & \mbox{$Z$ table}
+\end{array} \]
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Roulette example (solutions in R)}
+<<echo=TRUE>>=
+v = 49; cc = 0.5                              # P(Y>=50) = 1-P(Y <= 49) ~= P(X<=49+0.5), X~ N(E[Y],V[Y])
+n = 99; p  = 19/39
+
+1-pbinom(q=v, size=n, prob=p)                 # Truth 
+1-pnorm( q=(v   -n*p)/sqrt(n*p*(1-p)))        # Standardized
+1-pnorm( q=(v+cc-n*p)/sqrt(n*p*(1-p)))        # Standardized with continuity correction
+1-pnorm(q=v   , mean=n*p, sd=sqrt(n*p*(1-p))) # Original scale
+1-pnorm(q=v+cc, mean=n*p, sd=sqrt(n*p*(1-p))) # Original scale with continuity correction
+@
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Astronomy example}
+\small
+
+\vspace{-0.05in}
+
+An astronomer wants to measure the distance, $d$, from the observatory to a star. \pause
+The astronomer takes 30 measurements that she believes are unbiased and finds the average of these measurements to be 29.4 parsecs and variance to be 4 parsecs$^2$.
+What is the probability the average is within 0.5 parsecs?
+
+\vspace{0.1in} \pause
+
+Let $X_i$ be the $i^{th}$ measurement. \pause The
+The astronomer assumes that $X_1,X_2,\ldots X_n$ are iid with $E[X_i]=d$ (unbiased) and $Var[X_i]=\sigma^2=4$. \pause
+The estimate of $d$ is
+\[ \overline{X}_n=\frac{(X_1+X_2+\dots+X_n)}{n} = 29.4. \]
+and, by the Central Limit Theorem, we believe $\overline{X}_n \sim N(d, \sigma^2/n)$ where $n=30$. \pause
+We want to find
+{\footnotesize
+\[ \begin{array}{rl}
+P\left(|\overline{X}_n-d|<0.5\right)
+&= P\left(-0.5 < \overline{X}_n-d < 0.5\right) \\
+&= P\left(\frac{-0.5}{\sigma/\sqrt{n}} < \frac{\overline{X}_n-d}{\sigma/\sqrt{n}} < \frac{0.5}{\sigma/\sqrt{n}} \right) \\
+&= P\left(\frac{-0.5}{\sigma/\sqrt{n}} < Z < \frac{0.5}{\sigma/\sqrt{n}} \right) \\
+&\approx P(-1.37 < Z < 1.37) \\
+&= P(Z<1.37) - P(Z<-1.37) \\
+& \approx 0.915 - 0.085 = 0.830
+\end{array} \]
+}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Astronomy example (cont.)}
+\small
+
+Suppose the astronomer want to be outside 0.5 parsecs with at most 5\% probability. How many more samples would she need to take?
+
+\vspace{0.1in} \pause
+
+We solve
+\[ \begin{array}{rll}
+0.05 \ge P\left(\left|\overline{X}_n-d\right|>.5\right) &= P\left(\overline{X}_n-d>.5\right)+P\left(\overline{X}_n-d<-.5\right)\\
+ &= P\left(\frac{\overline{X}_n-d}{\sqrt{\sigma^2/n}}>\frac{.5}{\sqrt{\sigma^2/n}}\right)+
+ P\left(\frac{\overline{X}_n-d}{\sqrt{\sigma^2/n}}<\frac{-.5}{\sqrt{\sigma^2/n}}\right)\\
+ & \approx P\left(Z>\frac{.5}{\sqrt{\sigma^2/n}}\right)+P\left(Z<\frac{-.5}{\sqrt{\sigma^2/n}}\right) \\
+ &= 2P\left(Z<\frac{-.5}{\sqrt{\sigma^2/n}}\right) 
+\end{array} \]
+
+\pause
+On a $Z$ table, we find that $P(Z<-1.96)\approx 0.025$ \pause and thus $n=61.47$ \pause which we round up to 62. \pause
+So the astronomer needs 62-30=32 more measurements to obtained the desired accuracy.
+
+\end{frame}
+
+\end{document}   

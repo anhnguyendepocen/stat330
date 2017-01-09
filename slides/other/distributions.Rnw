@@ -1,0 +1,102 @@
+\documentclass{article}
+
+\input{../commands}
+
+\usepackage{fullpage}
+\usepackage[landscape]{geometry}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+\section*{Distributions}
+
+In this document $Y$ will indicate the random variable and Greek letters will
+indicate the parameters of the distribution.
+If the support for a random variable is not provided, then the support is all 
+real numbers, i.e. $(-\infty,\infty)$.
+Similar if the range of values for a parameter is not listed, the range is all
+real numbers.
+
+\subsection*{Discrete}
+
+\begin{tabular}{lllllll}
+Name & Notation & Parameters & Support & PDF & \multicolumn{2}{l}{Properties} \\
+\hline
+Bernoulli &
+$Y \sim Ber(\theta)$ &
+$\theta\in [0,1] $ &
+$y = 0,1$ &
+$\theta^y(1-\theta)^y$ &
+$E[Y] = \theta$ & $Var[Y] = \theta(1-\theta)$ \\
+
+Binomial &
+$Y\sim Bin(n,\theta)$ &
+$\theta\in [0,1]$ &
+$y=0,1\ldots,n$ &
+${n\choose y} \theta^y(1-\theta)^{n-y}$ &
+$E[Y] = n\theta$ & $Var[Y] = n\theta(1-\theta)$ \\
+
+Geometric &
+$Y\sim Geo(\theta)$ &
+$\theta\in [0,1]$ &
+$y=1,2,\ldots$ &
+$\theta(1-\theta)^{y-1}$ &
+$E[Y] = \frac{1}{\theta}$ & $Var[Y] = \frac{1-\theta}{\theta^2}$ \\
+
+Poisson & $Y\sim Po(\lambda)$ &
+$\lambda>0$ &
+$y=0,1,2,\ldots$ &
+$e^{-\lambda}\lambda^y/y!$ &
+$E[Y] = \lambda$ & $ Var[Y] = \lambda$ \\
+
+\hline
+\end{tabular}
+
+\subsection*{Continuous}
+
+
+\begin{tabular}{lllllll}
+Name & Notation & Parameters & Support & PDF & \multicolumn{2}{l}{Properties} \\
+\hline
+Beta & $Y\sim Be(\alpha,\beta)$ &
+$\alpha>0, \beta>0$ &
+$y\in (0,1)$ &
+$\frac{\mGamma(\alpha+\beta)}{\mGamma(\alpha)\mGamma(\beta)}y^{\alpha-1}(1-y)^{\beta-1}$ &
+$E[Y] = \frac{\alpha}{\alpha+\beta}$ & $Var[Y] = \frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$ \\
+
+Exponential & $Y\sim Exp(\lambda)$ &
+$\lambda>0$ &
+$y>0$ &
+$\lambda e^{-\lambda y}$ &
+$E[Y] = \frac{1}{\lambda}$ & $Var[Y] = \frac{1}{\lambda^2}$ \\
+
+Gamma & $Y\sim Ga(\alpha,\lambda)$ &
+$\alpha>0, \lambda>0$ &
+$y>0$ &
+$\frac{\lambda^\alpha}{\mGamma(\alpha)}y^{\alpha-1}e^{-\lambda y}$ &
+$E[Y] = \frac{\alpha}{\beta}$ & $ Var[Y] = \frac{\alpha}{\beta^2}$ \\
+
+Normal & $Y\sim N(\mu,\sigma^2)$ &
+$\sigma^2>0$ &
+& 
+$\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{1}{2\sigma^2}(y-\mu)^2}$ & 
+$E[Y] = \mu$ & $Var[Y] = \sigma^2$ \\
+
+Student's T & $Y\sim t_\nu$ & 
+$v>0$ & 
+& 
+$\frac{\mGamma\left(\frac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\mGamma\left(\frac{\nu}{2}\right)}
+\left(1+\frac{y^2}{\nu} \right)^{-\frac{\nu+1}{2}}$ & 
+$E[Y] = 0$ & $Var[Y] = \frac{\nu}{\nu-2}, \nu>2$ \\
+
+Uniform & $Y\sim Unif(\alpha,\beta)$ & 
+$\alpha<\beta$ & 
+$y\in(\alpha,\beta)$ & 
+$\frac{1}{\beta-\alpha}$ & 
+$E[Y] = \frac{\alpha+\beta}{2}$ & $ Var[Y] = \frac{(\beta-\alpha)^2}{12}$ \\
+
+\hline
+\end{tabular}
+
+\end{document}

@@ -1,0 +1,667 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set 25 - Simple linear regression}
+
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=7, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE>>=
+library(dplyr)
+library(ggplot2)
+@
+
+<<set_seed>>=
+set.seed(1)
+@
+
+
+
+\frame{\maketitle}
+
+\begin{frame}
+\frametitle{Bivariate response}
+
+The situations we have contemplated thus far have a single variable, \pause
+e.g. 
+\begin{itemize}
+\item a binary indicator of a website begin operational, \pause 
+\item the waiting time until the next arrival, \pause or
+\item the number of dead pixels in a monitor.
+\end{itemize}
+
+\pause
+
+Or a single variable through time, e.g. 
+\begin{itemize}
+\item the number of people standing in a line, \pause
+\item the number of jobs in a print queue, \pause or
+\item the number of CPU wafers in a fabrication facility. 
+\end{itemize}
+
+\pause
+
+But what if you have pairs of variables, e.g. 
+\begin{itemize}
+\item CPU speed and the time necessary to complete a specific task, \pause
+\item time of day and number of visitors currently on a website, \pause or
+\item number of bugs per line of code and the person who wrote the code.
+\end{itemize}
+
+\pause
+And your interest is the relationship between the two variables?
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{}
+\setkeys{Gin}{width=\textwidth}
+\includegraphics{gtx-960-benchmark-2}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Average FPS vs clock speed}
+
+<<gtx_fps>>=
+speed = readr::read_csv("clock.csv")
+@
+
+<<dependson="gtx_fps", fig.width=7>>=
+ggplot(speed, aes(clock_MHz, fps, label=card)) + 
+#  geom_point() + 
+  geom_label() +
+  theme_bw() + 
+  labs(x="Clock speed (MHz)", y="Average frames per second")
+@
+
+\end{frame}
+
+
+
+\section{Simple linear regression}
+\begin{frame}
+\frametitle{Simple linear regression}
+
+For $i=1,\ldots,n$, \pause let
+\begin{itemize}
+\item $Y_i$ be the response for unit $i$ \pause and 
+\item $x_i$ be the explanatory variable for unit $i$. 
+\end{itemize}
+
+\vspace{0.in} \pause
+
+The simple linear regression model assumes 
+\[ 
+Y_i|X_i=x_i \ind N(\beta_0 + \beta_1 x_i, \sigma^2)
+\]
+\pause
+and thus conditional on the model parameters ($\beta_0,\beta_1,\sigma^2$) \pause
+\[ \begin{array}{rl}
+E[Y_i|X_i = x_i] &=\pause \mu_i = \beta_0 + \beta_1 x_i \pause \\
+Var[Y_i|X_i=x_i] &= \sigma^2.
+\end{array} \]
+\pause
+The expectation is a line with y-intercept $\beta_0$ and slope $\beta_1$ \pause
+and the variability around the line is given by $\sigma^2$. 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{FPS example}
+
+Let 
+\begin{itemize}
+\item $Y_i$ be the (average) FPS for card $i$ \pause and 
+\item $x_i$ be the clock speed in MHz for card $i$.  
+\end{itemize}
+
+\vspace{0.in} \pause
+
+A simple linear regression of \alert{FPS on clock speed} assumes 
+\[ 
+Y_i|X_i=x_i \ind N(\beta_0 + \beta_1 x_i, \sigma^2).
+\]
+\pause
+Thus the expected FPS at a clock speed of $x$ MHz is 
+\[ 
+E[Y|X=x] = \beta_0+\beta_1 x.
+\]
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Parameter estimation}
+
+Define these sums of squares 
+\[ \begin{array}{rl}
+S_{XX} &= \sum_{i=1}^n (x_i-\overline{x})(x_i-\overline{x}) = \sum_{i=1}^n (x_i-\overline{x})^2 \\
+S_{YY} &= \sum_{i=1}^n (y_i-\overline{y})(y_i-\overline{y}) = \sum_{i=1}^n (y_i-\overline{y})^2 \\
+S_{XY} &= \sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y}) \\
+\end{array} \]
+
+\vspace{0.1in} \pause
+
+The MLE and Bayes estimator, with prior $p(\beta_0,\beta_1,\sigma^2) \propto 1/\sigma^2$, \pause is
+\[ \begin{array}{rl}
+\hat\beta_1 &= \frac{S_{XY}}{S_{XX}} \\
+\hat\beta_0 &= \overline{y} - \hat\beta_1 \overline{x} \pause \\
+\hat\sigma^2 &= \frac{RSS}{n-2}
+\end{array} \]
+\pause
+where 
+\[ 
+RSS = \sum_{i=1}^n (y_i-\hat{y}_i)^2 = \sum_{i=1}^n (y_i-\hat\beta_0-\hat\beta_1 x_i)^2. 
+\]
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Regression in R}
+<<regression, dependson="gtx_fps", echo=TRUE>>=
+m <- lm(fps ~ clock_MHz, data=speed); m
+@
+
+<<regression_summary, dependson="regression", echo=TRUE>>=
+summary(m)
+@
+
+\end{frame}
+
+
+\begin{frame}
+<<regression_plot, dependson="gtx_fps">>=
+ggplot(speed, aes(clock_MHz, fps, label=card)) +
+  geom_label() +
+  geom_smooth(method='lm',formula=y~x, se=FALSE) +
+  theme_bw()
+@
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Regression minimizes the sum of squared residuals}
+
+\begin{definition}
+Rewrite the simple linear regression model as 
+\[ 
+Y_i = \beta_0 + \beta_1 x_i + e_i, \qquad e_i \ind N(0,\sigma^2).
+\]\pause
+where $e_i$ is the ``\alert{error}'' of the observation $y_i$ relative to the 
+``true'' line $\beta_0 + \beta_1 x_i$. \pause 
+\pause
+The \alert{residual} is $r_i=y_i - \hat\beta_0 -\hat\beta_1 x_i$. 
+\end{definition}
+
+\vspace{0.1in} \pause 
+
+In deriving the {\bf maximum} likelihood estimator (MLE), we find the $\beta_0$, 
+$\beta_1$, and $\sigma^2$ that maximize
+\[ \begin{array}{rl}
+\ell(\beta_0,\beta_1,\sigma^2) &
+= -\frac{n}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (y_i - \beta_0 -\beta_1 x_i)^2 \\
+ &= -\frac{n}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n e_i^2 \\
+\end{array} \]
+The values for $\hat\beta_0$ and $\hat\beta_1$ are the values that minimize the
+residual sum of squares (RSS), $\sum_{i=1}^n r_i^2$, 
+and are sometimes referred to as the \alert{least squares estimator}.
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Visualizing the residuals}
+
+<<visualize_residuals, dependson="regression">>=
+ggplot(speed, aes(clock_MHz, fps)) +
+  geom_label(aes(label=card)) +
+  geom_smooth(method='lm',formula=y~x, se=FALSE) +
+  geom_segment(data = broom::augment(m), 
+               aes(x = clock_MHz, xend = clock_MHz, 
+                   y = .fitted, yend = .fitted+.resid),
+               color = "red") + 
+  theme_bw()
+@
+
+\end{frame}
+
+
+\subsection{Assumptions}
+\begin{frame}
+\frametitle{Assumptions}
+
+\small
+
+\vspace{-0.05in}
+
+The simple linear regression model can be written as 
+\[ 
+Y_i = \beta_0 + \beta_1 x_i + e_i, \qquad e_i \ind N(0,\sigma^2)
+\]
+which indicates the following assumptions
+\begin{itemize}[<+->]
+\item the expected response is a linear function of the explanatory variable and
+\item the errors are 
+  \begin{itemize}
+  \item independent, 
+  \item normally distributed, and
+  \item have a constant variance (homoscedasticity).
+  \end{itemize}
+\end{itemize}
+
+\pause
+
+These assumptions are typically checked by plotting residuals or a 
+standardized/studentized residual
+\[ 
+\frac{r_i}{\sqrt{Var[r_i]}} = \frac{r_i}{\hat\sigma\sqrt{1-h_{ii}}}
+\]
+where $h_{ii}$ is the $i$th diagonal element of 
+\[ 
+H = X(X^\top X)^{-1} X^\top
+\]
+where $X$ has a column of ones and a column of the $x_i$s.
+
+\end{frame}
+
+
+\subsection{Diagnostic plots}
+\begin{frame}[fragile]
+\frametitle{Default residual plots in R}
+<<diagnostic_plots, dependson="regression", echo=TRUE>>=
+opar = par(mfrow=c(2,3)); plot(m, 1:6); par(opar)
+@
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Diagnostic plots on simulated data}
+
+On the next few slides, common diagnostic plots are shown with simulated data 
+that violate simple linear regression assumptions:
+
+\vspace{0.1in} \pause
+
+\[ \begin{array}{ll}
+\mbox{assumption violation} & \mbox{true model} \pause \\
+\hline
+\mbox{constant variance} & e_i \ind N(0,x_i^2) \pause \\
+\mbox{independent} & e_i \stackrel{\phantom{ind}}{\sim} N(0.99 e_{i-1}, 1) \pause \\
+\mbox{linear} & Y_i \ind N(x_i^2,1) \pause \\
+\mbox{normal} & e_i \ind t_5 \pause \\
+\hline
+\end{array} \]
+
+\pause
+
+Two simulated data sets that have no violations are also included. 
+
+\end{frame}
+
+
+
+<<sim_data, warning=FALSE>>=
+sim <- data.frame(x = runif(100, 0, 3)) %>%
+  dplyr::mutate(
+    constant_variance = rnorm(length(x), x, x),
+    linear = rnorm(length(x), x^2),
+    independent = x+arima.sim(list(ar=.99), length(x)),
+    normal = x+rt(length(x), 5),
+    no_violation1 = rnorm(length(x), x),
+    no_violation2 = rnorm(length(x), x)) %>%
+  tidyr::gather(violation, y, -x) %>%
+  group_by(violation) %>%
+  do(broom::augment(lm(y~x,.))) %>%
+  ungroup() %>%
+  mutate(violation = paste(ifelse(grepl("no_",violation), "", "Violation:"), 
+  												 violation))
+@
+
+\begin{frame}
+\frametitle{Residuals vs fitted values}
+
+Fitted values: $\hat{y}_i = \hat\beta_0 + \hat\beta_1 x_i$. \pause
+
+<<residuals_v_fitted, dependson="sim_data">>=
+ggplot(sim, aes(.fitted, .resid)) + 
+  geom_point() +
+  facet_wrap(~violation, scales="free", ncol = 3, dir = "v") +
+  labs(x="Fitted values", y="Residuals") +
+  theme_bw()
+@
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Standardized residuals vs index}
+
+<<residuals_v_index, dependson="sim_data">>=
+add_index <- function(d) {
+  d %>% mutate(index = 1:nrow(d))
+}
+
+tmp <- sim %>%
+         group_by(violation) %>%
+         do(add_index(.))
+
+ggplot(tmp, aes(index, .std.resid)) + 
+  geom_point() +
+  facet_wrap(~violation, scales="free", ncol = 3, dir = "v") +
+  labs(x="Index", y="Standardized Residual") +
+  theme_bw()
+  
+@
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Histogram of standardized residuals}
+
+<<histogram, dependson="sim_data">>=
+ggplot(sim, aes(x=.std.resid)) +
+	geom_histogram(aes(y=..density..)) + 
+	stat_function(fun = dnorm, color="gray") + 
+	facet_wrap(~violation, scales="free", ncol = 3, dir = "v") + 
+	theme_bw() +
+	labs(x="Standardized residual")
+@
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{qqplot of standardized residuals}
+
+<<qqplots, depenndson="sim_data">>=
+qqline_extract <- function(d) {
+  vec <- d$.resid
+  y <- quantile(vec, c(.25,.75))
+  x <- qnorm(c(.025,.75))
+  data_frame(slope = diff(y)/diff(x)) %>%
+    mutate(int = y[1L] - slope*x[1L])
+}
+
+qqline_data <- sim %>%
+  group_by(violation) %>%
+  do(qqline_extract(.)) %>%
+  ungroup()
+
+ggplot(sim, aes(sample=.std.resid)) +
+  stat_qq() +
+  # geom_abline(data=qqline_data, aes(intercept = int, slope = slope)) +
+  geom_abline(intercept = 0, slope = 1) +
+  facet_wrap(~violation, scales="free", ncol = 3, dir = "v") +
+  theme_bw()
+@
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Regression statistics}
+
+We have or will discuss the following regression statistics
+\begin{itemize}
+\item $\hat\beta_0$, $\hat\beta_1$, and $\hat\sigma^2$
+\item confidence/credible intervals for $\hat\beta_0$ and $\hat\beta_1$
+\item t-statistics and pvalues for testing $\beta_0=0$ and $\beta_1=0$
+\item correlation and coefficient of determination, $R^2$
+\item case statistics: (standardized) residuals and fitted value $\hat{Y}_i$
+\end{itemize}
+
+\end{frame}
+
+
+
+\subsection{Interpretation}
+\begin{frame}
+\frametitle{Interpretation}
+
+Recall 
+\[ 
+E[Y_i|X_i=x_i] = \beta_0 + \beta_1 x_i
+\]
+\pause
+thus 
+\[ 
+E[Y_i|X_i=0] = \beta_0
+\]
+\pause
+so the intercept ($\beta_0$) is the expected response when the explanatory 
+variable is 0. 
+
+\vspace{0.1in} \pause
+
+Also
+\[ \begin{array}{rl}
+E[Y_i|X_i=x+1] &= \beta_0 + \beta_1 x + \beta_1 \\
+E[Y_i|X_i=x\phantom{ + 1}\,\,] &= \beta_0 + \beta_1 x \\
+\hline
+E[Y_i|X_i=x+1] - E[Y_i|X_i=x]&= \phantom{\beta_0 + \beta_1 x +}\,\,\beta_1
+\end{array} \]
+so the slope ($\beta_1$) is the expected increase in the response for each unit
+increase in the explanatory variable.
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{FPS example interpretation}
+<<regression2, dependson="regression", echo=TRUE>>=
+<<regression>>
+@
+
+\pause
+
+Thus, the estimated
+\begin{itemize}
+\item expected FPS is 5.6 when the clock speed is 0 MHz \pause and
+\item expected increase in FPS is 0.07 for each 1 MHz increase in clock speed. 
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+The first statement is clearly ridiculous because we are \alert{extrapolating} 
+beyond the range of clock speeds where we have data. 
+
+\end{frame}
+
+
+
+\begin{frame}
+<<regression_plot_expanded, dependson="gtx_fps">>=
+ggplot(speed, aes(clock_MHz, fps, label=card)) +
+  geom_label() +
+  geom_smooth(method='lm',formula=y~x, se=FALSE, fullrange=TRUE) +
+	xlim(0,1200) + 
+	ylim(0,130) + 
+  theme_bw()
+@
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Uncertainty in the line}
+
+Using techniques discussed earlier this semester, we can derive confidence 
+and credible intervals, with the default prior $1/\sigma^2$, for $\beta_0$ and 
+$\beta_1$. \pause For linear regression the confidence/credible intervals are 
+\[ 
+\hat\beta_0 \pm t_{n-2,a/2} \hat\sigma \sqrt{\frac{1}{n} + \frac{\overline{x}^2}{S_{XX}}}
+\]
+\pause
+and 
+\[ 
+\hat\beta_1 \pm t_{n-2,a/2} \hat\sigma \sqrt{\frac{1}{S_{XX}}}.
+\]
+\pause
+We can also calculate a confidence/credible interval for $E[Y|X=x]$ which is 
+\[
+\hat\beta_0+\hat\beta_1 x \pm t_{n-2,a/2} \hat\sigma \sqrt{\frac{1}{n} + \frac{(x-\overline{x})^2}{S_{XX}}}.
+\]
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Pvalues}
+
+Since 
+\[ 
+\frac{\hat\beta_0 - \beta_0}{\hat\sigma \sqrt{\frac{1}{n} + \frac{\overline{x}^2}{S_{XX}}}} \sim t_{n-2} \pause
+\qquad\mbox{and}\qquad
+\frac{\hat\beta_1 - \beta_1}{\hat\sigma \sqrt{\frac{1}{S_{XX}}}} \sim t_{n-2},
+\]
+\pause 
+we can use these to construct hypothesis tests. 
+
+\vspace{0.1in} \pause
+
+For example, to test $H_0: \beta_1 = 0$ we can compute 
+\[
+\mbox{pvalue} = 2P\left(T_{n-2}>\left| \frac{\hat\beta_1}{\hat\sigma \sqrt{\frac{1}{S_{XX}}}} \right|\right).
+\]
+\pause
+Most statistical software will automatically calculate pvalues for the tests 
+$\beta_0=0$ and $\beta_1=0$.
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Regression inference in R}
+
+<<confidence_intervals, dependson="regression", echo=TRUE>>=
+confint(m, level=0.95)
+summary(m)
+@
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Regression line with uncertainty}
+<<regression_uncertainty, dependson="gtx_fps">>=
+ggplot(speed, aes(clock_MHz, fps, label=card)) +
+  geom_label() +
+  geom_smooth(method='lm',formula=y~x) +
+  theme_bw()
+@
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Prediction}
+
+Using techniques discussed earlier this semester, we can derive prediction 
+intervals. \pause 
+To predict a value $\tilde{y}$ at a value $X=\tilde{x}$, we have the following
+equation
+\[ 
+\tilde{y} = \beta_0 + \beta_1 \tilde{x} + \tilde{e}, 
+\quad \tilde{e} \sim N(0,\sigma^2)
+\]
+The ``uncertainty in the line'' takes care of the uncertainty in 
+$\beta_0 + \beta_1 \tilde{x}$, but not in the additional variability of 
+$\tilde{e}$.
+\pause
+A prediction interval that takes into account both sources of variability 
+(and also uncertainty in $\sigma^2$) is 
+\[
+\hat\beta_0+\hat\beta_1 x 
+\pm t_{n-2,a/2} 
+\hat\sigma \sqrt{1+\frac{1}{n} + \frac{(x-\overline{x})^2}{S_{XX}}}.
+\]
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Regression prediction in R}
+
+<<prediction_intervals, dependson="regression", echo=TRUE>>=
+prediction_intervals <- predict(m, interval="prediction")
+prediction_intervals
+@
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Regression line with uncertainty}
+<<prediction_uncertainty, dependson=c("data","prediction_intervals")>>=
+prediction_df <- cbind(speed, prediction_intervals)
+ggplot(prediction_df, aes(clock_MHz, fps, label=card)) +
+  geom_label() +
+	geom_line(aes(y=lwr), color = "red", linetype = "dashed") +
+	geom_line(aes(y=upr), color = "red", linetype = "dashed") +
+  geom_smooth(method='lm',formula=y~x) +
+  theme_bw()
+@
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Correlation and $R^2$}
+
+The sample correlation coefficient is 
+\[ 
+r = \frac{s_{xy}}{s_xs_y}
+\]
+where 
+\[ \begin{array}{rll}
+s_{xy} &= \frac{SXY}{n-1} &= \frac{\sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y})}{n-1} \\
+s_{x}^2 &= \frac{SXX}{n-1} &= \frac{\sum_{i=1}^n (x_i-\overline{x})^2}{n-1} \\
+s_{y}^2 &= \frac{SYY}{n-1} &= \frac{\sum_{i=1}^n (y_i-\overline{y})^2}{n-1} \\
+\end{array} \]
+\pause
+The coefficient of determination (or R-squared) is the proportion of the total
+variation explained by the model
+\[ 
+R^2 = r^2 = 1-\frac{RSS}{SYY} %= 1-\frac{SSE}{SST} 
+= 1-\frac{\sum_{i=1}^n r_i^2}{\sum_{i=1}^n (y_i-\overline{y})^2}.
+\]
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Regression inference in R}
+
+<<coefficient_of_determination, dependson="regression", echo=TRUE>>=
+summary(m)
+@
+\end{frame}
+
+
+
+\end{document}

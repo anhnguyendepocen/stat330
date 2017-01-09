@@ -1,0 +1,631 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set 22 - Bayesian statistics}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=4, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE, echo=FALSE>>=
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(scales)
+library(xtable)
+@
+
+<<set_seed, echo=FALSE>>=
+set.seed(1)
+@
+
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\section{Bayesian statistics}
+\begin{frame}
+\frametitle{A Bayesian statistics}
+
+Let 
+\begin{itemize}[<+->]
+\item $y$ be the data we will collect from an experiment, 
+\item $K$ be everything we know for certain about the world (aside from $y$), and
+\item $\theta$ be anything we don't know for certain.
+\end{itemize}
+
+\vspace{0.2in} \pause
+
+My definition of a Bayesian statistician is an individual who makes decisions based on the probability distribution of those things we don't know conditional on what we know, \pause i.e. 
+\[ p(\theta|y, K). \]
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Bayesian statistics (with explicit conditioning)}
+{\small
+\begin{itemize}[<+->]
+\item Parameter estimation:
+\[ p(\theta|y,M) \]
+where $M$ is a model with parameter (vector) $\theta$ and $y$ is data assumed to come from model $M$ with true parameter $\theta_0$. 
+\item Hypothesis testing/model seletion:
+\[ p(M_j|y,\mathcal{M}) \]
+where $\mathcal{M}$ is a set of models with $M_j \in \mathcal{M}$ for $i=1,2,\ldots$ and $y$ is data assumed to come from some model $M_0\in\mathcal{M}$. 
+\item Prediction:
+\[ p(\tilde{y}|y,M) \]
+where $\tilde{y}$ is unobserved data and $y$ and $\tilde{y}$ are both assumed to come from $M$. \pause Alternatively, 
+\[ p(\tilde{y}|y,\mathcal{M}) \]
+where $y$ and $\tilde{y}$ are both assumed to come from some $M_0\in\mathcal{M}$.
+\end{itemize}
+}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Bayesian statistics (with implicit conditioning)}
+{\small
+\begin{itemize}
+\item Parameter estimation:
+\[ p(\theta|y) \]
+where $\theta$ is the unknown parameter (vector) and $y$ is the data. 
+\item Hypothesis testing/model seletion:
+\[ p(M_j|y) \]
+where $M_j$ is one of a set of models under consideration and $y$ is data assumed to come from one of those models. 
+\item Prediction:
+\[ p(\tilde{y}|y) \]
+where $\tilde{y}$ is unobserved data and $y$ and $\tilde{y}$ are both assumed to come from the same (set of) model(s). 
+\end{itemize}
+}
+\end{frame}
+
+
+
+
+
+\begin{frame}
+\frametitle{Bayes' Rule}
+
+Bayes' Rule applied to a partition $P=\{A_1,A_2,\ldots\}$, 
+\[ P(A_i|B) = \frac{P(B|A_i)P(A_i)}{P(B)} \frac{P(B|A_i)P(A_i)}{\sum_{i=1}^\infty P(B|A_i)P(A_i)} \]
+
+\vspace{0.2in} \pause
+
+Bayes' Rule also applies to probability density (or mass) functions, e.g. 
+\[ p(\theta|y) =\frac{p(y|\theta)p(\theta)}{p(y)} = \frac{p(y|\theta)p(\theta)}{\int p(y|\theta)p(\theta) d\theta}  \]
+where the integral plays the role of the sum in the previous statement.
+\end{frame}
+
+
+
+
+\subsection{Parameter estimation}
+\begin{frame}
+\frametitle{Posterior distribution}
+Let $y$ be data from some model with unknown parameter $\theta$. \pause Then
+\[ p(\theta|y) = \frac{p(y|\theta)p(\theta)}{p(y)}= \frac{p(y|\theta)p(\theta)}{\int p(y|\theta)p(\theta) d\theta} \]
+\pause and we use the following terminology 
+\begin{center}
+\begin{tabular}{ll}
+Terminology & Notation \\
+\hline 
+Posterior & $p(\theta|y)$ \\
+Prior & $p(\theta)$ \\
+Model (likelihood) & $p(y|\theta)$ \\
+Prior predictive distribution & $p(y)$ \\
+(marginal likelihood) & \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.1in} \pause
+
+If $\theta$ is discrete (continuous), 
+
+\hspace{0.2in} then $p(\theta)$ and $p(\theta|y)$ are probability mass (density) functions.
+
+If $y$ is discrete (continuous), 
+
+\hspace{0.2in}  then $p(y|\theta)$ and $p(y)$ are probability mass (density) functions.
+\end{frame}
+
+
+
+
+
+\subsection{Example: exponential model}
+\begin{frame}
+\frametitle{Example: exponential model}
+Let $Y|\lambda\sim Exp(\lambda)$, then this defines the likelihood, \pause i.e. 
+\[ p(y|\lambda) = \lambda e^{-\lambda y}. \]
+\pause
+Let's assume a convenient prior $\lambda \sim Ga(a, b)$, \pause then 
+\[ p(\lambda) = \frac{b^{a}}{\mathrm{\Gamma}(a)} \lambda^{a-1} e^{-b \lambda}. \]
+\pause 
+The prior predictive distribution is 
+\[ p(y) = \int p(y|\lambda)p(\lambda) d\lambda = \frac{b^{a}}{\mathrm{\Gamma}(a)}\frac{\mathrm{\Gamma}(a+1)}{(b+y)^{a+1}}. \]
+\pause 
+The posterior is 
+\[ p(\lambda|y) = \frac{p(y|\lambda)p(\lambda)}{p(y)} = \frac{(b+y)^{a+1}}{\mathrm{\Gamma}(a+1)} \lambda^{a+1-1} e^{-(b+y) \lambda}, \]
+\pause
+thus $\lambda|y \sim Ga(a+1,b+y)$. 
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Exponential model}
+
+<<echo=FALSE>>=
+a = 1
+b = 1
+y = 0.5
+
+d = data.frame(x = seq(0,3,by=0.1)) %>% 
+  mutate(prior = dgamma(x,a,b),
+         "normalized likelihood" = dgamma(x, 1, y),
+         posterior = dgamma(x, a+length(y), b+sum(y)))
+
+m = d %>%
+  gather(Distribution, density, -x)
+
+ggplot(m, aes(x, density, group = Distribution, linetype = Distribution, color= Distribution)) +
+  geom_line() + 
+  theme_bw()
+  
+# 
+# opar = par(mar=c(5,4,0,0)+.1)
+# curve(dgamma(x, a, b), 0, 3, ylim=c(0,1),         col=1, lty=1, lwd=2, ylab="Density", xlab=expression(theta))
+# curve(,                      add=TRUE, col=2, lty=2, lwd=2)
+# curve(, add=TRUE, col=3, lty=3, lwd=2)
+# legend("topright", c("Prior","Normalized likelihood","Posterior"), col=1:3, lty=1:3, lwd=2)
+# legend("topleft", expression(a==1, b==1, y==1/2), bg="white")
+# par(opar)
+@
+\end{frame}
+
+% Consider eliminating this as well as the more data example
+\begin{frame}
+\frametitle{A shortcut}
+If 
+\[ p(y) = \int p(y|\theta)p(\theta) d\theta < \infty, \]
+\pause 
+then we can actually use the following to find the posterior
+\[ p(\theta|y) \propto p(y|\theta) p(\theta) \]
+\pause
+where the $\propto$ signifies that terms not involving $\theta$ (or anything on the left of the conditioning bar) are irrelevant and can be dropped. 
+
+\vspace{0.2in} \pause
+
+In the exponential example
+\[ p(\lambda|y) \propto p(y|\lambda)p(\lambda) = \lambda e^{-\lambda y} \lambda^{a-1} e^{-b \lambda} = \lambda^{a+1-1} e^{-(b+y)\lambda} \]
+\pause 
+where we can recognize $p(\lambda|y)$ as the \alert{kernel} of a $Ga(a+1, b+y)$ distribution \pause and thus $\lambda|y \sim Ga(a+1, b+y)$ and $p(y)<\infty$. 
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Independent data}
+
+Suppose $Y_i|\lambda \stackrel{ind}{\sim} Exp(\lambda)$ for $i=1,\ldots,n$ and $y=(y_1,\ldots,y_n)$, then 
+\[ p(y|\lambda) = \prod_{i=1}^n p(y_i|\lambda) = \lambda^n e^{-\lambda n\overline{y}} \]
+\pause
+Then 
+\[ p(\lambda|y) \propto p(y|\lambda)p(\lambda) \propto \lambda^{a+n-1} e^{-\left(b+n\overline{y}\right) \lambda}\]
+\vspace{0.1in} \pause
+where $n\overline{y} = \sum_{i=1}^n y_i$. We recognize this as the kernel of a gamma, i.e. $\lambda|y \sim Ga(a+n, b+n\overline{y})$. 
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Exponential model}
+
+<<echo=FALSE>>=
+a = 1
+b = 1
+set.seed(20141121)
+y = rexp(10, 2)
+
+d = data.frame(x = seq(0,5,by=0.1)) %>% 
+  mutate(prior = dgamma(x,a,b),
+         "normalized likelihood" = dgamma(x, length(y), sum(y)),
+         posterior = dgamma(x, a+length(y), b+sum(y)))
+
+m = d %>%
+  gather(Distribution, density, -x)
+
+ggplot(m, aes(x, density, group = Distribution, linetype = Distribution, color= Distribution)) +
+  geom_line() +
+  theme_bw()
+@
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+\frametitle{Point estimation}
+	For parameter estimation, we will use the posterior expectation. 
+	
+	\vspace{0.1in} \pause
+	
+	For example, in the exponential model where 
+	
+  \[
+  \lambda|y \sim Ga(a+n, b+ n\overline{y})
+  \] 
+  \pause
+	then a Bayesian point estimate for $\lambda$ is 
+	\[ 
+	\hat{\lambda}_{Bayes} = E[\lambda|y] = \pause \frac{a+n}{b+n\overline{y}}.
+	\]
+	
+	\vspace{0.1in} \pause
+	
+	For simplicity, we'll use the posterior expectation, but other point estimates 
+	exist, e.g. posterior median, posterior mode, etc. 
+\end{frame}
+
+
+
+
+
+
+
+
+
+\subsection{Interval estimation}
+\begin{frame}
+\frametitle{Interval estimation}
+	\begin{definition}
+	A $100(1-a)\%$ \alert{credible interval} is any interval (L,U) such that 
+	\[ 1-a = \int_L^U p(\theta|y) d\theta \]
+	(where $\theta$ is considered random).
+	\end{definition}
+	
+	\vspace{0.2in} \pause 
+	
+	We will use the equal-tail interval such that 
+	\[
+	a/2 = P(\theta<L|y) = \int_{-\infty}^L p(\theta|y) dy =
+	\int_U^\infty p(\theta|y) dy = P(\theta>U|y).
+	\]
+	
+	\pause
+	That is, we find the $100(a/2)$\% and $100(1-a/2)$\% quantiles of the posterior. 
+\end{frame}
+
+
+
+
+
+\begin{frame}
+\frametitle{Interarrival times}
+
+<<interarrival_times>>=
+n = 10
+ybar = 5.5
+a = 0; ap = a+n
+b = 0; bp = b+n*ybar
+L = qgamma(.025, ap, bp)
+U = qgamma(.975, ap, bp)
+@
+
+Suppose we record \Sexpr{n} interarrival times and their average is \Sexpr{ybar} 
+minutes. 
+\pause
+We decide to use the default prior 
+\[ 
+p(\lambda) \propto 1/\lambda
+\]
+\pause
+which looks like a $Ga(0,0)$ if that were a valid distribution. 
+\pause
+The posterior is 
+\[ 
+p(\lambda|y) \propto p(y|\lambda) p(\lambda) = 
+\lambda^n e^{-\lambda n\overline{y}} \lambda^{-1} =
+\lambda^{n-1} e^{-\lambda n\overline{y}}
+\]
+and thus $\lambda|y \sim Ga(n,n\overline{y})$ where $n=\Sexpr{n}$ and 
+$\overline{y}=\Sexpr{ybar}$.
+\pause
+A point estimate is 
+\[ 
+\hat{\lambda}_{Bayes} = E[\lambda|y] = \frac{n}{n\overline{y}} = 
+\Sexpr{round(ap/bp,1)} \mbox{ per minute}
+\]
+and a 95\% credible interval is $(\Sexpr{round(L,2)},\Sexpr{round(U,2)})$ which 
+was obtained by computing the inverse cdf.
+
+\end{frame}
+
+
+
+
+
+
+
+
+\section{Priors}
+\frame{\frametitle{Guess the probability}
+  \begin{itemize}[<+->]
+  \item A coin spins heads.
+  \item Seattle Seahawks win 2015 Super Bowl.
+  \item The first base pair on my genome is A.
+  \end{itemize}
+}
+
+
+
+\begin{frame}
+\frametitle{Conjugate priors}
+  \begin{definition}
+  A \alert{prior probability distribution}, often called simply the \alert{prior}, of an uncertain quantity $\theta$ is the probability distribution that would express one's uncertainty about $\theta$ before the ``data'' is taken into account.
+  {\tiny \url{http://en.wikipedia.org/wiki/Prior_distribution}}
+  \end{definition}
+
+  \begin{definition}
+	A prior $p(\theta)$ is \alert{conjugate} if the posterior is from the 
+	same family as the prior.
+	\end{definition}
+	
+	\vspace{0.1in} \pause  
+	
+	For example, the gamma distribution is the conjugate prior for the exponential
+	model, $y_i \ind Exp(\lambda)$ since if the prior is gamma, the posterior is also gamma, i.e. 
+	\[ 
+	\lambda \sim Ga(a,b) \longrightarrow \lambda|y \sim Ga(a+n, b+n\overline{y}).
+	\]
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Improper priors}
+\frame{\frametitle{Improper priors}
+  \begin{definition}
+	An unnormalized density, $f(\theta)$, is \alert{proper} if $\int f(\theta) d\theta = c < \infty$, and otherwise it is \alert{improper}. 
+	\end{definition}
+	
+	\vspace{0.2in} \pause
+	
+	To create a normalized density from a proper unnormalized density, use 
+\[ p(\theta|y) = \frac{f(\theta)}{c} 
+\quad \mbox{with} \quad
+c = \int f(\theta) d\theta.
+\]
+\pause
+To see that $p(\theta|y)$ is a proper normalized density \pause note that $c=\int f(\theta) d\theta$ is not a function of $\theta$\pause , then 
+\[ 
+\int p(\theta|y) d\theta \pause 
+= \int \frac{f(\theta)}{\int f(\theta) d\theta} d\theta \pause 
+= \int \frac{f(\theta)}{c} d\theta \pause 
+= \frac{1}{c} \int f(\theta) d\theta \pause 
+= \frac{c}{c} \pause 
+= 1 
+\]
+}
+
+
+
+
+\frame{\frametitle{Ga(0,0) prior}
+  Recall that $\mbox{Ga}(a,b)$ is a proper probability distribution if $a>0,b>0$. 
+  
+  \vspace{0.2in} \pause
+  
+  Suppose $Y\sim Exp(\lambda)$ and $p(\lambda) \propto 1/\lambda$, i.e. the kernel of a $Ga(0,0)$ distribution. \pause This is an improper distribution.
+  
+  \vspace{0.2in} \pause
+  
+  The posterior, $\lambda|y \sim Ga(a+n, b+n\overline{y})$ (with $a=b=0$), is proper if $n>0$ and $\overline{y}>0$.
+}
+
+
+
+% \begin{frame}
+% \frametitle{Bayesian learning (in parameter estimation)}
+% % Update slide
+% Bayes' rule provides a formula for updating from prior beliefs to our posterior beliefs based on the data we observe, \pause i.e.
+% 
+% \[ p(\theta|y) = \frac{p(y|\theta)}{p(y)}p(\theta) \propto p(y|\theta)p(\theta) \]
+% 
+% \pause Suppose we gather $y_1,\ldots,y_n$ sequentially (and we assume $y_i$ independent conditional on $\theta$), \pause then we have 
+% 
+% \[ p(\theta|y_1) \propto p(y_1|\theta)p(\theta) \]
+% \pause 
+% and 
+% \[ p(\theta|y_1,\ldots,y_i) \propto p(y_i|\theta)p(\theta|y_1,\ldots,y_{i-1}) \]
+% 
+% \pause
+% So Bayesian learning is 
+% \[ p(\theta) \to p(\theta|y_1) \to p(\theta|y_1,y_2) \to \cdots \to p(\theta|y_1,\ldots,y_n). \]
+% \end{frame}
+
+
+\subsection{Model selection}
+\begin{frame}
+\frametitle{Model selection (Hypothesis testing)}
+
+Formally, to select a model (or average over models), we use
+\[ p(M_j|y) =
+\frac{p(y|M_j)p(M_j)}{p(y)} 
+= \frac{p(y|M_j)p(M_j)}{\sum_k p(y|M_k)p(M_k)}
+\propto p(y|M_j)p(M_j) \]
+\pause where 
+\begin{itemize}[<+->]
+\item $p(y|M_j)$ is the likelihood of the data when model $M_j$ is true
+\item $p(M_j)$ is the prior probabability for model $M_j$ 
+\item $p(M_j|y)$ is the posterior probability for model $M_j$
+\item $p(y)$ is the marginal likelihood that enforces that the posterior 
+model probabilities sum to 1.
+\end{itemize}
+
+\vspace{0.2in} \pause
+
+Thus, a Bayesian approach provides a natural way to learn about models, i.e. $p(M_j) \to p(M_j|y)$.
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Exponential example}
+
+<<>>=
+n = 10
+ybar = 5.5
+lambda = 1/(4:6)
+log_like = function(lambda,n,ybar) {
+	n*log(lambda)-n*ybar*lambda-log(3)
+}
+m = log_like(lambda,n,ybar)
+m_norm = m-max(m); m_norm = exp(m_norm)
+m_norm = m_norm/sum(m_norm)
+@
+
+Suppose we have data $Y_i \ind Exp(\lambda)$ and we have 3 possible models:
+\[ 
+M_4: \lambda = 1/4,\quad M_5: \lambda = 1/5,\quad M_6: \lambda = 1/6
+\]
+\pause
+with prior model probabilities
+\[ 
+P(M_4) = P(M_5) = P(M_6) = 1/3.
+\]
+\pause
+If we observe $\overline{y}=5.5$ for $n=10$ observations, the posterior 
+probabilities are 
+\[ \begin{array}{rl}
+P(M_4|y) &\propto p(y|M_4)p(M_4) = (\frac{1}{4})^ne^{-n\overline{y}/ 4} \frac{1}{3} = e^{\Sexpr{round(m[1],2)}} \\
+P(M_5|y) &\propto p(y|M_5)p(M_5) = (\frac{1}{5})^ne^{-n\overline{y}/ 5} \frac{1}{3} = e^{\Sexpr{round(m[2],2)}} \\
+P(M_6|y) &\propto p(y|M_6)p(M_6) = (\frac{1}{6})^ne^{-n\overline{y}/ 6} \frac{1}{3} = e^{\Sexpr{round(m[3],2)}} 
+\end{array} \]
+\pause 
+and thus 
+\[\begin{array}{rl}
+P(M_4|y) &= \Sexpr{round(m_norm[1],3)}  \\
+P(M_5|y) &= \Sexpr{round(m_norm[2],3)}\\
+P(M_6|y) &= \Sexpr{round(m_norm[3],3)}.
+\end{array} \]
+
+
+
+\end{frame}
+
+
+
+% \begin{frame}
+% \frametitle{Exponential example}
+% 
+% Include 
+% 
+% \end{frame}
+
+
+
+
+\subsection{Prediction}
+\begin{frame}
+\frametitle{Prediction}
+
+Let $y$ be observed data and $\tilde{y}$ be unobserved data from a model with parameter $\theta$\pause, then 
+\[ \begin{array}{rl}
+p(\tilde{y}|y) 
+&= \int p(\tilde{y},\theta|y) d\theta \pause \\
+&= \int p(\tilde{y}|\theta,y) p(\theta|y) d\theta \pause \\
+&= \int p(\tilde{y}|\theta) p(\theta|y) d\theta 
+\end{array} \]
+\pause where $p(\theta|y)$ is the posterior we obtained using Bayesian parameter estimation techniques.
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Example: exponential distribution}
+
+From previous, let $y_i \stackrel{ind}{\sim} Exp(\theta)$ and $\theta \sim Ga(a,b)$, then $\theta|y \sim Ga(a+n,b+n\overline{y})$. \pause Suppose we are interested in predicting a new value $\tilde{y}\sim Exp(\theta)$ \pause (conditionally independent of $y=(y_1,\ldots,y_n)$ given $\theta$). \pause Then we have 
+
+\[ \begin{array}{rl}
+p(\tilde{y}|y) 
+&= \int p(\tilde{y}|\theta) p(\theta|y) d\theta \pause \\
+&= \int \theta e^{-\theta\tilde{y}} \frac{(b+n\overline{y})^{a+n}}{\mathrm{\Gamma}(a+1)} \theta^{a+n} e^{-\theta (b+n\overline{y})} d\theta \pause \\
+&= \frac{(b+n\overline{y})^{a+n}}{\mathrm{\Gamma}(a+n)} \int \theta^{a+n+1} e^{-\theta (b+n\overline{y}+\tilde{y})} d\theta \pause \\
+&= \frac{(b+n\overline{y})^{a+n}}{\mathrm{\Gamma}(a+n)} \frac{\mathrm{\Gamma}(a+n+1)}{(b+n\overline{y}+\tilde{y})^{a+n+1}} \pause \\
+&= \frac{(a+n)(b+n\overline{y})^{a+n}}{(\tilde{y}+b+n\overline{y})^{a+n+1}}
+\end{array} \]
+This is the \href{http://en.wikipedia.org/wiki/Lomax_distribution}{Lomax distribution} for $\tilde{y}$ with parameters $a+n$ and $b+n\overline{y}$.
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Lomax prediction}
+
+<<>>=
+lomax = function(ytilde,a,b,n,ybar) {
+	log = log(a+n)+(a+n)*log(b+n*ybar)-(a+n+1)*log(ytilde+b+n*ybar)
+	exp(log)
+} 
+@
+
+Suppose $n=10$ and $\overline{y}=5.5$ with a $Ga(0,0)$ prior then 
+$\tilde{y} \sim Lomax(a+n,b+n\overline{y})$.
+\pause
+For reference $Exp(\hat{\lambda}_{Bayes}) \stackrel{d}{=} Exp(1/\overline{y})$
+is plotted as well.
+\pause
+
+<<fig.width=7>>=
+d = data.frame(ytilde=seq(0,20,length=101)) %>%
+	mutate(Lomax = lomax(ytilde,0,0,n,ybar),
+				 `Ref: Exp(1/ybar)` = dexp(ytilde, 1/ybar)) %>%
+	tidyr::gather(Distribution, density, -ytilde)
+
+ggplot(d, aes(ytilde,density, group=Distribution, color=Distribution, linetype=Distribution)) +
+	geom_line() +
+	ylim(0,0.25) + 
+	theme_bw()
+@
+
+\end{frame}
+
+
+
+
+\end{document}
+
+
+
+
+
+

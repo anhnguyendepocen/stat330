@@ -1,0 +1,392 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set 27 - Advanced Regression}
+
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=7, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=TRUE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, echo=FALSE>>=
+library("dplyr")
+library("ggplot2")
+library("GGally")
+library("gridExtra")
+library("broom")
+@
+
+<<set_seed, echo=FALSE>>=
+set.seed(1)
+@
+
+
+
+\frame{\maketitle}
+
+\section{Advanced regresssion}
+\subsection{Multiple linear regression}
+\begin{frame}
+\frametitle{Multiple linear regression model}
+
+\small
+
+For observation $i$ for $i=1,\ldots,n$, let 
+\begin{itemize}
+\item $y_i$ be the response, \pause
+\item $x_{i,1}$ be the first explanatory variable, 
+\item $\vdots$
+\item $x_{i,q}$ be the $q$th explanatory variable.
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+A multiple linear regression model assumes 
+\[ 
+Y_i \ind N(\beta_0+\beta_1 x_{i,1} + \cdots + \beta_q x_{i,q}, \sigma^2).
+\]
+\pause
+Letting $x_i = (1,x_{i,1},\ldots,x_{i,q})^\top$ and 
+$\beta = (\beta_0,\beta_1,\ldots,\beta_q)$, we can write this as 
+\[ 
+Y_i \ind N(x_i^\top \beta, \sigma^2) 
+\quad \mbox{or} \quad
+Y_i = x_i^\top + \epsilon_i, \quad \epsilon_i \ind N(0,\sigma^2).
+\]
+Letting $X$ be the $n\times p$ (where $p=q+1$) matrix with $i$th row $x_i$, we 
+can write 
+\[ 
+Y \sim N(X\beta, \sigma^2 \mathrm{I})
+\quad \mbox{or} \quad
+Y_i = X\beta + \epsilon, \quad \epsilon \sim N(0,\sigma^2\mathrm{I})
+\]
+where $N$ now represents a \alert{multivariate normal}.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Parameter estimation}
+
+The MLE and Bayesian estimates 
+(assuming the default prior $p(\beta,\sigma^2) \propto 1/\sigma^2$) for the 
+coefficients are
+\[ 
+\hat\beta = (X^\top X)^{-1}X^\top y.
+\]
+\pause
+Let $r_i = y_i - x_i^\top \beta$ and $r=(r_1,\ldots,r_n)$, then the point 
+estimate for $\sigma^2$ is 
+\[ 
+\sigma^2 = \frac{RSS}{n-p} 
+= \frac{r^\top r}{n-p}.
+ \]
+\pause
+You can obtain confidence intervals and prediction intervals similar to what
+we had before. 
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Nuclear task time}
+
+For observation $i=1,\ldots,n$, let 
+\begin{itemize}
+\item $y_i$ be the task time,
+\item $x_{i,1}$ be the task complexity minus 6, and
+\item $x_{i,2}$ be an indicator of US location.
+\end{itemize}
+
+\pause
+
+<<nuclear_time, dependson="multiple_regression_model">>=
+nuclear_time <- read.csv("nuclear_time.csv") %>%
+	mutate(location = ifelse(US, "US", "non-US"))
+@
+
+<<multiple_regression_model, dependson="nuclear_time">>=
+m <- lm(time ~ I(complexity-6) + location, data = nuclear_time)
+m
+@
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Nuclear task time regression in R}
+
+<<summary, dependson="multiple_regression_model">>=
+summary(m)
+confint(m)
+@
+
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+\frametitle{Diagnostics}
+<<dependson="multiple_regression_model">>=
+opar = par(mfrow=c(1,2))
+plot(m, 1:2)
+par(opar)
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Nuclear task time}
+
+Let's run a regression of the square root of task time on location and 
+task ID. 
+
+\pause
+
+<<multiple_regression_model2, dependson="nuclear_time">>=
+nuclear_time <- nuclear_time %>%
+	mutate(task_f = factor(task)) # convert from numeric into factor
+m2 <- lm(sqrt(time) ~ location+task_f, data = nuclear_time)
+m2
+@
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Nuclear task time regression in R}
+
+<<summary2, dependson="multiple_regression_model2">>=
+summary(m2)
+@
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Diagnostics}
+
+<<dependson="multiple_regression_model2">>=
+opar = par(mfrow=c(1,2))
+plot(m2, 1:2)
+par(opar)
+@
+
+\end{frame}
+
+
+
+\subsection{Mixed effect model}
+\begin{frame}
+\frametitle{Mixed effect model}
+
+For observation $i$ for $i=1,\ldots,n$, let 
+\begin{itemize}
+\item $y_i$ be the response, \pause
+\item $x_i$ be a vector of fixed effects, \pause and
+\item $z_i$ be a vector of random effects
+\end{itemize}
+\pause
+both $x$ and $z$ are explanatory variables, 
+\pause 
+and the analyst has a choice of whether to treat these explanatory variables
+as fixed or random effects.
+
+\vspace{0.1in} \pause
+
+A mixed effect linear regression model assumes 
+\[ 
+Y_i = X\beta + Z\eta + \epsilon, 
+\quad \epsilon \sim N(0,\sigma^2\I),
+\quad \eta \sim N(0,\tau^2\I).
+\]
+\pause
+where $Z$ has $i$th row $z_i$. 
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Mixed effect linear regression in R}
+<<mixed_effect_model, dependson="nuclear_time">>=
+# install.packages("lme4")
+library(lme4)
+m3 <- lmer(sqrt(time) ~ location + complexity + I(complexity^2) + (1|task), data = nuclear_time)
+summary(m3)
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Diagnostic}
+<<dependson="mixed_effect_model">>=
+plot(m3)
+@
+\end{frame}
+
+
+
+\subsection{Logistic regression}
+\begin{frame}
+\frametitle{Logistic regression}
+
+For observation $i$ for $i=1,\ldots,n$, let 
+\begin{itemize}
+\item $y_i$ be the number of successes, \pause
+\item $n_i$ be the number of attempts, \pause and
+\item $x_i$ be a vector of explanatory variables.
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+A logistic regression model assumes 
+\[ 
+Y_i \ind Bin(n_i,\theta_i),
+\quad
+\log\left( \frac{\theta_i}{1-\theta_i} \right) = x_i^\top \beta,
+\]
+\pause
+i.e. the success probability depends on the explanatory variables.
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Poisson regression}
+
+For observation $i$ for $i=1,\ldots,n$, let 
+\begin{itemize}
+\item $y_i$ be the count (with unlimited theoretical max), \pause and
+\item $x_i$ be a vector of explanatory variables.
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+A Poisson regression model assumes 
+\[ 
+Y_i \ind Po(\lambda_i),
+\quad
+\log(\lambda_i) = x_i^\top \beta,
+\]
+\pause
+i.e. the rate depends on the explanatory variables.
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Regression trees}
+
+\small
+
+For observation $i$ for $i=1,\ldots,n$, let 
+\begin{itemize}
+\item $y_i$ be the response, \pause
+\item $x_i$ be a vector of explanatory variables.
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+A regression tree splits the $x_i$ at cutpoints, e.g. 
+an example regression tree might be 
+\[ 
+Y_i \ind N(\mu_i, \sigma^2)
+\]
+where 
+\[ \begin{array}{rl}
+\mu_i =& \beta_0 + \beta_1 \I(x_{i,1}<0) + \beta_2 \I(x_{i,2}>3) + \beta_3 \I(x_{i,3} <2) \\
+&+ \beta_4 \I(x_{i,1}<0, x_{i,2}< -2) + \beta_5 \I(x_{i,3} <2, x_{i,4} <0)
+\end{array} \]
+\pause
+This approach allows for arbitrary non-linear relationships between the response
+and explanatory variables.
+
+\vspace{0.1in} \pause
+
+This can be combined with a binary or categorical response and the tree
+is then called a classification tree. 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Classification tree example}
+\begin{center}
+\includegraphics{CART_tree_titanic_survivors}
+\end{center}
+
+{\tiny \url{https://en.wikipedia.org/wiki/Decision_tree_learning}}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Random forests}
+\setkeys{Gin}{width=\textwidth}
+\includegraphics{RF}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Summary}
+
+\scriptsize
+
+Many machine learning and data mining algorithms have their theoretical basis 
+in regression. 
+\pause
+For example, {\tiny \url{http://machinelearningmastery.com/a-tour-of-machine-learning-algorithms/}}
+\begin{itemize}
+\item Regression algorithms
+	\begin{itemize}\tiny
+	\item Linear regression
+	\item Logistic regression
+	\item Stepwise regression
+	\item Multivariate adaptive regression splines (MARS)
+	\item Locally estimated scatterplot smoothing (LOESS)
+	\end{itemize}
+\item Penalized regression algorithms
+	\begin{itemize}\tiny
+	\item Ridge regression
+	\item Least absolute shrinkage and selection operator (LASSO)
+	\item Elastic net
+	\item Least-angle regression (LARS)
+	\end{itemize}
+\item Decision tree algorithms
+	\begin{itemize}\tiny
+	\item Classification and regression tree
+	\item C4.5 and C5.0
+	\item Conditional decision trees
+	\end{itemize}
+\item Deep learning algorithms
+\item $\vdots$
+\end{itemize}
+\pause
+Thus, if you understand regression, you will have an easier time understanding
+many machine learning algorithms.
+\end{frame}
+
+\end{document}

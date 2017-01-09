@@ -1,0 +1,281 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set05 - Bayes' Rule}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=5, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=FALSE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE>>=
+library(dplyr)
+library(ggplot2)
+@
+
+<<set_seed>>=
+set.seed(2)
+@
+
+\frame{\maketitle}
+
+
+\begin{frame}
+\frametitle{Treasure hunt}
+
+\begin{example}
+Treasure hunt:
+\begin{itemize}
+\item Box 1 has two gold coins.
+\item Box 2 has one gold coin and one silver coin.
+\item Box 3 has two silver coins. 
+\end{itemize} \pause
+Suppose that you 
+\begin{enumerate}
+\item randomly select one of the boxes at random \pause and then
+\item randomly select one of the coins from that box. 
+\end{enumerate}
+\pause What is the probability that the coin you select is a gold coin?
+\end{example}
+
+\vspace{0.2in} \pause
+
+For a problem like this, that consists of a step-wise procedure, it is 
+often useful to draw a tree (a flow chart) of the choices we can make 
+in each step.
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Treasure hunt (cont.)}
+\setkeys{Gin}{width=0.3\textwidth}
+
+\begin{center}
+\includegraphics{box_coin_tree}
+\end{center}
+
+\pause
+
+Let $B_1, B_2, B_3$ to be the events that Box 1, 2 or 3 is selected randomly. \pause 
+Then $P(B_1)=P(B_2)=P(B_3) = 1/3$. 
+
+\vspace{0.2in} \pause
+
+Let $G$ be the event that a gold coin is selected. \pause
+Now, \emph{conditional on a particular box} what is the probability of randomly selecting a gold coin?
+\begin{itemize}
+\item $P(G|B_1) = \pause 1$. \pause
+\item $P(G|B_2) = \pause 1/2$. \pause
+\item $P(G|B_3) = \pause 0$.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Treasure hunt (cont.)}
+
+Using conditional probability, we can calculate 
+\begin{itemize}
+\item $P(G\intersection B_1) = \pause P(G|B_1)P(B_1) = 1\times \frac{1}{3} = \frac{1}{3}$.
+\item $P(G\intersection B_2) = \pause P(G|B_2)P(B_2) = \frac{1}{2}\times \frac{1}{3} = \frac{1}{6}$.
+\item $P(G\intersection B_3) = \pause P(G|B_3)P(B_3) = 0\times \frac{1}{3} = 0$.
+\end{itemize}
+
+\vspace{0.2in} \pause
+
+These are disjoint events and thus the probability of their union is the sum of their probabilities\pause, i.e. 
+{\small
+\[ \begin{array}{rl}
+P([G\intersection B_1] \union [G\intersection B_2] \union [G\intersection B_3]) \pause
+&= P(G\intersection B_1) + P(G\intersection B_2) + P(G\intersection B_3) \pause \\
+&= \frac{1}{3} + \frac{1}{6} + 0 = \frac{1}{2}
+\end{array} \]
+}
+
+\pause
+
+Since these are the only ways to get the gold coin, this is the probability of getting a gold coin.
+\end{frame}
+
+\begin{frame}
+\frametitle{Partition}
+\setkeys{Gin}{width=0.3\textwidth}
+\begin{definition}
+A collection of events $B_{1}, \ldots B_{K}$ is called a \alert{partition} (or \alert{cover}) of $\mOmega$ if 
+\begin{itemize}
+\item the events are mutually exclusive (i.e., $B_{i}\intersection B_{j} = \emptyset$ for $i\neq j$)\pause, and
+\item the union of the events is $\mOmega$ (i.e., $\bigcup_{k=1}^{K}B_{k} = \mOmega$).
+\end{itemize}
+\end{definition}
+
+\begin{center}
+\includegraphics{cover}
+\end{center}
+
+\pause
+
+The branches of our tree $(B_1,B_2,B_3)$ formed a partition. 
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Law of Total Probability}
+
+\begin{theorem}[Law of Total Probability]
+If  the collection of events $B_{1}, \ldots, B_{K}$ is a partition of $\mOmega$, and $A$ is an event, then 
+\[ P(A) = \sum_{k=1}^{K}P(A|B_{k})P(B_{k}). \]
+\end{theorem}
+\pause
+\begin{proof}
+\[ \begin{array}{rll}
+P(A) &= P\left( \bigcup_{k=1}^K A\intersection B_k \right) & \mbox{$B_1,\ldots,B_K$ is a partition} \pause \\
+&= \sum_{k=1}^K P(A\intersection B_k) & \mbox{$A\intersection B_1,\ldots,A\intersection B_K$ are disjoint} \pause \\
+&= \sum_{k=1}^K P(A|B_k)P(B_k) & \mbox{definition of conditional probability}
+\end{array} \]
+\end{proof}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Law of Total Probability graphic}
+\setkeys{Gin}{width=0.6\textwidth}
+
+\begin{center}
+\includegraphics{total-prob.pdf}
+\end{center}
+
+\pause
+
+\begin{example}
+In the Treasure Hunt example, the events $B_1, B_2,$ and $B_3$ form a cover $\mOmega$, as a coin can be drawn only from one of the boxes. \pause
+Thus, we have 
+
+\[ \begin{array}{rl}
+P(G) &= P(G|B_1)P(B_1) + P(G|B_2)P(B_2) + P(G|B_3)P(B_3) \pause \\
+&= 1\times \frac{1}{3} + \frac{1}{2}\times\frac{1}{3} + 0\times \frac{1}{3} \pause \\
+&= \frac{1}{2}
+\end{array} \]
+\end{example}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Inverse probability}
+
+\begin{example}
+What if we know a gold coin was chosen, but now we want to know which box it was drawn from. \pause
+That is, we want to know 
+\begin{itemize}
+\item $P(B_1|G)$
+\item $P(B_2|G)$
+\item $P(B_3|G)$
+\end{itemize}
+\end{example}
+
+\pause
+
+Intuitively, we know \pause
+\begin{itemize}
+\item $P(B_3|G) = 0$ since there are no gold coins in box 3, 
+\item $P(B_1|G)+P(B_2|G)+P(B_3|G)=1$ since these are the only three options, and
+\item perhaps $P(B_1|G) = 2P(B_2|G)$. 
+\end{itemize}
+
+\pause
+
+This results in $P(B_1|G) = \frac{2}{3}$ and $P(B_2|G) = \frac{1}{3}$. 
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Bayes' rule}
+
+\begin{theorem}[Bayes' Rule]
+If $B_{1}, \ldots, B_{K}$ is a partition of $\mOmega$, and $A$ is an event, then 
+\[
+P(B_k|A) = \frac{P(A|B_k)P(B_k)}{\sum_{k=1}^{K}P(A|B_k)P(B_k)}.
+\]
+\end{theorem}
+
+\pause
+
+\begin{proof}
+\[ \begin{array}{rll}
+P(B_k|A) &= \frac{P(A\intersection B_k)}{P(A)} & \mbox{by definition of conditional probability} \pause \\
+&= \frac{P(A|B_k)P(B_k)}{P(A)} & \mbox{by definition of conditional probability} \pause \\
+&= \frac{P(A|B_k)P(B_k)}{\sum_{k=1}^K P(A|B_k)P(B_k)} & \mbox{by Law of Total Probability} 
+\end{array} \]
+\end{proof}
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{CPU testing}
+\begin{example}
+A given lot of CPUs contains 2\%  defective CPUs. \pause
+Each CPU is tested before delivery. \pause
+However, the tester is not wholly reliable: \pause
+\[ \begin{array}{rl}
+    P(\text{ ``tester says CPU is good'' } | \text{  ``CPU is good'' }) &= 0.95 \pause \\
+    P(\text{ ``tester says CPU is defective'' } | \text{ ``CPU is defective'' }) &=  0.94
+\end{array} \]
+\pause
+If the test device says the CPU is defective, what is the probability that the CPU actually is defective?
+\end{example}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{CPU testing (cont.)}
+
+Let
+\begin{itemize}
+\item $C_g$ ($C_d$) be the event the CPU is good (defective) \pause
+\item $T_g$ ($T_d$) be the event the tester says the CPU is good (defective)
+\end{itemize}
+
+We know \pause
+
+\begin{itemize}
+\item $0.02 = P(C_d) \phantom{|C_g} = 1-P(C_g)$
+\item $0.95 = P(T_g|C_g) = 1-P(T_d|C_g)$
+\item $0.94 = P(T_d|C_d) = 1-P(T_g|C_d)$
+\end{itemize}
+
+\pause
+Using Bayes' Rule, we have 
+
+\[ \begin{array}{rl}
+P(C_d|T_d) &= \frac{P(T_d|C_d)P(C_d)}{P(T_d|C_d)P(C_d)+P(T_d|C_g)P(C_g)} \pause \\
+&= \frac{P(T_d|C_d)P(C_d)}{P(T_d|C_d)P(C_d)+[1-P(T_g|C_g)][1-P(C_d)]} \pause \\
+&= \frac{0.94\times 0.02}{0.94\times 0.02 + [1-0.95]\times[1-0.02]} \pause \\
+&= 0.28
+\end{array} \]
+\end{frame}
+
+
+\end{document}
+
+
+
+
+

@@ -1,0 +1,828 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\newtheorem{principle}[theorem]{Principle}
+
+\title{Set 20 - Confidence interval}
+
+\begin{document}
+
+<<options, results='hide', echo=FALSE, purl=FALSE>>=
+opts_chunk$set(comment=NA, 
+               fig.width=6, fig.height=4, 
+               size='tiny', 
+               out.width='0.8\\textwidth', 
+               fig.align='center', 
+               message=FALSE,
+               echo=TRUE,
+               cache=TRUE)
+options(width=120)
+@
+
+<<libraries, message=FALSE, warning=FALSE, cache=FALSE, echo=FALSE>>=
+library(dplyr)
+library(ggplot2)
+library(xtable)
+@
+
+<<set_seed, echo=FALSE>>=
+set.seed(1)
+@
+
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\section{Confidence intervals}
+\begin{frame}
+\frametitle{Uncertainty estimation}
+
+When we have an estimate $\hat{\theta}$ of a population parameter $\theta$, we
+know almost surely that 
+\[ 
+\hat{\theta} \ne \theta.
+\]
+\pause
+Thus, we'd like to provide an estimate of the uncertainty our knowledge of 
+$\theta$.
+\pause
+\begin{definition}
+An interval $[L,U]$ is a $100(1-a)$\% \alert{confidence interval} for the parameter 
+$\theta$ if it contains the parameter with probability $(1-a)$ (when the data 
+are considered random), \pause
+\[ 
+P(L\le \theta \le U) = 1-a.
+\]
+\pause
+The \alert{coverage probability} $(1-a)$ is also called the 
+\alert{confidence level}.
+\end{definition}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Normal-based confidence intervals}
+
+Suppose we have an estimator $\hat{\theta}$ for a population parameter $\theta$
+with 
+\[ 
+\hat{\theta} \sim N\left(\theta,\sigma(\hat{\theta})^2\right)
+\]
+\pause
+i.e. when the data are considered random, the estimator is unbiased and has a
+normal distribution.
+\pause
+Then a $100(1-a)$ confidence interval can be constructed by using 
+\[ \begin{array}{rl}
+1-a &= P\left( -z_{a/2} \le \frac{\hat{\theta}-\theta}{\sigma(\hat{\theta})} \le z_{a/2} \right) \pause \\
+&= P\left(\hat{\theta}-z_{a/2} \sigma(\hat{\theta}) \le \theta \le \hat{\theta}+z_{a/2} \sigma(\hat{\theta}) \right)
+\end{array} \]
+\pause 
+where the \alert{critical value} $z_{a/2}$ is the $(a/2)$-quantile of the standard 
+normal distribution. \pause
+Thus
+\[ 
+\hat{\theta} \pm z_{a/2}\sigma(\hat{\theta})
+\]
+is a $100(1-a)$\% confidence interval.
+\end{frame}
+
+
+%' \begin{frame}
+%' \frametitle{Critical values}
+%' <<>>=
+%' a = .05
+%' z_crit = qnorm(a/2)
+%' curve(dnorm, -3, 3)
+%' abline(v=z_crit)
+%' 
+%' @
+%' \end{frame}
+
+
+\subsection{Normal mean with known variance}
+\begin{frame}
+\frametitle{Normal mean with known variance}
+
+Suppose $X_1,\ldots,X_n \ind N(\mu,s^2)$ and we use $\hat{\mu} = 
+\overline{X}$. \pause
+Then 
+\[ 
+\overline{X} \pause \sim N(\mu,s^2/n)
+\]
+\pause 
+and thus 
+\[
+Z = \frac{\overline{X}-\mu}{\sigma/\sqrt{n}} \sim N(0,1).
+\]
+Using the formula on the previous slide, we have 
+\[ 
+\overline{x} \pm z_{a/2} s/\sqrt{n}.
+\]
+is a $100(1-a)$\% confidence interval for $\mu$. 
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Mean height of US women}
+
+Suppose we are interested in the mean height $(\mu)$ of women in the U.S. \pause
+Let $X_i$ represent the height (inches) for woman $i$. \pause
+Assume 
+\[ 
+X_i \ind N(\mu,s^2)
+\]
+\pause
+where $s^2 = 3.5^2$ inches$^2$. \pause
+In our random sample of 100 women, we find the sample average to be 
+$\overline{x}=64.66$ inches. \pause
+A 95\% confidence interval for $\mu$ is 
+\[ 
+\overline{x} \pm z_{a/2} s/\sqrt{n} \pause 
+= 64.66 \pm 1.96 \cdot 3.5/\sqrt{100} \pause
+= (63.97,65.35).
+\]
+\pause 
+An interpretation for this confidence interval is 
+\begin{quote}
+the mean height $(\mu)$ would be within the intervals constructed using this 
+procedure in 95\% of the samples that we could have taken.
+\end{quote}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]
+<<echo=FALSE, fig.height=5>>=
+n  = 100
+mu = 65
+s  = 3.5
+a  = 0.05
+z  = -qnorm(a/2)
+d = data.frame(sample = 1:n, 
+               xbar = rnorm(100, mu, s/sqrt(n))) %>%
+  mutate(L  = xbar - z*s/sqrt(n),
+         U  = xbar + z*s/sqrt(n),
+         success = (L<mu) & (mu<U))
+ggplot(d, aes(sample, ymin=L, ymax=U,color=success)) + 
+  geom_errorbar() + 
+  theme_bw() +
+  geom_hline(yintercept = mu) + 
+  coord_flip()
+@
+\end{frame}
+
+
+
+\subsection{Normal mean with unknown variance}
+\begin{frame}
+\frametitle{Normal mean with unknown variance}
+
+Typically, we will not know the variance and thus we assume
+\[ 
+X_i \ind N(\mu,\sigma^2)
+\]
+for some unknown $\mu$ and $\sigma^2$. 
+\pause
+We obtain a sample mean $(\overline{x})$ and sample variance $s^2$.
+
+\vspace{0.1in} \pause
+
+Standardizing using the sample standard deviation results in  
+\[ 
+\frac{\overline{x}-\mu}{s/\sqrt{n}} \sim t_{n-1}
+\]
+\pause
+i.e. a $t$-distribution with $n-1$ degrees of freedom
+\pause
+and construction of a $100(1-a)$\% confidence interval for $\mu$ using 
+\[
+\overline{x} \pm t_{n-1,a/2} s/\sqrt{n}
+\]
+where $t_{n-1,a/2}$ is the $(a/2)$-quantile of a $t$-distribution with $n-1$ 
+degrees of freedom.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{$t$-distribution}
+
+\vspace{-0.05in}
+
+\small
+
+If $T$ is a random variable with a $t$-distribution, then $T$ is a continuous
+random variable with the parameter $v$, called the \alert{degrees of freedom},
+\pause 
+and we use the notation
+\[ 
+T \sim t_v.
+\]
+\pause 
+A $t$-distributed random variable has the following probability density function 
+with support over the real line
+\[ 
+f(t) = \frac{\Gamma(\frac{v+1}{2})}{\sqrt{v\pi}\Gamma(\frac{v}{2})}\left( 1+\frac{t^2}{v}\right)^{-\frac{v+1}{2}}
+\]
+\pause
+and moments
+
+\[ \begin{array}{rcl}
+E[T] =& 0 & \mbox{for }v>1 \mbox{ and} \\
+Var[T] =& \frac{v}{v-2} & \mbox{for }v>2.
+\end{array} \]
+
+\pause
+
+If we use $T_v$ to denote a $t$-distributed random variable with degrees
+of freedom $v$. 
+Then 
+\[
+T_v \to Z  \mbox{ as }v\to\infty
+\]
+\pause 
+i.e. $t$-distribution converges to a standard normal distribution the degrees of 
+freedom increase.
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{$t$ probability density functions}
+
+<<echo=FALSE>>=
+d = data.frame(x = seq(-3,3,length=101)) %>%
+  mutate(normal = dnorm(x),
+         t_1 = dt(x,1),
+         t_5 = dt(x,5),
+         t_30 = dt(x,30)) %>%
+  tidyr::gather(distribution, density, -x) %>%
+  mutate(distribution = factor(distribution, levels=c("normal","t_1","t_5","t_30")))
+
+ggplot(d, aes(x, density, color=distribution, group=distribution)) +
+  geom_line() +
+  theme_bw()
+@
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Mean height of US women}
+
+Suppose we are interested in the mean height $(\mu)$ of women in the U.S. \pause
+Let $X_i$ represent the height (inches) for woman $i$. \pause
+Assume 
+\[ 
+X_i \ind N(\mu,\sigma^2)
+\]
+\pause
+In a random sample of 10 women, We find the sample average to be 
+$\overline{x}=64.66$ inches and sample standard deviation to be $s^2=4.06$. \pause
+A 95\% confidence interval for $\mu$ is 
+\[ 
+\overline{x} \pm t_{n-1,a/2} s/\sqrt{n} \pause 
+= 64.66 \pm 2.26 \cdot 4.06/\sqrt{100} \pause
+= (63.74,65.58).
+\]
+\pause 
+An interpretation for this confidence interval is 
+\begin{quote}
+the mean height $(\mu)$ would be within the intervals constructed using this 
+procedure in 95\% of the samples that we could have taken.
+\end{quote}
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]
+<<echo=FALSE, fig.height=5>>=
+n  = 10
+mu = 65
+sigma  = 3.5
+a  = 0.05
+t  = -qt(a/2,n-1)
+d = plyr::rdply(100, {
+  data.frame(x = rnorm(10, mu, sigma))
+}, .id = "sample") %>%
+  group_by(sample) %>%
+  summarize(xbar = mean(x),
+            s    = sd(x),
+            L  = xbar - t*s/sqrt(n),
+            U  = xbar + t*s/sqrt(n),
+            success = (L<mu) & (mu<U))
+  
+ggplot(d, aes(sample, ymin=L, ymax=U,color=success)) + 
+  geom_errorbar() + 
+  theme_bw() +
+  geom_hline(yintercept = mu) + 
+  coord_flip()
+@
+\end{frame}
+
+
+
+
+\subsection{Asymptotic confidence intervals}
+\begin{frame}
+\frametitle{Large sample (asymptotic) confidence intervals}
+
+As the sample size gets larger, many estimators have an asymptotically normal
+distribution (when the data are considered random) centered on the true\pause,
+i.e.
+\[ 
+\hat{\theta} \stackrel{\cdot}{\sim} N\left(\theta,\sigma(\hat{\theta})^2\right)
+\]
+\pause
+If we have a consistent estimator of the standard error, say $s(\hat{\theta})$ 
+then we can replace the unknown standard error with the consistent estimator\pause, i.e.
+\[ 
+\hat{\theta} \stackrel{\cdot}{\sim} N\left(\theta,s(\hat{\theta})^2\right).
+\]
+\pause
+Thus, we can obtain an \alert{approximate} $100(1-a)$\% confidence interval by 
+\[ 
+\hat{\theta} \pm z_{a/2} s(\hat{\theta}).
+\]
+\end{frame}
+
+
+
+\subsection{Large sample proportion confidence interval}
+\begin{frame}
+\frametitle{Large sample proportion confidence interval}
+
+Let $X_i \ind Ber(\theta)$ and estimate $\theta$ using 
+\[ 
+\hat{\theta} = \frac{1}{n}\sum_{i=1}^n X_i.
+\]
+\pause
+We know that 
+\[ 
+E\left[\hat{\theta}\right] \pause = \theta 
+\pause
+\quad\mbox{and}\quad
+Var\left[\hat{\theta}\right] \pause = \frac{\theta(1-\theta)}{n} .
+\]
+\pause
+Thus, we estimate the standard error using 
+\[ 
+s\left(\hat{\theta}\right) = \sqrt{\frac{\hat\theta(1-\hat\theta)}{n}}
+\]
+\pause
+and construct an approximate $100(1-a)$\% confidence interval using 
+\[ 
+\hat{\theta} \pm z_{a/2} \sqrt{\frac{\hat\theta(1-\hat\theta)}{n}}.
+\]
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Large sample proportion confidence interval - example}
+
+<<die_rolling_data, echo=FALSE>>=
+x = 297
+n = 1000
+theta_hat = x/n
+se = sqrt(theta_hat*(1-theta_hat)/n)
+@
+
+Suppose we roll a 6-sided die \Sexpr{n} times and obtained \Sexpr{x} ones and twos. 
+\pause
+Let $X_i$ be 1 if the $i$th attempt is a one or two and 0 otherwise and assume
+$X_i\ind Ber(\theta)$. 
+\pause
+Then we have $\hat{\theta} = \Sexpr{x}/\Sexpr{n}=\Sexpr{x/n}$. 
+\pause
+A $100(1-a)$\% confidence interval is 
+\[ 
+\hat{\theta} \pm z_{a/2} \sqrt{\frac{\hat\theta(1-\hat\theta)}{n}} =
+\Sexpr{theta_hat} \pm z_{a/2} \Sexpr{se}.
+\]
+\pause
+Here are various confidence intervals based on different confidence levels
+
+<<myround, echo=FALSE>>=
+my_round = function(x, digits=3) {
+  formatC( round(x, digits), format='f', digits=digits)
+}
+@
+
+<<die_rolling_cis, dependson=c("die_rolling_data","my_round"), echo=FALSE, results='asis'>>=
+d = data.frame(a = c(.1,.05,.01)) %>%
+  mutate(conf_level = 1-a,
+         z_crit = -qnorm((1-conf_level)/2),
+         L = theta_hat - z_crit*se,
+         U = theta_hat + z_crit*se,
+         ci = paste0("(",my_round(L), ",", my_round(U), ")"),
+         z_crit = my_round(z_crit)) %>%
+  select(conf_level, z_crit, ci) %>%
+  rename(`Confidence Level` = conf_level,
+         `Z Critical Value` = z_crit,
+         `Confidence interval` = ci)
+tab <- xtable(d, align="cccc")
+print(tab, type="latex", include.rownames = FALSE)
+@
+
+\end{frame}
+
+
+\subsection{Large sample difference in proportions}
+\begin{frame}
+\frametitle{Large sample difference in proportions}
+
+Let $X_i \ind Ber(\theta_X)$ for $i=1,\ldots,n_X$ and $Y_j \ind Ber(\theta_Y)$ 
+for $j=1,\ldots,n_Y$ 
+\pause 
+and suppose we are interested in $\delta = \theta_X - \theta_Y$. 
+\pause
+A natural estimator is 
+\[ 
+\hat{\delta} = \hat{\theta}_X - \hat{\theta}_Y = \overline{X} - \overline{Y}.
+\]
+\pause
+By the CLT, this has an asymptotically normal distribution as $n_X\to\infty$ and 
+$n_Y\to\infty$ 
+\pause
+with
+\[ 
+E\left[\hat{\delta}\right] = \theta_X - \theta_Y 
+\quad\mbox{and}\quad
+Var\left[\hat{\delta}\right] = \frac{\theta_X(1-\theta_X)}{n_X} + \frac{\theta_Y(1-\theta_Y)}{n_Y}.
+\]
+\pause
+A consistent estimate for the variance arises if you use $\theta_X = \hat{\theta}_X = \overline{X}$
+and $\theta_Y = \hat{\theta}_Y = \overline{Y}$. \pause
+Thus, a $100(1-a)$\% confidence interval is 
+\[ 
+\overline{X} - \overline{Y} \pm z_{a/2} \sqrt{\frac{\overline{X}(1-\overline{X})}{n_X} + \frac{\overline{Y}(1-\overline{Y})}{n_Y}}.
+\]
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Large sample difference in proportions - example}
+
+Suppose you have been running an experiment with web hosting site A and B. 
+\pause
+Periodically, you ping an identical site you have created at each of these
+hosts to see if the site at that host is operational. 
+\pause
+Let $X_i\ind Ber(\theta_X)$ be 1 if the site at host A was operational on the 
+$i$th attempt and 0 otherwise 
+and $Y_j\ind Ber(\theta_Y)$ be 1 if the site at host B was operational on the 
+$i$th attempt and 0 otherwise.
+\pause
+The data you have collected are 
+
+<<web_hosting_data, echo=FALSE, results='asis'>>=
+d = data.frame(host = c("A","B"),
+               n = c(1486,1444)) %>%
+  mutate(y = c(1340,1363))
+
+d_format = d %>%
+  mutate(`Proportion` = round(y/n,2)) %>%
+  rename(Host = host,
+         `Attempts` = n,
+         `Successful` = y) 
+
+tab <- xtable(d_format, align="ccccc", digits=c(NA,NA,0,0,3))
+print(tab, type="latex", include.rownames = FALSE)
+@
+
+<<web_hosting_ci, dependson=c("web_hosting_data","my_round"), echo=FALSE>>=
+a = 0.05
+d = d %>%
+  mutate(theta_hat = y/n,
+         var = theta_hat*(1-theta_hat)/n)
+
+xbar = my_round(d$theta_hat[1],2)
+ybar = my_round(d$theta_hat[2],2)
+
+diff = -diff(d$theta_hat)
+se   = sqrt(sum(d$var))
+z_crit = -qnorm(a/2)
+L = diff-z_crit*se
+U = diff+z_crit*se
+@
+
+A $\Sexpr{100*(1-a)}$\% confidence interval for the difference in the probability 
+of uptime (A-B) is 
+\[ 
+\Sexpr{xbar} - \Sexpr{ybar} \pm \Sexpr{my_round(z_crit,2)}\sqrt{\frac{\Sexpr{xbar}(1-\Sexpr{xbar})}{n_X} + \frac{\Sexpr{ybar}(1-\Sexpr{ybar})}{n_Y}}
+= (\Sexpr{my_round(L,2)}, \Sexpr{my_round(U,2)}).
+\]
+
+\end{frame}
+
+
+\subsection{Large sample difference in normal means}
+\begin{frame}
+\frametitle{Large sample difference in normal means}
+
+Suppose independently
+\[ 
+X_1,\ldots,X_{n_X} \ind N(\mu_X,\sigma_X^2) 
+\quad\mbox{and}\quad
+Y_1,\ldots,Y_{n_Y} \ind N(\mu_Y,\sigma_Y^2)
+\]
+\pause 
+and we use $\widehat{\mu_X-\mu_Y} = \overline{X} - \overline{Y}$. 
+\pause 
+By the CLT, we have 
+\[ 
+\overline{X} - \overline{Y} \sim N\left(\mu_X-\mu_Y, \frac{\sigma_X^2}{n_X} + \frac{\sigma_Y^2}{n_Y} \right)
+\]
+\pause
+A consistent estimator of the variance arises if you use 
+$\sigma_X^2 = \hat{\sigma}_X^2 = s_X^2$ and 
+$\sigma_Y^2 = \hat{\sigma}_Y^2 = s_Y^2$.
+\pause
+Thus a $100(1-a)$\% confidence interval for $\mu_X-\mu_Y$ is
+\[ 
+\overline{x} - \overline{y} \pm z_{a/2} \sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}}.
+\]
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Large sample difference in normal means - example}
+
+Suppose we have a random sample of individuals in the U.S. and we are interested in
+comparing mean heights between men and women. 
+\pause 
+We assume the data arise from normal distributions for each group.
+\pause
+
+<<heights_data, echo = FALSE, results="asis">>=
+d = data.frame(Group = c("Men","Women"),
+               n = c(100,100),
+               mean = c(69.1,63.7),
+               sd   = c(2.9,2.7))
+
+d_format = d %>%
+  rename(`Number` = n,
+         `Mean height` = mean,
+         `Standard deviation` = sd)
+
+tab <- xtable(d_format, align="llccc", digits=c(NA,NA,0,1,1))
+print(tab, type="latex", include.rownames = FALSE)
+@
+
+<<heights_ci, dependson=c("heights_data","my_round"), echo=FALSE>>=
+a = 0.1
+
+diff = -diff(d$mean)
+se   = sqrt(sum(d$sd^2/d$n))
+z_crit = -qnorm(a/2)
+L = diff-z_crit*se
+U = diff+z_crit*se
+@
+
+A $\Sexpr{100*(1-a)}$\% confidence interval for the difference in mean heights
+(men-women) in inches is 
+\[ 
+\Sexpr{d$mean[1]} - \Sexpr{d$mean[2]} \pm \Sexpr{my_round(z_crit,3)}\sqrt{\frac{\Sexpr{d$sd[1]}^2}{\Sexpr{d$n[1]}} + \frac{\Sexpr{d$sd[2]}^2}{\Sexpr{d$n[2]}}}
+= (\Sexpr{my_round(L,2)}, \Sexpr{my_round(U,2)}).
+\]
+\end{frame}
+
+
+\subsection{Small sample difference in normal means}
+\begin{frame}
+\frametitle{Small sample difference in normal means}
+
+Suppose independently
+\[ 
+X_1,\ldots,X_{n_X} \ind N(\mu_X,\sigma^2) 
+\quad\mbox{and}\quad
+Y_1,\ldots,Y_{n_Y} \ind N(\mu_Y,\sigma^2)
+\]
+but $n_X$ and $n_Y$ are small. 
+\pause 
+and we use $\widehat{\mu_X-\mu_Y} = \overline{X} - \overline{Y}$. 
+\pause 
+We can show that 
+\[ 
+\frac{\overline{X} - \overline{Y} - (\mu_X-\mu_Y)}{s_p \sqrt{\frac{1}{n_X} + \frac{1}{n_Y}}} \sim t_{n_X+n_Y-2} 
+\]
+\pause
+where $\sigma$ is estimated by $s_p$ the \alert{pooled standard deviation}
+which is given by
+\[
+s_p = \sqrt{\frac{(n_X-1)s_X^2+(n_Y-1)s_Y^2}{n_X+n_Y-2}}.
+\]
+\pause
+Thus a $100(1-a)$\% confidence interval for $\mu_X-\mu_Y$ is
+\[ 
+\overline{x} - \overline{y} \pm t_{n_X+n_Y-2,a/2} \, s_p \sqrt{\frac{1}{n_X} + \frac{1}{n_Y}}.
+\]
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Small sample difference in normal means - example}
+
+Suppose we have a random sample of individuals in the U.S. and we are interested in
+comparing mean heights between men and women. 
+\pause 
+We assume the data arise from normal distributions for each group.
+\pause
+
+<<heights_small_data, echo = FALSE, results="asis">>=
+d = data.frame(Group = c("Men","Women"),
+               n = c(10,12),
+               mean = c(69.1,63.7),
+               sd   = c(2.9,2.7))
+
+d_format = d %>%
+  rename(`Number` = n,
+         `Mean height` = mean,
+         `Standard deviation` = sd)
+
+tab <- xtable(d_format, align="llccc", digits=c(NA,NA,0,1,1))
+print(tab, type="latex", include.rownames = FALSE)
+@
+
+<<heights_small_ci, dependson=c("heights_small_data","my_round"), echo=FALSE>>=
+a = 0.01
+
+diff = -diff(d$mean)
+sp   = with(d, sqrt(sum((n-1)*sd^2)/sum(n-1)))
+t_crit = -qt(a/2,sum(d$n-1))
+L = diff - t_crit * sp * sqrt(sum(1/d$n))
+U = diff + t_crit * sp * sqrt(sum(1/d$n))
+@
+
+A $\Sexpr{100*(1-a)}$\% confidence interval for the difference in mean heights
+(men-women) in inches is 
+\[
+\Sexpr{d$mean[1]} - \Sexpr{d$mean[2]} \pm \Sexpr{my_round(t_crit,3)}
+\cdot \Sexpr{my_round(sp,3)} \sqrt{\frac{1}{\Sexpr{d$n[1]}}+\frac{1}{\Sexpr{d$n[2]}}}
+= (\Sexpr{my_round(L,2)}, \Sexpr{my_round(U,2)})
+\]
+where the pooled standard deviation is $\Sexpr{my_round(sp,3)}$.
+\end{frame}
+
+
+
+
+
+\subsection{Small sample difference in normal means}
+\begin{frame}
+\frametitle{Small sample difference in normal means}
+
+Suppose independently
+\[ 
+X_1,\ldots,X_{n_X} \ind N(\mu_X,\sigma_X^2) 
+\quad\mbox{and}\quad
+Y_1,\ldots,Y_{n_Y} \ind N(\mu_Y,\sigma_Y^2)
+\]
+but $n_X$ and $n_Y$ are small. 
+\pause 
+and we use $\widehat{\mu_X-\mu_Y} = \overline{X} - \overline{Y}$. 
+\pause 
+We can show that 
+\[ 
+\frac{\overline{X} - \overline{Y} - (\mu_X-\mu_Y)}{\sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}}} \pause \, \dot\sim \, t_{v} 
+\]
+\pause
+where $v$ is the \alert{Satterthwaite approximation} to the degrees of freedom
+and is given by 
+\[
+v = \left(\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}\right)^2 \left/ 
+\left[\frac{s_X^4}{n_X^2(n_X-1)}+\frac{s_Y^4}{n_Y^2(n_Y-1)}\right] \right.
+\]
+\pause
+Thus a $100(1-a)$\% confidence interval for $\mu_X-\mu_Y$ is
+\[ 
+\overline{x} - \overline{y} \pm t_{v,a/2} \, \sqrt{\frac{s_X^2}{n_X} + \frac{s_Y^2}{n_Y}}.
+\]
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Small sample difference in normal means - example}
+
+Suppose we have a random sample of individuals in the U.S. and we are interested in
+comparing mean heights between men and women. 
+\pause 
+We assume the data arise from normal distributions for each group.
+\pause
+
+<<heights_small_difvar_data, echo = FALSE, results="asis">>=
+d = data.frame(Group = c("Men","Women"),
+               n = c(10,12),
+               mean = c(69.1,63.7),
+               sd   = c(2.9,2.7))
+
+d_format = d %>%
+  rename(`Number` = n,
+         `Mean height` = mean,
+         `Standard deviation` = sd)
+
+tab <- xtable(d_format, align="llccc", digits=c(NA,NA,0,1,1))
+print(tab, type="latex", include.rownames = FALSE)
+@
+
+<<heights_small_difvar__ci, dependson=c("heights_small_difvar_data","my_round"), echo=FALSE>>=
+a = 0.01
+
+diff = -diff(d$mean)
+se   = with(d, sqrt(sum(sd^2/d$n)))
+v = with(d, sum(sd^2/n)^2/(sum(sd^4/n^2/(n-1))))
+t_crit = -qt(a/2,v)
+L = diff - t_crit * se
+U = diff + t_crit * se
+@
+
+A $\Sexpr{100*(1-a)}$\% confidence interval for the difference in mean heights
+(men-women) in inches is 
+\[
+\Sexpr{d$mean[1]} - \Sexpr{d$mean[2]} \pm \Sexpr{my_round(t_crit,3)}
+\cdot \Sexpr{my_round(se,3)}
+= (\Sexpr{my_round(L,2)}, \Sexpr{my_round(U,2)})
+\]
+where the Satterthwaite approximation to the degrees of freedom was \Sexpr{my_round(v,2)}. 
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Summary}
+
+\tiny
+
+Large sample: derived using CLT and consistent estimator of the variance:
+\[ \begin{array}{llrll}
+\textrm{Assumed model} & \textrm{Parameter} & \multicolumn{3}{c}{\textrm{Confidence interval}} \\
+\hline
+X_i \ind Ber(\theta) & \theta & \overline{X} &\pm z_{a/2} &\sqrt{\frac{\overline{X}(1-\overline{X})}{n}} \\
+X_i \ind Ber(\theta_X), \,  Y_j \ind Ber(\theta_Y) & \theta_X-\theta_Y & \overline{X}-\overline{Y} &\pm z_{a/2} &\sqrt{\frac{\overline{X}(1-\overline{X})}{n_X} + \frac{\overline{Y}(1-\overline{Y})}{n_Y}} \\
+\hline
+X_i \ind N(\mu,\sigma^2) & \mu & \overline{X} &\pm z_{a/2} & s/\sqrt{n} \\
+X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm z_{a/2} &s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}} \\
+X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm z_{a/2} &\sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}} \\
+\hline
+\end{array} \]
+
+\pause
+
+Small sample: derive actual distribution (or an approximation)
+
+\[ \begin{array}{llrll}
+\textrm{Assumed model} & \textrm{Parameter} & \multicolumn{3}{c}{\textrm{Confidence interval}} \\
+\hline
+X_i \ind N(\mu,\sigma^2) & \mu & \overline{X} &\pm t_{n-1,a/2} & s/\sqrt{n} \\
+X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm t_{n_X+n_Y-2,a/2} & s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}} \\
+X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm t_{v,a/2}  & \sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}} \\
+\hline
+\end{array} \]
+where $s_p$ is the pooled standard deviation and $v$ is the Satterthwaite approximation:
+\[ \begin{array}{rl}
+s_p &= \sqrt{\frac{(n_X-1)s_X^2+(n_Y-1)s_Y^2}{n_X+n_Y-2}} \\
+v &= \left(\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}\right)^2 \left/ 
+\left[\frac{s_X^4}{n_X^2(n_X-1)}+\frac{s_Y^4}{n_Y^2(n_Y-1)}\right] \right.
+\end{array} \]
+
+
+\end{frame}
+
+
+
+% \begin{frame}
+% \frametitle{Sample size}
+% 
+% Suppose we believe $\Delta = \theta_X-\theta_Y$ and we are interested in how 
+% many observations we need so that a $100(1-a)$\% confidence interval 
+% 
+% \end{frame}
+
+\end{document}
+
+
+
+
+

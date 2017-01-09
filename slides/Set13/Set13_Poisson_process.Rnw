@@ -1,0 +1,308 @@
+\documentclass[handout]{beamer}
+
+\input{../frontmatter}
+\input{../commands}
+
+\title{Set13 - Poisson process}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\section{Counting process}
+\begin{frame}
+\frametitle{Counting process}
+
+\begin{definition}
+A stochastic process $X$ is a \alert{counting process} if $X(t)$ is the number of items counted by time $t$. 
+\end{definition}
+
+\vspace{0.1in} \pause
+
+Examples
+\begin{itemize}
+\item The number of head count flips out of $t$ flips.
+\item The number of on time flights out of $t$ flights.
+\item The number of on time flights in the next $t$ hours.
+\item The number of router requests processed in the next $t$ minutes.
+\item The number of successful router requests out of $t$ requests.
+\end{itemize}
+\end{frame}
+
+
+\subsection{Binomial process}
+\begin{frame}
+\frametitle{Binomial process}
+\begin{definition}
+A \alert{binomial process} $X(n)$ is the number of success in the first $n$ 
+independent Bernoulli trials where $n=0,1,2,\ldots$ with common success 
+probability $p$. \pause
+If a trial occurs every $\Delta$ seconds, then $t=n\Delta$ seconds. \pause
+Let $X(t)$ be the \alert{binomial counting process} that records the number of successes in the first $t$ time. 
+\end{definition}
+
+\vspace{0.1in} \pause
+
+<<echo=FALSE, fig.height=2.8>>=
+set.seed(1)
+library(magrittr)
+n = 100; p = 0.3
+x = rbinom(n = n, size = 1, prob = p) %>% cumsum
+Delta = 2
+
+opar = par(mfrow=c(1,2), mar=c(5,4,2,2)+.1)
+plot(1:n,x, type="s", xlab="Number of attempts", ylab="Number of successes")
+plot(Delta*(1:n), x, type="s", xlab="Time (seconds)", ylab="")
+par(opar)
+@
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Binomial and binomial count process moments}
+\small
+
+We have
+\begin{itemize}
+\item $E[X(n)] \pause = np$, \pause
+\item $Var[X(n)] \pause = np(1-p)$, \pause
+\item $E[X(t)] \pause = np$ for $t\in [n\Delta, (n+1)\Delta)$, \pause and
+\item $Var[X(t)] \pause = np(1-p)$ for $t\in [n\Delta, (n+1)\Delta)$. 
+\end{itemize}
+
+\vspace{0.1in} \pause
+
+Let $Y_n$ be the number of attempts after the $n-1$th success until the $n$th success. \pause
+Let $T_n$ be the time between the $n-1$th success and the $n$th success.
+We have 
+\begin{itemize}
+\item the distribution of $Y_n \pause \ind Geo(p)$, \pause
+\item $E[Y_n] \pause = 1/p$, \pause
+\item $Var[Y_n] \pause = (1-p)/p^2$, \pause
+\item the distribution of $T_n \pause = \Delta Y_n$ is a scaled geometric, \pause
+\item $E[T_n] \pause = E[\Delta Y_n] = \Delta E[Y_n] = \Delta/p$, \pause and
+\item $Var[T_n] \pause = Var[\Delta Y_n] = \Delta^2 Var[Y_n] = \Delta^2 (1-p)/p^2$.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Binomial process a Markov chain}
+
+\begin{corollary}
+A binomial process is a stochastic process is \pause
+\begin{itemize}
+\item Markov chain, \pause
+\item homogeneous, \pause and
+\item irregular.
+\end{itemize}
+\pause
+Thus a binomial process has no steady-state distribution. 
+\end{corollary}
+
+\pause
+
+The one-step transition matrix is 
+{\tiny 
+\[ P = \left( \begin{array}{ccccc}
+1-p & p & 0 & 0 & \cdots \\
+0 & 1-p & p & 0 & \cdots \\
+0 & 0 & 1-p & p & \cdots \\
+\vdots & \vdots & \vdots & \ddots & \cdots
+\end{array} \right). \]
+}
+The $h$-step transition matrix is defined by the binomial distribution
+{\tiny
+\[ p_{ij}^{(h)} = P(j-i\mbox{ successes in $h$ trials}) =
+\left\{ \begin{array}{cl}
+{h \choose j-i}p^{j-i}(1-p)^{h-j+i} & \mbox{if }0\le j-i\le h \\
+0 & \mbox{otherwise}
+\end{array} \right. . \]
+}
+
+\end{frame}
+
+
+
+\subsection{Poisson process}
+\begin{frame}
+\frametitle{Poisson process definition}
+\begin{definition}
+\alert{Arrival rate} is the average number of successes per 
+one unit of time, i.e. 
+\[ 
+\lambda = \frac{E[X(t)]}{t} = \frac{np}{t} = \frac{tp/\Delta}{t} =\frac{p}{\Delta}.
+\] \pause
+The time interval $\Delta$ of each Bernoulli trial is called a \alert{frame}.
+\pause
+The \alert{interarrival time} is the time between successes.
+\end{definition}
+
+\vspace{0.1in} \pause
+
+\begin{definition}
+\alert{Poisson (counting) process} is a continuous-time counting stochastic process 
+obtained from a binomial counting process when $\Delta\to 0$ while the arrival 
+rate $\lambda$ remains constant.
+\end{definition}
+\end{frame}
+
+
+
+
+
+\begin{frame}
+\frametitle{Poisson process derivation}
+\small
+
+Let $X(t)$ be a binomial counting process and let $\Delta \to 0$ while 
+$\lambda=p/\Delta$ remains constant. \pause
+
+\begin{itemize}[<+->]
+\item The number of frames $n = \frac{t}{\Delta} \to \infty.$
+\item The probability of an arrival $p = \lambda\Delta \to 0.$
+\item The number of arrivals $E[X(t)] = np = \frac{tp}{\Delta} = \lambda t$. 
+\item The distribution $X(t) \sim Bin(n,p) \to Po(\lambda t)$.
+\item The interarrival time $T=\Delta Y$ 
+\[ \begin{array}{rll}
+F_T(t) &= P(T\le t) \pause = P(Y\le n) & \mbox{definition of }T\\
+&= 1-(1-p)^n &\mbox{geometric cdf} \\
+&= 1-\left( 1-\frac{\lambda t}{n}\right)^n & \mbox{definition of }p,\Delta\\
+&= 1-e^{-\lambda t} &\mbox{Euler limit}.
+\end{array} \]
+Thus $T\sim Exp(\lambda)$ or, equivalently, $T_n\ind Exp(\lambda)$. 
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Poisson process results}
+\small
+
+If 
+\begin{itemize}[<+->]
+\item $X(t)$ is a Poisson process with rate $\lambda$,
+\item with arrival time $A_j$ for event $j$ with $A_0=0$, and 
+\item interarrival time $I_j = A_j-A_{j-1}$ for $j>0$,
+\end{itemize}
+\pause
+then 
+\begin{itemize}[<+->]
+\item $X(t)$ has state space $\{0,1,2,\ldots\}$, 
+\item if $0\le t_1<t_2$, 
+\[ 
+X(t_2)-X(t_1) \sim Po(\lambda[t_2-t_1]),
+\]
+\item if $0\le t_1<t_2\le t_3<t_4$, 
+\[ 
+X(t_2)-X(t_1) \mbox{ is independent of } X(t_4)-X(t_3)
+\]
+\item $I_j \ind Exp(\lambda)$, and
+\item $A_j \sim Ga(j, \lambda)$. 
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Web page visits}
+
+Suppose a web page has visits that correspond to a Poisson process with a rate 
+of 10 visits per minute. \pause
+
+\begin{itemize}
+\item What is the probability of 2 or less hits in the first minute? \pause
+Let $\lambda=10$/min. \pause
+Two solutions:
+
+	\begin{itemize}
+	\item Let $X(1)\sim Po(\lambda\times 1)$ be the number of hits 
+	in 1 minute. \pause Then 
+	\[ 
+	P(X(1) \le 2) = \sum_{x=0}^2 P(X(1)=x) = 
+	\sum_{x=0}^2 \frac{\lambda^x e^{-\lambda}}{x!} \approx 0.0028
+	\]
+	\pause
+	\item Let $Y_3\sim Ga(3,\lambda)$ be the time of the 3rd arrival. \pause Then
+	\[ 
+	P(Y_3>1) = 1- P(Y_3<1) = 
+	1-\int_0^\infty \frac{\lambda^3}{\Gamma(3)}y^{3-1} e^{-\lambda y} dy 
+	\approx 0.0028
+	\]
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Web page visits (cont.)}
+Suppose a web page has visits that correspond to a Poisson process with a rate 
+of 10 visits per minute. \pause
+
+\begin{itemize}
+\item What is the probability that the time until the first hit exceeds 10 
+seconds? \pause
+First, 10 seconds is 1/6 of a minute. \pause
+Two solutions:
+
+	\begin{itemize}
+	\item Let $X(1/6)\sim Po(\lambda/6)$ be the number of hits in 10 seconds 
+	\pause 
+	Then 
+	\[ 
+	P(X(1/6) = 0) = \frac{(\lambda/6)^x e^{-\lambda/6}}{x!} \approx 0.1889
+	\]
+	\pause
+	\item Let $I_1\sim Exp(\lambda)$ be the time of the 1st arrival. \pause Then
+	\[ 
+	P(I_1>1) = 1- P(I_1<1) = 1-\left[1-e^{-\lambda/6}\right] = e^{-\lambda/6} 
+	\approx 0.1889
+	\]
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Web page visits (cont.)}
+Suppose a web page has visits that correspond to a Poisson process with a rate 
+of 10 visits per minute. \pause
+
+\begin{itemize}
+\item Calculate the mean and the variance of the time until the 4th hit? \pause
+
+Let $A_k \sim Ga(k,\lambda)$ be the time until the $k$th hit. \pause Then 
+\[ \begin{array}{rl}
+E[A_4] &= k/\lambda = 4/10 = 0.4 \mbox{ minutes} \\
+Var[A_4] &= k/\lambda^2 = 4/10^2 = 0.04 \mbox{ minutes}^2 
+\end{array} \]
+
+\item Evaluate the probability that the time until the 4th hit exceeds 24 
+seconds. \pause
+First, 24 seconds is 24/60=0.4 minutes. \pause
+\begin{itemize}
+\item Use $A_k \sim Ga(k,\lambda)$ to find 
+\[ 
+P(A_4>0.4) = 0.433
+\]
+\item Use $X(t) \sim Po(\lambda t)$ to find 
+\[ 
+P(X(0.4) < 4) = P(X(0.4) \le 3) = 0.433
+\]
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\end{document}
+
+
+
+
