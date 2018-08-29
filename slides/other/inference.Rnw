@@ -1,0 +1,76 @@
+\documentclass{article}
+
+\input{../commands}
+
+\usepackage{fullpage}
+%\usepackage[landscape]{geometry}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+\small
+
+\section*{Hypothesis testing / p-values}
+
+In large samples ($p=2P(Z\le -|z|)$), here are some possibilities
+
+\[ \begin{array}{lcc}
+\textrm{Assumed model} & \textrm{Null hypothesis} & \textrm{Test statistic ($z$)}  \\
+\hline
+X_i \ind Ber(\theta) & \theta = p_0 & \frac{\overline{X}-p_0}{\sqrt{\frac{\overline{X}(1-\overline{X})}{n}}} \\ \\
+X_i \ind Ber(\theta_X), \,  Y_j \ind Ber(\theta_Y) & \theta_X-\theta_Y = d_0 & 
+\frac{\overline{X}-\overline{Y}-d_0}{\sqrt{\frac{\overline{X}(1-\overline{X})}{n_X}+\frac{\overline{Y}(1-\overline{Y})}{n_Y}}} \\ \\
+\hline
+X_i \ind N(\mu,\sigma^2) & \mu=m_0 & \frac{\overline{X}-m_0}{s/\sqrt{n}} \\ \\
+X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y = d_0 & \frac{\overline{X}-\overline{Y}-d_0}{s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}} \\ \\
+X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y = d_0 & \frac{\overline{X}-\overline{Y}-d_0}{\sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}}} \\
+\hline
+\end{array} \]
+
+ 
+In small samples ($p=2P(T\ge t)$), here are some possibilities
+
+\[ \begin{array}{lcc}
+\textrm{Assumed model} & \textrm{Null hypothesis} & \textrm{Test statistic $t$}  \\
+\hline
+X_i \ind N(\mu,\sigma^2) & \mu=m_0 & \frac{\overline{X}-m_0}{s/\sqrt{n}} \sim t_{n-1} \\ \\
+X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y = d_0 & \frac{\overline{X}-\overline{Y}-d_0}{s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}}} \sim t_{n_X+n_Y-2} \\ \\
+X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y = d_0 & \frac{\overline{X}-\overline{Y}-d_0}{\sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}}} \stackrel{\cdot}{\sim} t_{v}\\
+\hline
+\end{array} \]
+
+\section*{Confidence intervals}
+
+Large sample: derived using CLT and consistent estimator of the variance:
+\[ \begin{array}{llrll}
+\textrm{Assumed model} & \textrm{Parameter} & \multicolumn{3}{c}{\textrm{Confidence interval}} \\
+\hline
+X_i \ind Ber(\theta) & \theta & \overline{X} &\pm z_{a/2} &\sqrt{\frac{\overline{X}(1-\overline{X})}{n}} \\
+X_i \ind Ber(\theta_X), \,  Y_j \ind Ber(\theta_Y) & \theta_X-\theta_Y & \overline{X}-\overline{Y} &\pm z_{a/2} &\sqrt{\frac{\overline{X}(1-\overline{X})}{n_X} + \frac{\overline{Y}(1-\overline{Y})}{n_Y}} \\
+\hline
+X_i \ind N(\mu,\sigma^2) & \mu & \overline{X} &\pm z_{a/2} & s/\sqrt{n} \\
+X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm z_{a/2} &s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}} \\
+X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm z_{a/2} &\sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}} \\
+\hline
+\end{array} \]
+
+
+
+Small sample: derive actual distribution (or an approximation)
+
+\[ \begin{array}{llrll}
+\textrm{Assumed model} & \textrm{Parameter} & \multicolumn{3}{c}{\textrm{Confidence interval}} \\
+\hline
+X_i \ind N(\mu,\sigma^2) & \mu & \overline{X} &\pm t_{n-1,a/2} & s/\sqrt{n} \\
+X_i \ind N(\mu_X,\sigma^2), \, Y_j \ind N(\mu_Y,\sigma^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm t_{n_X+n_Y-2,a/2} & s_p \sqrt{\frac{1}{n_X}+\frac{1}{n_Y}} \\
+X_i \ind N(\mu_X,\sigma_X^2), \, Y_j \ind N(\mu_Y,\sigma_Y^2) & \mu_X - \mu_Y & \overline{X} - \overline{Y} & \pm t_{v,a/2}  & \sqrt{\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}} \\
+\hline
+\end{array} \]
+where $s_p$ is the pooled standard deviation and $v$ is the Satterthwaite approximation:
+\[ \begin{array}{rl}
+s_p &= \sqrt{\frac{(n_X-1)s_X^2+(n_Y-1)s_Y^2}{n_X+n_Y-2}} \\
+v &= \left(\frac{s_X^2}{n_X}+\frac{s_Y^2}{n_Y}\right)^2 \left/ 
+\left[\frac{s_X^4}{n_X^2(n_X-1)}+\frac{s_Y^4}{n_Y^2(n_Y-1)}\right] \right.
+\end{array} \]
+\end{document}

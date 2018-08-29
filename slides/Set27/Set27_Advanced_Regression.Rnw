@@ -5,7 +5,8 @@
 
 \newtheorem{principle}[theorem]{Principle}
 
-\title{Set 27 - Adavnced Regression}
+
+\title{Set 27 - Advanced Regression}
 
 
 \begin{document}
@@ -23,11 +24,11 @@ options(width=120)
 @
 
 <<libraries, message=FALSE, warning=FALSE, echo=FALSE>>=
-library(dplyr)
-library(ggplot2)
-library(GGally)
-library(gridExtra)
-library(broom)
+library("dplyr")
+library("ggplot2")
+library("GGally")
+library("gridExtra")
+library("broom")
 @
 
 <<set_seed, echo=FALSE>>=
@@ -57,7 +58,7 @@ For observation $i$ for $i=1,\ldots,n$, let
 
 A multiple linear regression model assumes 
 \[ 
-Y_i \ind N(\beta_1+\beta_1 x_{i,1} + \cdots + \beta_q x_{i,q}, \sigma^2).
+Y_i \ind N(\beta_0+\beta_1 x_{i,1} + \cdots + \beta_q x_{i,q}, \sigma^2).
 \]
 \pause
 Letting $x_i = (1,x_{i,1},\ldots,x_{i,q})^\top$ and 
@@ -65,14 +66,14 @@ $\beta = (\beta_0,\beta_1,\ldots,\beta_q)$, we can write this as
 \[ 
 Y_i \ind N(x_i^\top \beta, \sigma^2) 
 \quad \mbox{or} \quad
-Y_i = x_i^\top + e_i, \quad e_i \ind N(0,\sigma^2).
+Y_i = x_i^\top + \epsilon_i, \quad \epsilon_i \ind N(0,\sigma^2).
 \]
 Letting $X$ be the $n\times p$ (where $p=q+1$) matrix with $i$th row $x_i$, we 
 can write 
 \[ 
 Y \sim N(X\beta, \sigma^2 \mathrm{I})
 \quad \mbox{or} \quad
-Y_i = X\beta + e, \quad e \sim N(0,\sigma^2\mathrm{I})
+Y_i = X\beta + \epsilon, \quad \epsilon \sim N(0,\sigma^2\mathrm{I})
 \]
 where $N$ now represents a \alert{multivariate normal}.
 \end{frame}
@@ -96,7 +97,7 @@ estimate for $\sigma^2$ is
 = \frac{r^\top r}{n-p}.
  \]
 \pause
-You can get similar to confidence intervals and prediction intervals to what
+You can obtain confidence intervals and prediction intervals similar to what
 we had before. 
 \end{frame}
 
@@ -114,10 +115,12 @@ For observation $i=1,\ldots,n$, let
 
 \pause
 
-<<multiple_regression_model>>=
+<<nuclear_time, dependson="multiple_regression_model">>=
 nuclear_time <- read.csv("nuclear_time.csv") %>%
 	mutate(location = ifelse(US, "US", "non-US"))
+@
 
+<<multiple_regression_model, dependson="nuclear_time">>=
 m <- lm(time ~ I(complexity-6) + location, data = nuclear_time)
 m
 @
@@ -158,7 +161,7 @@ task ID.
 
 \pause
 
-<<multiple_regression_model2, dependson="multiple_regression_model">>=
+<<multiple_regression_model2, dependson="nuclear_time">>=
 nuclear_time <- nuclear_time %>%
 	mutate(task_f = factor(task)) # convert from numeric into factor
 m2 <- lm(sqrt(time) ~ location+task_f, data = nuclear_time)
@@ -190,6 +193,57 @@ par(opar)
 
 \end{frame}
 
+
+
+\subsection{Mixed effect model}
+\begin{frame}
+\frametitle{Mixed effect model}
+
+For observation $i$ for $i=1,\ldots,n$, let 
+\begin{itemize}
+\item $y_i$ be the response, \pause
+\item $x_i$ be a vector of fixed effects, \pause and
+\item $z_i$ be a vector of random effects
+\end{itemize}
+\pause
+both $x$ and $z$ are explanatory variables, 
+\pause 
+and the analyst has a choice of whether to treat these explanatory variables
+as fixed or random effects.
+
+\vspace{0.1in} \pause
+
+A mixed effect linear regression model assumes 
+\[ 
+Y_i = X\beta + Z\eta + \epsilon, 
+\quad \epsilon \sim N(0,\sigma^2\I),
+\quad \eta \sim N(0,\tau^2\I).
+\]
+\pause
+where $Z$ has $i$th row $z_i$. 
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Mixed effect linear regression in R}
+<<mixed_effect_model, dependson="nuclear_time">>=
+# install.packages("lme4")
+library(lme4)
+m3 <- lmer(sqrt(time) ~ location + complexity + I(complexity^2) + (1|task), data = nuclear_time)
+summary(m3)
+@
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Diagnostic}
+<<dependson="mixed_effect_model">>=
+plot(m3)
+@
+\end{frame}
 
 
 \subsection{Logistic regression}
@@ -291,12 +345,48 @@ is then called a classification tree.
 
 \begin{frame}
 \frametitle{Random forests}
+\setkeys{Gin}{width=\textwidth}
+\includegraphics{RF}
+\end{frame}
 
-Random forests resample the data with replacement and construct a tree from 
-each resampled data set. 
+
+\begin{frame}
+\frametitle{Summary}
+
+\scriptsize
+
+Many machine learning and data mining algorithms have their theoretical basis 
+in regression. 
 \pause
-
-
+For example, {\tiny \url{http://machinelearningmastery.com/a-tour-of-machine-learning-algorithms/}}
+\begin{itemize}
+\item Regression algorithms
+	\begin{itemize}\tiny
+	\item Linear regression
+	\item Logistic regression
+	\item Stepwise regression
+	\item Multivariate adaptive regression splines (MARS)
+	\item Locally estimated scatterplot smoothing (LOESS)
+	\end{itemize}
+\item Penalized regression algorithms
+	\begin{itemize}\tiny
+	\item Ridge regression
+	\item Least absolute shrinkage and selection operator (LASSO)
+	\item Elastic net
+	\item Least-angle regression (LARS)
+	\end{itemize}
+\item Decision tree algorithms
+	\begin{itemize}\tiny
+	\item Classification and regression tree
+	\item C4.5 and C5.0
+	\item Conditional decision trees
+	\end{itemize}
+\item Deep learning algorithms
+\item $\vdots$
+\end{itemize}
+\pause
+Thus, if you understand regression, you will have an easier time understanding
+many machine learning algorithms.
 \end{frame}
 
 \end{document}

@@ -1,0 +1,16 @@
+\documentclass{article}
+
+\input{../commands}
+
+\usepackage[final]{pdfpages}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+\includepdf[landscape=true]{distributions}
+\includepdf[pages=3]{notation}
+\includepdf[pages=-]{inference}
+\includepdf{t_table}
+
+\end{document}

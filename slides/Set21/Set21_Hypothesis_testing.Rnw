@@ -359,7 +359,7 @@ t = \frac{\overline{y} - m_0}{s/\sqrt{n}} =
 \]
 and 
 \[ 
-p = 2P(T_{14} > |\Sexpr{t}|) \approx \Sexpr{round(p,3)}.
+p = 2P(T_{14} > |\Sexpr{t}|) \approx \Sexpr{round(2*p,3)}.
 \]
 Thus we fail to reject the null hypothesis at the $0.05$ significance level.
 

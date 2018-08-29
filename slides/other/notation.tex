@@ -80,10 +80,11 @@ systems.
 
 {\renewcommand{\arraystretch}{1.5}
 \begin{sidewaystable}
-\caption{Properties for $M/M/k/C$ queueing systems}
+\caption{Properties of $M/M/k/C$ queueing systems}
 \label{tab:properties}
 \[ \begin{array}{c|ccccc}
-\mbox{System} & M/M/1 & M/M/1/C & M/M/k & M/M/k/C & M/M/\infty \\
+& \multicolumn{5}{c}{\mbox{System}} \\
+ & M/M/1 & M/M/1/C & M/M/k & M/M/k/C & M/M/\infty \\
 \hline
 P(X=0)=\pi_0 & 1-\utilization & \frac{1-\utilization}{1-\utilization^{C+1}} & 
 \left(\left[\sum_{x=0}^{k-1} \frac{\utilization^x}{x!}\right] + \frac{\utilization^k}{(1-\kappa)k!}\right)^{-1} &

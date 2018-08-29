@@ -161,7 +161,8 @@ S_{XY} &= \sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y}) \\
 
 \vspace{0.1in} \pause
 
-The MLE and Bayes estimator, with prior $p(\beta_0,\beta_1,\sigma^2) \propto 1/\sigma^2)$, \pause is
+
+The MLE and Bayes estimator, with prior $p(\beta_0,\beta_1,\sigma^2) \propto 1/\sigma^2$, \pause is
 \[ \begin{array}{rl}
 \hat\beta_1 &= \frac{S_{XY}}{S_{XX}} \\
 \hat\beta_0 &= \overline{y} - \hat\beta_1 \overline{x} \pause \\
@@ -640,13 +641,13 @@ where
 \[ \begin{array}{rll}
 s_{xy} &= \frac{SXY}{n-1} &= \frac{\sum_{i=1}^n (x_i-\overline{x})(y_i-\overline{y})}{n-1} \\
 s_{x}^2 &= \frac{SXX}{n-1} &= \frac{\sum_{i=1}^n (x_i-\overline{x})^2}{n-1} \\
-s_{y}^2 &= \frac{SXY}{n-1} &= \frac{\sum_{i=1}^n (y_i-\overline{y})^2}{n-1} \\
+s_{y}^2 &= \frac{SYY}{n-1} &= \frac{\sum_{i=1}^n (y_i-\overline{y})^2}{n-1} \\
 \end{array} \]
 \pause
 The coefficient of determination (or R-squared) is the proportion of the total
 variation explained by the model
-\[ 
-R^2 = r^2 = 1-\frac{RSS}{SSY} %= 1-\frac{SSE}{SST} 
+\[
+R^2 = r^2 = 1-\frac{RSS}{SYY} %= 1-\frac{SSE}{SST} 
 = 1-\frac{\sum_{i=1}^n r_i^2}{\sum_{i=1}^n (y_i-\overline{y})^2}.
 \]
 

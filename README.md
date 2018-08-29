@@ -1,4 +1,6 @@
 stat330
 =======
 
-A repository for STAT 330 materials.
+A repository for public information for STAT 330, 
+e.g. lecture slides and previous exams.
+

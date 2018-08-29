@@ -550,10 +550,12 @@ complexity has no units.
 We performed a simple linear regression model of task time on location.
 At a non-US location, the model estimated an expected task time of 
 \Sexpr{round(m2$coefficients[1])} seconds with a 95\% confidence interval of
-(\Sexpr{round(ci2[1,1])},\Sexpr{round(ci2[1,2])}) seconds. \pause
+(\Sexpr{round(ci2[1,1])},\Sexpr{round(ci2[1,2])}) seconds. 
+\pause
 At a US location, the model estimated an expected task time of 
 \Sexpr{round(c2[1,1])} 
-(\Sexpr{round(c2[1,2])},\Sexpr{round(c2[1,3])}) seconds. \pause
+(\Sexpr{round(c2[1,2])},\Sexpr{round(c2[1,3])}) seconds. 
+\pause
 The increase in expected task time from a non-US to a US location is 
 \Sexpr{round(m2$coefficients[2])} 
 (\Sexpr{round(ci2[2,1])},\Sexpr{round(ci2[2,2])}) seconds. \pause
@@ -565,6 +567,7 @@ variability in task time.
 We caution against reading too much into these results as the residuals have a 
 right-skewed distribution, more variability is seen in the non-US group than 
 the US group, and there is a lack of independence in the residuals. 
+\pause
 We suggest future analyses consider transformations of the response and 
 explanatory variable as well as including additional explanatory variables into
 the model.
@@ -574,6 +577,16 @@ the model.
 
 \begin{frame}[fragile]
 \frametitle{Results are exactly the same as a t-test}
+
+Recall that $Y_{ij} \ind N(\mu_j,\sigma^2)$ with $H_0:\mu_1=\mu_2$ is called a
+t-test. 
+\pause
+This is a regression with $\mu_1 = \beta_0$ and $\mu_2 = \beta_0+\beta_1$. 
+\pause
+The pvalue for this test and confidence/credible interval for the difference
+between the two groups is exactly the same no matter what parameterization is 
+used.
+\pause
 
 <<t_test, dependson="location_model">>=
 US    <- nuclear_time2 %>% filter(location == "US")
